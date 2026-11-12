@@ -9,6 +9,10 @@ for (const file of [
   'assets/learning.js',
   'assets/simulator.js',
   'assets/app.js',
+  'assets/pages.js',
+  'assets/routes.js',
+  'scripts/render-page.mjs',
+  'scripts/build.mjs',
   'scripts/serve.mjs',
   'labs/git-lab.cjs',
 ])

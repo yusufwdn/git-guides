@@ -109,8 +109,11 @@ try {
   }
 
   async function navigate(route) {
-    await cdp('Page.navigate', { url: `http://localhost:4321/${route}` });
-    await until("document.readyState === 'complete' && !!document.querySelector('#main h1')");
+    const path = route.startsWith('#/') ? route.slice(1) : route;
+    await cdp('Page.navigate', { url: new URL(path, 'http://localhost:4321').href });
+    await until(
+      "document.readyState === 'complete' && document.querySelector('#main')?.dataset.hydrated === 'true'",
+    );
   }
 
   async function screenshot(name) {
@@ -139,7 +142,9 @@ try {
   await navigate('#/belajar/stash');
   await evaluate('localStorage.clear()');
   await cdp('Page.reload');
-  await until("!!document.querySelector('#quiz-form')");
+  await until(
+    "document.readyState === 'complete' && document.querySelector('#main')?.dataset.hydrated === 'true'",
+  );
   await evaluate('document.fonts.ready.then(() => true)');
   assert.equal(await evaluate('getComputedStyle(document.body).fontSize'), '15px');
   assert.match(await evaluate('getComputedStyle(document.body).fontFamily'), /Poppins/);
@@ -213,7 +218,9 @@ try {
   await evaluate("document.querySelector('#toast').classList.remove('visible')");
   await screenshot('preview-dark.png');
   await cdp('Page.reload');
-  await until("!!document.querySelector('#complete-lesson')");
+  await until(
+    "document.readyState === 'complete' && document.querySelector('#main')?.dataset.hydrated === 'true'",
+  );
   assert.equal(
     await evaluate("document.querySelector('#complete-lesson').getAttribute('aria-pressed')"),
     'true',
@@ -230,7 +237,7 @@ try {
     /membelah riwayat/,
   );
   await evaluate("document.querySelector('#search-results a').click()");
-  await until("location.hash.includes('bisect') && !!document.querySelector('#quiz-form')");
+  await until("location.pathname === '/belajar/bisect/' && !!document.querySelector('#quiz-form')");
   await navigate('#/playground?scenario=stash');
   for (const command of ['git stash push -u -m "Latihan"', 'git stash pop'])
     await evaluate(
@@ -268,7 +275,7 @@ try {
   // Smoke-test all authored routes instead of relying on one representative page.
   const ids = await evaluate('GitGuidesContent.lessons.map(lesson=>lesson.id)');
   for (const id of ids) {
-    await evaluate(`location.hash='#/belajar/${id}'`);
+    await evaluate(`GitGuidesRoutes.navigate('/belajar/${id}/')`);
     await until(
       `document.querySelector('#main h1') && document.title.includes(${JSON.stringify(await titleFor(id))})`,
     );
@@ -334,7 +341,9 @@ try {
   await navigate('#/belajar/maintenance');
   await evaluate('localStorage.clear()');
   await cdp('Page.reload');
-  await until("!!document.querySelector('#quiz-form')");
+  await until(
+    "document.readyState === 'complete' && document.querySelector('#main')?.dataset.hydrated === 'true'",
+  );
   await navigate('#/');
   await screenshot('preview-home.png');
   await cdp('Emulation.setDeviceMetricsOverride', {
@@ -362,7 +371,7 @@ try {
     'true',
   );
   await evaluate("document.querySelector('#sidebar a').click()");
-  await until("location.hash.includes('kenalan-git')");
+  await until("location.pathname === '/belajar/kenalan-git/'");
   assert.equal(
     await evaluate("document.querySelector('#menu-toggle').getAttribute('aria-expanded')"),
     'false',
@@ -398,10 +407,88 @@ try {
       );
     }
   }
+  // Clean URLs work on direct entry, client navigation, reload, and history.
+  await navigate('/belajar/staging/');
+  assert.equal(await evaluate('location.pathname'), '/belajar/staging/');
+  assert.equal(await evaluate('location.hash'), '');
+  await evaluate("document.querySelector('.pagination-link.next').click()");
+  await until(
+    "location.pathname === '/belajar/ignore/' && document.querySelector('#main').dataset.hydrated === 'true'",
+  );
+  await evaluate('window.history.back()');
+  await until(
+    "location.pathname === '/belajar/staging/' && document.title.includes('Pilih perubahan')",
+  );
+  await evaluate('window.history.forward()');
+  await until("location.pathname === '/belajar/ignore/' && document.title.includes('Ada file')");
+  await cdp('Page.reload');
+  await until(
+    "document.readyState === 'complete' && document.querySelector('#main')?.dataset.hydrated === 'true'",
+  );
+  assert.equal(await evaluate('location.pathname'), '/belajar/ignore/');
+  await navigate('/playground/');
+  await evaluate(
+    "document.querySelector('#scenario-select').value='conflict';document.querySelector('#scenario-select').dispatchEvent(new Event('change'))",
+  );
+  assert.equal(await evaluate('location.pathname'), '/playground/');
+  assert.equal(await evaluate('location.search'), '?scenario=conflict');
+  await cdp('Page.reload');
+  await until(
+    "document.readyState === 'complete' && document.querySelector('#main')?.dataset.hydrated === 'true'",
+  );
+  assert.equal(await evaluate("document.querySelector('#scenario-select').value"), 'conflict');
+  await cdp('Page.navigate', { url: 'http://localhost:4321/#/belajar/stash' });
+  await until(
+    "document.readyState === 'complete' && location.pathname === '/belajar/stash/' && document.querySelector('#main')?.dataset.hydrated === 'true'",
+  );
+  assert.equal(await evaluate('location.hash'), '');
+  await evaluate("document.querySelector('[data-scroll=konsep]').click()");
+  assert.equal(await evaluate('location.hash'), '#konsep');
+  await cdp('Page.reload');
+  await until(
+    "document.readyState === 'complete' && document.querySelector('#main')?.dataset.hydrated === 'true'",
+  );
+  assert.equal(await evaluate('location.hash'), '#konsep');
+  assert.equal(
+    await evaluate("document.querySelector('link[rel=canonical]').getAttribute('href')"),
+    'http://localhost:4321/belajar/stash/',
+  );
+
+  // Prerendered text, native links, and downloadable exercises work without JS.
+  await cdp('Emulation.setScriptExecutionDisabled', { value: true });
+  await cdp('Page.navigate', { url: 'http://localhost:4321/belajar/stash/' });
+  await until("document.readyState === 'complete'");
+  assert.equal(
+    await evaluate("document.querySelector('#main').hasAttribute('data-hydrated')"),
+    false,
+  );
+  assert.match(await evaluate("document.querySelector('h1').innerText"), /Simpan sebentar/);
+  assert.match(await evaluate("document.querySelector('#konsep').innerText"), /git stash push/);
+  assert.match(await evaluate("document.querySelector('#langkah').innerText"), /git stash push -u/);
+  assert.equal(await evaluate("document.querySelector('[data-sim-next]').disabled"), true);
+  await evaluate("document.querySelector('.pagination-link.next').click()");
+  await until(
+    "document.readyState === 'complete' && location.pathname === '/belajar/stash-untracked/'",
+  );
+  assert.match(await evaluate('document.title'), /File baru/);
+  await cdp('Page.navigate', { url: 'http://localhost:4321/latihan/remote/' });
+  await until("document.readyState === 'complete'");
+  assert.match(
+    await evaluate("document.querySelector('.page-title').innerText"),
+    /Remote tanpa internet/,
+  );
+  assert.equal(
+    await evaluate("document.querySelector('a[download]').getAttribute('href')"),
+    '../../assets/downloads/kopi-kita-labs.zip',
+  );
+  await cdp('Emulation.setScriptExecutionDisabled', { value: false });
+
   await cdp('Page.navigate', {
     url: new URL('../index.html#/belajar/stash', import.meta.url).href,
   });
-  await until("document.readyState==='complete' && !!document.querySelector('#quiz-form')");
+  await until(
+    "document.readyState === 'complete' && document.querySelector('#main')?.dataset.hydrated === 'true'",
+  );
   assert.match(await evaluate("document.querySelector('h1').innerText"), /Simpan sebentar/);
   await evaluate("document.querySelector('[data-sim-next]').click()");
   assert.match(await evaluate("document.querySelector('#stash-scene').innerText"), /WIP diskon/);
@@ -416,11 +503,25 @@ try {
   await cdp('Page.navigate', {
     url: new URL('../index.html#/latihan/remote', import.meta.url).href,
   });
-  await until("!!document.querySelector('.exercise-solution')");
+  await until(
+    "document.readyState === 'complete' && document.querySelector('#main')?.dataset.hydrated === 'true'",
+  );
   assert.match(
     await evaluate("document.querySelector('.page-title').innerText"),
     /Remote tanpa internet/,
   );
+  await cdp('Page.navigate', {
+    url: new URL('../dist/belajar/stash/index.html', import.meta.url).href,
+  });
+  await until(
+    "document.readyState === 'complete' && document.querySelector('#main')?.dataset.hydrated === 'true'",
+  );
+  assert.match(await evaluate("document.querySelector('h1').innerText"), /Simpan sebentar/);
+  await evaluate("document.querySelector('.pagination-link.next').click()");
+  await until(
+    "document.readyState === 'complete' && location.hash.includes('/belajar/stash-untracked/')",
+  );
+  assert.match(await evaluate('document.title'), /File baru/);
   assert.deepEqual(errors, [], 'Runtime browser errors');
   console.log(
     `Browser QA lulus: ${ids.length} materi, ${labIds.length} halaman latihan/ZIP, 7 diagram bertahap, 3 playground, pencarian, progres, bookmark, tema hitam, dan mobile. Screenshot: artifacts/.`,

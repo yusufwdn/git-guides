@@ -1,6 +1,6 @@
 # Rencana Git Guides
 
-Status: disetujui pengguna dan tersedia secara lokal. Kurikulum sekarang 16 bab/66 subbab, dilengkapi kondisi awal, prasyarat, pemeriksaan hasil, 23 skenario terminal Git asli yang dapat diunduh, serta ilustrasi branch/merge/remote/rebase/reset/pemulihan. Desain yang disepakati memakai Poppins 15px, aksen orange jenuh, dan dark mode hitam murni dengan panel abu netral. Paket Astro belum dapat diunduh pada environment ini, sehingga implementasi tetap HTML/CSS/JavaScript tanpa dependency. Hosting publik dan migrasi ke prerender belum dilakukan.
+Status: disetujui pengguna dan tersedia secara lokal. Kurikulum sekarang 16 bab/66 subbab, dilengkapi kondisi awal, prasyarat, pemeriksaan hasil, 23 skenario terminal Git asli yang dapat diunduh, serta ilustrasi branch/merge/remote/rebase/reset/pemulihan. Desain yang disepakati memakai Poppins 15px, aksen orange jenuh, dan dark mode hitam murni dengan panel abu netral. Implementasi HTML/CSS/JavaScript tanpa dependency kini menghasilkan 112 halaman HTML melalui prerender Node.js, dengan URL langsung dan metadata per halaman. Browser serta build memakai template bersama; kompatibilitas file lokal dan tautan hash lama tetap tersedia. Hosting publik belum dilakukan.
 
 ## 1. Tujuan dan ruang lingkup
 

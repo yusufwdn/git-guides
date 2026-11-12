@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="id">
+<html lang="id" class="no-js">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -22,13 +22,15 @@
     <script src="./assets/content.js" defer></script>
     <script src="./assets/simulator.js" defer></script>
     <script src="./assets/visuals.js" defer></script>
+    <script src="./assets/routes.js" defer></script>
+    <script src="./assets/pages.js" defer></script>
     <script src="./assets/learning.js" defer></script>
     <script src="./assets/app.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Langsung ke materi</a>
     <header class="topbar">
-      <a class="brand" href="#/" aria-label="Git Guides, halaman utama">
+      <a class="brand" href="/" aria-label="Git Guides, halaman utama">
         <svg viewBox="0 0 40 40" aria-hidden="true">
           <rect
             x="5"
@@ -47,12 +49,12 @@
         <span>git<span class="brand-light">guides</span><span class="brand-period">.</span></span>
       </a>
       <nav class="topnav" aria-label="Navigasi utama">
-        <a href="#/belajar/stash" data-nav="belajar">Belajar Git</a>
-        <a href="#/playground" data-nav="playground"
+        <a href="/belajar/stash/" data-nav="belajar">Belajar Git</a>
+        <a href="/playground/" data-nav="playground"
           >Playground <span class="tiny-arrow">↗</span></a
         >
-        <a href="#/latihan" data-nav="latihan">Latihan</a>
-        <a href="#/referensi" data-nav="referensi">Referensi</a>
+        <a href="/latihan/" data-nav="latihan">Latihan</a>
+        <a href="/referensi/" data-nav="referensi">Referensi</a>
       </nav>
       <div class="header-actions">
         <button class="search-trigger" id="open-search" aria-label="Cari materi, Control K">
@@ -88,7 +90,7 @@
         </div>
         <div class="progress-track"><span id="progress-bar"></span></div>
         <p id="progress-detail">Satu langkah kecil setiap hari.</p>
-        <a href="#/roadmap" class="roadmap-link">Lihat seluruh perjalanan <span>↗</span></a>
+        <a href="/roadmap/" class="roadmap-link">Lihat seluruh perjalanan <span>↗</span></a>
       </div>
     </aside>
     <div class="sidebar-scrim" id="sidebar-scrim"></div>
@@ -116,11 +118,5 @@
       </div>
     </dialog>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
-    <noscript
-      ><div class="noscript-notice">
-        Aktifkan JavaScript untuk membuka panduan dan simulasi. Referensi Git tetap bisa dibaca di
-        <a href="https://git-scm.com/book/en/v2">Pro Git</a>.
-      </div></noscript
-    >
   </body>
 </html>

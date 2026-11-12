@@ -1,5 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;450;500;600&display=swap');
 
+.javascript-note {
+  max-width: 1030px;
+  margin: 0 auto 24px;
+  padding: 18px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.javascript-note p {
+  margin: 0 0 12px;
+}
+
+.javascript-note nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  color: var(--primary-ink);
+}
+
 @font-face {
   font-family: 'Poppins';
   font-style: normal;

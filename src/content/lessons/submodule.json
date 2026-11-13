@@ -1,51 +1,72 @@
 {
   "chapter": 14,
   "id": "submodule",
-  "title": "Repo di dalam repo punya posisi versinya sendiri.",
-  "summary": "Pahami gitlink, .gitmodules, dan pembaruan submodule.",
-  "scenario": "Tim memakai pustaka tema dari repository terpisah dan ingin versi tema terikat pada satu commit yang sudah diuji.",
-  "concept": "Superproject menyimpan gitlink yang menunjuk commit submodule dan .gitmodules berisi konfigurasi seperti path/URL. Clone biasa tidak selalu mengisi isi submodule; update --init --recursive dapat menyiapkannya. Commit di submodule dan commit pembaruan gitlink pada superproject adalah dua pekerjaan berbeda.",
-  "analogy": "Daftar resep utama menyebut edisi tertentu dari buku lain. Mengubah buku kedua belum otomatis mengganti edisi yang dicatat daftar utama.",
+  "title": "Submodule: pasang repo lain di dalam repo",
+  "summary": "Submodule menempatkan repo lain sebagai folder di repo-mu. Repo utama cuma mencatat commit mana dari repo itu yang dipakai.",
+  "scenario": "Desain Kopi Kita, seperti warna dan logo, diurus di repo terpisah supaya bisa dipakai juga oleh website kedai. Repo menu ingin memakai desain itu dan tahu persis versi mana yang dipakai.",
+  "concept": "git submodule add diikuti alamat repo dan nama folder meng-clone repo itu ke dalam folder, lalu mencatatnya di file .gitmodules. Repo utama nggak menyimpan isi file submodule. Ia cuma menyimpan gitlink, yaitu hash commit submodule yang dipakai. Kalau repo desain punya commit baru, repo utama tetap memakai commit lama sampai kamu memperbarui submodule dan commit perubahan gitlink-nya. git submodule status menampilkan commit yang dipakai, dan git diff --submodule menampilkan commit apa saja yang berubah. Orang yang meng-clone repo utama perlu git clone --recurse-submodules, atau git submodule update --init setelah clone, supaya folder submodule terisi. Sejak Git 2.38, submodule dari path lokal ditolak secara bawaan demi keamanan, jadi latihan ini memakai -c protocol.file.allow=always untuk satu command saja. Dengan alamat HTTPS atau SSH, opsi itu nggak diperlukan.",
+  "analogy": "Seperti menempelkan katalog warna dari percetakan ke buku menu, lengkap dengan catatan edisi katalog yang dipakai. Percetakan boleh menerbitkan edisi baru, tapi buku menu tetap memakai edisi yang tercatat sampai kamu menggantinya.",
   "steps": [
     {
-      "title": "Periksa submodule bila ada",
-      "command": "git submodule status",
-      "explanation": "Pada repo tanpa submodule, output kosong adalah keadaan yang wajar."
+      "title": "Buat repo desain",
+      "command": "cd ..\ngit init -b main kopi-kita-desain\ncd kopi-kita-desain",
+      "explanation": "git init diikuti nama folder membuat folder baru sekaligus repo-nya. Buat file warna.txt berisi satu baris: Warna utama: cokelat kopi, lalu simpan."
     },
     {
-      "title": "Isi versi yang direkam superproject",
-      "command": "git submodule update --init --recursive",
-      "explanation": "Jalankan pada repo contoh yang memang punya .gitmodules dan URL yang dapat diakses. Ini dapat menghubungi remote."
+      "title": "Commit desain awal",
+      "command": "git add warna.txt\ngit commit -m \"Warna awal Kopi Kita\"",
+      "explanation": "Repo desain sekarang punya satu commit."
     },
     {
-      "title": "Tinjau perubahan penunjuk",
-      "command": "git diff --submodule",
-      "explanation": "Setelah memilih commit baru di submodule, tinjau dan commit perubahan gitlink pada superproject."
+      "title": "Pasang sebagai submodule",
+      "command": "cd ../kopi-kita\ngit -c protocol.file.allow=always submodule add ../kopi-kita-desain desain\ngit status --short",
+      "explanation": "Git meng-clone repo desain ke folder desain. Status menampilkan A .gitmodules dan A desain."
+    },
+    {
+      "title": "Commit dan periksa",
+      "command": "git commit -m \"Tambah submodule desain\"\ngit submodule status",
+      "explanation": "Status submodule berbentuk hash diikuti desain (heads/main). Hash itulah commit desain yang dipakai repo menu."
+    },
+    {
+      "title": "Desain mendapat commit baru",
+      "command": "cd ../kopi-kita-desain\ngit add warna.txt\ngit commit -m \"Tambah warna aksen\"",
+      "explanation": "Setelah cd, tambahkan baris kedua di warna.txt: Warna aksen: krem, lalu simpan sebelum menjalankan git add."
+    },
+    {
+      "title": "Ambil versi baru di submodule",
+      "command": "cd ../kopi-kita/desain\ngit pull\ncd ..\ngit diff --submodule",
+      "explanation": "git pull di folder desain mengambil commit Tambah warna aksen. Kembali di kopi-kita, git diff --submodule menampilkan Submodule desain diikuti dua hash, lalu > Tambah warna aksen."
+    },
+    {
+      "title": "Catat pilihan versi baru",
+      "command": "git add desain\ngit commit -m \"Perbarui submodule desain\"\ngit push",
+      "explanation": "Repo menu sekarang memakai commit desain terbaru."
     }
   ],
-  "result": "Kamu tahu repo mana yang menyimpan perubahan dan repo mana yang menyimpan pilihan versi.",
-  "pitfall": "Jangan menghapus folder submodule untuk “memperbaiki” keadaan tanpa memeriksa perubahan lokal di dalamnya. Detached HEAD di submodule bisa merupakan keadaan checkout versi yang diharapkan.",
-  "practice": "Gambarkan superproject yang menunjuk tema commit T1, lalu tema berkembang ke T2. Jelaskan dua commit yang perlu dibagikan agar tim memakai T2.",
+  "result": "kopi-kita punya submodule desain yang menunjuk commit Tambah warna aksen, dan perubahan itu sudah di-push.",
+  "pitfall": "Commit di repo desain nggak otomatis dipakai repo menu, dan push repo menu nggak mengirim commit desain. Rekan butuh akses ke repo desain beserta commit yang dicatat gitlink; kalau commit itu nggak ada di server desain, folder submodule di clone rekan gagal terisi. Di latihan ini repo desain cuma folder lokal, jadi Rani belum bisa memakainya. Dalam proyek sungguhan, taruh repo desain di server juga.",
+  "practice": "Buka file .gitmodules dengan editor dan baca isinya: nama submodule, path, dan url. Jelaskan kenapa url-nya berupa path relatif ../kopi-kita-desain.",
   "quiz": {
-    "question": "Apa yang dicatat gitlink?",
+    "question": "Apa yang disimpan repo menu tentang submodule desain?",
     "options": [
-      "Semua branch submodule secara live",
-      "Password repo tema",
-      "Commit tertentu pada submodule"
+      "Seluruh isi file desain",
+      "Hash commit desain yang dipakai, plus path dan alamatnya di .gitmodules",
+      "Nggak ada, submodule berdiri sendiri"
     ],
-    "answer": 2,
-    "explanation": "Superproject merekam pilihan commit, bukan mengikuti setiap perubahan otomatis."
+    "answer": 1,
+    "explanation": "Repo utama menyimpan gitlink ke satu commit dan konfigurasi di .gitmodules. Isinya tetap milik repo desain."
   },
   "commands": ["git submodule", "git diff --submodule"],
   "visual": "objects",
-  "minutes": 9,
+  "minutes": 10,
   "level": "Lanjutan",
-  "prerequisites": ["mulai-repo", "revision"],
-  "initialState": "Latihan submodule: repo tema sudah ditambahkan pada T1. Sumber tema-source lokal mempunyai T2, sementara gitlink superproject masih memilih T1.",
+  "prerequisites": ["sparse-partial", "mulai-repo"],
+  "initialState": "Lanjutan dari materi sparse checkout: terminal berada di kopi-kita di branch main, dan working tree bersih.",
   "lab": "submodule",
   "objectives": [
-    "Pahami gitlink, .gitmodules, dan pembaruan submodule.",
-    "Periksa hasilnya: Kamu tahu repo mana yang menyimpan perubahan dan repo mana yang menyimpan pilihan versi."
+    "Tahu apa yang dicatat repo utama tentang submodule",
+    "Bisa menambahkan dan memperbarui submodule",
+    "Tahu apa yang dibutuhkan rekan untuk meng-clone repo dengan submodule"
   ],
   "sources": [
     {
@@ -53,13 +74,13 @@
       "url": "https://git-scm.com/docs/git-submodule"
     },
     {
-      "title": "Manual git diff",
-      "url": "https://git-scm.com/docs/git-diff"
+      "title": "Pro Git: submodules",
+      "url": "https://git-scm.com/book/en/v2/Git-Tools-Submodules"
     }
   ],
   "verification": {
-    "command": "git submodule status\ngit rev-parse HEAD:tema",
-    "explanation": "Repo tema menyimpan commit isi tema. Superproject menyimpan gitlink yang memilih commit tersebut. Remote latihan berupa folder lokal dan tidak membutuhkan akun internet."
+    "command": "git submodule status",
+    "explanation": "Hash-nya sama dengan commit Tambah warna aksen di kopi-kita-desain dan nggak diawali tanda + atau -. Tanda + berarti folder submodule berada di commit lain, dan - berarti submodule belum diisi."
   },
   "order": 56
 }

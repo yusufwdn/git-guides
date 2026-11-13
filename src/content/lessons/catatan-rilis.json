@@ -1,46 +1,52 @@
 {
   "chapter": 13,
   "id": "catatan-rilis",
-  "title": "Hubungkan versi dengan perubahan yang dipakai.",
-  "summary": "Susun catatan rilis dari rentang commit dan perilaku yang berubah.",
-  "scenario": "Kasir bertanya apa yang baru pada v1.0.1. Daftar hash saja tidak menjelaskan manfaat atau perubahan perilakunya.",
-  "concept": "Tag membantu menentukan batas versi. Log memberi kandidat perubahan, tetapi catatan rilis perlu disunting menjadi perubahan perilaku, perbaikan, dan kebutuhan migrasi bila ada. Tidak semua commit internal perlu menjadi butir untuk pengguna.",
-  "analogy": "Daftar bahan dapur tidak sama dengan penjelasan menu baru. Gunakan riwayat sebagai bahan untuk menulis informasi yang berguna.",
+  "title": "Catatan rilis: rangkum perubahan sejak tag terakhir",
+  "summary": "Dengan tag sebagai titik awal, git log dan git diff --stat bisa merangkum apa saja yang berubah sejak rilis sebelumnya.",
+  "scenario": "Fitur diskon member sudah siap dirilis. Sebelum memberi tag v1.1.0, kamu perlu menulis catatan rilis untuk pemilik kedai: apa saja yang berubah sejak v1.0.0.",
+  "concept": "Tag bisa dipakai di mana pun Git menerima nama commit. git log --oneline v1.0.0..main menampilkan commit yang ada di main tapi belum ada di v1.0.0, dengan aturan rentang yang sama seperti di bab 4. git diff --stat v1.0.0 main merangkum file yang berubah beserta jumlah baris yang ditambah dan dihapus. Gabungan keduanya jadi bahan catatan rilis. Pesan commit yang jelas membuat langkah ini jauh lebih mudah, karena catatan rilis tinggal disusun dari judul-judul commit.",
+  "analogy": "Seperti membandingkan daftar menu bulan lalu dengan bulan ini, lalu menulis pengumuman: menu baru apa saja dan harga mana yang berubah.",
   "steps": [
     {
-      "title": "Baca perubahan antarversi",
-      "command": "git log --oneline v1.0.0..HEAD",
-      "explanation": "Pada latihan tags, buat tag awal dan commit baru lebih dahulu."
+      "title": "Gabungkan diskon-member",
+      "command": "git merge --no-edit diskon-member\ngit push",
+      "explanation": "Git menulis Merge made by the 'ort' strategy dan menambahkan member.txt. Baris diskon nggak bentrok, karena perubahan 20 menjadi 15 di kedua sisi sama persis."
     },
     {
-      "title": "Periksa lingkup file",
-      "command": "git diff --stat v1.0.0 HEAD",
-      "explanation": "Stat membantu melihat lingkup, lalu buka patch yang perlu dijelaskan."
+      "title": "Commit sejak rilis terakhir",
+      "command": "git log --oneline v1.0.0..main",
+      "explanation": "Hasilnya tiga commit: Merge branch 'diskon-member', Turunkan diskon jadi 15 persen, dan Tambah diskon member. Turunkan diskon jadi 15 persen muncul lagi karena ini commit aslinya dari diskon-member; v1.0.0 cuma berisi salinan hasil cherry-pick."
+    },
+    {
+      "title": "Ringkasan file yang berubah",
+      "command": "git diff --stat v1.0.0 main",
+      "explanation": "diskon.js mendapat satu baris, yaitu diskonMember, dan member.txt adalah file baru. Perubahan diskon 15 nggak muncul, karena sudah ada di v1.0.0."
+    },
+    {
+      "title": "Tandai dan kirim rilis baru",
+      "command": "git tag -a v1.1.0 -m \"Diskon member\"\ngit push origin v1.1.0",
+      "explanation": "Fitur baru menaikkan angka kedua, jadi versinya v1.1.0."
     }
   ],
-  "result": "Catatan rilis menghubungkan versi dan perilaku, bukan sekadar menyalin semua pesan commit.",
-  "pitfall": "Rentang log pada riwayat bercabang mengikuti reachability. Jangan mengandalkan tanggal saja untuk menentukan isi versi.",
-  "practice": "Selesaikan latihan tags, lalu tulis satu butir rilis untuk perubahan README dan sebutkan cara memverifikasinya.",
+  "result": "main berisi fitur diskon member dan ditandai v1.1.0. Bahan catatan rilisnya: diskon member 5 persen, dengan penjelasan di member.txt.",
+  "pitfall": "Rentang v1.0.0..main menghitung commit, bukan perubahan isi. Commit hasil cherry-pick, merge commit, dan commit yang dibatalkan dengan revert tetap muncul walaupun hasil akhirnya nggak mengubah apa pun. Selalu cocokkan daftar commit dengan git diff --stat sebelum menulis catatan rilis.",
+  "practice": "Tulis catatan rilis v1.1.0 dalam dua sampai tiga kalimat untuk pemilik kedai, berdasarkan hasil dua command tadi. Hindari istilah Git di catatan itu.",
   "quiz": {
-    "question": "Sumber awal yang tepat untuk catatan antarversi?",
-    "options": [
-      "Hanya nama file paling besar",
-      "Semua issue tanpa pemeriksaan",
-      "Rentang commit beserta patch yang ditinjau"
-    ],
-    "answer": 2,
-    "explanation": "Riwayat adalah bahan; penjelasan rilis tetap perlu konteks produk."
+    "question": "Command mana yang menampilkan commit baru sejak tag v1.0.0?",
+    "options": ["git log --oneline v1.0.0..main", "git log --oneline main..v1.0.0", "git tag -n"],
+    "answer": 0,
+    "explanation": "A..B berarti commit yang ada di B tapi belum ada di A. Urutan terbalik justru mencari commit di tag yang belum ada di main."
   },
   "commands": ["git log", "git diff --stat"],
   "visual": "graph",
-  "minutes": 7,
+  "minutes": 8,
   "level": "Lanjutan",
-  "prerequisites": ["tag", "log-filter"],
-  "initialState": "Tag v1.0.0 sudah ada dan main punya commit sesudahnya. Gunakan latihan tags setelah membuat commit README tambahan.",
-  "lab": "tags",
+  "prerequisites": ["tag", "revision"],
+  "initialState": "Lanjutan dari materi tag: kamu berada di branch main, dan v1.0.0 menunjuk commit Turunkan diskon jadi 15 persen.",
   "objectives": [
-    "Susun catatan rilis dari rentang commit dan perilaku yang berubah.",
-    "Periksa hasilnya: Catatan rilis menghubungkan versi dan perilaku, bukan sekadar menyalin semua pesan commit."
+    "Bisa memakai tag sebagai titik awal rentang commit",
+    "Bisa merangkum perubahan file dengan git diff --stat",
+    "Bisa menyusun bahan catatan rilis"
   ],
   "sources": [
     {
@@ -53,8 +59,8 @@
     }
   ],
   "verification": {
-    "command": "git log --oneline v1.0.0..HEAD",
-    "explanation": "Catatan rilis menghubungkan versi dan perilaku, bukan sekadar menyalin semua pesan commit."
+    "command": "git tag -n",
+    "explanation": "Ada dua tag: v1.0.0 dengan pesan Rilis pertama menu Kopi Kita dan v1.1.0 dengan pesan Diskon member."
   },
   "order": 50
 }

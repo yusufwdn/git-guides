@@ -1,51 +1,53 @@
 {
   "chapter": 13,
   "id": "tag",
-  "title": "Kasih nama pada versi yang dirilis.",
-  "summary": "Gunakan tag untuk menandai commit yang mewakili rilis tertentu.",
-  "scenario": "Kopi Kita versi 1.0 sudah berjalan di toko. Dua minggu kemudian, tim perlu memeriksa persis kode yang dirilis saat itu.",
-  "concept": "Tag menamai object, biasanya commit. Lightweight tag langsung menyimpan referensi; annotated tag mempunyai object dengan pesan dan metadata tagger. Tag tidak ikut berpindah setiap ada commit baru seperti branch. Push branch biasa tidak otomatis mengirim semua tag.",
-  "analogy": "Pasang label pada edisi buku yang sudah dicetak. Penulisan edisi berikutnya tidak otomatis memindahkan label edisi lama.",
+  "title": "Tag: beri nama pada versi yang dirilis",
+  "summary": "Tag adalah nama tetap untuk sebuah commit, misalnya v1.0.0. Berbeda dengan branch, tag nggak ikut maju saat ada commit baru.",
+  "scenario": "Menu Kopi Kita sudah stabil dan mulai dicetak untuk kedai. Kamu ingin menandai versi ini supaya kapan pun bisa dibuka lagi persis seperti saat dirilis.",
+  "concept": "git tag diikuti nama membuat tag yang menunjuk commit saat ini. Ada dua jenis. Lightweight tag cuma nama yang menunjuk commit, tanpa informasi tambahan. Annotated tag, dibuat dengan -a dan -m, adalah object tersendiri yang menyimpan nama pembuat, tanggal, dan pesan; jenis ini dianjurkan untuk rilis. git tag tanpa argumen menampilkan daftar tag, dan git show diikuti nama tag menampilkan detailnya. Tag nggak ikut terkirim oleh git push biasa; kirim satu tag dengan git push origin diikuti nama tag. Penamaan seperti v1.0.0 mengikuti kebiasaan semantic versioning: angka pertama untuk perubahan besar, kedua untuk fitur baru, dan ketiga untuk perbaikan.",
+  "analogy": "Branch seperti pembatas buku yang terus digeser saat kamu membaca. Tag seperti stiker bertanggal yang ditempel di satu halaman dan nggak pernah dipindah.",
   "steps": [
     {
-      "title": "Buat tag rilis",
-      "command": "git tag -a v1.0.0 -m \"Rilis awal Kopi Kita\"",
-      "explanation": "Jalankan pada commit yang sudah diuji dan memang akan dirilis."
+      "title": "Buat annotated tag",
+      "command": "git switch main\ngit tag -a v1.0.0 -m \"Rilis pertama menu Kopi Kita\"\ngit tag",
+      "explanation": "git tag menampilkan v1.0.0."
     },
     {
-      "title": "Periksa tag",
+      "title": "Lihat isi tag",
       "command": "git show v1.0.0",
-      "explanation": "Annotated tag menampilkan metadata tag dan commit yang ditunjuk."
+      "explanation": "Bagian atas berisi tag v1.0.0, Tagger, tanggal, dan pesan Rilis pertama menu Kopi Kita. Di bawahnya baru detail commit yang ditunjuk."
     },
     {
-      "title": "Bagikan tag tertentu",
+      "title": "Bandingkan dengan lightweight tag",
+      "command": "git tag coba-tag\ngit show coba-tag\ngit tag -d coba-tag",
+      "explanation": "Tanpa -a, git show langsung menampilkan commit tanpa bagian Tagger. git tag -d menghapus tag latihan itu dan menulis Deleted tag 'coba-tag'."
+    },
+    {
+      "title": "Kirim tag ke server",
       "command": "git push origin v1.0.0",
-      "explanation": "Periksa remote yang dituju. Tag hanyalah penanda; proses deployment merupakan langkah lain."
+      "explanation": "Output berisi * [new tag] v1.0.0 -> v1.0.0."
     }
   ],
-  "result": "Tim punya nama stabil untuk snapshot rilis.",
-  "pitfall": "Memindahkan tag rilis yang sudah dibagikan bisa membingungkan pengguna. Buat versi baru sesuai kebijakan tim.",
-  "practice": "Buat annotated tag pada commit latihan, tambahkan commit baru, lalu pastikan tag tetap menunjuk versi lama.",
+  "result": "Commit teratas main ditandai v1.0.0, dan tag itu sudah ada di server.",
+  "pitfall": "Jangan memindahkan atau menghapus tag yang sudah di-push. Orang lain mungkin sudah memakainya untuk rilis, dan Git nggak otomatis memperbarui tag yang sudah mereka ambil. Kalau ada kesalahan, buat versi baru seperti v1.0.1. Ingat juga bahwa git push tanpa nama tag nggak mengirim tag.",
+  "practice": "Jalankan git log --oneline --decorate -1 dan temukan label tag: v1.0.0 di samping commit teratas.",
   "quiz": {
-    "question": "Tag rilis biasanya bergerak saat commit baru dibuat?",
-    "options": [
-      "Ya, seperti branch aktif",
-      "Tidak, tetap menunjuk targetnya",
-      "Hanya jika namanya v1"
-    ],
+    "question": "Kamu membuat tag v1.0.0, lalu commit lagi di main. Di mana v1.0.0 sekarang?",
+    "options": ["Ikut pindah ke commit terbaru", "Tetap di commit yang ditandai", "Terhapus"],
     "answer": 1,
-    "explanation": "Branch bergerak saat commit dibuat di jalurnya; tag tidak otomatis bergerak."
+    "explanation": "Tag nggak bergerak. Cuma branch yang maju saat commit."
   },
-  "commands": ["git tag", "git push"],
+  "commands": ["git tag", "git tag -a"],
   "visual": "graph",
   "minutes": 8,
   "level": "Lanjutan",
-  "prerequisites": ["riwayat"],
-  "initialState": "Latihan tags dimulai pada commit awal yang akan diberi v1.0.0. Nama tag belum dipakai; tidak memerlukan server.",
+  "prerequisites": ["bisect-run", "push"],
+  "initialState": "Lanjutan dari bab 12: kamu berada di branch main, working tree bersih, dan main sejajar dengan origin/main.",
   "lab": "tags",
   "objectives": [
-    "Gunakan tag untuk menandai commit yang mewakili rilis tertentu.",
-    "Periksa hasilnya: Tim punya nama stabil untuk snapshot rilis."
+    "Tahu bedanya tag dan branch",
+    "Bisa membuat annotated tag dan membedakannya dari lightweight tag",
+    "Bisa mengirim tag ke server"
   ],
   "sources": [
     {
@@ -53,13 +55,17 @@
       "url": "https://git-scm.com/docs/git-tag"
     },
     {
-      "title": "Manual git push",
-      "url": "https://git-scm.com/docs/git-push"
+      "title": "Pro Git: tagging",
+      "url": "https://git-scm.com/book/en/v2/Git-Basics-Tagging"
+    },
+    {
+      "title": "Semantic Versioning",
+      "url": "https://semver.org/"
     }
   ],
   "verification": {
     "command": "git tag -n",
-    "explanation": "Baris v1.0.0 diikuti pesan Rilis awal Kopi Kita. Pesan itu milik annotated tag. Untuk lightweight tag, yang tampil adalah judul commit yang ditunjuknya."
+    "explanation": "Hasilnya v1.0.0 diikuti pesan Rilis pertama menu Kopi Kita."
   },
   "order": 49
 }

@@ -1,51 +1,53 @@
 {
   "chapter": 14,
   "id": "partial-staging",
-  "title": "Satu file, dua tujuan perubahan.",
-  "summary": "Pilih bagian perubahan melalui git add -p.",
-  "scenario": "Dalam checkout.js, kamu memperbaiki bug sekaligus bereksperimen dengan tampilan pesan. Kamu ingin bug fix menjadi commit terpisah.",
-  "concept": "Patch staging menampilkan hunk perubahan dan meminta keputusan. y menyiapkan hunk, n melewatkan, s mencoba membelah, dan ? menampilkan bantuan. Hunk tidak selalu bisa dipisah otomatis. Periksa staged diff dan uji snapshot yang akan direkam; working tree bisa berisi gabungan pekerjaan yang berbeda.",
-  "analogy": "Kamu memilih kalimat yang siap diterbitkan dari satu halaman, sementara paragraf percobaan tetap ada di draf.",
+  "title": "Add -p: commit sebagian perubahan dalam satu file",
+  "summary": "git add -p menampilkan perubahan per bagian (hunk) dan menanyakan mana yang masuk staging area. Satu file bisa dipecah menjadi beberapa commit dengan tujuan berbeda.",
+  "scenario": "Di diskon.js kamu mengubah dua hal sekaligus: diskon umum jadi 12 persen yang sudah disetujui, dan diskon member jadi 7 persen yang masih percobaan. Kamu cuma ingin commit perubahan pertama.",
+  "concept": "git add diikuti nama file selalu memasukkan semua perubahan di file itu. git add -p diikuti nama file menampilkan perubahan per hunk, yaitu potongan baris yang berubah beserta sedikit baris di sekitarnya, lalu bertanya Stage this hunk. Jawab y untuk memasukkan hunk itu, n untuk melewatinya, s untuk memecah hunk menjadi bagian yang lebih kecil, dan q untuk berhenti. Pemecahan dengan s cuma bisa dilakukan kalau di antara perubahan ada baris yang nggak berubah. Setelah selesai, git diff --staged menampilkan yang akan di-commit, dan git diff menampilkan sisanya. Ini cara menjaga commit tetap atomik seperti di bab 3, walaupun perubahannya berada di satu file.",
+  "analogy": "Seperti memilih dari satu nampan berisi dua gelas: kamu mengantar gelas yang sudah siap dan meninggalkan gelas yang masih diracik.",
   "steps": [
     {
-      "title": "Pilih hunk",
-      "command": "git add -p checkout.js",
-      "explanation": "Baca konteks setiap hunk. Gunakan ? untuk daftar pilihan di versi Git-mu."
+      "title": "Buat dua perubahan",
+      "command": "git diff",
+      "explanation": "Sebelum menjalankan command, ubah baris pertama diskon.js menjadi const diskon = 12; dan baris ketiga menjadi const diskonMember = 7; lalu simpan. git diff menampilkan keduanya dalam satu hunk."
     },
     {
-      "title": "Periksa kedua sisi",
-      "command": "git diff --staged\ngit diff",
-      "explanation": "Pastikan calon commit hanya berisi bug fix, sedangkan perubahan percobaan masih unstaged."
+      "title": "Pilih dengan add -p",
+      "command": "git add -p diskon.js",
+      "explanation": "Git bertanya (1/1) Stage this hunk [y,n,q,a,d,s,e,p,?]?. Jawab s lalu Enter, dan hunk dipecah dua. Untuk hunk pertama (diskon 12) jawab y, dan untuk hunk kedua (diskonMember 7) jawab n."
     },
     {
-      "title": "Rekam tujuan pertama",
-      "command": "git commit -m \"Perbaiki perhitungan total\"",
-      "explanation": "Pesan menjelaskan perubahan yang benar-benar staged."
+      "title": "Periksa pembagiannya",
+      "command": "git diff --staged\ngit diff\ngit status --short",
+      "explanation": "git diff --staged cuma berisi diskon 12, git diff cuma berisi diskonMember 7, dan status menampilkan MM diskon.js: ada perubahan di staging area dan di working tree."
+    },
+    {
+      "title": "Commit bagian yang siap",
+      "command": "git commit -m \"Turunkan diskon jadi 12 persen\"",
+      "explanation": "Percobaan diskonMember 7 tetap di working tree, belum di-commit."
     }
   ],
-  "result": "Dua tujuan pada satu file bisa direkam secara terpisah.",
-  "pitfall": "Memilih sebagian baris dapat menghasilkan snapshot yang tidak valid jika perubahan saling bergantung. Jangan hanya menguji gabungan working tree.",
-  "practice": "Ubah dua bagian README yang berjauhan. Stage satu hunk, lalu buktikan diff --staged hanya memuat bagian tersebut.",
+  "result": "main punya commit Turunkan diskon jadi 12 persen, sementara percobaan diskonMember 7 masih belum di-commit di working tree.",
+  "pitfall": "Hunk yang terlalu berdekatan nggak bisa dipecah dengan s. Untuk kasus itu ada opsi e yang membuka editor untuk memilih baris secara manual, tapi lebih rawan salah. Setelah add -p, selalu cek git diff --staged sebelum commit, karena salah menekan y dan n mudah terjadi.",
+  "practice": "Jalankan git add -p diskon.js sekali lagi dan jawab ? untuk melihat arti setiap pilihan. Lalu jawab q untuk keluar tanpa memasukkan apa pun.",
   "quiz": {
-    "question": "Apa kegunaan git add -p?",
-    "options": [
-      "Menjalankan push otomatis",
-      "Menghapus file besar",
-      "Memilih bagian perubahan untuk index"
-    ],
-    "answer": 2,
-    "explanation": "Patch mode memungkinkan staging per hunk."
+    "question": "Saat git add -p, kamu ingin memecah satu hunk berisi dua perubahan yang dipisah baris lain. Tombol apa yang dipakai?",
+    "options": ["y", "s", "q"],
+    "answer": 1,
+    "explanation": "s (split) memecah hunk. y memasukkan seluruh hunk, dan q berhenti."
   },
   "commands": ["git add -p"],
   "visual": "staging",
   "minutes": 8,
   "level": "Lanjutan",
-  "prerequisites": ["staging", "diff-versi"],
-  "initialState": "Satu file tracked memiliki dua hunk terpisah yang mengerjakan tujuan berbeda. Pilih sendiri edit melalui editor sebelum add -p.",
+  "prerequisites": ["commit-atomik", "signing"],
+  "initialState": "Lanjutan dari bab 13: kamu berada di branch main, dan diskon.js berisi diskon 15, maksDiskon 50, dan diskonMember 5.",
   "lab": "partial-staging",
   "objectives": [
-    "Pilih bagian perubahan melalui git add -p.",
-    "Periksa hasilnya: Dua tujuan pada satu file bisa direkam secara terpisah."
+    "Tahu apa itu hunk",
+    "Bisa memilih sebagian perubahan dengan git add -p",
+    "Bisa memeriksa pembagian staging area sebelum commit"
   ],
   "sources": [
     {
@@ -54,8 +56,8 @@
     }
   ],
   "verification": {
-    "command": "git show HEAD:checkout.js\ngit diff -- checkout.js",
-    "explanation": "Dua tujuan pada satu file bisa direkam secara terpisah."
+    "command": "git show HEAD:diskon.js\ngit diff",
+    "explanation": "Di commit terakhir, diskon bernilai 12 dan diskonMember masih 5. git diff masih menampilkan perubahan diskonMember menjadi 7."
   },
   "order": 53
 }

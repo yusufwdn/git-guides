@@ -1,51 +1,52 @@
 {
   "chapter": 13,
   "id": "hotfix",
-  "title": "Perbaiki versi yang sedang dipakai.",
-  "summary": "Mulai hotfix dari titik rilis dan pastikan perbaikannya kembali ke jalur pengembangan.",
-  "scenario": "Main sudah berisi fitur minggu depan. Versi v1.0.0 yang dipakai toko punya bug checkout dan harus diperbaiki lebih dahulu.",
-  "concept": "Branch hotfix dapat dibuat dari tag rilis agar fitur yang belum siap tidak ikut. Setelah perbaikan diuji, buat tag rilis perbaikan dan integrasikan perbaikannya ke jalur lain yang masih membutuhkan. Penomoran versi dan otomasi rilis mengikuti kebijakan proyek.",
-  "analogy": "Perbaiki edisi yang sedang beredar tanpa menyisipkan bab percobaan dari naskah berikutnya.",
+  "title": "Hotfix: perbaiki versi yang sudah dirilis",
+  "summary": "Kalau ada kesalahan di versi yang sedang dipakai, buat branch dari tag rilisnya, perbaiki di sana, beri tag baru, lalu gabungkan perbaikannya kembali ke main.",
+  "scenario": "Kedai cabang masih memakai menu v1.0.0 dan belum siap ke v1.1.0. Ternyata harga roti bakar di v1.0.0 salah: seharusnya 16000, bukan 15000. Cabang butuh perbaikan tanpa ikut menerima fitur diskon member.",
+  "concept": "git switch -c diikuti nama branch dan nama tag membuat branch baru yang berangkat dari commit tag itu, bukan dari main. Di branch ini kamu cuma memperbaiki kesalahan, commit, lalu memberi tag versi perbaikan seperti v1.0.1. Kedai cabang cukup memakai v1.0.1. Supaya kesalahan yang sama nggak muncul lagi di rilis berikutnya, gabungkan branch hotfix ke main. Setelah perbaikannya ada di main, branch hotfix boleh dihapus, karena tag v1.0.1 tetap menunjuk commit perbaikannya.",
+  "analogy": "Seperti mengoreksi salah cetak di edisi lama sebuah buku: kamu membuka edisi itu, menerbitkan ralat edisi 1.0.1, lalu memastikan edisi berikutnya juga sudah benar.",
   "steps": [
     {
-      "title": "Mulai dari versi yang dipakai",
-      "command": "git switch -c hotfix-v1.0.1 v1.0.0",
-      "explanation": "Tag v1.0.0 harus tersedia. Kerjakan perbaikan dan uji pada lingkungan yang sesuai."
+      "title": "Buat branch dari v1.0.0",
+      "command": "git switch -c hotfix-roti v1.0.0",
+      "explanation": "Ubah nilai rotiBakar di menu.json dari 15000 menjadi 16000 lalu simpan. Perhatikan diskon.js di branch ini belum punya baris diskonMember, karena branch-nya berangkat dari v1.0.0."
     },
     {
-      "title": "Rekam dan tandai",
-      "command": "git add checkout.js\ngit commit -m \"Perbaiki validasi checkout\"\ngit tag -a v1.0.1 -m \"Perbaikan checkout\"",
-      "explanation": "Pastikan hanya perubahan yang diperlukan masuk rilis."
+      "title": "Commit perbaikan dan beri tag",
+      "command": "git add menu.json\ngit commit -m \"Perbaiki harga roti bakar\"\ngit tag -a v1.0.1 -m \"Perbaikan harga roti bakar\"\ngit push origin v1.0.1",
+      "explanation": "Kedai cabang sekarang bisa memakai v1.0.1."
     },
     {
-      "title": "Integrasikan ke pengembangan",
-      "command": "git switch main\ngit merge hotfix-v1.0.1",
-      "explanation": "Jika tim memakai strategi lain, cherry-pick atau PR dapat dipilih dengan konteks yang sesuai."
+      "title": "Bawa perbaikan ke main",
+      "command": "git switch main\ngit merge --no-edit hotfix-roti\ngit push",
+      "explanation": "menu.json di main belum berubah sejak v1.0.0, jadi merge berjalan tanpa konflik. Harga roti bakar di main sekarang juga 16000."
+    },
+    {
+      "title": "Hapus branch hotfix",
+      "command": "git branch -d hotfix-roti",
+      "explanation": "Penghapusan diterima karena commit-nya sudah masuk ke main. Tag v1.0.1 tetap ada."
     }
   ],
-  "result": "Versi perbaikan tidak membawa fitur yang belum siap, dan bug yang sama tidak tertinggal di main.",
-  "pitfall": "Tag bukan bukti deployment berhasil. Periksa proses rilis, konfigurasi lingkungan, dan hasil pengujian.",
-  "practice": "Buat tag lama, tambahkan fitur baru di main, lalu buat hotfix dari tag. Buktikan fitur baru tidak ada pada hotfix.",
+  "result": "Ada tiga tag: v1.0.0, v1.0.1 dengan harga roti bakar yang benar, dan v1.1.0. main berisi diskon member sekaligus perbaikan harga roti bakar.",
+  "pitfall": "Jangan memperbaiki langsung di main lalu memberi tag v1.0.1 di sana. Tag itu akan ikut membawa diskon member, padahal cabang belum siap menerimanya. Perhatikan juga bahwa perbaikan di branch hotfix belum ada di main sampai kamu menggabungkannya.",
+  "practice": "Jalankan git show v1.0.1:diskon.js dan git show main:diskon.js. Jelaskan kenapa baris diskonMember cuma ada di salah satunya.",
   "quiz": {
-    "question": "Dari mana memulai perbaikan versi lama?",
-    "options": [
-      "Titik versi yang benar-benar dirilis",
-      "Selalu commit main terbaru tanpa pemeriksaan",
-      "Branch acak yang paling panjang"
-    ],
-    "answer": 0,
-    "explanation": "Mulai dari snapshot yang perlu diperbaiki agar fitur lain tidak ikut tanpa sengaja."
+    "question": "Versi rilis v1.0.0 butuh perbaikan, tapi main sudah berisi fitur yang belum siap. Dari mana branch hotfix dibuat?",
+    "options": ["Dari main", "Dari tag v1.0.0", "Dari branch fitur terbaru"],
+    "answer": 1,
+    "explanation": "Branch dari v1.0.0 berisi persis versi yang dirilis, jadi perbaikannya nggak membawa fitur lain."
   },
-  "commands": ["git tag", "git switch -c"],
+  "commands": ["git switch -c", "git tag -a"],
   "visual": "graph",
   "minutes": 8,
   "level": "Lanjutan",
-  "prerequisites": ["tag", "branch"],
-  "initialState": "Tag v1.0.0 tersedia dan main sudah maju dengan fitur yang belum masuk versi rilis. Working tree bersih sebelum membuat hotfix.",
-  "lab": "tags",
+  "prerequisites": ["catatan-rilis", "merge"],
+  "initialState": "Lanjutan dari materi catatan rilis: kamu berada di branch main, dan tag v1.0.0 serta v1.1.0 sudah ada di server.",
   "objectives": [
-    "Mulai hotfix dari titik rilis dan pastikan perbaikannya kembali ke jalur pengembangan.",
-    "Periksa hasilnya: Versi perbaikan tidak membawa fitur yang belum siap, dan bug yang sama tidak tertinggal di main."
+    "Bisa membuat branch dari tag rilis",
+    "Bisa memberi tag versi perbaikan",
+    "Tahu kenapa perbaikan juga perlu digabung ke main"
   ],
   "sources": [
     {
@@ -58,8 +59,8 @@
     }
   ],
   "verification": {
-    "command": "git show v1.0.1\ngit log --graph --oneline --all",
-    "explanation": "Versi perbaikan tidak membawa fitur yang belum siap, dan bug yang sama tidak tertinggal di main."
+    "command": "git tag -n\ngit show main:menu.json",
+    "explanation": "Ada v1.0.0, v1.0.1, dan v1.1.0. menu.json di main berisi rotiBakar 16000."
   },
   "order": 51
 }

@@ -1,51 +1,67 @@
 {
   "chapter": 14,
   "id": "worktree",
-  "title": "Dua pekerjaan, dua meja.",
-  "summary": "Gunakan worktree saat dua branch perlu terbuka bersamaan.",
-  "scenario": "Kamu sedang menjalankan fitur diskon, tetapi perlu menguji hotfix pada jendela editor lain tanpa menutup pekerjaan sekarang.",
-  "concept": "git worktree menambahkan working tree lain yang berbagi database object dan referensi repository. Masing-masing memiliki working tree dan index sendiri. Secara normal satu branch tidak boleh aktif di dua worktree sekaligus. Ini berbeda dari clone yang merupakan repository tersendiri.",
-  "analogy": "Kamu menambah meja kerja kedua untuk buku catatan yang sama. Bahan di kedua meja terpisah, tetapi riwayat proyeknya dibagikan.",
+  "title": "Worktree: kerjakan dua branch di dua folder",
+  "summary": "git worktree membuat folder kerja kedua dari repo yang sama. Kamu bisa mengerjakan branch lain tanpa stash atau commit setengah jadi di folder utama.",
+  "scenario": "Percobaan diskonMember 7 masih terbuka di kopi-kita. Pemilik kedai minta info jam buka hari Minggu ditambahkan sekarang juga, dan kamu nggak mau mengganggu percobaan yang sedang berjalan.",
+  "concept": "Satu repo biasanya punya satu working tree. git worktree add diikuti path folder baru membuat working tree tambahan yang terhubung ke repo yang sama. Opsi -b membuat branch baru untuk folder itu, dan argumen terakhir menentukan commit awalnya. Kedua folder berbagi riwayat, branch, dan object, tapi masing-masing punya working tree, staging area, dan HEAD sendiri. Commit di satu folder langsung terlihat dari folder lain. Satu branch cuma boleh aktif di satu worktree sekaligus, jadi main yang sedang dipakai di kopi-kita nggak bisa dibuka juga di folder kedua. git worktree list menampilkan semua worktree, dan git worktree remove menghapus folder tambahan setelah selesai.",
+  "analogy": "Seperti punya dua meja kerja di dapur yang sama. Bahan dan resepnya sama, tapi racikan di meja pertama nggak terganggu saat kamu menyiapkan pesanan di meja kedua.",
   "steps": [
     {
-      "title": "Tambahkan ruang hotfix",
-      "command": "git worktree add -b hotfix-checkout ../kopi-hotfix main",
-      "explanation": "Jalankan dari repo Kopi Kita. Folder baru dibuat di lokasi saudara; pilih lokasi yang memang kamu miliki."
+      "title": "Buat folder kerja kedua",
+      "command": "git worktree add -b perbaiki-jam ../kopi-kita-jam main",
+      "explanation": "Git menulis Preparing worktree (new branch 'perbaiki-jam') dan HEAD is now at diikuti commit Turunkan diskon jadi 12 persen."
     },
     {
-      "title": "Lihat daftar meja",
-      "command": "git worktree list",
-      "explanation": "Buka folder hotfix di editor lain dan kerjakan sesuai kebutuhan."
+      "title": "Pindah ke folder kedua",
+      "command": "cd ../kopi-kita-jam\ngit status --short",
+      "explanation": "Status kosong: percobaan diskonMember 7 nggak ikut ke folder ini. Tambahkan baris kedua di jam-buka.txt: Minggu buka mulai pukul 09.00, lalu simpan."
     },
     {
-      "title": "Rapikan sesudah selesai",
-      "command": "git worktree remove ../kopi-hotfix",
-      "explanation": "Pastikan perubahan sudah disimpan. Remove worktree tidak otomatis menghapus nama branch-nya."
+      "title": "Commit di folder kedua",
+      "command": "git add jam-buka.txt\ngit commit -m \"Tambah jam buka hari Minggu\"",
+      "explanation": "Commit ini memajukan perbaiki-jam."
+    },
+    {
+      "title": "Kembali dan lihat semua worktree",
+      "command": "cd ../kopi-kita\ngit worktree list\ngit status --short",
+      "explanation": "Ada dua baris: kopi-kita dengan [main] dan kopi-kita-jam dengan [perbaiki-jam]. Status masih menampilkan M diskon.js, jadi percobaanmu utuh."
+    },
+    {
+      "title": "Gabungkan dan bereskan",
+      "command": "git merge --ff-only perbaiki-jam\ngit push\ngit worktree remove ../kopi-kita-jam\ngit branch -d perbaiki-jam",
+      "explanation": "Merge bisa fast-forward walaupun diskon.js sedang diedit, karena file yang berubah berbeda. Push juga mengirim commit diskon 12 dari materi sebelumnya. Folder kopi-kita-jam lalu dihapus bersama branch-nya."
+    },
+    {
+      "title": "Buang percobaan diskon member",
+      "command": "git restore diskon.js\ngit status --short",
+      "explanation": "Pemilik kedai menolak diskon member 7. Status kosong lagi."
     }
   ],
-  "result": "Fitur dan hotfix bisa diuji pada folder berbeda tanpa mengganti branch pada meja pertama.",
-  "pitfall": "Submodule melacak commit repo lain; sparse checkout membatasi path working tree; partial clone mengurangi object awal; shallow clone membatasi riwayat. Semuanya memecahkan masalah berbeda. Git LFS adalah ekstensi untuk pengelolaan file besar.",
-  "practice": "Bandingkan status pada dua worktree setelah mengedit file hanya di salah satunya. Amati perubahan mana yang lokal pada meja itu.",
+  "result": "main berisi jam buka hari Minggu dan sudah di-push, folder tambahan sudah dihapus, dan working tree kopi-kita bersih.",
+  "pitfall": "Jangan menghapus folder worktree lewat File Explorer atau Finder. Git masih mencatatnya dan menganggap branch-nya sedang dipakai; kalau terlanjur, jalankan git worktree prune. git worktree remove juga menolak kalau folder itu masih punya perubahan yang belum di-commit.",
+  "practice": "Jalankan git worktree add ../kopi-kita-main main. Git menolak dengan pesan 'main' is already used by worktree. Jelaskan kenapa main nggak bisa dibuka di dua folder sekaligus.",
   "quiz": {
-    "question": "Apa yang dibagikan antar linked worktree?",
+    "question": "Apa yang dibagikan dua worktree dari repo yang sama?",
     "options": [
-      "Database object dan referensi repository",
-      "Semua edit working tree seketika",
-      "Satu index untuk semua pekerjaan"
+      "Working tree dan staging area",
+      "Riwayat, branch, dan object",
+      "Nggak ada, keduanya repo terpisah"
     ],
-    "answer": 0,
-    "explanation": "Linked worktree memiliki working tree dan index masing-masing, dengan penyimpanan repository yang dibagikan."
+    "answer": 1,
+    "explanation": "Setiap worktree punya working tree, staging area, dan HEAD sendiri, tapi riwayatnya sama."
   },
   "commands": ["git worktree"],
   "visual": "graph",
-  "minutes": 8,
+  "minutes": 9,
   "level": "Lanjutan",
-  "prerequisites": ["branch"],
-  "initialState": "Latihan worktree: repo kopi-kita bersih pada main dengan harga 18000. Folder saudara kopi-kita-hotfix belum ada.",
+  "prerequisites": ["partial-staging", "fast-forward"],
+  "initialState": "Lanjutan dari materi add -p: kamu berada di branch main, dan diskon.js berisi percobaan diskonMember 7 yang belum di-commit.",
   "lab": "worktree",
   "objectives": [
-    "Gunakan worktree saat dua branch perlu terbuka bersamaan.",
-    "Periksa hasilnya: Fitur dan hotfix bisa diuji pada folder berbeda tanpa mengganti branch pada meja pertama."
+    "Tahu apa yang dibagikan dan dipisahkan antar worktree",
+    "Bisa membuat dan menghapus worktree",
+    "Tahu kapan worktree lebih cocok daripada stash"
   ],
   "sources": [
     {
@@ -54,8 +70,8 @@
     }
   ],
   "verification": {
-    "command": "git worktree list\ngit show main:menu.json\ngit show hotfix:menu.json",
-    "explanation": "Kedua folder memakai penyimpanan repository bersama, tetapi mempunyai branch aktif, index, dan file kerja masing-masing. Main dan file pada kopi-kita tetap 18000."
+    "command": "git worktree list\ngit log --oneline -1",
+    "explanation": "Cuma tersisa satu worktree, yaitu kopi-kita. Commit teratas Tambah jam buka hari Minggu."
   },
   "order": 54
 }

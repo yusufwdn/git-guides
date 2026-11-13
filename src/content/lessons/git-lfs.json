@@ -1,66 +1,85 @@
 {
   "chapter": 14,
   "id": "git-lfs",
-  "title": "File besar punya alur penyimpanan tambahan.",
-  "summary": "Kenali Git LFS sebagai ekstensi dengan object server terpisah.",
-  "scenario": "Foto menu beresolusi tinggi berganti berkali-kali. Tim ingin mengelolanya tanpa menganggap file biner seperti kode teks kecil.",
-  "concept": "Git LFS menggunakan pointer pada riwayat Git dan menyimpan isi besar melalui layanan LFS. git lfs track menambahkan aturan ke .gitattributes; aturan tersebut perlu di-commit. Mengaktifkan tracking baru tidak otomatis memigrasikan seluruh file besar di riwayat lama. Dukungan, kuota, dan akses server perlu diperiksa pada penyedia.",
-  "analogy": "Katalog mencatat nomor penyimpanan barang besar. Memiliki kartu katalog belum berarti barang fisiknya sudah tersedia di tempatmu.",
+  "title": "Git LFS: simpan file besar di luar riwayat Git",
+  "summary": "Git LFS menyimpan file besar seperti desain atau video di penyimpanan terpisah. Riwayat Git cuma berisi pointer kecil, jadi repo tetap ringan.",
+  "scenario": "Tim desain mulai menyimpan file Photoshop berukuran puluhan megabyte. Kalau semua versinya masuk riwayat Git, setiap clone akan mengunduh semua versi itu.",
+  "concept": "Git menyimpan setiap versi setiap file di riwayat, sehingga file biner besar yang sering berubah cepat membengkakkan repo. Git LFS (Large File Storage) adalah ekstensi yang mengganti isi file seperti itu dengan pointer teks kecil berisi hash dan ukuran. Isi aslinya disimpan di penyimpanan LFS dan cuma diunduh untuk versi yang sedang dipakai. git lfs track diikuti pola, misalnya \"*.psd\", menulis aturan ke file .gitattributes; file itu perlu di-commit supaya rekan memakai aturan yang sama. Setelah itu git add dan git commit bekerja seperti biasa, dan git lfs ls-files menampilkan file yang disimpan lewat LFS. Git for Windows sudah menyertakan Git LFS. Di macOS dan Linux, pasang dulu dari git-lfs.com lalu jalankan git lfs install sekali. Layanan hosting biasanya menerapkan kuota penyimpanan LFS.",
+  "analogy": "Seperti menitipkan barang besar di gudang dan cuma menyimpan tiket penitipannya di laci. Laci tetap rapi, dan barangnya diambil dari gudang saat dibutuhkan.",
   "steps": [
     {
-      "title": "Periksa ekstensi",
+      "title": "Pastikan Git LFS terpasang",
       "command": "git lfs version",
-      "explanation": "Ini memerlukan Git LFS terpasang terpisah; command tidak tersedia pada Git inti saja."
+      "explanation": "Hasilnya berbentuk git-lfs/3.6.1 diikuti detail sistem. Kalau Git bilang lfs bukan command Git, pasang dulu Git LFS."
     },
     {
-      "title": "Atur pola pada repo yang siap LFS",
-      "command": "git lfs track \"*.psd\"\ngit diff -- .gitattributes",
-      "explanation": "Contoh pola adalah pilihan tim. Commit .gitattributes dan file yang relevan setelah memeriksa hasil."
+      "title": "Daftarkan pola file",
+      "command": "git lfs track \"*.psd\"\ngit status --short",
+      "explanation": "Git LFS menulis Tracking \"*.psd\". Status menampilkan ?? .gitattributes, file baru berisi aturan *.psd filter=lfs diff=lfs merge=lfs -text."
+    },
+    {
+      "title": "Commit aturannya",
+      "command": "git add .gitattributes\ngit commit -m \"Simpan file psd lewat Git LFS\"",
+      "explanation": "Aturan ini sekarang ikut dibagikan ke semua orang yang meng-clone repo."
+    },
+    {
+      "title": "Tambahkan file psd",
+      "command": "git add logo.psd\ngit commit -m \"Tambah logo kedai\"\ngit lfs ls-files",
+      "explanation": "Sebelum menjalankan command, buat file logo.psd berisi teks apa saja, misalnya contoh logo kedai. Untuk latihan, isinya nggak perlu gambar sungguhan. git lfs ls-files menampilkan potongan hash diikuti * logo.psd."
+    },
+    {
+      "title": "Lihat yang tersimpan di Git, lalu kirim",
+      "command": "git show HEAD:logo.psd\ngit push",
+      "explanation": "Riwayat Git cuma menyimpan tiga baris pointer: version, oid sha256, dan size. Saat push, Git LFS menulis Uploading LFS objects lalu mengirim isi aslinya."
     }
   ],
-  "result": "Kamu dapat membedakan riwayat pointer dan ketersediaan data besar pada layanan LFS.",
-  "pitfall": "Clone atau bundle Git tidak otomatis menjadi backup semua object LFS. Jangan memigrasikan riwayat bersama tanpa rencana serta verifikasi data.",
-  "practice": "Jelaskan data apa yang dibutuhkan rekan agar bisa membuka file LFS dari snapshot tertentu. Latihan ini tidak meminta akun atau upload file besar.",
+  "result": "logo.psd tersimpan lewat Git LFS: riwayat Git berisi pointer, dan isi aslinya sudah terkirim ke server bersama push.",
+  "pitfall": "track cuma berlaku untuk file yang di-add setelah aturannya dibuat. File besar yang sudah terlanjur di-commit tetap memenuhi riwayat; memindahkannya butuh git lfs migrate, yang menulis ulang riwayat dan perlu koordinasi tim. Pastikan juga server yang dipakai mendukung LFS. Kalau rekan meng-clone tanpa Git LFS terpasang, yang mereka dapat cuma file pointer.",
+  "practice": "Jalankan git lfs track tanpa argumen dan baca daftar pola yang aktif di bawah Listing tracked patterns. Lalu buka .gitattributes dan cocokkan isinya.",
   "quiz": {
-    "question": "Git LFS termasuk command bawaan Git inti?",
+    "question": "Apa yang tersimpan di riwayat Git untuk file yang dikelola Git LFS?",
     "options": [
-      "Tidak, ekstensi terpisah",
-      "Ya, selalu sudah tersedia",
-      "Hanya built-in pada repo public"
+      "Isi file lengkap",
+      "Pointer kecil berisi hash dan ukuran",
+      "Nggak ada sama sekali"
     ],
-    "answer": 0,
-    "explanation": "LFS adalah alat dan alur object tambahan yang perlu dipasang serta didukung server."
+    "answer": 1,
+    "explanation": "Riwayat Git menyimpan pointer. Isi aslinya ada di penyimpanan LFS dan diunduh saat dibutuhkan."
   },
-  "commands": ["git lfs track", "git lfs version"],
+  "commands": ["git lfs track", "git lfs ls-files"],
   "visual": "objects",
-  "minutes": 7,
+  "minutes": 8,
   "level": "Lanjutan",
-  "prerequisites": ["mulai-repo", "ignore"],
-  "initialState": "Git LFS harus dipasang terpisah untuk praktik. Gunakan file contoh, dukungan server yang diketahui, dan repository yang boleh menerima aturan baru.",
-  "lab": "objects",
+  "prerequisites": ["submodule", "ignore"],
+  "initialState": "Lanjutan dari materi submodule: kamu berada di branch main di kopi-kita, dan working tree bersih.",
   "objectives": [
-    "Kenali Git LFS sebagai ekstensi dengan object server terpisah.",
-    "Periksa hasilnya: Kamu dapat membedakan riwayat pointer dan ketersediaan data besar pada layanan LFS."
+    "Tahu masalah file besar di riwayat Git",
+    "Bisa mendaftarkan pola file ke Git LFS",
+    "Tahu bahwa riwayat Git cuma menyimpan pointer"
   ],
   "sources": [
     {
-      "title": "Dokumentasi Git LFS",
+      "title": "Git LFS",
       "url": "https://git-lfs.com/"
+    },
+    {
+      "title": "Dokumentasi gitattributes",
+      "url": "https://git-scm.com/docs/gitattributes"
     }
   ],
   "verification": {
     "command": "git lfs ls-files",
-    "explanation": "Kamu dapat membedakan riwayat pointer dan ketersediaan data besar pada layanan LFS."
+    "explanation": "Ada satu baris yang berakhiran * logo.psd."
   },
   "order": 57,
   "checkpoint": {
-    "question": "Superproject menyimpan gitlink T1. Submodule mendapat commit T2. Apa yang dibagikan agar tim memakai T2?",
+    "question": "Repo menu memakai submodule desain di commit D1, dan repo desain sekarang punya D2. Apa yang perlu dibagikan supaya tim memakai D2?",
     "options": [
-      "Commit submodule yang tersedia dan commit pembaruan gitlink di superproject",
-      "Hanya mengganti nama folder",
-      "Private key pembuat submodule"
+      "Commit di repo menu yang memperbarui gitlink desain ke D2, dan D2 sudah ada di server desain",
+      "Cukup push repo desain",
+      "Salin isi folder desain ke repo menu"
     ],
     "answer": 0,
-    "explanation": "Repository submodule menyimpan commit, sedangkan superproject merekam pilihan commit yang dipakai."
+    "explanation": "Repo menu mencatat commit desain yang dipakai. Tim butuh catatan baru itu dan akses ke commit D2."
   }
 }

@@ -1,42 +1,51 @@
 {
   "chapter": 13,
   "id": "signing",
-  "title": "Tanda tangan menambah bukti asal, bukan kebenaran.",
-  "summary": "Kenali signed commit/tag dan prasyarat verifikasinya.",
-  "scenario": "Tim ingin memeriksa asal tag rilis. Kamu perlu tahu apa yang dibuktikan tanda tangan dan alat apa yang harus disiapkan.",
-  "concept": "Git dapat memakai mekanisme signing yang dikonfigurasi, misalnya OpenPGP atau SSH pada versi yang mendukung. Signed tag dibuat dengan tag -s; commit signing memakai commit -S. Verifikasi memerlukan kunci publik dan kebijakan kepercayaan yang benar. Tanda tangan valid tidak membuktikan kode bebas bug.",
-  "analogy": "Segel penulis membantu membuktikan asal surat. Isi surat tetap perlu dibaca dan diuji.",
+  "title": "Signing: buktikan commit dan tag berasal darimu",
+  "summary": "Nama author bisa diisi siapa saja. Tanda tangan digital pada commit atau tag membuktikan bahwa data itu dibuat oleh pemilik kunci tertentu.",
+  "scenario": "Siapa pun bisa menjalankan git config user.name \"Rani\" lalu commit atas nama Rani. Tim Kopi Kita ingin rilis berikutnya bisa dibuktikan memang dibuat oleh orang yang berwenang.",
+  "concept": "user.name dan user.email cuma label yang bisa diisi bebas, jadi nggak membuktikan apa-apa. Signing menambahkan tanda tangan digital yang dibuat dengan kunci privat milikmu. Siapa pun yang punya kunci publikmu bisa memeriksa bahwa commit atau tag itu benar dibuat oleh pemilik kunci dan isinya belum diubah. Git mendukung kunci GPG, SSH, dan X.509; pilihannya diatur lewat gpg.format, dengan openpgp (GPG) sebagai bawaan. Tag bertanda tangan dibuat dengan git tag -s, dan commit bertanda tangan dengan git commit -S. Pemeriksaannya memakai git tag -v dan git log --show-signature. GitHub dan GitLab menampilkan label Verified kalau kunci publiknya sudah didaftarkan di akunmu.",
+  "analogy": "Nama di amplop bisa ditulis siapa saja. Segel lilin dengan cap pribadi cuma bisa dibuat pemilik capnya, dan segel yang rusak menandakan isinya sudah dibuka.",
   "steps": [
     {
-      "title": "Periksa konfigurasi tanpa mengubahnya",
-      "command": "git config --get gpg.format\ngit config --get user.signingkey",
-      "explanation": "Nilai kosong berarti belum disiapkan secara eksplisit. Alat dan konfigurasi signing berbeda antar sistem."
+      "title": "Periksa tag rilis",
+      "command": "git tag -v v1.0.0",
+      "explanation": "Git menampilkan isi tag, lalu berhenti dengan error: no signature found. Tag ini dibuat dengan -a, jadi nggak bertanda tangan."
     },
     {
-      "title": "Verifikasi tag yang memang signed",
-      "command": "git tag -v NAMA_TAG_SIGNED",
-      "explanation": "Ganti placeholder dengan tag nyata. Annotated tag biasa pada latihan tags tidak ditandatangani dan verifikasinya tidak akan sukses sebagai signed tag."
+      "title": "Periksa commit terakhir",
+      "command": "git log --show-signature -1",
+      "explanation": "Hasilnya sama seperti git log biasa. Kalau commit-nya bertanda tangan, ada baris tambahan tentang signature di atas Author."
+    },
+    {
+      "title": "Lihat format yang dipakai",
+      "command": "git config --get gpg.format",
+      "explanation": "Biasanya kosong, artinya Git memakai bawaan openpgp. Kalau kamu sudah mengatur signing dengan SSH, hasilnya ssh."
     }
   ],
-  "result": "Kamu dapat membedakan author metadata, signature, kepercayaan kunci, dan hasil pengujian kode.",
-  "pitfall": "Jangan membuat atau mengunggah private key sebagai bagian materi. Latihan dasar sengaja menonaktifkan signing agar tidak memerlukan rahasia pengguna.",
-  "practice": "Baca metadata tag annotated pada latihan tags. Jelaskan informasi tambahan yang diperlukan sebelum dapat memverifikasi signed tag.",
+  "result": "Kamu tahu bahwa tag dan commit Kopi Kita sejauh ini belum bertanda tangan, dan cara memeriksanya.",
+  "pitfall": "Tanda tangan valid cuma membuktikan siapa pembuatnya dan bahwa isinya belum diubah. Tanda tangan nggak membuktikan kodenya benar atau aman. Jaga kunci privat seperti password: jangan di-commit, jangan dibagikan, dan cabut dari akun layanan hosting kalau kuncinya bocor.",
+  "practice": "Baca panduan signing di GitHub Docs pada bagian sumber. Tulis urutan langkah untuk mengaktifkan signing dengan kunci SSH: membuat kunci, mengatur gpg.format dan user.signingkey, lalu mendaftarkan kunci publik di akun.",
   "quiz": {
-    "question": "Signature valid menjamin kode tanpa bug?",
-    "options": ["Ya, selalu", "Tidak", "Hanya untuk tag versi 1"],
+    "question": "Apa yang dibuktikan tanda tangan yang valid pada sebuah tag?",
+    "options": [
+      "Kodenya bebas bug",
+      "Tag dibuat oleh pemilik kunci dan isinya belum diubah",
+      "Author commit-nya benar"
+    ],
     "answer": 1,
-    "explanation": "Signature memverifikasi hubungan data dan kunci sesuai mekanismenya; kualitas kode dinilai terpisah."
+    "explanation": "Signature menghubungkan data dengan kunci. Kualitas kode tetap perlu review dan pengujian."
   },
-  "commands": ["git tag -v", "git commit -S"],
+  "commands": ["git tag -v", "git log --show-signature"],
   "visual": "objects",
   "minutes": 7,
   "level": "Lanjutan",
-  "prerequisites": ["tag", "autentikasi"],
-  "initialState": "Git dan mekanisme signing yang sesuai harus dikonfigurasi untuk praktik nyata. Contoh verifikasi memerlukan tag yang memang signed dan kunci publik tepercaya.",
-  "lab": "tags",
+  "prerequisites": ["hotfix", "autentikasi"],
+  "initialState": "Lanjutan dari materi hotfix: kamu berada di branch main, dan working tree bersih.",
   "objectives": [
-    "Kenali signed commit/tag dan prasyarat verifikasinya.",
-    "Periksa hasilnya: Kamu dapat membedakan author metadata, signature, kepercayaan kunci, dan hasil pengujian kode."
+    "Tahu kenapa user.name nggak membuktikan identitas",
+    "Bisa memeriksa tanda tangan tag dan commit",
+    "Tahu langkah besar mengaktifkan signing"
   ],
   "sources": [
     {
@@ -44,19 +53,27 @@
       "url": "https://git-scm.com/docs/git-tag"
     },
     {
-      "title": "Manual git commit",
-      "url": "https://git-scm.com/docs/git-commit"
+      "title": "Pro Git: signing your work",
+      "url": "https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work"
+    },
+    {
+      "title": "GitHub Docs: about commit signature verification",
+      "url": "https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification"
     }
   ],
   "verification": {
-    "command": "git config --get gpg.format",
-    "explanation": "Kamu dapat membedakan author metadata, signature, kepercayaan kunci, dan hasil pengujian kode."
+    "command": "git tag -v v1.0.1",
+    "explanation": "Hasilnya juga error: no signature found, karena v1.0.1 dibuat dengan -a tanpa -s."
   },
   "order": 52,
   "checkpoint": {
-    "question": "Tag v1.0.0 menunjuk A. Main kemudian mendapat commit B. Di mana tag tersebut?",
-    "options": ["Tetap A", "Otomatis B", "Mengikuti branch aktif terakhir"],
+    "question": "v1.1.0 sudah dirilis, tapi kedai cabang yang memakai v1.0.0 butuh perbaikan harga tanpa fitur baru. Langkah mana yang tepat?",
+    "options": [
+      "Buat branch dari v1.0.0, perbaiki, beri tag v1.0.1, lalu gabungkan perbaikannya ke main",
+      "Perbaiki di main, lalu pindahkan tag v1.0.0 ke commit perbaikan",
+      "Hapus tag v1.1.0"
+    ],
     "answer": 0,
-    "explanation": "Tag tidak otomatis berpindah ketika branch maju."
+    "explanation": "Tag yang sudah dirilis jangan dipindah. Hotfix dari tag lama menjaga versi cabang tetap tanpa fitur baru."
   }
 }

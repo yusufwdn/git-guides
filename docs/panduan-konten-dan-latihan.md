@@ -20,30 +20,30 @@ Contoh di atas hanya memperlihatkan bentuk satu field. Pertahankan field lain da
 
 ## Arti field materi
 
-| Field                | Dipakai untuk                                                                                        |
-| -------------------- | ---------------------------------------------------------------------------------------------------- |
-| `id`                 | Identitas materi dan slug URL; harus sama dengan nama file tanpa `.json`.                            |
-| `order`              | Urutan global materi; angka lebih kecil muncul lebih dahulu.                                         |
-| `chapter`            | Nomor bab yang ada pada katalog.                                                                     |
+| Field                | Dipakai untuk                                                                                                                    |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `id`                 | Identitas materi dan slug URL; harus sama dengan nama file tanpa `.json`.                                                        |
+| `order`              | Urutan global materi; angka lebih kecil muncul lebih dahulu.                                                                     |
+| `chapter`            | Nomor bab yang ada pada katalog.                                                                                                 |
 | `title`, `summary`   | Judul serta pengantar; juga dipakai untuk metadata halaman. Gaya penulisan ada di [panduan gaya bahasa](panduan-gaya-bahasa.md). |
-| `scenario`           | Masalah yang dihadapi pembaca pada proyek Kopi Kita.                                                 |
-| `concept`, `analogy` | Penjelasan teknis dan analogi pendamping.                                                            |
-| `initialState`       | Kondisi repo yang harus tersedia sebelum contoh dicoba.                                              |
-| `preparationURL`     | Tautan persiapan opsional; saat ini menuju `/persiapan/`.                                            |
-| `prerequisites`      | Array ID materi yang perlu dipahami lebih dahulu.                                                    |
-| `objectives`         | Daftar tujuan belajar yang ditampilkan di panel persiapan.                                           |
-| `steps`              | Array objek `title`, `command`, dan `explanation` untuk langkah praktik.                             |
-| `result`             | Keadaan atau pemahaman yang diharapkan setelah mengikuti contoh.                                     |
-| `verification`       | Objek `command` dan `explanation` untuk memeriksa hasil.                                             |
-| `pitfall`            | Kesalahan yang perlu dikenali beserta konteksnya.                                                    |
-| `practice`           | Tantangan pembaca yang berkaitan dengan materi.                                                      |
-| `lab`                | ID latihan terminal dalam `src/data/labs.json`.                                                      |
-| `commands`           | Daftar command terkait; dipakai pada breadcrumb, referensi, dan pencarian.                           |
-| `visual`             | Jenis ilustrasi dasar; beberapa ID materi mendapat diagram khusus melalui `forLesson()`.             |
-| `quiz`               | Kuis dengan pertanyaan, opsi, indeks jawaban benar, dan penjelasan.                                  |
-| `checkpoint`         | Tantangan tambahan opsional, saat ini dipakai pada penutup setiap bab.                               |
-| `sources`            | Array objek `title` dan `url` untuk sumber resmi.                                                    |
-| `level`, `minutes`   | Label tingkat dan perkiraan waktu baca/praktik.                                                      |
+| `scenario`           | Masalah yang dihadapi pembaca pada proyek Kopi Kita.                                                                             |
+| `concept`, `analogy` | Penjelasan teknis dan analogi pendamping.                                                                                        |
+| `initialState`       | Kondisi repo yang harus tersedia sebelum contoh dicoba.                                                                          |
+| `preparationURL`     | Tautan persiapan opsional; saat ini menuju `/persiapan/`.                                                                        |
+| `prerequisites`      | Array ID materi yang perlu dipahami lebih dahulu.                                                                                |
+| `objectives`         | Daftar tujuan belajar yang ditampilkan di panel persiapan.                                                                       |
+| `steps`              | Array objek `title`, `command`, dan `explanation` untuk langkah praktik.                                                         |
+| `result`             | Keadaan atau pemahaman yang diharapkan setelah mengikuti contoh.                                                                 |
+| `verification`       | Objek `command` dan `explanation` untuk memeriksa hasil.                                                                         |
+| `pitfall`            | Kesalahan yang perlu dikenali beserta konteksnya.                                                                                |
+| `practice`           | Tantangan pembaca yang berkaitan dengan materi.                                                                                  |
+| `lab`                | Opsional. ID latihan terminal dalam `src/data/labs.json`; kosongkan bila materi dipraktikkan langsung di repo pembaca.           |
+| `commands`           | Daftar command terkait; dipakai pada breadcrumb, referensi, dan pencarian.                                                       |
+| `visual`             | Jenis ilustrasi dasar; beberapa ID materi mendapat diagram khusus melalui `forLesson()`. Isi `none` untuk materi tanpa diagram.  |
+| `quiz`               | Kuis dengan pertanyaan, opsi, indeks jawaban benar, dan penjelasan.                                                              |
+| `checkpoint`         | Tantangan tambahan opsional, saat ini dipakai pada penutup setiap bab.                                                           |
+| `sources`            | Array objek `title` dan `url` untuk sumber resmi.                                                                                |
+| `level`, `minutes`   | Label tingkat dan perkiraan waktu baca/praktik.                                                                                  |
 
 Schema berada di [content.config.ts](../src/content.config.ts). Hubungan antarmateri, keberadaan latihan, dan beberapa kriteria kelengkapan tambahan diperiksa di [scripts/check.mjs](../scripts/check.mjs).
 

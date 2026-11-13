@@ -277,7 +277,7 @@ export default (context) => {
       `<div class="section-kicker">SEBELUM MULAI</div>
       <h2>Pastikan titik awalnya jelas.</h2>
       <p>${esc(lesson.initialState)}</p>
-      ${lesson.preparationURL ? `<a class="text-button" href="${esc(lesson.preparationURL)}">Belum siap? Instal Git dan buat repo pertama →</a>` : ''}
+      ${lesson.preparationURL ? `<a class="text-button" href="${esc(lesson.preparationURL)}">Belum pasang Git? Ikuti halaman persiapan →</a>` : ''}
       <details class="lesson-objectives">
         <summary>Yang akan kamu pahami</summary>
         <ul>
@@ -310,7 +310,11 @@ export default (context) => {
     );
   }
 
+  // Panel latihan pendamping dari paket ZIP. Dipanggil dari lessonPage().
+  // Materi awal (bab 1 dan git init) dipraktikkan langsung di repo pembaca dan belum
+  // memakai paket latihan, jadi field lab boleh kosong dan panelnya tidak dirender.
   function terminalLab(lesson) {
+    if (!lesson.lab) return '';
     const lab = data.labs[lesson.lab];
     return (
       '<div class="terminal-lab-panel" data-lab="' +

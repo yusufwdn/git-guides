@@ -49,6 +49,30 @@ export default (context) => {
     return `${esc(lead)}<br/><span class="title-accent">${esc(accent)}</span>`;
   }
 
+  // Membuat bagian "Lihat dulu alurnya" berisi diagram materi. Dipanggil dari lessonPage()
+  // hanya untuk materi yang visual-nya bukan "none". Judul dan pengantar khusus disediakan
+  // untuk diagram interaktif stash dan staging; diagram lain memakai teks umum.
+  function visualSection(lesson) {
+    const heading =
+      lesson.visual === 'stash'
+        ? 'Pekerjaanmu pindah ke mana?'
+        : lesson.visual === 'staging'
+          ? 'Dari file kerja ke snapshot.'
+          : 'Gambaran besarnya.';
+    const intro =
+      lesson.visual === 'stash'
+        ? 'Klik setiap langkah. Perhatikan file di meja kerja dan simpanan di laci stash.'
+        : lesson.visual === 'staging'
+          ? 'Perhatikan perbedaan file kerja, isi index, dan snapshot yang sudah direkam.'
+          : 'Gunakan gambaran ini sambil membaca konsep dan contoh di bawah.';
+    return /* HTML */ `<section id="visualisasi" class="lesson-section">
+      <div class="section-kicker">01 / LIHAT DULU ALURNYA</div>
+      <h2>${heading}</h2>
+      <p>${intro}</p>
+      <div id="lesson-visual">${visual(lesson)}</div>
+    </section>`;
+  }
+
   function lessonPage(lesson, options = {}) {
     const completed = options.completed || new Set(),
       bookmarks = options.bookmarks || new Set();
@@ -57,9 +81,14 @@ export default (context) => {
       previous = lessons[index - 1],
       next = lessons[index + 1];
     const title = lessonHeading(lesson);
+    // Materi dengan visual "none" tidak punya bagian diagram. Nomor kicker tiap bagian
+    // ikut bergeser supaya urutannya tetap 01, 02, 03 tanpa loncatan.
+    const hasVisual = lesson.visual !== 'none';
+    const kicker = (number, label) =>
+      `${String(hasVisual ? number : number - 1).padStart(2, '0')} / ${label}`;
     const toc = [
       ['situasi', 'Situasinya begini'],
-      ['visualisasi', 'Lihat alurnya'],
+      ...(hasVisual ? [['visualisasi', 'Lihat alurnya']] : []),
       ['konsep', 'Pahami konsepnya'],
       ['langkah', 'Coba langkahnya'],
       ['perhatian', 'Yang perlu diingat'],
@@ -113,10 +142,10 @@ export default (context) => {
                   <li><code>diskon.js</code> menyimpan nilai diskon.</li>
                 </ul>
                 <p>
-                  Untuk sekarang, cukup ikuti ceritanya. Saat mulai praktik,
-                  <a href="/persiapan/">halaman persiapan</a> akan memandu kamu membuat folder
-                  <code>kopi-kita</code> dan kedua file tersebut dari awal. Perubahan pada file-file
-                  inilah yang akan kita catat dan telusuri dengan Git.
+                  Untuk sekarang, cukup ikuti ceritanya. Di bab 1 kamu menyiapkan Git dan folder
+                  <code>kopi-kita</code>, lalu di bab 2 kamu membuat kedua file itu dari awal dan
+                  menyimpannya sebagai commit pertama. Perubahan pada file-file inilah yang akan
+                  kita catat dan telusuri dengan Git.
                 </p>
               </section>`
             : ''
@@ -137,31 +166,9 @@ export default (context) => {
             <p>${inline(lesson.scenario)}</p>
           </div>
         </section>
-        ${preparation(lesson)}
-        <section id="visualisasi" class="lesson-section">
-          <div class="section-kicker">01 / LIHAT DULU ALURNYA</div>
-          <h2>
-            ${
-              lesson.visual === 'stash'
-                ? 'Pekerjaanmu pindah ke mana?'
-                : lesson.visual === 'staging'
-                  ? 'Dari file kerja ke snapshot.'
-                  : 'Gambaran besarnya.'
-            }
-          </h2>
-          <p>
-            ${
-              lesson.visual === 'stash'
-                ? 'Klik setiap langkah. Perhatikan file di meja kerja dan simpanan di laci stash.'
-                : lesson.visual === 'staging'
-                  ? 'Perhatikan perbedaan file kerja, isi index, dan snapshot yang sudah direkam.'
-                  : 'Gunakan gambaran ini sambil membaca konsep dan contoh di bawah.'
-            }
-          </p>
-          <div id="lesson-visual">${visual(lesson)}</div>
-        </section>
+        ${preparation(lesson)} ${hasVisual ? visualSection(lesson) : ''}
         <section id="konsep" class="lesson-section">
-          <div class="section-kicker">02 / PAHAMI IDE DI BALIKNYA</div>
+          <div class="section-kicker">${kicker(2, 'PAHAMI IDE DI BALIKNYA')}</div>
           <h2>
             ${
               lesson.id === 'stash'
@@ -176,11 +183,14 @@ export default (context) => {
           </div>
         </section>
         <section id="langkah" class="lesson-section">
-          <div class="section-kicker">03 / SEKARANG, COBA SENDIRI</div>
+          <div class="section-kicker">${kicker(3, 'SEKARANG, COBA SENDIRI')}</div>
           <h2>Satu langkah pada satu waktu.</h2>
           <p>
-            Gunakan repository latihan. Nama file dan branch mengikuti skenario; sesuaikan dengan
-            keadaan awalmu. Baris output dan hash di komputermu dapat berbeda.
+            ${
+              lesson.lab
+                ? 'Gunakan repository latihan. Nama file dan branch mengikuti skenario; sesuaikan dengan keadaan awalmu. Baris output dan hash di komputermu dapat berbeda.'
+                : 'Jalankan langkah berikut di terminalmu sendiri, berurutan dari atas. Baris output dan hash di komputermu dapat berbeda dari contoh.'
+            }
           </p>
           <ol class="step-list">
             ${lesson.steps
@@ -234,7 +244,7 @@ export default (context) => {
         }
         ${verification(lesson)}
         <section id="perhatian" class="lesson-section">
-          <div class="section-kicker">04 / SEBELUM TERBURU-BURU</div>
+          <div class="section-kicker">${kicker(4, 'SEBELUM TERBURU-BURU')}</div>
           <h2>Yang sering bikin tersandung.</h2>
           <div class="notice">
             <span aria-hidden="true">↳</span>
@@ -242,7 +252,7 @@ export default (context) => {
           </div>
         </section>
         <section id="latihan" class="lesson-section">
-          <div class="section-kicker">05 / SEKARANG GILIRANMU</div>
+          <div class="section-kicker">${kicker(5, 'SEKARANG GILIRANMU')}</div>
           <h2>Dari “oh, paham” ke “bisa pakai”.</h2>
           <p>${inline(lesson.practice)}</p>
           ${terminalLab(lesson)}${quizHTML(lesson)}${browserPractice(lesson)}

@@ -32,7 +32,8 @@ const lessons = defineCollection({
       .refine((q) => q.answer < q.options.length, 'Jawaban kuis harus merujuk opsi yang ada.'),
     prerequisites: z.array(text),
     initialState: text,
-    lab: text,
+    // Opsional: materi awal dipraktikkan langsung di repo pembaca tanpa paket latihan.
+    lab: text.optional(),
     objectives: z.array(text).min(1),
     sources: z.array(z.object({ title: text, url: z.url() })).min(1),
     verification: z.object({ command: text, explanation: text }),

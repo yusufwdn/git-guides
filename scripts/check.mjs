@@ -41,7 +41,7 @@ for (const lesson of lessons) {
   assert(lesson.quiz.options[lesson.quiz.answer]);
   for (const step of lesson.steps) assert(step.command && step.explanation.length > 20);
   assert(lesson.initialState?.length > 40, `${lesson.id}: kondisi awal belum dijelaskan.`);
-  assert(labs[lesson.lab], `${lesson.id}: latihan pendamping tidak ditemukan.`);
+  if (lesson.lab) assert(labs[lesson.lab], `${lesson.id}: latihan pendamping tidak ditemukan.`);
   for (const id of lesson.prerequisites)
     assert(
       lessons.findIndex((item) => item.id === id) < lessons.indexOf(lesson) &&

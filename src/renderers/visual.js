@@ -1,5 +1,39 @@
 export default (context) => {
   const { data, Sim, Visuals, esc, fileChip, graphSVG, graphHTML } = context;
+  // Isi diagram tiga kotak untuk materi bab 1-2 yang belum memakai istilah index.
+  // Setiap kotak: [judul, baris keterangan, label kecil]. Dibaca oleh staticBoxes().
+  const introBoxes = {
+    versions: [
+      ['Tanpa Git', ['menu-lama.json', 'menu-baru.json', 'menu-final.json'], 'SALINAN MANUAL'],
+      ['Dengan Git', ['Satu menu.json', 'plus riwayat commit'], 'SATU FILE'],
+      ['Riwayat', ['Siapa, kapan,', 'dan kenapa berubah'], 'BISA DITELUSURI'],
+    ],
+    config: [
+      ['Global', ['Berlaku untuk semua', 'repo di akunmu'], 'SEKALI ATUR'],
+      ['Lokal', ['Berlaku untuk satu repo,', 'menang kalau bentrok'], 'PENGECUALIAN'],
+      ['Commit', ['Nama dan email', 'tercatat di commit'], 'HASILNYA'],
+    ],
+    init: [
+      ['Folder biasa', ['kopi-kita/', 'belum dikenali Git'], 'SEBELUM'],
+      ['Repository', ['kopi-kita/', 'plus folder .git'], 'SESUDAH GIT INIT'],
+      ['Siap mencatat', ['git status bisa', 'dipakai di sini'], 'BERIKUTNYA'],
+    ],
+  };
+
+  // Merender diagram statis tiga kotak bersambung panah. Dipanggil dari visual()
+  // untuk jenis "versions", "config", dan "init". Input: array kotak dari introBoxes.
+  function staticBoxes(boxes) {
+    const html = boxes.map(
+      ([title, lines, label]) =>
+        /* HTML */ `<div class="snapshot-box">
+          <strong>${title}</strong>
+          <p>${lines.join('<br />')}</p>
+          <div class="snapshot-label">${label}</div>
+        </div>`,
+    );
+    return `<div class="snapshot-visual">${html.join('<div class="snapshot-arrow">→</div>')}</div>`;
+  }
+
   function visual(lesson, miniStep = 0, miniMode = 'pop') {
     const kind = lesson.visual;
     const selected = Visuals.forLesson(lesson);
@@ -258,6 +292,8 @@ export default (context) => {
           <p>Susunan path<br />dan isi file</p>
         </div>
       </div>`;
+    } else if (['versions', 'config', 'init'].includes(kind)) {
+      return staticBoxes(introBoxes[kind]);
     } else {
       return /* HTML */ `<div class="snapshot-visual">
         <div class="snapshot-box">

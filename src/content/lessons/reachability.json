@@ -1,42 +1,56 @@
 {
   "chapter": 16,
   "id": "reachability",
-  "title": "Ada di penyimpanan belum tentu punya nama.",
-  "summary": "Bedakan object yang tersedia dengan commit yang dapat dicapai dari branch.",
-  "scenario": "Setelah branch dihapus, commit fitur tidak tampak pada log main. Namun reflog masih bisa menunjukkannya.",
-  "concept": "Reachability mengikuti referensi menuju object dan hubungan parent/tree/blob. Menghapus satu referensi bisa membuat commit tidak terjangkau dari branch, tetapi object dapat tetap tersedia untuk sementara melalui reflog atau sampai pemangkasan. Rebase juga tidak langsung memusnahkan object versi lama.",
-  "analogy": "Halaman bisa masih ada di gudang meski penanda katalog dilepas. Tanpa aturan penyimpanan, ketersediaannya tidak boleh dianggap selamanya.",
+  "title": "Reachability: kapan commit benar-benar hilang",
+  "summary": "Commit yang nggak bisa dicapai dari branch atau tag nggak langsung hilang. Ia tetap ada sampai Git membersihkannya, dan selama itu reflog masih bisa menemukannya.",
+  "scenario": "Di bab 10 kamu menyelamatkan commit teh tarik lewat reflog. Sekarang kamu ingin memahami aturannya: kapan commit seperti itu masih bisa diselamatkan, dan kapan benar-benar hilang.",
+  "concept": "Sebuah commit disebut terjangkau (reachable) kalau bisa dicapai dari sebuah ref, misalnya branch atau tag, dengan mengikuti parent. git log --all cuma menampilkan commit yang terjangkau. Setelah reset, commit yang ditinggalkan nggak lagi terjangkau, tapi masih dicatat reflog dan object-nya masih ada, jadi git cat-file atau git show tetap bisa membacanya lewat hash. Git membersihkan object yang benar-benar nggak terjangkau lewat git gc. Bawaannya, entri reflog untuk commit yang nggak terjangkau kedaluwarsa setelah 30 hari, dan object tanpa referensi baru dihapus setelah berumur lebih dari dua minggu. Jadi pemulihan masih mungkin selama beberapa waktu, tapi bukan selamanya, dan cuma di repo tempat commit itu dibuat.",
+  "analogy": "Barang di gudang yang labelnya dicopot nggak langsung dibuang. Barang itu masih tercatat di buku keluar masuk sampai petugas kebersihan datang, dan petugas cuma membuang barang yang sudah lama nggak berlabel.",
   "steps": [
     {
-      "title": "Amati jalur yang bernama",
-      "command": "git log --oneline --all",
-      "explanation": "Pada latihan reflog, jalur fitur yang referensinya dihapus tidak otomatis terlihat dari main."
+      "title": "Buat commit percobaan",
+      "command": "git add coba-malam.txt\ngit commit -m \"Coba menu malam\"",
+      "explanation": "Sebelum menjalankan command, buat file coba-malam.txt berisi satu baris: Menu malam: wedang jahe. Catat potongan hash commit dari output."
     },
     {
-      "title": "Cari posisi lama",
-      "command": "git reflog --all",
-      "explanation": "Setelah mendapat hash, cat-file -t HASH dapat memeriksa object selama masih tersedia."
+      "title": "Tinggalkan commit itu",
+      "command": "git reset --hard HEAD~1\ngit log --oneline --all -3",
+      "explanation": "Coba menu malam nggak muncul di git log --all, karena nggak ada branch atau tag yang bisa mencapainya."
+    },
+    {
+      "title": "Masih tercatat di reflog",
+      "command": "git reflog -2",
+      "explanation": "Baris kedua berisi HEAD@{1}: commit: Coba menu malam. Reflog masih menyimpan jejaknya."
+    },
+    {
+      "title": "Object-nya masih ada",
+      "command": "git cat-file -t HASH\ngit cat-file -p HASH",
+      "explanation": "Ganti HASH dengan hash yang kamu catat. Jenisnya commit, dan isinya masih lengkap. Commit ini bisa dipulihkan dengan git branch seperti di bab 10, tapi kali ini dibiarkan saja."
     }
   ],
-  "result": "Kamu tahu mengapa pemulihan mungkin berhasil hari ini tetapi tidak dijamin setelah retensi dan maintenance.",
-  "pitfall": "Jangan menjalankan prune agresif saat investigasi pemulihan. Menyalin log hash saja bukan salinan object yang dirujuknya.",
-  "practice": "Pulihkan branch pada latihan reflog. Bandingkan log --all sebelum dan setelah branch pulih-diskon dibuat.",
+  "result": "Commit Coba menu malam nggak terjangkau dari branch mana pun, tapi masih tercatat di reflog dan masih bisa dibaca sampai Git membersihkannya.",
+  "pitfall": "Reflog dan object yang nggak terjangkau cuma ada di repo lokal. Commit yang belum pernah di-push lalu ditinggalkan di laptop yang rusak atau folder yang terhapus nggak bisa dipulihkan dari mana pun. Jangan menjalankan git gc --prune=now atau git reflog expire saat sedang mencari commit yang hilang, karena keduanya bisa menghapus jejak terakhir.",
+  "practice": "Jalankan git fsck --unreachable --no-reflogs. Command ini mengabaikan reflog dan menampilkan object yang nggak terjangkau, termasuk commit Coba menu malam dan sisa-sisa stash dari bab 9.",
   "quiz": {
-    "question": "Hapus nama branch berarti object commit langsung hilang?",
-    "options": ["Ya, seketika selalu", "Tidak selalu", "Hanya jika branch berawalan fitur"],
-    "answer": 1,
-    "explanation": "Penghapusan referensi dan pemangkasan object adalah hal yang berbeda."
+    "question": "Sebuah commit nggak terjangkau dari branch mana pun, tapi masih ada di reflog. Apakah masih bisa dipulihkan?",
+    "options": [
+      "Bisa, selama object-nya belum dibersihkan git gc",
+      "Nggak bisa, karena nggak muncul di git log --all",
+      "Bisa, dari server"
+    ],
+    "answer": 0,
+    "explanation": "Object-nya masih tersimpan dan hash-nya ada di reflog. Server nggak pernah menerima commit yang belum di-push."
   },
-  "commands": ["git reflog", "git cat-file"],
-  "visual": "recovery",
-  "minutes": 7,
+  "commands": ["git reflog", "git cat-file -p"],
+  "visual": "reach",
+  "minutes": 8,
   "level": "Lanjutan",
-  "prerequisites": ["objects", "reflog-rescue"],
-  "initialState": "Latihan reflog: branch dihapus tetapi commit masih tersimpan. Jangan jalankan prune selama investigasi.",
-  "lab": "reflog",
+  "prerequisites": ["refs-refspec", "reflog-rescue"],
+  "initialState": "Lanjutan dari materi ref dan refspec: kamu berada di branch main, dan working tree bersih.",
   "objectives": [
-    "Bedakan object yang tersedia dengan commit yang dapat dicapai dari branch.",
-    "Periksa hasilnya: Kamu tahu mengapa pemulihan mungkin berhasil hari ini tetapi tidak dijamin setelah retensi dan maintenance."
+    "Tahu arti commit yang terjangkau",
+    "Tahu kenapa commit yang ditinggalkan reset masih bisa dibaca",
+    "Tahu kapan Git benar-benar menghapus object"
   ],
   "sources": [
     {
@@ -44,13 +58,13 @@
       "url": "https://git-scm.com/docs/git-reflog"
     },
     {
-      "title": "Manual git cat-file",
-      "url": "https://git-scm.com/docs/git-cat-file"
+      "title": "Manual git gc",
+      "url": "https://git-scm.com/docs/git-gc"
     }
   ],
   "verification": {
-    "command": "git log --oneline --all",
-    "explanation": "Kamu tahu mengapa pemulihan mungkin berhasil hari ini tetapi tidak dijamin setelah retensi dan maintenance."
+    "command": "git status --short\ngit log --oneline -1",
+    "explanation": "Status kosong, dan commit teratas kembali Abaikan file .env. coba-malam.txt ikut hilang dari working tree karena reset --hard."
   },
   "order": 64
 }

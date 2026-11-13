@@ -1,52 +1,65 @@
 {
   "chapter": 16,
   "id": "maintenance",
-  "title": "Riwayat punya cara disimpan dan dirawat.",
-  "summary": "Kenali packfiles, reachability, dan batas pemulihan repository.",
-  "scenario": "Repository makin besar. Kamu ingin memahami apa yang dilakukan maintenance dan mengapa object tanpa referensi belum tentu tersimpan selamanya.",
-  "concept": "Git dapat mengemas object ke packfiles untuk efisiensi, termasuk kompresi delta. Reachability ditentukan dari referensi dan hubungan object. Reflog bisa mempertahankan informasi posisi lama untuk sementara; masa retensi dan garbage collection memengaruhi peluang pemulihan. Refspec menjelaskan pemetaan referensi saat transport.",
-  "analogy": "Gudang mengemas bahan agar hemat tempat. Bahan yang tidak lagi terhubung ke catatan aktif punya aturan penyimpanan; jangan menganggap semuanya selalu tersedia.",
+  "title": "Perawatan repo: ukur, periksa, dan cadangkan",
+  "summary": "git count-objects mengukur penyimpanan, git gc memadatkannya, git fsck memeriksa keutuhan object, dan git bundle membungkus seluruh riwayat menjadi satu file cadangan.",
+  "scenario": "Repo Kopi Kita sudah berumur 16 bab. Sebelum membawa laptop ke servis, kamu ingin memastikan repo-nya sehat dan punya cadangan yang bisa dibawa dengan flashdisk.",
+  "concept": "Object baru disimpan sebagai file terpisah yang disebut loose object. git count-objects -vH menampilkan jumlah dan ukurannya. git gc memadatkan object ke dalam packfile dan membersihkan yang sudah kedaluwarsa. Git juga menjalankannya otomatis sesekali, jadi jarang perlu dijalankan sendiri. git fsck memeriksa apakah setiap object utuh dan saling terhubung dengan benar. Baris dangling di hasilnya cuma berarti ada object tanpa nama, misalnya sisa stash, bukan kerusakan. git bundle create diikuti nama file dan --all membungkus semua ref beserta object-nya menjadi satu file, yang bisa di-clone atau di-fetch seperti remote. git bundle verify memastikan file itu lengkap.",
+  "analogy": "Seperti merapikan gudang secara berkala: menghitung barang, memadatkan kardus, memeriksa barang yang rusak, lalu memotret seluruh isinya sebagai cadangan.",
   "steps": [
     {
-      "title": "Periksa ukuran object",
+      "title": "Ukur penyimpanan",
       "command": "git count-objects -vH",
-      "explanation": "Amati perbedaan loose objects dan object dalam pack. Ini tidak menghapus apa pun."
+      "explanation": "count adalah jumlah loose object, dan in-pack adalah jumlah object di packfile. Angkanya tergantung riwayat di komputermu."
     },
     {
-      "title": "Periksa konsistensi",
-      "command": "git fsck --full",
-      "explanation": "Baca hasil dengan konteks. Object dangling tidak otomatis berarti repository rusak."
+      "title": "Padatkan dan ukur lagi",
+      "command": "git gc\ngit count-objects -vH",
+      "explanation": "Setelah gc, count turun dan in-pack naik, karena loose object sudah dimasukkan ke packfile."
     },
     {
-      "title": "Buat paket riwayat bernama",
-      "command": "git bundle create kopi-kita.bundle --all",
-      "explanation": "Bundle dapat memindahkan refs dan object yang dicakup, tetapi bukan backup edit working tree, index, hooks, atau semua konfigurasi."
+      "title": "Periksa keutuhan",
+      "command": "git fsck",
+      "explanation": "Kalau repo sehat, yang muncul cuma baris dangling atau nggak ada output sama sekali. Pesan seperti missing atau broken link menandakan kerusakan."
+    },
+    {
+      "title": "Buat cadangan",
+      "command": "git bundle create ../kopi-kita.bundle --all\ngit bundle verify ../kopi-kita.bundle",
+      "explanation": "verify menampilkan daftar ref di dalam bundle, lalu menulis The bundle records a complete history dan ../kopi-kita.bundle is okay."
     }
   ],
-  "result": "Kamu mengetahui fungsi penyimpanan object, pemeriksaan konsistensi, dan bundle tanpa menganggapnya menyimpan semua keadaan lokal.",
-  "pitfall": "Hindari prune agresif ketika sedang mencoba memulihkan pekerjaan. Buat salinan yang sesuai sebelum tindakan maintenance berisiko.",
-  "practice": "Buat bundle repo latihan lalu verifikasi dengan git bundle verify kopi-kita.bundle. Catat data lokal apa yang tidak termasuk.",
+  "result": "Repo kopi-kita sudah dipadatkan, terbukti utuh, dan punya cadangan di file kopi-kita.bundle di sebelah folder repo.",
+  "pitfall": "Bundle cuma berisi object Git. Isi file Git LFS seperti logo.psd cuma terbawa sebagai pointer, dan repo submodule desain nggak ikut. Clone dari bundle ini akan gagal mengisi logo.psd dengan pesan smudge filter lfs failed, kecuali isi LFS-nya dicadangkan terpisah. Bundle juga nggak membawa reflog, stash, atau perubahan yang belum di-commit.",
+  "practice": "Daftar semua folder latihan yang kamu buat sepanjang panduan ini, lalu tentukan mana yang perlu dicadangkan kalau kopi-kita-server.git hilang. Petunjuk: server bisa dibuat ulang dari repo milikmu dengan git clone --bare seperti di bab 7, tapi isi LFS dan repo desain perlu diurus terpisah.",
   "quiz": {
-    "question": "Apakah bundle --all menyimpan edit working tree yang belum di-commit?",
-    "options": ["Ya, seluruh folder otomatis", "Hanya file JavaScript", "Tidak"],
-    "answer": 2,
-    "explanation": "Bundle berisi refs dan object yang dicakup, bukan seluruh keadaan folder kerja."
+    "question": "Kamu membuat git bundle --all saat ada editan yang belum di-commit. Apakah editan itu ikut?",
+    "options": [
+      "Ikut",
+      "Nggak, bundle cuma berisi ref dan object yang sudah di-commit",
+      "Ikut kalau di-add dulu"
+    ],
+    "answer": 1,
+    "explanation": "Bundle membungkus riwayat Git. Perubahan di working tree dan staging area nggak termasuk."
   },
-  "commands": ["git count-objects", "git fsck", "git bundle"],
-  "visual": "objects",
-  "minutes": 8,
+  "commands": ["git count-objects", "git gc", "git fsck", "git bundle"],
+  "visual": "maintenance",
+  "minutes": 9,
   "level": "Lanjutan",
   "prerequisites": ["reachability"],
-  "initialState": "Repo lokal mempunyai object dan referensi. Bundle adalah file baru; pilih nama output yang belum ada dan cukup ruang.",
-  "lab": "objects",
+  "initialState": "Lanjutan dari materi reachability: kamu berada di branch main, dan working tree bersih.",
   "objectives": [
-    "Kenali packfiles, reachability, dan batas pemulihan repository.",
-    "Periksa hasilnya: Kamu mengetahui fungsi penyimpanan object, pemeriksaan konsistensi, dan bundle tanpa menganggapnya menyimpan semua keadaan lokal."
+    "Bisa mengukur dan memadatkan penyimpanan repo",
+    "Bisa memeriksa keutuhan repo dengan git fsck",
+    "Bisa membuat dan memverifikasi cadangan dengan git bundle"
   ],
   "sources": [
     {
       "title": "Manual git count-objects",
       "url": "https://git-scm.com/docs/git-count-objects"
+    },
+    {
+      "title": "Manual git gc",
+      "url": "https://git-scm.com/docs/git-gc"
     },
     {
       "title": "Manual git fsck",
@@ -58,18 +71,18 @@
     }
   ],
   "verification": {
-    "command": "git bundle verify kopi-kita.bundle",
-    "explanation": "Kamu mengetahui fungsi penyimpanan object, pemeriksaan konsistensi, dan bundle tanpa menganggapnya menyimpan semua keadaan lokal."
+    "command": "git bundle list-heads ../kopi-kita.bundle",
+    "explanation": "Hasilnya daftar hash dan ref di dalam bundle, termasuk refs/heads/main dan tag seperti refs/tags/v1.1.0."
   },
   "order": 65,
   "checkpoint": {
-    "question": "Kamu membuat git bundle --all saat ada edit yang belum di-commit. Apakah edit itu termasuk?",
+    "question": "Commit percobaan ditinggalkan setelah git reset --hard dan belum pernah di-push. Kapan commit itu benar-benar nggak bisa dipulihkan?",
     "options": [
-      "Tidak; bundle mencakup refs dan object yang dipilih",
-      "Ya, semua file komputer",
-      "Ya, termasuk konfigurasi global dan kredensial"
+      "Setelah entri reflog-nya kedaluwarsa dan git gc membersihkan object-nya",
+      "Langsung setelah reset",
+      "Setelah kamu menjalankan git fetch"
     ],
     "answer": 0,
-    "explanation": "Bundle bukan salinan lengkap working tree, index, hook, dan konfigurasi pengguna."
+    "explanation": "Selama reflog masih mencatatnya dan object-nya belum dibersihkan, commit masih bisa dibaca dan dipulihkan."
   }
 }

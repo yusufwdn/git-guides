@@ -1,42 +1,56 @@
 {
   "chapter": 15,
   "id": "attributes",
-  "title": "Biar beda komputer tetap selaras.",
-  "summary": "Atur atribut file agar line endings dan perlakuan file konsisten.",
-  "scenario": "Kamu memakai Windows, Rani memakai Linux. Satu perubahan kecil terlihat seperti seluruh file berubah karena perbedaan akhir baris.",
-  "concept": ".gitattributes menyimpan aturan per path yang bisa dibagikan bersama repository. Misalnya * text=auto dan *.sh text eol=lf. Pengaturan text mengatur normalisasi pada index, sedangkan eol memengaruhi working tree. File biner perlu diperlakukan sesuai jenisnya.",
-  "analogy": "Tim menyepakati format kertas sebelum saling mengoreksi, agar pergantian format tidak menyamar sebagai perubahan isi.",
+  "title": "Gitattributes: samakan akhir baris di semua komputer",
+  "summary": ".gitattributes mengatur cara Git memperlakukan file berdasarkan polanya, misalnya akhir baris file teks. Aturannya ikut di-commit, jadi berlaku sama untuk semua orang.",
+  "scenario": "Kamu memakai Windows, sedangkan Rani memakai macOS. Windows mengakhiri baris dengan CRLF, macOS dan Linux dengan LF. Tanpa aturan bersama, satu file bisa terlihat berubah di semua baris hanya karena disimpan di komputer lain.",
+  "concept": "File teks punya penanda akhir baris yang nggak terlihat: CRLF di Windows, LF di macOS dan Linux. Pengaturan core.autocrlf mengatasinya per komputer, tapi setiap orang harus mengaturnya sendiri. .gitattributes adalah file di repo berisi pola dan atribut, dan karena di-commit, aturannya berlaku untuk semua orang. Baris * text=auto artinya Git mendeteksi file teks sendiri, menyimpannya dengan LF di repo, lalu menyesuaikan akhir baris di working tree dengan sistem masing-masing. Kalau beberapa pola cocok dengan satu file, aturan yang lebih bawah menang; baris *.psd dari Git LFS menandai file psd sebagai bukan teks (-text). git check-attr menampilkan atribut yang berlaku untuk sebuah file. Setelah mengubah aturan akhir baris, git add --renormalize . menerapkan ulang aturan itu ke semua file yang dilacak.",
+  "analogy": "Seperti kesepakatan format tanggal di satu kantor. Daripada setiap orang mengatur komputernya sendiri, aturannya ditulis di dokumen bersama yang dibaca semua orang.",
   "steps": [
     {
-      "title": "Periksa atribut yang berlaku",
-      "command": "git check-attr text eol -- checkout.js",
-      "explanation": "Buat .gitattributes melalui editor dengan aturan yang disepakati tim."
+      "title": "Lihat atribut sebelum diatur",
+      "command": "git check-attr text eol -- jam-buka.txt logo.psd",
+      "explanation": "jam-buka.txt: text: unspecified, artinya belum ada aturan. logo.psd: text: unset, karena aturan Git LFS menandainya bukan teks."
     },
     {
-      "title": "Normalisasi dengan peninjauan",
-      "command": "git add --renormalize .\ngit diff --staged",
-      "explanation": "Lakukan saat working tree sudah dipahami dan sebagai perubahan khusus. Tinjau file yang terdampak sebelum commit."
+      "title": "Tambahkan aturan text=auto",
+      "command": "git check-attr text -- jam-buka.txt logo.psd",
+      "explanation": "Sebelum menjalankan command, buka .gitattributes, tambahkan * text=auto sebagai baris pertama di atas baris *.psd, lalu simpan. Sekarang jam-buka.txt: text: auto, sedangkan logo.psd tetap unset karena baris *.psd berada di bawah dan menang."
+    },
+    {
+      "title": "Terapkan ulang ke semua file",
+      "command": "git add --renormalize .\ngit status --short",
+      "explanation": "Kalau semua file sudah tersimpan dengan LF, cuma M .gitattributes yang muncul. Di Windows mungkin ada peringatan LF will be replaced by CRLF; artinya Git akan memakai CRLF di working tree, dan peringatan itu aman diabaikan."
+    },
+    {
+      "title": "Commit aturannya",
+      "command": "git commit -m \"Normalisasi akhir baris file teks\"\ngit push",
+      "explanation": "Rani dan siapa pun yang meng-clone repo sekarang memakai aturan yang sama."
     }
   ],
-  "result": "Perubahan format dapat dipisahkan dari perubahan logika dan aturan konsisten ikut dibagikan.",
-  "pitfall": "Jangan menjalankan normalisasi besar bersama bug fix kecil. Ia dapat mempersulit review dan memicu konflik pada branch lain.",
-  "practice": "Buat aturan eol=lf untuk file .sh pada repo latihan dan periksa hasil check-attr.",
+  "result": ".gitattributes berisi * text=auto dan aturan LFS, dan sudah terkirim ke server.",
+  "pitfall": "Menambahkan text=auto ke repo yang sudah berisi file CRLF bisa membuat banyak file tampil berubah setelah renormalize. Itu wajar, tapi jadikan satu commit tersendiri supaya nggak tercampur dengan perubahan isi. Jangan menandai file biner seperti gambar sebagai text, karena konversi akhir baris akan merusak isinya.",
+  "practice": "Jalankan git check-attr -a -- menu.json untuk melihat semua atribut yang berlaku untuk menu.json, lalu jelaskan dari baris mana atribut itu berasal.",
   "quiz": {
-    "question": "File mana yang tepat untuk atribut path bersama tim?",
-    "options": [".gitignore sebagai pengganti semua aturan", ".gitattributes", ".env"],
-    "answer": 1,
-    "explanation": "Attributes mengatur perlakuan file; ignore mengatur file untracked yang diabaikan."
+    "question": "Kenapa aturan akhir baris lebih baik ditulis di .gitattributes daripada mengandalkan core.autocrlf?",
+    "options": [
+      "Karena .gitattributes ikut di-commit, jadi berlaku untuk semua orang",
+      "Karena core.autocrlf sudah dihapus dari Git",
+      "Karena .gitattributes membuat file lebih kecil"
+    ],
+    "answer": 0,
+    "explanation": "core.autocrlf diatur per komputer. .gitattributes tersimpan di repo sehingga aturannya sama untuk semua yang meng-clone."
   },
   "commands": ["git check-attr", "git add --renormalize"],
-  "visual": "snapshot",
-  "minutes": 6,
+  "visual": "attributes",
+  "minutes": 8,
   "level": "Lanjutan",
-  "prerequisites": ["ignore"],
-  "initialState": "Repo latihan bersih sebelum normalisasi. Buat .gitattributes melalui editor; jangan gabungkan renormalisasi dengan edit logika yang belum ditinjau.",
-  "lab": "basics",
+  "prerequisites": ["git-lfs", "ignore"],
+  "initialState": "Lanjutan dari bab 14: kamu berada di branch main di kopi-kita, working tree bersih, dan .gitattributes berisi aturan *.psd dari Git LFS.",
   "objectives": [
-    "Atur atribut file agar line endings dan perlakuan file konsisten.",
-    "Periksa hasilnya: Perubahan format dapat dipisahkan dari perubahan logika dan aturan konsisten ikut dibagikan."
+    "Tahu bedanya CRLF dan LF",
+    "Bisa menulis aturan akhir baris di .gitattributes",
+    "Bisa memeriksa atribut file dengan git check-attr"
   ],
   "sources": [
     {
@@ -44,17 +58,17 @@
       "url": "https://git-scm.com/docs/git-check-attr"
     },
     {
-      "title": "Manual git add",
-      "url": "https://git-scm.com/docs/git-add"
+      "title": "Dokumentasi gitattributes",
+      "url": "https://git-scm.com/docs/gitattributes"
     },
     {
-      "title": "Aturan atribut path",
-      "url": "https://git-scm.com/docs/gitattributes"
+      "title": "Pro Git: Git attributes",
+      "url": "https://git-scm.com/book/en/v2/Customizing-Git-Git-Attributes"
     }
   ],
   "verification": {
-    "command": "git check-attr text eol -- checkout.js",
-    "explanation": "Perubahan format dapat dipisahkan dari perubahan logika dan aturan konsisten ikut dibagikan."
+    "command": "git check-attr text -- diskon.js",
+    "explanation": "Hasilnya diskon.js: text: auto."
   },
   "order": 58
 }

@@ -1,67 +1,80 @@
 {
   "chapter": 15,
   "id": "aliases",
-  "title": "Singkat boleh, asal maksudnya tetap jelas.",
-  "summary": "Buat alias Git lokal dan hindari menyembunyikan efek berisiko.",
-  "scenario": "Kamu sering mengetik log dengan grafik dan ingin shortcut tanpa mengubah kebiasaan semua proyek di laptop.",
-  "concept": "Alias Git menyimpan perluasan command melalui konfigurasi. Tanpa --global, pengaturan berlaku pada repo saat ini. Alias yang diawali ! menjalankan shell dan memiliki konsekuensi berbeda; contoh panduan cukup memakai alias command Git biasa.",
-  "analogy": "Singkatan pada catatan membantu menulis cepat, selama semua orang masih tahu kalimat lengkapnya.",
+  "title": "Alias: singkat command yang sering dipakai",
+  "summary": "Alias memberi nama pendek untuk command Git yang panjang. git lg bisa menggantikan git log --oneline --graph --all.",
+  "scenario": "Sepanjang belajar kamu sering mengetik git log --oneline --graph --all. Kamu ingin cukup mengetik git lg.",
+  "concept": "git config alias diikuti titik, nama alias, dan command dalam tanda kutip membuat alias, misalnya git config alias.lg \"log --oneline --graph --all\". Setelah itu, git lg menjalankan command tersebut, dan argumen tambahan ikut diteruskan: git lg -5 sama dengan git log --oneline --graph --all -5. Tanpa --global, alias cuma berlaku di repo ini; dengan --global, alias berlaku di semua repo milikmu, sama seperti user.name di bab 1. git config --get alias.lg menampilkan isinya, dan git config --unset alias.lg menghapusnya. Alias sebaiknya dipakai untuk command yang sudah kamu pahami. Saat menulis panduan atau membantu orang lain, tetap pakai command lengkap, karena alias-mu nggak ada di komputer mereka.",
+  "analogy": "Seperti nomor speed dial di telepon. Kamu tetap perlu tahu nomor lengkapnya, tapi sehari-hari cukup menekan satu tombol.",
   "steps": [
     {
-      "title": "Buat alias hanya untuk latihan",
-      "command": "git config alias.lg \"log --oneline --graph --decorate\"",
-      "explanation": "Pengaturan ini tidak mengubah konfigurasi global."
+      "title": "Buat alias lg",
+      "command": "git config alias.lg \"log --oneline --graph --all\"\ngit lg -3",
+      "explanation": "git lg -3 menampilkan tiga commit teratas dalam bentuk grafik, sama dengan git log --oneline --graph --all -3."
     },
     {
-      "title": "Pakai dan periksa definisinya",
-      "command": "git lg\ngit config --get alias.lg",
-      "explanation": "Pastikan shortcut menghasilkan informasi yang kamu harapkan."
+      "title": "Lihat isi alias",
+      "command": "git config --get alias.lg",
+      "explanation": "Hasilnya log --oneline --graph --all."
     },
     {
-      "title": "Hapus bila tidak diperlukan",
-      "command": "git config --unset alias.lg",
-      "explanation": "Yang dihapus adalah nilai konfigurasi alias, bukan commit atau file proyek."
+      "title": "Coba alias kedua",
+      "command": "git config alias.st \"status --short\"\ngit st",
+      "explanation": "git st menjalankan git status --short. Hasilnya kosong karena working tree bersih."
+    },
+    {
+      "title": "Hapus alias yang nggak dipakai",
+      "command": "git config --unset alias.st\ngit st",
+      "explanation": "Setelah dihapus, Git menulis git: 'st' is not a git command dan menyarankan command yang mirip."
     }
   ],
-  "result": "Kamu punya shortcut yang bisa diperiksa dan dibatalkan dengan jelas.",
-  "pitfall": "Jangan membungkus reset --hard, clean, atau force push dengan nama samar. Shortcut tidak mengurangi dampak operasinya.",
-  "practice": "Buat lg pada salah satu repo latihan, pakai, lalu hapus. Buktikan log dan isi proyek tidak berubah karena pengaturan itu.",
+  "result": "Repo milikmu punya alias git lg, dan alias st yang tadi dicoba sudah dihapus.",
+  "pitfall": "Jangan membuat alias yang namanya sama dengan command Git asli; Git mengabaikan alias seperti itu. Hindari juga alias untuk command berbahaya seperti reset --hard, karena nama pendek membuatnya terlalu mudah dijalankan tanpa berpikir.",
+  "practice": "Buat alias global dengan git config --global alias.terakhir \"log -1 --stat\", lalu jalankan git terakhir di kopi-kita dan di kopi-kita-rani. Jelaskan kenapa alias itu jalan di kedua repo.",
   "quiz": {
-    "question": "Tanpa --global, alias disimpan di mana?",
-    "options": ["Semua komputer tim otomatis", "Konfigurasi repo saat ini", "Server GitHub"],
+    "question": "Kamu menjalankan git config alias.lg \"log --oneline\" tanpa --global. Di mana alias itu berlaku?",
+    "options": [
+      "Di semua repo di komputermu",
+      "Cuma di repo tempat kamu menjalankannya",
+      "Di server juga"
+    ],
     "answer": 1,
-    "explanation": "Scope lokal sesuai untuk mencoba preferensi di satu repo."
+    "explanation": "Tanpa --global, pengaturan disimpan di repo itu saja, sama seperti user.name lokal di bab 1."
   },
-  "commands": ["git config alias.lg", "git config"],
-  "visual": "snapshot",
-  "minutes": 9,
+  "commands": ["git config alias.lg"],
+  "visual": "alias",
+  "minutes": 6,
   "level": "Lanjutan",
-  "prerequisites": ["setup"],
-  "initialState": "Berada di repo latihan. Contoh memakai konfigurasi lokal dan nama alias lg yang boleh dibuat/dihapus.",
-  "lab": "basics",
+  "prerequisites": ["bantuan", "hooks"],
+  "initialState": "Lanjutan dari materi hooks: kamu berada di branch main, dan working tree bersih.",
   "objectives": [
-    "Buat alias Git lokal dan hindari menyembunyikan efek berisiko.",
-    "Periksa hasilnya: Kamu punya shortcut yang bisa diperiksa dan dibatalkan dengan jelas."
+    "Bisa membuat alias lokal dan global",
+    "Bisa melihat dan menghapus alias",
+    "Tahu kapan alias sebaiknya nggak dipakai"
   ],
   "sources": [
     {
       "title": "Manual git config",
       "url": "https://git-scm.com/docs/git-config"
+    },
+    {
+      "title": "Pro Git: Git aliases",
+      "url": "https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases"
     }
   ],
   "verification": {
     "command": "git config --get alias.lg",
-    "explanation": "Kamu punya shortcut yang bisa diperiksa dan dibatalkan dengan jelas."
+    "explanation": "Hasilnya log --oneline --graph --all."
   },
   "order": 61,
   "checkpoint": {
-    "question": "Token telanjur masuk commit publik. Apa langkah penting selain membersihkan file/riwayat sesuai kebutuhan?",
+    "question": "Token pembayaran terlanjur ter-push ke repo publik. Apa langkah penting selain membersihkan riwayat?",
     "options": [
-      "Cabut atau rotasi token pada penyedianya",
-      "Tambahkan .env ke ignore lalu anggap selesai",
-      "Ubah pesan commit terakhir saja"
+      "Mengganti atau mencabut token itu di penyedia layanan",
+      "Menambahkan .env ke .gitignore saja",
+      "Membuat hook pre-commit"
     ],
     "answer": 0,
-    "explanation": "Menghapus teks tidak mencabut akses kredensial yang sudah terekspos."
+    "explanation": ".gitignore dan hook mencegah kejadian berikutnya, tapi token yang sudah keluar harus dianggap bocor dan diganti."
   }
 }

@@ -1,42 +1,61 @@
 {
   "chapter": 16,
   "id": "refs-refspec",
-  "title": "Nama dan jalur pertukaran punya pemetaan.",
-  "summary": "Hubungkan refs/heads, refs/remotes, dan refspec fetch.",
-  "scenario": "Remote memiliki branch main. Kamu ingin memahami mengapa fetch menyimpannya sebagai origin/main di laptop.",
-  "concept": "Refs memberi nama pada object ID. Branch lokal biasanya di refs/heads, tag di refs/tags, dan referensi pelacakan remote di refs/remotes. Refspec memetakan sisi sumber ke tujuan saat fetch/push; konfigurasi fetch default clone biasanya memetakan heads remote ke refs/remotes/origin.",
-  "analogy": "Alamat di daftar pengiriman mempunyai nama asal dan rak tujuan. Nama di kedua sisi bisa berbeda meski mengacu pada isi yang sama.",
+  "title": "Ref dan refspec: nama-nama yang menunjuk commit",
+  "summary": "Branch, remote-tracking branch, dan tag adalah ref: nama di bawah refs/ yang menunjuk object. Refspec mengatur pemetaan ref saat fetch dan push.",
+  "scenario": "Kamu ingin memahami kenapa git fetch origin mengisi origin/main, dan bagaimana sebuah branch bisa dikirim ke server dengan nama yang berbeda.",
+  "concept": "Ref adalah nama yang menyimpan hash. Branch lokal ada di refs/heads/, remote-tracking branch di refs/remotes/origin/, dan tag di refs/tags/. git show-ref menampilkan ref beserta hash yang ditunjuknya. Annotated tag menunjuk object tag, bukan langsung commit; tambahan ^{commit} di belakang nama tag mengarahkan ke commit-nya. Refspec berbentuk sumber:tujuan. Saat git remote add, Git menyimpan refspec fetch +refs/heads/*:refs/remotes/origin/*: setiap branch di server disalin menjadi remote-tracking branch, dan tanda + mengizinkan pembaruan yang bukan fast-forward. Refspec juga bisa ditulis langsung saat push. git push origin main:cadangan-main mengirim main lokal sebagai branch cadangan-main di server. git ls-remote menampilkan ref yang ada di server tanpa mengambil commit apa pun.",
+  "analogy": "Ref seperti label nama di rak. Refspec seperti aturan pengiriman: barang dari rak A di gudang pusat diletakkan di rak B di gudang cabang.",
   "steps": [
     {
-      "title": "Lihat referensi yang tersedia",
-      "command": "git show-ref",
-      "explanation": "Ini membaca nama dan object ID tanpa mengubah posisi branch."
+      "title": "Lihat ref branch dan tag",
+      "command": "git show-ref --heads\ngit show-ref --tags",
+      "explanation": "Setiap baris berisi hash lalu nama lengkap, misalnya refs/heads/main dan refs/tags/v1.0.0."
     },
     {
-      "title": "Lihat aturan pemetaan",
-      "command": "git config --get-all remote.origin.fetch",
-      "explanation": "Pada latihan remote, amati wildcard yang memetakan branch sumber ke origin."
+      "title": "Tag menunjuk object tag",
+      "command": "git cat-file -t v1.0.0\ngit rev-parse v1.0.0 \"v1.0.0^{commit}\"",
+      "explanation": "Jenisnya tag. rev-parse menampilkan dua hash berbeda: hash object tag, lalu hash commit Turunkan diskon jadi 15 persen. Di PowerShell, v1.0.0^{commit} perlu tanda kutip karena kurung kurawal."
+    },
+    {
+      "title": "Baca refspec fetch",
+      "command": "git config --get remote.origin.fetch",
+      "explanation": "Hasilnya +refs/heads/*:refs/remotes/origin/*."
+    },
+    {
+      "title": "Push dengan refspec",
+      "command": "git push origin main:cadangan-main\ngit ls-remote origin",
+      "explanation": "Server mendapat branch baru cadangan-main yang menunjuk commit yang sama dengan main. ls-remote menampilkan semua ref di server, termasuk baris refs/tags/v1.0.0^{} yang menunjuk commit di balik tag."
+    },
+    {
+      "title": "Hapus branch latihan di server",
+      "command": "git push origin --delete cadangan-main",
+      "explanation": "Git menulis - [deleted] cadangan-main."
     }
   ],
-  "result": "Kamu dapat menghubungkan nama singkat main/origin/main dengan namespace referensinya.",
-  "pitfall": "Jangan mengedit file refs secara manual; penyimpanan referensi dapat berbentuk packed atau backend lain. Gunakan command Git resmi.",
-  "practice": "Pada latihan remote, temukan refs/heads/main dan refs/remotes/origin/main sebelum dan sesudah fetch.",
+  "result": "Kamu tahu di mana branch, remote-tracking branch, dan tag disimpan, dan bisa membaca serta menulis refspec sederhana.",
+  "pitfall": "Refspec dengan tanda + di depan, atau push dengan --force, mengizinkan ref di tujuan ditimpa walaupun bukan fast-forward. Hati-hati juga saat menulis refspec push sendiri: sumber kosong seperti :cadangan-main berarti menghapus branch itu di server.",
+  "practice": "Jalankan git show-ref origin/main dan git ls-remote origin main. Jelaskan kenapa hasilnya bisa berbeda kalau Rani baru saja push dan kamu belum fetch.",
   "quiz": {
-    "question": "Namespace branch lokal yang umum?",
-    "options": ["refs/heads", "refs/passwords", "refs/issues"],
-    "answer": 0,
-    "explanation": "Nama branch lokal berada pada namespace heads."
+    "question": "Apa arti refspec +refs/heads/*:refs/remotes/origin/*?",
+    "options": [
+      "Push semua branch lokal ke server",
+      "Saat fetch, setiap branch di server disalin ke refs/remotes/origin/ dengan nama yang sama",
+      "Menghapus branch yang nggak ada di server"
+    ],
+    "answer": 1,
+    "explanation": "Bagian kiri adalah sumber di server, bagian kanan tujuan di repo lokal. Tanda + mengizinkan pembaruan yang bukan fast-forward."
   },
-  "commands": ["git show-ref", "git config"],
-  "visual": "objects",
-  "minutes": 7,
+  "commands": ["git show-ref", "git ls-remote", "git push --delete"],
+  "visual": "refs",
+  "minutes": 9,
   "level": "Lanjutan",
-  "prerequisites": ["branch-tracking", "objects"],
-  "initialState": "Latihan remote mempunyai origin dengan konfigurasi fetch serta refs main dan origin/main.",
-  "lab": "remote",
+  "prerequisites": ["objects", "fetch-pull"],
+  "initialState": "Lanjutan dari materi object: kamu berada di branch main, dan working tree bersih.",
   "objectives": [
-    "Hubungkan refs/heads, refs/remotes, dan refspec fetch.",
-    "Periksa hasilnya: Kamu dapat menghubungkan nama singkat main/origin/main dengan namespace referensinya."
+    "Tahu letak branch, remote-tracking branch, dan tag di bawah refs/",
+    "Bisa membaca refspec fetch",
+    "Bisa mengirim branch dengan nama berbeda lewat refspec push"
   ],
   "sources": [
     {
@@ -44,13 +63,17 @@
       "url": "https://git-scm.com/docs/git-show-ref"
     },
     {
-      "title": "Manual git config",
-      "url": "https://git-scm.com/docs/git-config"
+      "title": "Manual git ls-remote",
+      "url": "https://git-scm.com/docs/git-ls-remote"
+    },
+    {
+      "title": "Pro Git: the refspec",
+      "url": "https://git-scm.com/book/en/v2/Git-Internals-The-Refspec"
     }
   ],
   "verification": {
-    "command": "git show-ref",
-    "explanation": "Kamu dapat menghubungkan nama singkat main/origin/main dengan namespace referensinya."
+    "command": "git ls-remote origin cadangan-main",
+    "explanation": "Nggak ada output, karena branch cadangan-main sudah dihapus dari server."
   },
   "order": 63
 }

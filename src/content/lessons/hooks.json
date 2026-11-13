@@ -1,60 +1,70 @@
 {
   "chapter": 15,
   "id": "hooks",
-  "title": "Jalankan pemeriksaan pada peristiwa yang jelas.",
-  "summary": "Bedakan hooks lokal, konfigurasi distribusi, dan checks bersama.",
-  "scenario": "Tim ingin memeriksa format sebelum commit, tetapi rekan yang baru clone tidak mendapat hook yang sama.",
-  "concept": "Hook adalah executable yang dipanggil Git pada peristiwa tertentu. pre-commit dapat menolak commit dengan exit nonzero; pre-push bekerja sebelum pengiriman. .git/hooks tidak menjadi konten tracked biasa. core.hooksPath dapat menunjuk direktori hook yang disepakati, tetapi setiap lingkungan perlu konfigurasi dan interpreter yang cocok.",
-  "analogy": "Alarm di meja masing-masing membantu kebiasaan lokal. Gerbang pemeriksaan bersama tetap dibutuhkan untuk aturan tim.",
+  "title": "Hooks: jalankan pemeriksaan otomatis sebelum commit",
+  "summary": "Hook adalah script yang dijalankan Git pada peristiwa tertentu, misalnya sebelum commit. Kalau script-nya gagal, commit dibatalkan.",
+  "scenario": "Kesalahan .env di materi sebelumnya bisa terulang, apalagi kalau ada yang memakai git add -f tanpa sadar. Kamu ingin Git sendiri yang menolak commit berisi .env.",
+  "concept": "Git menjalankan hook pada peristiwa tertentu: pre-commit sebelum commit dibuat, commit-msg untuk memeriksa pesan commit, pre-push sebelum push, dan lainnya. Hook adalah file script tanpa ekstensi di folder .git/hooks, dengan nama sesuai peristiwanya. Folder itu sudah berisi contoh berakhiran .sample, dan Git LFS juga memasang hook di sana, misalnya pre-push. Kalau hook pre-commit selesai dengan exit code selain 0, commit dibatalkan. Di Windows, hook dijalankan dengan shell bawaan Git for Windows, jadi script sh tetap jalan. Di macOS dan Linux, file hook perlu izin eksekusi lewat chmod +x. Folder .git/hooks nggak ikut ter-clone. Untuk membagikan hook ke tim, simpan script di folder repo biasa lalu arahkan core.hooksPath ke folder itu, atau pakai alat seperti pre-commit atau husky.",
+  "analogy": "Seperti petugas di pintu dapur yang memeriksa setiap pesanan sebelum keluar. Kalau ada yang nggak sesuai aturan, pesanan dikembalikan dengan alasan yang jelas.",
   "steps": [
     {
-      "title": "Periksa jalur aktif",
+      "title": "Cek lokasi hook",
       "command": "git config --get core.hooksPath",
-      "explanation": "Paket latihan memakai direktori kosong agar hook pribadi tidak dijalankan pada repo contoh."
+      "explanation": "Biasanya nggak ada output, artinya Git memakai folder bawaan .git/hooks. Folder ini tersembunyi di dalam .git."
     },
     {
-      "title": "Pelajari kontrak hook",
-      "command": "git help hooks",
-      "explanation": "Pilih peristiwa, input, exit code, dan interpreter sesuai dokumentasi sebelum memasang script."
+      "title": "Buat hook pre-commit",
+      "command": "git status --short",
+      "explanation": "Buat file baru bernama pre-commit tanpa ekstensi di folder .git/hooks, dan pastikan editormu nggak menambahkan .txt. Baris pertamanya #!/bin/sh. Baris keduanya: if git diff --cached --name-only | grep -qx .env; then echo \"Tolak: .env jangan di-commit\"; exit 1; fi. Simpan. Di macOS atau Linux, jalankan juga chmod +x .git/hooks/pre-commit. Status tetap kosong, karena isi folder .git nggak dilacak."
+    },
+    {
+      "title": "Uji dengan .env",
+      "command": "git add -f .env\ngit commit -m \"Coba commit .env\"",
+      "explanation": "Git menulis Tolak: .env jangan di-commit, dan commit dibatalkan. Hook membaca daftar file di staging area dengan git diff --cached --name-only (--cached sama dengan --staged), lalu grep -qx mencari baris yang persis .env."
+    },
+    {
+      "title": "Kembalikan .env ke keadaan diabaikan",
+      "command": "git restore --staged .env\ngit status --short --ignored",
+      "explanation": "Status kembali menampilkan !! .env."
     }
   ],
-  "result": "Kamu tahu mengapa hook bisa berjalan pada satu komputer tetapi tidak pada clone lain.",
-  "pitfall": "Hooks lokal bisa dilewati pada alur tertentu. Jangan menaruh satu-satunya aturan penting tim di pemeriksaan lokal saja.",
-  "practice": "Rancang pre-commit yang menolak whitespace error dan tentukan checks server/CI yang mengulang pemeriksaan penting.",
+  "result": "Repo milikmu punya hook pre-commit yang menolak commit berisi .env, sementara commit lain tetap berjalan seperti biasa.",
+  "pitfall": "Hook bisa dilewati dengan git commit --no-verify, dan hook di .git/hooks cuma ada di laptopmu. Jadi hook adalah pengaman tambahan, bukan jaminan; pemeriksaan wajib untuk semua orang tetap perlu dijalankan di server, misalnya lewat CI atau protected branch. Jangan menimpa hook yang dipasang Git LFS seperti pre-push, karena push file LFS bisa ikut rusak.",
+  "practice": "Buka folder .git/hooks dan lihat isinya. Cari file pre-commit.sample, baca komentarnya, lalu bandingkan dengan hook yang kamu buat.",
   "quiz": {
-    "question": "Hook di .git/hooks otomatis ikut clone?",
-    "options": ["Tidak", "Ya, seluruh .git pengguna disalin", "Hanya file berakhiran .sample"],
-    "answer": 0,
-    "explanation": "Distribusi dan aktivasi hook perlu alur tersendiri."
+    "question": "Hook pre-commit selesai dengan exit code 1. Apa yang terjadi?",
+    "options": [
+      "Commit tetap dibuat, cuma ada peringatan",
+      "Commit dibatalkan",
+      "Hook dijalankan ulang otomatis"
+    ],
+    "answer": 1,
+    "explanation": "Exit code selain 0 dari pre-commit membatalkan commit."
   },
-  "commands": ["git config", "git help hooks"],
-  "visual": "snapshot",
-  "minutes": 7,
+  "commands": ["git config --get core.hooksPath", "git commit --no-verify"],
+  "visual": "hooks",
+  "minutes": 9,
   "level": "Lanjutan",
-  "prerequisites": ["staging", "hooks-secrets"],
-  "initialState": "Repo lokal tersedia dan jalur hooks dapat diperiksa. Paket latihan memakai direktori hook kosong khusus repo.",
-  "lab": "basics",
+  "prerequisites": ["hooks-secrets", "bisect-run"],
+  "initialState": "Lanjutan dari materi rahasia: kamu berada di branch main, dan .env ada di folder sebagai file yang diabaikan.",
   "objectives": [
-    "Bedakan hooks lokal, konfigurasi distribusi, dan checks bersama.",
-    "Periksa hasilnya: Kamu tahu mengapa hook bisa berjalan pada satu komputer tetapi tidak pada clone lain."
+    "Tahu apa itu hook dan kapan pre-commit dijalankan",
+    "Bisa membuat hook pre-commit sederhana",
+    "Tahu batasan hook lokal"
   ],
   "sources": [
     {
+      "title": "Dokumentasi githooks",
+      "url": "https://git-scm.com/docs/githooks"
+    },
+    {
       "title": "Manual git config",
       "url": "https://git-scm.com/docs/git-config"
-    },
-    {
-      "title": "Manual git help",
-      "url": "https://git-scm.com/docs/git-help"
-    },
-    {
-      "title": "Peristiwa dan kontrak hooks",
-      "url": "https://git-scm.com/docs/githooks"
     }
   ],
   "verification": {
-    "command": "git config --get core.hooksPath",
-    "explanation": "Kamu tahu mengapa hook bisa berjalan pada satu komputer tetapi tidak pada clone lain."
+    "command": "git status --short --ignored",
+    "explanation": "Hasilnya !! .env dan !! catatan.txt. Nggak ada file di staging area."
   },
   "order": 60
 }

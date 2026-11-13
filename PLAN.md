@@ -1,6 +1,6 @@
 # Rencana Git Guides
 
-Status: disetujui pengguna dan tersedia secara lokal. Kurikulum sekarang 16 bab/66 subbab, dilengkapi kondisi awal, prasyarat, pemeriksaan hasil, 23 skenario terminal Git asli yang dapat diunduh, serta ilustrasi branch/merge/remote/rebase/reset/pemulihan. Desain yang disepakati memakai Poppins 15px, aksen orange jenuh, dan dark mode hitam murni dengan panel abu netral. Implementasi HTML/CSS/JavaScript tanpa dependency kini menghasilkan 112 halaman HTML melalui prerender Node.js, dengan URL langsung dan metadata per halaman. Browser serta build memakai template bersama; kompatibilitas file lokal dan tautan hash lama tetap tersedia. Hosting publik belum dilakukan.
+Status: implementasi dimigrasikan ke Astro + TypeScript. Tersedia 16 bab/66 materi pada content collections JSON yang divalidasi schema, halaman persiapan dari instalasi hingga repo pertama, 25 latihan terminal Git asli, 16 diagram bertahap, empat skenario browser, serta 16 tantangan penutup bab. Pencarian mencakup isi materi, istilah, dan masalah; progres lokal menyimpan hasil kuis/latihan dan mendukung ekspor/impor. Pengujian mencakup build Astro, fixture Git, dan Playwright; workflow CI ditambahkan. Hosting publik belum dijalankan dari sesi ini.
 
 ## 1. Tujuan dan ruang lingkup
 
@@ -122,17 +122,17 @@ Arah visual: buku panduan modern yang nyaman dibaca, dengan bidang diagram kontr
 
 Fitur pendukung versi pertama: pencarian lokal, tombol salin command, navigasi lanjut/kembali, tema terang/gelap, bookmark, dan progres di perangkat melalui local storage. Progres tidak tersinkron lintas perangkat. Akun, backend, dan koneksi GitHub langsung belum diperlukan untuk pengalaman inti.
 
-## 8. Usulan teknis
+## 8. Implementasi teknis
 
 - **Astro + TypeScript:** menghasilkan halaman materi statis dan komponen yang terstruktur.
-- **MDX + content collections:** konten terpisah dari UI, metadata terverifikasi, dan komponen visual bisa disisipkan pada materi.
-- **React untuk bagian interaktif:** simulator, kuis, serta kontrol visual dimuat pada bagian yang memerlukannya.
+- **Content collections JSON:** satu berkas per materi di src/content/lessons, schema Zod untuk metadata dan isi, serta prasyarat eksplisit. JSON mempertahankan struktur latihan yang ada; MDX dapat ditambahkan untuk materi naratif yang membutuhkannya.
+- **Modul interaksi TypeScript:** halaman mempertahankan HTML hasil build. Simulator dimuat terpisah pada playground; kontrol diagram memakai frame halaman yang sudah disiapkan. React belum diperlukan untuk interaksi yang ada.
 - **SVG untuk grafik:** node, label, dan hubungan commit bisa dikontrol serta disertai penjelasan teks.
 - **Indeks pencarian saat build dan local storage:** mendukung pencarian dan progres tanpa layanan akun.
 
 Model konten memuat ID, slug, bab, level, prasyarat, tujuan, kasus, command terkait, latihan, sumber, serta versi Git yang relevan. Metadata wajib diperiksa saat build; keberadaan kasus dan visual juga diperiksa secara editorial agar tidak hanya menjadi kolom kosong formalitas.
 
-Versi dependency dipilih dan dikunci saat implementasi. Website dikerjakan lokal dahulu; keputusan hosting dan audiens ditentukan ketika hasilnya sudah bisa ditinjau.
+Versi dependency dikunci di package-lock.json. Website dikerjakan lokal dahulu; keputusan hosting dan audiens ditentukan ketika hasilnya sudah bisa ditinjau.
 
 ## 9. Urutan pelaksanaan setelah persetujuan
 

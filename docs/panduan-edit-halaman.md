@@ -61,7 +61,7 @@ H1 materi stash diberi aksen warna pada bagian setelah `: `. Contohnya, judul `S
 
 Buka [GettingStarted.astro](../src/components/GettingStarted.astro). Isi di bawah penutup frontmatter `---` adalah template HTML. Cari judul atau paragraf yang ingin diganti, lalu edit seperti HTML biasa.
 
-Komponen ini mempunyai bagian ber-ID `instalasi`, `folder`, `identitas`, `commit-pertama`, `tiga-versi`, dan `latihan-terminal`. Pertahankan ID itu jika tautan atau pengujian masih memakainya.
+Komponen ini mempunyai bagian ber-ID `instalasi`, `terminal`, `mulai`, dan `latihan-terminal`. Pertahankan ID itu karena tes browser memakainya. Sesuai [aturan kurikulum](kurikulum.md), halaman ini hanya menyiapkan lingkungan: jangan menambahkan command Git selain `git --version`. Tes prerender menolak `git init`, `git add`, dan `git commit` di halaman ini.
 
 Kotak command dibuat dengan helper:
 

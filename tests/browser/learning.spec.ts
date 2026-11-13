@@ -35,13 +35,14 @@ test('66 materi dapat dibuka tanpa runtime error dan halaman biasa tidak mengamb
   expect(errors).toEqual([]);
 });
 
-test('persiapan membawa pemula dari instalasi ke repo yang dipakai materi', async ({ page }) => {
-  await page.goto('/belajar/snapshot/');
-  await page.getByRole('link', { name: 'Belum siap? Instal Git dan buat repo pertama' }).click();
+test('persiapan membawa pemula dari instalasi ke materi pertama', async ({ page }) => {
+  await page.goto('/belajar/kenalan-git/');
+  await page.getByRole('link', { name: 'Belum pasang Git? Ikuti halaman persiapan' }).click();
   await expect(page).toHaveURL(/\/persiapan\/$/);
   await expect(page.locator('#instalasi')).toContainText('Windows');
-  await expect(page.locator('#commit-pertama')).toContainText('git commit');
-  await expect(page.locator('#tiga-versi')).toContainText('index 5');
+  await expect(page.locator('#terminal')).toContainText('prompt');
+  await page.locator('#mulai a[href="/belajar/kenalan-git/"]').click();
+  await expect(page).toHaveURL(/\/belajar\/kenalan-git\/$/);
 });
 
 test('tipe progres lama yang salah tidak mematikan interaksi; status tetap tersimpan', async ({

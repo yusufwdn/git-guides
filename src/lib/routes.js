@@ -17,8 +17,8 @@ function createRoutes(data) {
   add(
     '/persiapan/',
     'preparation',
-    'Siapkan Git dan repo pertamamu — Git Guides',
-    'Instalasi Git di Windows, macOS, dan Linux, dasar terminal, serta repository Kopi Kita untuk mengikuti materi dari nol.',
+    'Pasang Git dan kenali terminal — Git Guides',
+    'Cara memasang Git di Windows, macOS, dan Linux, lalu membuka terminal sebelum mulai materi pertama.',
   );
   add(
     '/roadmap/',

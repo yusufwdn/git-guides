@@ -43,8 +43,8 @@ export default (context) => {
       <div class="notice">
         <span>↳</span>
         <p>
-          Belum memasang Git atau belum punya repo?
-          <a href="/persiapan/">Siapkan Git dan repo pertamamu</a> sebelum mengikuti contoh command.
+          Belum memasang Git?
+          <a href="/persiapan/">Pasang Git dan kenali terminal</a> sebelum mengikuti contoh command.
         </p>
       </div>
       <div class="section-heading">

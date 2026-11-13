@@ -66,7 +66,6 @@ test('seluruh materi, latihan, dan evaluasi tersedia pada HTML tanpa JS', () => 
     for (const id of [
       'situasi',
       'persiapan',
-      'visualisasi',
       'konsep',
       'langkah',
       'perhatian',
@@ -75,20 +74,17 @@ test('seluruh materi, latihan, dan evaluasi tersedia pada HTML tanpa JS', () => 
       'quiz-form',
     ])
       assert(html.includes('id="' + id + '"'), lesson.id + ': ' + id);
-    assert(html.includes('data-lab="' + lesson.lab + '"'));
+    assert.equal(html.includes('id="visualisasi"'), lesson.visual !== 'none', lesson.id);
+    if (lesson.lab) assert(html.includes('data-lab="' + lesson.lab + '"'));
+    else assert(!html.includes('terminal-lab-panel'), lesson.id + ': panel latihan tanpa lab');
     assert(html.includes('data-prerender-disabled'));
     if (lesson.checkpoint) assert(html.includes('id="checkpoint-form"'));
   }
   const setup = htmlFor('/persiapan/');
-  for (const text of [
-    'Windows',
-    'macOS',
-    'Linux',
-    'git init -b main',
-    'git commit',
-    'working tree clean',
-  ])
-    assert(setup.includes(text));
+  for (const text of ['Windows', 'macOS', 'Linux', 'git --version', 'href="/belajar/kenalan-git/"'])
+    assert(setup.includes(text), text);
+  // Persiapan hanya menyiapkan lingkungan; command Git lain diajarkan di materi.
+  for (const text of ['git init', 'git add', 'git commit']) assert(!setup.includes(text), text);
 });
 
 test('browser menerima modul kecil dan data halaman saat ini, simulator dipisahkan', () => {

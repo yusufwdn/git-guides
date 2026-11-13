@@ -3011,10 +3011,13 @@ dialog::backdrop {
   color: #fff;
 }
 
+/* Isi file seperti {"kopiSusu":22000,...} tidak punya spasi. Tanpa ini, satu kata panjang
+   membuat halaman meluber ke samping di layar HP. */
 .lesson-section > p,
 .analogy p,
 .step-list p {
   line-height: 1.85;
+  overflow-wrap: anywhere;
 }
 
 .lesson h1 {

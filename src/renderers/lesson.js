@@ -37,6 +37,18 @@ export default (context) => {
     return `<a class="text-button" href="/playground/?scenario=${['branch', 'kelola-branch'].includes(lesson.id) ? 'branch' : lesson.visual === 'stash' ? 'stash' : lesson.visual === 'conflict' ? 'conflict' : 'staging'}">Buka latihan fondasi di browser →</a>`;
   }
 
+  // Membuat isi H1 halaman materi dari lesson.title. Dipanggil dari lessonPage().
+  // Materi stash adalah halaman contoh utama, jadi bagian judul setelah ": " diberi
+  // aksen warna di baris kedua. Teksnya tetap diambil dari JSON supaya judul di H1,
+  // tab browser, dan metadata selalu sama. Output berupa HTML yang sudah di-escape.
+  function lessonHeading(lesson) {
+    const separator = lesson.title.indexOf(': ');
+    if (lesson.id !== 'stash' || separator === -1) return esc(lesson.title);
+    const lead = lesson.title.slice(0, separator + 1);
+    const accent = lesson.title.slice(separator + 2);
+    return `${esc(lead)}<br/><span class="title-accent">${esc(accent)}</span>`;
+  }
+
   function lessonPage(lesson, options = {}) {
     const completed = options.completed || new Set(),
       bookmarks = options.bookmarks || new Set();
@@ -44,10 +56,7 @@ export default (context) => {
       index = lessons.indexOf(lesson),
       previous = lessons[index - 1],
       next = lessons[index + 1];
-    const title =
-      lesson.id === 'stash'
-        ? 'Simpan sebentar.<br/><span class="title-accent">Lanjutkan nanti.</span>'
-        : esc(lesson.title);
+    const title = lessonHeading(lesson);
     const toc = [
       ['situasi', 'Situasinya begini'],
       ['visualisasi', 'Lihat alurnya'],

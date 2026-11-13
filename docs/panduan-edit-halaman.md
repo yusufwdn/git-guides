@@ -49,13 +49,13 @@ Simpan lalu periksa beranda pada development server. Perubahan ini hanya menguba
 | H1 beranda                                                    | `home()` di `src/renderers/catalog.js`                           |
 | Judul tab dan deskripsi beranda                               | `defaults.title`, `defaults.description` di `src/lib/routes.js`  |
 | H1 materi biasa                                               | `title` dalam JSON materi                                        |
-| H1 materi stash                                               | Teks khusus pada `lessonPage()` di `src/renderers/lesson.js`     |
+| H1 materi stash                                               | `title` JSON stash, dipecah oleh `lessonHeading()` di `lesson.js` |
 | Judul tab materi                                              | `title` JSON materi, ditambah akhiran Git Guides oleh route      |
 | Deskripsi metadata materi                                     | `summary` JSON materi                                            |
 | Metadata halaman Persiapan, Roadmap, dan halaman katalog lain | Pemanggilan `add(...)` untuk URL tersebut di `src/lib/routes.js` |
 | Struktur tag `<title>`, description, Open Graph, canonical    | `src/layouts/Base.astro`                                         |
 
-Stash memiliki H1 khusus agar bagian “Lanjutkan nanti” dapat diberi aksen. Jika mengganti judul stash, perbarui juga cabang `lesson.id === 'stash'` di `lessonPage()` agar tampilan dan metadata tetap sejalan.
+H1 materi stash diberi aksen warna pada bagian setelah `: `. Contohnya, judul `Stash: simpan kerjaan yang belum selesai` tampil sebagai "Stash:" lalu baris beraksen "simpan kerjaan yang belum selesai". Teksnya tetap diambil dari `title` di `stash.json`, jadi mengganti judul cukup di JSON. Kalau judul baru tidak memakai `: `, H1 tampil biasa tanpa aksen.
 
 ## Contoh 2: mengubah halaman Persiapan
 

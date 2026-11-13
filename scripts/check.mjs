@@ -1,18 +1,28 @@
 import { execFileSync } from 'node:child_process';
+import { readdirSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import assert from 'node:assert/strict';
 import { usedBeforeTaught } from './curriculum-order.mjs';
 const require = createRequire(import.meta.url);
+
+// Mengambil semua file .js di satu folder. Dipakai untuk daftar pemeriksaan sintaks di bawah.
+// node --check cuma membaca file yang disebut, bukan file yang di-import, jadi setiap file
+// renderer dan data visual perlu disebut satu per satu supaya salah ketik ikut tertangkap.
+const jsFiles = (dir) =>
+  readdirSync(dir)
+    .filter((name) => name.endsWith('.js'))
+    .map((name) => `${dir}/${name}`);
+
 for (const file of [
   'assets/content.js',
   'assets/visuals.js',
   'assets/simulator.js',
   'assets/pages.js',
   'assets/routes.js',
-  'src/lib/progress.js',
-  'src/lib/simulator.js',
-  'src/renderers/index.js',
+  ...jsFiles('src/lib'),
+  ...jsFiles('src/renderers'),
   'scripts/prepare-assets.mjs',
+  'scripts/curriculum-order.mjs',
   'labs/git-lab.cjs',
 ])
   execFileSync(process.execPath, ['--check', file], { stdio: 'inherit' });

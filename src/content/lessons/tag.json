@@ -58,8 +58,8 @@
     }
   ],
   "verification": {
-    "command": "git cat-file -t v1.0.0\ngit show v1.0.0",
-    "explanation": "Tim punya nama stabil untuk snapshot rilis."
+    "command": "git tag -n",
+    "explanation": "Baris v1.0.0 diikuti pesan Rilis awal Kopi Kita. Pesan itu milik annotated tag. Untuk lightweight tag, yang tampil adalah judul commit yang ditunjuknya."
   },
   "order": 49
 }

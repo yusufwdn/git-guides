@@ -54,8 +54,8 @@
     }
   ],
   "verification": {
-    "command": "git ls-files -u\ngit stash list",
-    "explanation": "Perubahan dipulihkan dengan keputusan isi yang jelas atau dipindahkan ke branch berdasarkan dasar aslinya."
+    "command": "git status --short\ngit stash list",
+    "explanation": "git status --short nggak lagi menampilkan kode UU untuk diskon.js, artinya konflik sudah selesai. git stash list masih menampilkan entrinya, karena pop yang berhenti di tengah konflik nggak menghapus stash. Hapus entri itu sendiri setelah yakin hasilnya benar. Kalau kamu memakai git stash branch, entrinya sudah hilang dari daftar."
   },
   "order": 35,
   "checkpoint": {

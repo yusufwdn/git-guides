@@ -1,7 +1,8 @@
 export default (context) => {
   const { data, Sim, Visuals, esc, fileChip, graphSVG, graphHTML } = context;
-  // Isi diagram tiga kotak untuk materi bab 1-2 yang belum memakai istilah index.
-  // Setiap kotak: [judul, baris keterangan, label kecil]. Dibaca oleh staticBoxes().
+  // Isi diagram tiga kotak untuk materi bab 1-4. Materi ini belum mengenal branch dan
+  // merge, jadi diagramnya statis dan riwayatnya lurus. Setiap kotak:
+  // [judul, baris keterangan, label kecil]. Dibaca oleh staticBoxes().
   const introBoxes = {
     versions: [
       ['Tanpa Git', ['menu-lama.json', 'menu-baru.json', 'menu-final.json'], 'SALINAN MANUAL'],
@@ -18,10 +19,25 @@ export default (context) => {
       ['Repository', ['kopi-kita/', 'plus folder .git'], 'SESUDAH GIT INIT'],
       ['Siap mencatat', ['git status bisa', 'dipakai di sini'], 'BERIKUTNYA'],
     ],
+    status: [
+      ['Kolom kiri', ['staging area vs', 'commit terakhir'], 'SUDAH DI-ADD'],
+      ['Kolom kanan', ['working tree vs', 'staging area'], 'BELUM DI-ADD'],
+      ['Kode ??', ['file baru yang', 'belum dilacak'], 'UNTRACKED'],
+    ],
+    ignore: [
+      ['File baru', ['tampil sebagai ??', 'di git status'], 'UNTRACKED'],
+      ['Cocok .gitignore', ['disembunyikan dari', 'status dan add'], 'DIABAIKAN'],
+      ['Sudah dilacak', ['tetap dilacak walau', 'ada di .gitignore'], 'PERLU RM --CACHED'],
+    ],
+    history: [
+      ['HEAD~2', ['Abaikan catatan', 'pribadi'], 'LEBIH LAMA'],
+      ['HEAD~1', ['Tambah es kopi', 'ke menu'], 'SEBELUMNYA'],
+      ['HEAD', ['Batasi diskon', 'maksimal 50 persen'], 'COMMIT TERBARU'],
+    ],
   };
 
   // Merender diagram statis tiga kotak bersambung panah. Dipanggil dari visual()
-  // untuk jenis "versions", "config", dan "init". Input: array kotak dari introBoxes.
+  // untuk setiap jenis visual yang terdaftar di introBoxes. Input: array kotak dari sana.
   function staticBoxes(boxes) {
     const html = boxes.map(
       ([title, lines, label]) =>
@@ -292,7 +308,7 @@ export default (context) => {
           <p>Susunan path<br />dan isi file</p>
         </div>
       </div>`;
-    } else if (['versions', 'config', 'init'].includes(kind)) {
+    } else if (introBoxes[kind]) {
       return staticBoxes(introBoxes[kind]);
     } else {
       return /* HTML */ `<div class="snapshot-visual">

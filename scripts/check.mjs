@@ -1,6 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import assert from 'node:assert/strict';
+import { usedBeforeTaught } from './curriculum-order.mjs';
 const require = createRequire(import.meta.url);
 for (const file of [
   'assets/content.js',
@@ -52,11 +53,20 @@ for (const lesson of lessons) {
     lesson.sources.length && lesson.sources.every((source) => source.url.startsWith('https://')),
   );
 }
+const orderProblems = usedBeforeTaught(lessons);
+assert.equal(
+  orderProblems.length,
+  0,
+  'Command dipakai sebelum diajarkan:\n' +
+    orderProblems
+      .map((p) => `- ${p.lesson}: ${p.command} baru diajarkan di ${p.taughtIn}`)
+      .join('\n'),
+);
 for (const [id, lab] of Object.entries(labs))
   assert(
     lab.solution && lab.hints.length && lessons.some((lesson) => lesson.id === lab.lesson),
     `${id}: pembahasan latihan belum lengkap.`,
   );
 console.log(
-  `Pemeriksaan selesai: 16 bab, ${lessons.length} materi, ${Object.keys(labs).length} latihan terminal; kondisi awal, prasyarat, dan sumber valid.`,
+  `Pemeriksaan selesai: 16 bab, ${lessons.length} materi, ${Object.keys(labs).length} latihan terminal; kondisi awal, prasyarat, sumber, dan urutan command valid.`,
 );

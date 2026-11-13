@@ -25,7 +25,7 @@ Contoh di atas hanya memperlihatkan bentuk satu field. Pertahankan field lain da
 | `id`                 | Identitas materi dan slug URL; harus sama dengan nama file tanpa `.json`.                            |
 | `order`              | Urutan global materi; angka lebih kecil muncul lebih dahulu.                                         |
 | `chapter`            | Nomor bab yang ada pada katalog.                                                                     |
-| `title`, `summary`   | Judul serta pengantar; juga dipakai untuk metadata halaman. Stash mempunyai H1 khusus pada template. |
+| `title`, `summary`   | Judul serta pengantar; juga dipakai untuk metadata halaman. Gaya penulisan ada di [panduan gaya bahasa](panduan-gaya-bahasa.md). |
 | `scenario`           | Masalah yang dihadapi pembaca pada proyek Kopi Kita.                                                 |
 | `concept`, `analogy` | Penjelasan teknis dan analogi pendamping.                                                            |
 | `initialState`       | Kondisi repo yang harus tersedia sebelum contoh dicoba.                                              |
@@ -92,7 +92,7 @@ URL `/belajar/topik-baru/`, navigasi materi, daftar bab, referensi, pencarian, d
 
 Saat jumlah materi berubah, perbarui angka inventaris route pada `tests/prerender.test.cjs`. Hitungan saat ini: 7 halaman tetap selain persiapan, 1 persiapan, 16 halaman bab, 66 materi, dan 25 latihan = 115 route. `404.html` dibuat terpisah. Penambahan satu materi menambah satu route.
 
-Pemeriksaan kurikulum saat ini mengharapkan 16 bab, 60–80 materi, dan minimal empat materi per bab. Jika target produk memang diperluas melewati batas itu, sesuaikan `scripts/check.mjs`, schema bab di `src/content.config.ts`, label pada UI, dan dokumentasi bersama perubahan cakupannya.
+Pemeriksaan kurikulum saat ini mengharapkan 16 bab, 60–80 materi, dan minimal tiga materi per bab. Aturan urutan dan prasyarat ada di [kurikulum](kurikulum.md). Jika target produk memang diperluas melewati batas itu, sesuaikan `scripts/check.mjs`, schema bab di `src/content.config.ts`, label pada UI, dan dokumentasi bersama perubahan cakupannya.
 
 ### Mengganti slug materi yang sudah ada
 

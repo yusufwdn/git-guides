@@ -39,6 +39,51 @@ export default (context) => {
       ['HEAD~1', ['Tambah es kopi', 'ke menu'], 'SEBELUMNYA'],
       ['HEAD', ['Batasi diskon', 'maksimal 50 persen'], 'COMMIT TERBARU'],
     ],
+    clone: [
+      ['kopi-kita', ['repo milikmu,', 'hasil git init'], 'ASAL'],
+      ['Server', ['kopi-kita-server.git,', 'tanpa working tree'], 'BARE REPOSITORY'],
+      ['kopi-kita-rani', ['clone lengkap', 'dengan riwayat'], 'LAPTOP RANI'],
+    ],
+    access: [
+      ['Identitas', ['user.name dan', 'user.email'], 'TERCATAT DI COMMIT'],
+      ['Autentikasi', ['token HTTPS atau', 'kunci SSH'], 'MEMBUKTIKAN SIAPA KAMU'],
+      ['Izin', ['boleh baca atau', 'tulis ke repo'], 'DITENTUKAN SERVER'],
+    ],
+    tracking: [
+      ['main', ['branch lokal,', 'maju saat commit'], 'MILIKMU'],
+      ['origin/main', ['posisi main di server', 'saat terakhir dicek'], 'CATATAN LOKAL'],
+      ['Server', ['main yang', 'sebenarnya'], 'BISA SUDAH BERUBAH'],
+    ],
+    push: [
+      ['Laptop Rani', ['main ahead 1,', 'commit kue'], 'SEBELUM PUSH'],
+      ['git push', ['kirim commit,', 'majukan main server'], 'HARUS FAST-FORWARD'],
+      ['Server', ['main berisi', 'commit kue'], 'SESUDAH PUSH'],
+    ],
+    upstream: [
+      ['Tanpa upstream', ['git status nggak', 'membandingkan'], 'HASIL GIT INIT'],
+      ['--set-upstream-to', ['main mengikuti', 'origin/main'], 'SEKALI ATUR'],
+      ['Dengan upstream', ['push dan pull', 'tahu tujuannya'], 'SEPERTI HASIL CLONE'],
+    ],
+    pull: [
+      ['--ff-only', ['maju kalau cuma', 'tertinggal'], 'MENOLAK SAAT BERCABANG'],
+      ['--no-rebase', ['membuat', 'merge commit'], 'RIWAYAT BERCABANG'],
+      ['--rebase', ['menyalin commit lokal', 'ke atas server'], 'RIWAYAT LURUS, BAB 11'],
+    ],
+    review: [
+      ['Branch fitur', ['commit di', 'menu-sarapan'], 'LOKAL'],
+      ['git push -u', ['branch dan upstream', 'ada di server'], 'DIBAGIKAN'],
+      ['Pull request', ['dibahas dan', 'disetujui tim'], 'LAYANAN HOSTING'],
+    ],
+    fork: [
+      ['Repo asli', ['kopi-kita-server.git,', 'nggak bisa kamu tulis'], 'UPSTREAM'],
+      ['Fork', ['salinan di akunmu,', 'bebas push'], 'ORIGIN'],
+      ['Laptopmu', ['branch usulan,', 'lalu pull request'], 'KONTRIBUSI'],
+    ],
+    squash: [
+      ['Merge commit', ['semua commit fitur', 'plus commit pertemuan'], 'RIWAYAT LENGKAP'],
+      ['Squash', ['satu commit baru', 'berisi semua perubahan'], 'RIWAYAT RINGKAS'],
+      ['Rebase', ['commit disalin', 'ke ujung main'], 'RIWAYAT LURUS, BAB 11'],
+    ],
   };
 
   // Merender diagram statis tiga kotak bersambung panah. Dipanggil dari visual()

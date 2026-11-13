@@ -164,9 +164,9 @@ const scenarios = {
       },
       {
         title: 'Rekam pekerjaan lokal',
-        command: 'git add README.md\ngit commit -m "Perbarui panduan"',
+        command: 'git add jam-buka.txt\ngit commit -m "Tambah jam buka"',
         explanation:
-          'Setelah README diedit, commit C baru ada di main lokal. Server dan origin/main masih B.',
+          'Setelah jam-buka.txt dibuat, commit C baru ada di main lokal. Server dan origin/main masih B.',
         repos: [
           { title: 'Laptopmu', ...local('C', 'B', true) },
           { title: 'Server lokal', ...server('B') },
@@ -176,7 +176,7 @@ const scenarios = {
         title: 'Kirim ke server',
         command: 'git push origin main',
         explanation:
-          'Server menerima C. Dalam konfigurasi latihan ini, catatan origin/main juga menjadi C setelah push berhasil.',
+          'Server menerima C, dan catatan origin/main ikut menjadi C setelah push berhasil. Kalau server sudah punya commit lain, push ini ditolak.',
         repos: [
           { title: 'Laptopmu', ...local('C', 'C', true) },
           { title: 'Server lokal', ...server('C') },

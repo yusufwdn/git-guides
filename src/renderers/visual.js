@@ -104,6 +104,11 @@ export default (context) => {
       ['git blame', ['commit terakhir', 'per baris'], 'SIAPA DAN KAPAN'],
       ['git log -S / -G', ['commit yang', 'mengubah teks'], 'SEJAK KAPAN'],
     ],
+    sparse: [
+      ['Riwayat lengkap', ['semua folder', 'tetap tersimpan'], 'NGGAK BERUBAH'],
+      ['set promo', ['working tree cuma', 'promo + file utama'], 'SPARSE CHECKOUT'],
+      ['Partial clone', ['isi file diunduh', 'saat dibutuhkan'], 'BUTUH SERVER'],
+    ],
     squash: [
       ['Merge commit', ['semua commit fitur', 'plus commit pertemuan'], 'RIWAYAT LENGKAP'],
       ['Squash', ['satu commit baru', 'berisi semua perubahan'], 'RIWAYAT RINGKAS'],

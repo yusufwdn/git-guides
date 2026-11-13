@@ -271,39 +271,39 @@ const areas = (title, description, frames) => ({ title, description, frames });
 Object.assign(scenarios, {
   'partial-staging': areas(
     'Dua hunk, satu tujuan commit.',
-    'File checkout.js mempunyai perubahan perhitungan dan pesan yang terpisah.',
+    'diskon.js berisi keputusan diskon 12 dan percobaan diskon member 7 yang belum disetujui.',
     [
       {
         title: 'Dua edit',
-        command: 'git diff -- checkout.js',
+        command: 'git diff -- diskon.js',
         explanation:
-          'Working tree memuat validasi jumlah dan pesan baru. Index masih sama dengan HEAD.',
+          'Working tree memuat dua perubahan dengan tujuan berbeda. Index masih sama dengan HEAD.',
         areas: [
-          ['HEAD', 'harga × jumlah; pesan Terima kasih'],
-          ['Index', 'harga × jumlah; pesan Terima kasih'],
-          ['Working tree', 'harga × Math.max(0, jumlah); pesan Pesanan diterima'],
+          ['HEAD', 'diskon 15; diskonMember 5'],
+          ['Index', 'diskon 15; diskonMember 5'],
+          ['Working tree', 'diskon 12; diskonMember 7'],
         ],
       },
       {
         title: 'Pilih satu hunk',
-        command: 'git add -p checkout.js',
+        command: 'git add -p diskon.js',
         explanation:
-          'Pilih y untuk validasi jumlah, n untuk pesan. Hanya patch perhitungan disalin ke index.',
+          'Jawab s untuk memecah hunk, y untuk baris diskon, dan n untuk baris diskonMember. Hanya perubahan diskon yang masuk index.',
         areas: [
-          ['HEAD', 'Perhitungan lama; pesan lama'],
-          ['Index', 'Validasi jumlah; pesan Terima kasih'],
-          ['Working tree', 'Validasi jumlah; pesan Pesanan diterima'],
+          ['HEAD', 'diskon 15; diskonMember 5'],
+          ['Index', 'diskon 12; diskonMember 5'],
+          ['Working tree', 'diskon 12; diskonMember 7'],
         ],
       },
       {
         title: 'Commit terarah',
-        command: 'git commit -m "Validasi jumlah checkout"\ngit diff',
+        command: 'git commit -m "Turunkan diskon jadi 12 persen"\ngit diff',
         explanation:
-          'HEAD mengikuti index: validasi jumlah direkam. Perubahan pesan tetap berada di working tree dan belum di-commit.',
+          'HEAD mengikuti index: diskon 12 direkam. Percobaan diskonMember 7 tetap di working tree dan belum di-commit.',
         areas: [
-          ['HEAD baru', 'Validasi jumlah; pesan Terima kasih'],
+          ['HEAD baru', 'diskon 12; diskonMember 5'],
           ['Index', 'Sama dengan HEAD baru'],
-          ['Working tree', 'Pesan Pesanan diterima masih unstaged'],
+          ['Working tree', 'diskonMember 7 masih belum di-add'],
         ],
       },
     ],
@@ -391,46 +391,46 @@ Object.assign(scenarios, {
     'Linked worktree berbagi penyimpanan object dan refs, dengan index serta HEAD masing-masing.',
     [
       {
-        title: 'Folder utama',
-        command: 'git worktree list',
-        explanation: 'Mulai dari main yang bersih dengan menu harga 18000.',
+        title: 'Folder utama sedang dipakai',
+        command: 'git status --short',
+        explanation:
+          'main di kopi-kita masih berisi percobaan diskonMember 7 yang belum di-commit.',
         areas: [
-          ['kopi-kita', 'HEAD → main; menu 18000'],
-          ['Index utama', 'Menu 18000'],
-          ['Object bersama', 'Commit awal A'],
+          ['kopi-kita', 'HEAD → main; diskon.js sedang diedit'],
+          ['Index utama', 'Milik folder kopi-kita'],
+          ['Object bersama', 'Commit A di ujung main'],
         ],
       },
       {
-        title: 'Folder hotfix',
-        command: 'git worktree add -b hotfix ../kopi-kita-hotfix awal',
+        title: 'Folder kedua',
+        command: 'git worktree add -b perbaiki-jam ../kopi-kita-jam main',
         explanation:
-          'Folder saudara baru memakai branch hotfix. Membuat worktree belum membuat commit hotfix.',
+          'Folder saudara baru memakai branch perbaiki-jam dari commit A. Editan diskon.js di folder utama nggak ikut terbawa.',
         areas: [
-          ['kopi-kita', 'main → A'],
-          ['kopi-kita-hotfix', 'hotfix → A; index terpisah'],
+          ['kopi-kita', 'main → A; diskon.js tetap diedit'],
+          ['kopi-kita-jam', 'perbaiki-jam → A; index terpisah'],
           ['Object bersama', 'A dipakai kedua worktree'],
         ],
       },
       {
-        title: 'Commit di hotfix',
-        command:
-          'git -C ../kopi-kita-hotfix add menu.json\ngit -C ../kopi-kita-hotfix commit -m "Hotfix harga"',
+        title: 'Commit di folder kedua',
+        command: 'git add jam-buka.txt\ngit commit -m "Tambah jam buka hari Minggu"',
         explanation:
-          'Setelah menu di folder hotfix diedit menjadi 22000, commit memajukan hotfix. Main dan file kerja pada folder utama tetap 18000.',
+          'Commit dari kopi-kita-jam memajukan perbaiki-jam ke B. main dan editan di folder utama nggak berubah.',
         areas: [
-          ['Folder utama', 'main → A; menu 18000'],
-          ['Folder hotfix', 'hotfix → B; menu 22000'],
-          ['Object bersama', 'A dan B dapat dibaca dari kedua folder'],
+          ['Folder utama', 'main → A; diskon.js tetap diedit'],
+          ['Folder kedua', 'perbaiki-jam → B'],
+          ['Object bersama', 'A dan B bisa dibaca dari kedua folder'],
         ],
       },
     ],
   ),
-  tag: areas('Tag tetap, branch dapat maju.', 'Contoh annotated tag menunjuk commit rilis A.', [
+  tag: areas('Tag tetap, branch dapat maju.', 'Annotated tag v1.0.0 menunjuk commit rilis A.', [
     {
       title: 'Tandai rilis',
-      command: 'git tag -a v1.0.0 awal -m "Rilis pertama"',
+      command: 'git tag -a v1.0.0 -m "Rilis pertama menu Kopi Kita"',
       explanation:
-        'Annotated tag menyimpan metadata tag dan menunjuk commit awal. Penunjuk rilis tidak mengikuti setiap commit main.',
+        'Annotated tag menyimpan nama pembuat, tanggal, dan pesan, lalu menunjuk commit yang sedang aktif. Tag nggak ikut bergerak saat main maju.',
       areas: [
         ['main', 'A'],
         ['v1.0.0', 'Object tag → A'],
@@ -439,13 +439,13 @@ Object.assign(scenarios, {
     },
     {
       title: 'Main berkembang',
-      command: 'git add README.md\ngit commit -m "Perbarui panduan"',
+      command: 'git merge --no-edit diskon-member',
       explanation:
-        'Setelah README diedit dan di-commit, main maju ke B. Tag v1.0.0 tetap memilih A.',
+        'Setelah diskon-member digabung, main maju ke B. Tag v1.0.0 tetap menunjuk A, jadi isi rilis pertama selalu bisa dibuka lagi.',
       areas: [
-        ['main', 'B dengan parent A'],
-        ['v1.0.0', 'Tetap memilih A'],
-        ['Rilis berikutnya', 'Perlu tag baru yang dipilih sendiri'],
+        ['main', 'B, keturunan A'],
+        ['v1.0.0', 'Tetap menunjuk A'],
+        ['Rilis berikutnya', 'Butuh tag baru, misalnya v1.1.0'],
       ],
     },
   ]),
@@ -489,68 +489,68 @@ Object.assign(scenarios, {
     ],
   ),
   submodule: areas(
-    'Repo tema dan pilihan versi proyek.',
-    'Superproject menyimpan gitlink, sedangkan repo tema menyimpan file dan commit-nya.',
+    'Repo desain dan pilihan versinya.',
+    'kopi-kita menyimpan gitlink ke satu commit, sedangkan kopi-kita-desain menyimpan file dan riwayatnya sendiri.',
     [
       {
-        title: 'Tema awal',
+        title: 'Desain awal',
         command: 'git submodule status',
         explanation:
-          'Superproject memilih T1. Sumber tema lokal mempunyai T2 yang belum dipilih oleh proyek.',
+          'kopi-kita memilih D1. Repo kopi-kita-desain lalu mendapat D2 yang belum dipilih kopi-kita.',
         areas: [
-          ['Superproject', 'Gitlink tema → T1'],
-          ['Folder tema', 'HEAD → T1'],
-          ['Sumber tema', 'main → T2'],
+          ['kopi-kita', 'Gitlink desain → D1'],
+          ['Folder desain', 'HEAD → D1'],
+          ['kopi-kita-desain', 'main → D2'],
         ],
       },
       {
-        title: 'Pilih versi baru',
-        command: 'git -C tema fetch origin\ngit -C tema switch --detach origin/main',
+        title: 'Ambil versi baru',
+        command: 'cd desain\ngit pull',
         explanation:
-          'Folder submodule sekarang memakai T2, sementara commit superproject masih memilih T1. Detached HEAD di sini merupakan checkout versi yang dipilih.',
+          'Folder desain sekarang memakai D2, tapi commit kopi-kita masih memilih D1. git status di kopi-kita menampilkan M desain.',
         areas: [
-          ['Superproject HEAD', 'Masih T1'],
-          ['Folder tema', 'Sekarang T2'],
-          ['Perubahan lokal', 'Gitlink belum direkam pada superproject'],
+          ['kopi-kita HEAD', 'Masih D1'],
+          ['Folder desain', 'Sekarang D2'],
+          ['Perubahan lokal', 'Gitlink belum di-commit'],
         ],
       },
       {
         title: 'Rekam pilihan',
-        command: 'git add tema\ngit commit -m "Pilih tema orange"',
+        command: 'git add desain\ngit commit -m "Perbarui submodule desain"',
         explanation:
-          'Commit superproject yang baru memilih T2. Tim membutuhkan commit tema T2 yang dapat diakses dan commit superproject tersebut.',
+          'Commit baru di kopi-kita memilih D2. Rekan butuh commit kopi-kita ini dan akses ke commit D2 di repo desain.',
         areas: [
-          ['Superproject baru', 'Gitlink → T2'],
-          ['Repo tema', 'Tetap menyimpan commit T2'],
-          ['Dua repository', 'Isi tema dan pilihan versinya dicatat terpisah'],
+          ['kopi-kita baru', 'Gitlink → D2'],
+          ['Repo desain', 'Tetap menyimpan D2'],
+          ['Dua repository', 'Isi desain dan pilihan versinya dicatat terpisah'],
         ],
       },
     ],
   ),
   'git-lfs': areas(
     'Pointer Git dan object LFS saling melengkapi.',
-    'Praktik ini membutuhkan ekstensi Git LFS dan server yang mendukungnya.',
+    'Praktik ini membutuhkan Git LFS. Git for Windows sudah menyertakannya.',
     [
       {
         title: 'Aturan pola',
-        command: 'git lfs track "*.psd"\ngit diff -- .gitattributes',
+        command: 'git lfs track "*.psd"\ngit add .gitattributes',
         explanation:
-          'Track menuliskan aturan pola pada .gitattributes. File lama tidak otomatis dipindahkan dari seluruh riwayat.',
+          'Track menuliskan aturan pola di .gitattributes. File yang sudah ada di riwayat nggak otomatis dipindahkan.',
         areas: [
           ['.gitattributes', 'Pola *.psd memakai filter LFS'],
-          ['Git', 'Menyimpan pointer untuk file yang diproses'],
+          ['Git', 'Menyimpan pointer untuk file yang cocok'],
           ['LFS', 'Menyimpan isi file besar'],
         ],
       },
       {
-        title: 'Saat mengambil',
-        command: 'git lfs ls-files',
+        title: 'Commit file besar',
+        command: 'git add logo.psd\ngit commit -m "Tambah logo kedai"\ngit lfs ls-files',
         explanation:
-          'Rekan membutuhkan pointer dari snapshot Git dan object LFS yang dapat diunduh. Pointer saja tidak memberikan isi PSD asli.',
+          'Snapshot Git berisi pointer kecil. Isi logo.psd disimpan sebagai object LFS dan ikut terkirim saat push.',
         areas: [
-          ['Snapshot', 'Pointer dengan identitas object'],
-          ['Server LFS', 'Object isi PSD'],
-          ['Working tree', 'Isi asli setelah object tersedia'],
+          ['Snapshot', 'Pointer: oid sha256 dan ukuran'],
+          ['Penyimpanan LFS', 'Isi logo.psd'],
+          ['Working tree', 'Isi asli logo.psd'],
         ],
       },
     ],
@@ -560,25 +560,25 @@ Object.assign(scenarios, {
     'Signature memeriksa hubungan data dan kunci sesuai mekanisme signing.',
     [
       {
-        title: 'Tag ditandatangani',
-        command: 'git config --get gpg.format\ngit config --get user.signingkey',
+        title: 'Tag tanpa tanda tangan',
+        command: 'git tag -v v1.0.0',
         explanation:
-          'Praktik memerlukan mekanisme signing yang disiapkan sendiri. Metadata author saja tidak membuktikan kepemilikan kunci.',
+          'v1.0.0 dibuat tanpa tanda tangan, jadi Git menampilkan isi tag lalu berhenti dengan error: no signature found. Nama tagger saja nggak membuktikan siapa pembuatnya.',
         areas: [
-          ['Data', 'Commit atau tag yang dipilih'],
-          ['Penandatangan', 'Kunci privat tetap di perangkat pemilik'],
-          ['Hasil', 'Data beserta signature'],
+          ['Data', 'Tag v1.0.0'],
+          ['Tanda tangan', 'Nggak ada'],
+          ['Hasil', 'error: no signature found'],
         ],
       },
       {
-        title: 'Verifikasi',
-        command: 'git tag -v NAMA_TAG_SIGNED',
+        title: 'Verifikasi tag bertanda tangan',
+        command: 'git tag -v NAMA_TAG',
         explanation:
-          'Verifikasi memerlukan kunci publik dan kebijakan kepercayaan yang sesuai. Signature valid tidak membuktikan kode bebas bug.',
+          'Tag yang dibuat dengan git tag -s bisa diverifikasi dengan kunci publik pembuatnya. Signature valid nggak membuktikan kodenya bebas bug.',
         areas: [
           ['Yang diperiksa', 'Hubungan data dan kunci'],
-          ['Yang masih dinilai', 'Kepercayaan pada identitas kunci'],
-          ['Kualitas kode', 'Tetap memerlukan review dan pengujian'],
+          ['Yang masih dinilai', 'Kepercayaan pada pemilik kunci'],
+          ['Kualitas kode', 'Tetap perlu review dan pengujian'],
         ],
       },
     ],
@@ -603,7 +603,7 @@ function forLesson(lesson) {
   if (lesson.id === 'fast-forward') return 'merge-ff';
   if (lesson.id === 'merge') return 'merge';
   if (['branch', 'kelola-branch'].includes(lesson.id)) return 'branch';
-  if (['amend-rebase', 'rebase-dasar'].includes(lesson.id)) return 'rebase';
+  if (lesson.id === 'rebase-dasar') return 'rebase';
   if (lesson.id === 'reset-modes') return 'reset';
   if (lesson.visual === 'remote') return 'remote';
   if (lesson.visual === 'recovery') return 'recovery';

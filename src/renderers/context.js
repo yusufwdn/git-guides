@@ -9,11 +9,14 @@ export default function createContext(data) {
       /[&<>"']/g,
       (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char],
     );
-  const inline = (value) =>
-    esc(value).replace(
-      /\b(git [a-z][a-z-]*(?: --[a-z-]+)?|HEAD(?:~\d)?|origin\/main|--staged|--index|--soft|--mixed|--hard|\.gitignore|\.gitattributes)\b/g,
-      '<code>$1</code>',
-    );
+  // Membungkus command dan istilah Git di teks materi dengan <code>. Dipanggil dari renderer
+  // materi untuk summary, skenario, konsep, langkah, pitfall, dan latihan.
+  // Lookbehind mencegah salah tangkap: "git" setelah titik atau garis miring adalah bagian
+  // path (.git, kopi-kita-server.git), bukan command. Flag dan nama file yang diawali tanda
+  // baca juga butuh lookbehind, karena \b tidak cocok di antara spasi dan "-" atau ".".
+  const inlineCode =
+    /(?<![\w./-])git [a-z][a-z-]*(?: --[a-z-]+)?\b|\bHEAD(?:~\d)?\b|\borigin\/main\b|(?<![\w-])--(?:staged|index|soft|mixed|hard)\b|(?<![\w./-])\.git(?:ignore|attributes)\b/g;
+  const inline = (value) => esc(value).replace(inlineCode, (match) => `<code>${match}</code>`);
   const href = (id) => '/belajar/' + id + '/';
   const cup = `<svg
     viewBox="0 0 24 24"

@@ -13,9 +13,9 @@
       "explanation": "Biasanya nggak ada output, artinya Git memakai folder bawaan .git/hooks. Folder ini tersembunyi di dalam .git."
     },
     {
-      "title": "Buat hook pre-commit",
-      "command": "git status --short",
-      "explanation": "Buat file baru bernama pre-commit tanpa ekstensi di folder .git/hooks, dan pastikan editormu nggak menambahkan .txt. Baris pertamanya #!/bin/sh. Baris keduanya: if git diff --cached --name-only | grep -qx .env; then echo \"Tolak: .env jangan di-commit\"; exit 1; fi. Simpan. Di macOS atau Linux, jalankan juga chmod +x .git/hooks/pre-commit. Status tetap kosong, karena isi folder .git nggak dilacak."
+      "title": "Tulis isi hook pre-commit",
+      "command": "#!/bin/sh\nif git diff --cached --name-only | grep -qx .env; then echo \"Tolak: .env jangan di-commit\"; exit 1; fi",
+      "explanation": "Blok di bawah bukan command terminal, melainkan isi file. Buat file baru bernama pre-commit tanpa ekstensi di folder .git/hooks, salin kedua baris di bawah ke dalamnya, lalu simpan. Pastikan editormu nggak menambahkan .txt di akhir nama file. Di macOS atau Linux, jalankan juga chmod +x .git/hooks/pre-commit supaya file itu boleh dijalankan."
     },
     {
       "title": "Uji dengan .env",

@@ -91,3 +91,23 @@ Alternatif yang ditolak:
 - Perilaku `git pull` tanpa opsi berbeda antarinstalasi: Git for Windows mengatur `pull.rebase=false` di konfigurasi sistem, instalasi lain berhenti dengan pesan `Need to specify how to reconcile divergent branches`. Materi selalu menulis `--ff-only`, `--no-rebase`, atau `--rebase` secara eksplisit.
 - Commit merge dari pull memakai `--no-edit` supaya editor tidak terbuka.
 - Paket latihan `remote` tetap dipasang hanya di `fetch-pull`, karena isinya memakai `fetch` dan `push` yang baru lengkap diajarkan di materi itu.
+
+## Catatan keputusan: bab 9-16 sebagai lanjutan repo pembaca (2026-11-14)
+
+### Masalah
+
+Materi bab 9-16 masih memakai skenario paket latihan (`checkout.js`, branch `rilis`, repo `tema`) yang tidak pernah dibuat pembaca. Beberapa materi juga diletakkan menurut tema: `reset-revert` membandingkan revert dengan reset sebelum mode reset diajarkan, dan `hooks-secrets` mencampur rahasia dengan hook.
+
+### Keputusan
+
+1. **Semua langkah melanjutkan repo `kopi-kita`.** Bab 9 bekerja di branch `diskon-member`, bab 10 di `main`, bab 11 di `menu-sore`, bab 12-16 kembali ke `main`. Repo tambahan yang dibuat di bab 14: `kopi-kita-desain` (submodule) dan worktree sementara `kopi-kita-jam`.
+2. **`reset-modes` pindah sebelum `reset-revert`.** `reset-revert` sekarang fokus ke revert untuk commit yang sudah di-push, dengan reset sebagai pembanding yang sudah dikenal.
+3. **`hooks-secrets` fokus ke rahasia**, dan `hooks` membuat hook pre-commit yang menolak `.env` dari materi sebelumnya.
+4. **Paket latihan cuma dipasang di materi yang isinya cocok** dengan field `lesson` di `src/data/labs.json`. Teks pengantar langkah selalu mengarahkan ke repo pembaca, sedangkan panel latihan menjelaskan bahwa latihannya terpisah.
+
+### Konsekuensi
+
+- Contoh `cherry-pick` mengambil commit diskon 15 dari `diskon-member`, bukan commit di atas ujung `main`. Commit yang parent-nya sama dengan ujung `main` bisa menghasilkan hash yang sama persis kalau dijalankan di detik yang sama, sehingga demonya menyesatkan.
+- Submodule dari path lokal ditolak Git sejak 2.38 (`transport 'file' not allowed`). Materi memakai `git -c protocol.file.allow=always submodule add` untuk satu command dan menjelaskan alasannya.
+- Git LFS ikut dipakai sampai akhir. Push LFS ke bare repository lokal berjalan, tetapi clone dari `git bundle` gagal mengisi file LFS (`smudge filter lfs failed`). Materi `maintenance` menjelaskan batasan ini sebagai pitfall dan tidak meminta clone dari bundle.
+- `git bisect run grep` berjalan juga dari PowerShell, karena Git for Windows menyediakan `grep` untuk command yang dijalankan bisect.

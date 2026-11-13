@@ -1,66 +1,74 @@
 {
   "chapter": 2,
   "id": "tiga-area",
-  "title": "Kenali tiga tempat perubahanmu.",
-  "summary": "Working tree, staging area, dan snapshot HEAD menjawab tiga pertanyaan yang berbeda.",
-  "scenario": "Harga kopi dan teks tombol berubah bersamaan. Kamu ingin menyimpan harga sekarang, tetapi teks tombol masih perlu dibahas.",
-  "concept": "Working tree adalah file yang kamu edit. Index atau staging area menyusun snapshot untuk commit berikutnya. HEAD biasanya merujuk branch aktif, yang menunjuk commit terakhirnya. Setelah git add, edit tambahan pada file yang sama belum otomatis ikut staged.",
-  "analogy": "Meja kerja berisi semua bahan. Nampan persiapan memuat pilihan yang akan disajikan. Album menyimpan hasil yang sudah direkam. Nampan di sini adalah snapshot usulan, bukan sekadar daftar nama file.",
+  "title": "Tiga area: perjalanan file sampai jadi commit",
+  "summary": "Sebelum masuk riwayat, perubahan melewati tiga tempat: working tree, staging area, dan commit. Di materi ini kamu membuat commit pertama Kopi Kita sambil melihat ketiganya.",
+  "scenario": "Repo kopi-kita sudah siap tapi masih kosong. Kamu mau menambahkan dua file pertama, yaitu daftar harga dan pengaturan diskon, lalu menyimpannya sebagai versi awal website.",
+  "concept": "Git membagi pekerjaanmu ke tiga area. Working tree adalah file-file di folder proyek yang kamu lihat dan edit. Staging area, disebut juga index, adalah tempat menyiapkan isi commit berikutnya. Commit adalah snapshot yang sudah tersimpan di riwayat, dan HEAD menunjuk commit terakhir di branch yang sedang aktif. Alurnya selalu sama: git add menyalin isi file dari working tree ke staging area, lalu git commit menyimpan isi staging area sebagai commit baru. Di setiap tahap, git status memberi tahu posisi perubahanmu.",
+  "analogy": "Bayangkan meja kerja, kardus, dan gudang arsip. Kamu menyiapkan barang di meja (working tree), memasukkan yang sudah siap ke kardus (staging area), lalu menyegel kardus itu dan menyimpannya di gudang (commit). Kardus yang sudah masuk gudang nggak berubah lagi, walaupun barang di meja terus kamu ubah.",
   "steps": [
     {
-      "title": "Periksa semua keadaan",
+      "title": "Buat dua file, lalu cek status",
       "command": "git status",
-      "explanation": "Lihat bagian staged, unstaged, dan untracked. Untracked berarti file belum ada dalam index."
+      "explanation": "Pakai editor teks seperti VS Code untuk membuat dua file di folder kopi-kita: menu.json berisi {\"kopiSusu\":18000} dan diskon.js berisi const diskon = 0; lalu simpan. Pastikan nama file nggak berakhiran .txt. Setelah itu jalankan git status: kedua file muncul di bagian Untracked files, artinya file sudah ada di working tree tapi belum dilacak Git."
     },
     {
-      "title": "Lihat perubahan di meja kerja",
-      "command": "git diff",
-      "explanation": "Bandingkan perubahan pada file tracked di working tree terhadap index."
+      "title": "Masukkan keduanya ke staging area",
+      "command": "git add menu.json diskon.js\ngit status",
+      "explanation": "git add menyalin isi kedua file ke staging area. Sekarang git status menampilkan keduanya di bagian Changes to be committed, artinya siap masuk commit berikutnya. Di Windows mungkin muncul peringatan LF will be replaced by CRLF. Itu soal format akhir baris dan aman diabaikan untuk sekarang."
     },
     {
-      "title": "Periksa isi calon commit",
-      "command": "git diff --staged",
-      "explanation": "Bandingkan index terhadap HEAD. Inilah perubahan yang akan direkam saat commit."
+      "title": "Simpan sebagai commit pertama",
+      "command": "git commit -m \"Menu awal Kopi Kita\"",
+      "explanation": "git commit menyimpan isi staging area sebagai snapshot baru di riwayat, dan opsi -m berisi pesan yang menjelaskan isinya. Git membalas dengan ringkasan seperti [main (root-commit) 4f098a8] Menu awal Kopi Kita dan 2 files changed. Kode 4f098a8 adalah potongan hash, tanda pengenal unik commit itu. Di komputermu kodenya pasti berbeda."
+    },
+    {
+      "title": "Lihat hasilnya",
+      "command": "git status\ngit log --oneline",
+      "explanation": "git status sekarang melaporkan nothing to commit, working tree clean: isi working tree, staging area, dan commit terakhir sudah sama. git log --oneline menampilkan daftar commit, satu baris per commit, dan untuk sekarang isinya baru satu. Cara membaca riwayat lebih jauh dibahas di bab 4."
     }
   ],
-  "result": "Kamu tahu apakah suatu perubahan masih di working tree, sudah staged, atau sudah menjadi bagian commit.",
-  "pitfall": "git diff kosong tidak selalu berarti semua bersih. Perubahan mungkin sudah staged, atau ada file untracked yang tidak ditampilkan oleh diff biasa.",
-  "practice": "Di repo latihan, edit sebuah file, jalankan add, lalu edit lagi. Bandingkan diff dan diff --staged untuk file yang sama.",
+  "result": "Repo kopi-kita punya commit pertama berisi menu.json dan diskon.js. Working tree bersih, artinya belum ada perubahan baru sejak commit itu.",
+  "pitfall": "Commit tanpa git add nggak menyimpan apa-apa, dan Git akan membalas no changes added to commit. Sebaliknya, file yang diedit lagi setelah di-add harus di-add ulang, karena staging area menyimpan isi file saat add dijalankan, bukan isi terbarunya.",
+  "practice": "Buka diskon.js, ubah nilainya, lalu jalankan git status tanpa add dan perhatikan di bagian mana diskon.js muncul. Kembalikan nilainya ke 0, simpan, lalu jalankan git status lagi untuk memastikan working tree bersih kembali.",
   "quiz": {
-    "question": "Setelah add, kamu mengedit file lagi. Apa isi commit berikutnya?",
+    "question": "Kamu mengedit menu.json lalu langsung menjalankan git commit -m \"Ubah harga\" tanpa git add. Apa yang terjadi?",
     "options": [
-      "Versi yang terakhir dimasukkan ke index",
-      "Selalu versi terbaru di editor",
-      "Semua file di folder"
+      "Perubahan menu.json ikut tersimpan",
+      "Git menolak karena belum ada perubahan di staging area",
+      "Git otomatis menjalankan add dulu"
     ],
-    "answer": 0,
-    "explanation": "Commit merekam index. Jalankan add lagi jika edit terbaru juga ingin disertakan."
+    "answer": 1,
+    "explanation": "Commit hanya menyimpan isi staging area. Karena perubahan menu.json belum di-add, staging area masih sama dengan commit terakhir, jadi nggak ada yang bisa di-commit."
   },
-  "commands": ["git status", "git diff", "git diff --staged"],
+  "commands": ["git add", "git commit", "git status", "git log --oneline"],
   "visual": "snapshot",
   "minutes": 8,
   "level": "Dasar",
   "prerequisites": ["mulai-repo"],
-  "initialState": "Repo sudah mempunyai HEAD. Satu file tracked diedit, di-add, lalu diedit lagi agar staged dan unstaged dapat dibandingkan. Siapkan keadaan ini melalui halaman Persiapan: repo pertama dan contoh tiga versi.",
-  "lab": "basics",
+  "initialState": "Repo kopi-kita sudah dibuat dengan git init di materi sebelumnya. Belum ada file maupun commit di dalamnya.",
   "objectives": [
-    "Working tree, staging area, dan snapshot HEAD menjawab tiga pertanyaan yang berbeda.",
-    "Periksa hasilnya: Kamu tahu apakah suatu perubahan masih di working tree, sudah staged, atau sudah menjadi bagian commit."
+    "Paham peran working tree, staging area, dan commit",
+    "Bisa membuat commit pertama dengan git add dan git commit",
+    "Bisa membaca kondisi repo dari git status"
   ],
   "sources": [
     {
-      "title": "Manual git status",
-      "url": "https://git-scm.com/docs/git-status"
+      "title": "Manual git add",
+      "url": "https://git-scm.com/docs/git-add"
     },
     {
-      "title": "Manual git diff",
-      "url": "https://git-scm.com/docs/git-diff"
+      "title": "Manual git commit",
+      "url": "https://git-scm.com/docs/git-commit"
+    },
+    {
+      "title": "Manual git status",
+      "url": "https://git-scm.com/docs/git-status"
     }
   ],
   "verification": {
-    "command": "git diff\ngit diff --staged",
-    "explanation": "Kamu tahu apakah suatu perubahan masih di working tree, sudah staged, atau sudah menjadi bagian commit."
+    "command": "git log --oneline",
+    "explanation": "Harus ada tepat satu baris berisi potongan hash dan pesan Menu awal Kopi Kita. Kalau kosong, kemungkinan commit-nya gagal; jalankan git status untuk melihat apakah file masih di staging area."
   },
-  "order": 5,
-  "preparationURL": "/persiapan/"
+  "order": 5
 }

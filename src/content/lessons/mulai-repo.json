@@ -1,51 +1,51 @@
 {
   "chapter": 2,
   "id": "mulai-repo",
-  "title": "Mulai dari satu repository.",
-  "summary": "Pilih init untuk proyek baru atau clone untuk meneruskan proyek yang sudah ada.",
-  "scenario": "Folder website kopi sudah ada di laptopmu. Rekan lain justru akan mulai dari repository yang sudah tersimpan di server.",
-  "concept": "git init membuat metadata Git pada folder proyek. git clone membuat salinan repository beserta riwayat dan biasanya mengatur remote bernama origin. Keduanya adalah pintu masuk alternatif; kamu tidak perlu init di dalam folder hasil clone.",
-  "analogy": "init berarti menyiapkan buku catatan baru. clone berarti memperoleh salinan buku beserta catatan yang sudah dibuat orang lain.",
+  "title": "Init: jadikan folder sebagai repository",
+  "summary": "git init mengubah folder biasa menjadi repository Git. Mulai dari sini, Git bisa mencatat perubahan di folder kopi-kita.",
+  "scenario": "Folder kopi-kita sudah siap, tapi masih kosong dan belum dikenali Git. Kamu mau mulai membuat website Kopi Kita dan ingin setiap perubahannya tercatat sejak file pertama.",
+  "concept": "git init membuat folder tersembunyi bernama .git di dalam folder proyek. Di situlah Git menyimpan seluruh riwayat dan pengaturannya, sementara file proyekmu tetap di folder kopi-kita seperti biasa. Opsi -b main memberi nama main pada branch pertama. Branch dibahas tuntas di bab 5; untuk sekarang, anggap main sebagai jalur utama tempat commit-mu tersimpan. Setelah init, git status bisa dipakai untuk menanyakan kondisi repo: file mana yang baru, mana yang berubah, dan apa yang siap di-commit. Kalau proyeknya sudah ada di server, kamu nggak perlu init; kamu menyalinnya dengan git clone, yang dibahas di bab remote.",
+  "analogy": "Mirip menaruh buku catatan di laci meja kerja. Mejanya tetap sama, tapi sekarang ada tempat khusus untuk mencatat setiap perubahan yang terjadi di atasnya. Buku catatan itu adalah folder .git.",
   "steps": [
     {
-      "title": "Buat repo di folder proyek",
+      "title": "Pastikan kamu ada di folder kopi-kita",
+      "command": "pwd",
+      "explanation": "Path-nya harus berakhir dengan kopi-kita. Kalau belum, pindah dulu dengan cd seperti di materi terminal."
+    },
+    {
+      "title": "Jadikan folder ini repository",
       "command": "git init -b main",
-      "explanation": "Jalankan dari folder yang memang ingin dilacak. Opsi -b tersedia sejak Git 2.28."
+      "explanation": "Git membalas dengan pesan Initialized empty Git repository, diikuti lokasi folder .git yang baru dibuat. Folder .git tersembunyi, jadi mungkin nggak terlihat di File Explorer atau Finder. Jangan mengubah isinya secara manual."
     },
     {
-      "title": "Periksa keadaan awal",
+      "title": "Tanya kondisi repo",
       "command": "git status",
-      "explanation": "File yang belum ditambahkan akan terlihat sebagai untracked. Branch pertama belum memiliki commit sampai kamu membuatnya."
-    },
-    {
-      "title": "Alternatif untuk proyek tim",
-      "command": "git clone https://example.com/tim/kopi-kita.git",
-      "explanation": "URL ini contoh. Ganti dengan URL repository yang benar dan bisa kamu akses; jalankan dari folder induk."
+      "explanation": "git status menampilkan kondisi repo saat ini. Karena belum ada file dan belum ada commit, hasilnya berisi On branch main, No commits yet, dan nothing to commit. Command ini akan sering kamu pakai, jadi biasakan menjalankannya setiap kali ragu."
     }
   ],
-  "result": "Proyek baru memiliki folder .git, atau proyek tim sudah tersedia sebagai hasil clone.",
-  "pitfall": "Hindari init pada folder induk yang memuat banyak proyek berbeda. Periksa lokasi terminal sebelum memulai.",
-  "practice": "Buat folder latihan kosong, init main, lalu buat README.md melalui editor. Periksa apakah status menunjukkan README sebagai untracked.",
+  "result": "Folder kopi-kita sudah menjadi repository dengan branch main, tapi belum ada file maupun commit di dalamnya.",
+  "pitfall": "Jalankan git init sekali saja, di folder utama proyek. Kalau tanpa sengaja menjalankannya di folder yang salah, misalnya folder akun penggunamu, Git akan menganggap seluruh isi folder itu sebagai proyek. Hapus folder .git yang baru saja salah dibuat itu. Opsi -b butuh Git versi 2.28 atau lebih baru; kalau ditolak, perbarui Git-mu.",
+  "practice": "Buat folder latihan lain di luar kopi-kita. Di dalamnya, jalankan git status, lalu git init -b main, lalu git status lagi. Bandingkan pesan sebelum dan sesudah init.",
   "quiz": {
-    "question": "Proyek sudah ada di server. Mulai dengan apa?",
+    "question": "Apa yang dibuat oleh git init?",
     "options": [
-      "git init di setiap subfolder",
-      "git push sebelum punya repository",
-      "git clone URL-repo"
+      "Salinan proyek dari GitHub",
+      "Folder .git yang menyimpan riwayat dan pengaturan repo",
+      "Commit pertama berisi semua file di folder"
     ],
-    "answer": 2,
-    "explanation": "Clone mengambil repository yang sudah ada, termasuk riwayatnya."
+    "answer": 1,
+    "explanation": "init cuma menyiapkan folder .git. Belum ada commit sampai kamu sendiri membuatnya. Menyalin proyek dari server adalah tugas git clone."
   },
-  "commands": ["git init", "git clone", "git status"],
-  "visual": "snapshot",
+  "commands": ["git init", "git status"],
+  "visual": "init",
   "minutes": 8,
   "level": "Dasar",
   "prerequisites": ["setup", "terminal-folder"],
-  "initialState": "Pilih salah satu: folder proyek baru tanpa .git, atau URL repo yang benar-benar dapat diakses untuk clone.",
-  "lab": "basics",
+  "initialState": "Terminal berada di folder kopi-kita yang masih kosong, hasil dari materi terminal di bab 1.",
   "objectives": [
-    "Pilih init untuk proyek baru atau clone untuk meneruskan proyek yang sudah ada.",
-    "Periksa hasilnya: Proyek baru memiliki folder .git, atau proyek tim sudah tersedia sebagai hasil clone."
+    "Bisa membuat repository baru dengan git init",
+    "Tahu fungsi folder .git",
+    "Terbiasa mengecek kondisi repo dengan git status"
   ],
   "sources": [
     {
@@ -53,18 +53,13 @@
       "url": "https://git-scm.com/docs/git-init"
     },
     {
-      "title": "Manual git clone",
-      "url": "https://git-scm.com/docs/git-clone"
-    },
-    {
       "title": "Manual git status",
       "url": "https://git-scm.com/docs/git-status"
     }
   ],
   "verification": {
-    "command": "git status --short",
-    "explanation": "Proyek baru memiliki folder .git, atau proyek tim sudah tersedia sebagai hasil clone."
+    "command": "git rev-parse --show-toplevel",
+    "explanation": "Command dari materi terminal ini sekarang menampilkan path folder kopi-kita, bukan pesan error lagi. Artinya folder ini sudah menjadi repo."
   },
-  "order": 4,
-  "preparationURL": "/persiapan/"
+  "order": 4
 }

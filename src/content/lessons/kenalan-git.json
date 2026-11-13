@@ -32,12 +32,11 @@
     "explanation": "Commit cuma menulis ke repository di komputermu, jadi nggak butuh internet. Push dan pull request perlu terhubung ke server."
   },
   "commands": ["git --version", "git help"],
-  "visual": "snapshot",
+  "visual": "versions",
   "minutes": 6,
   "level": "Dasar",
   "prerequisites": [],
-  "initialState": "Materi ini bisa dibaca tanpa menyiapkan proyek apa pun. Untuk mencoba git --version, Git perlu terpasang dulu. Caranya ada di halaman persiapan.",
-  "lab": "basics",
+  "initialState": "Materi ini cukup dibaca, belum perlu menyiapkan proyek apa pun. Kalau mau mencoba git --version, Git perlu terpasang dulu; caranya ada di halaman persiapan.",
   "objectives": [
     "Tahu bedanya Git, repository, commit, dan layanan seperti GitHub atau GitLab",
     "Paham kenapa commit bisa dibuat tanpa internet",

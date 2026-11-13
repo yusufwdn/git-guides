@@ -3,19 +3,19 @@
   "id": "staging",
   "title": "Staging: pilih dulu, baru commit",
   "summary": "Lewat git add, kamu memilih perubahan mana yang masuk ke commit berikutnya. Dengan begitu satu commit bisa berisi satu tujuan saja.",
-  "scenario": "Kamu baru saja membetulkan harga di menu.json, sementara diskon.js masih kamu utak-atik. Koreksi harga sudah siap di-commit, tapi eksperimen diskonnya belum.",
-  "concept": "git add menyalin isi file saat itu ke staging area, yang juga disebut index. Lalu git commit menyimpan apa pun yang ada di staging area sebagai snapshot baru. Jadi isi commit ditentukan oleh staging area, bukan oleh file yang sedang terbuka di editor. Kalau kamu cuma add satu file, perubahan di file lain tetap tinggal di working tree dan nggak ikut masuk commit. Biasakan menjalankan git diff --staged sebelum commit untuk melihat apa yang benar-benar akan masuk.",
-  "analogy": "Mirip mengemas paket. Barang-barang masih berserakan di meja (working tree). Kamu pilih yang sudah siap dan masukkan ke kardus (staging area), cek isinya, lalu segel dan kirim (commit). Barang yang masih di meja nggak ikut terkirim.",
+  "scenario": "Harga kopi susu di menu.json ternyata salah dan harus dibetulkan, sementara kamu juga sedang mencoba nilai diskon baru di diskon.js. Koreksi harga sudah siap di-commit, tapi eksperimen diskonnya belum.",
+  "concept": "Satu commit sebaiknya berisi satu tujuan. Karena itu git add bisa dipakai per file: kamu memilih file mana yang masuk ke staging area, dan file lain tetap tinggal di working tree. Untuk memeriksa pilihanmu, ada dua command yang mirip tapi berbeda. git diff menampilkan perubahan di working tree yang belum di-add, sedangkan git diff --staged menampilkan apa yang sudah ada di staging area dan akan masuk ke commit berikutnya. Biasakan menjalankan git diff --staged sebelum commit.",
+  "analogy": "Mirip belanja di minimarket. Barang yang kamu ambil dari rak masuk ke keranjang dulu, dan kamu masih bisa mengeluarkan yang nggak jadi dibeli. Yang dibayar di kasir cuma isi keranjang, bukan semua barang yang sempat kamu lihat di rak.",
   "steps": [
     {
-      "title": "Lihat dulu apa saja yang berubah",
+      "title": "Ubah dua file, lalu lihat perubahannya",
       "command": "git status\ngit diff",
-      "explanation": "git status menunjukkan file mana yang berubah, sedangkan git diff menunjukkan baris apa saja yang berubah. Dari sini kamu bisa memutuskan mana yang sudah siap dan mana yang masih percobaan."
+      "explanation": "Ubah harga di menu.json dari 18000 menjadi 20000 dan nilai di diskon.js dari 0 menjadi 10, lalu simpan. git status menandai kedua file sebagai modified. git diff menampilkan baris yang berubah dan belum di-add: baris lama diawali tanda minus, baris baru diawali tanda plus."
     },
     {
-      "title": "Masukkan menu.json saja ke staging",
+      "title": "Masukkan menu.json saja ke staging area",
       "command": "git add menu.json\ngit diff --staged",
-      "explanation": "git diff --staged menampilkan isi yang akan masuk ke commit. Di sini seharusnya cuma ada perubahan harga di menu.json, tanpa diskon.js. Yang masuk staging adalah isi file saat add dijalankan, jadi kalau menu.json kamu edit lagi sesudahnya, jalankan add sekali lagi."
+      "explanation": "git diff --staged sekarang cuma menampilkan perubahan harga di menu.json, karena hanya file itu yang di-add. Kalau kamu jalankan git diff, yang tersisa tinggal diskon.js. Ingat, yang masuk staging area adalah isi file saat add dijalankan; kalau menu.json kamu edit lagi sesudahnya, jalankan add sekali lagi."
     },
     {
       "title": "Commit dengan pesan yang jelas",
@@ -36,16 +36,16 @@
     "answer": 1,
     "explanation": "git commit menyimpan isi staging area. File yang berubah tapi belum di-add nggak ikut masuk."
   },
-  "commands": ["git add", "git commit", "git diff --staged"],
+  "commands": ["git add", "git diff", "git diff --staged"],
   "visual": "staging",
   "minutes": 8,
   "level": "Dasar",
   "prerequisites": ["tiga-area"],
-  "initialState": "Kamu ada di branch fitur-diskon. Harga di menu.json sudah diubah dari 18000 menjadi 20000, dan nilai di diskon.js diubah dari 0 menjadi 10. Belum ada yang di-add.",
+  "initialState": "Repo kopi-kita punya satu commit dari materi sebelumnya: menu.json berisi harga 18000 dan diskon.js berisi nilai 0. Working tree masih bersih.",
   "lab": "staging",
   "objectives": [
-    "Paham peran staging area di antara file kerja dan commit",
-    "Bisa meng-commit satu file tanpa ikut membawa perubahan file lain",
+    "Bisa memilih file mana yang masuk ke commit",
+    "Tahu bedanya git diff dan git diff --staged",
     "Terbiasa mengecek git diff --staged sebelum commit"
   ],
   "sources": [
@@ -54,17 +54,13 @@
       "url": "https://git-scm.com/docs/git-add"
     },
     {
-      "title": "Manual git commit",
-      "url": "https://git-scm.com/docs/git-commit"
-    },
-    {
       "title": "Manual git diff",
       "url": "https://git-scm.com/docs/git-diff"
     }
   ],
   "verification": {
-    "command": "git show HEAD:menu.json\ngit diff -- diskon.js",
-    "explanation": "git show HEAD:menu.json harus menampilkan harga 20000, artinya koreksi menu sudah masuk commit. git diff -- diskon.js masih menampilkan perubahan dari 0 ke 10, artinya eksperimen diskon belum ikut di-commit."
+    "command": "git log --oneline\ngit diff",
+    "explanation": "git log --oneline sekarang menampilkan dua commit, dengan Perbaiki harga kopi susu di baris paling atas. git diff masih menampilkan perubahan diskon.js dari 0 menjadi 10, artinya eksperimen diskon belum ikut di-commit."
   },
   "order": 6
 }

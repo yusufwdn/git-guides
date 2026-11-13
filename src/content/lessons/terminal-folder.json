@@ -1,46 +1,51 @@
 {
   "chapter": 1,
   "id": "terminal-folder",
-  "title": "Pastikan sedang bekerja di folder yang benar.",
-  "summary": "Kenali lokasi terminal, root repository, dan path relatif.",
-  "scenario": "Kamu menjalankan add di folder proyek lain dan bingung mengapa file menu tidak ditemukan.",
-  "concept": "Command Git memakai direktori kerja terminal sebagai konteks. Path relatif dimulai dari lokasi itu. git -C PATH menjalankan operasi dari path tertentu tanpa memindahkan terminal. Kutip path yang mengandung spasi.",
-  "analogy": "Alamat pengiriman yang tepat sama pentingnya dengan isi paket. Perintah yang benar di alamat berbeda tetap bisa memberi hasil yang keliru.",
+  "title": "Terminal: pastikan kamu di folder yang benar",
+  "summary": "Git selalu bekerja dari folder tempat terminal sedang berada. Di sini kamu belajar mengecek lokasi terminal, pindah folder, dan menyiapkan folder kopi-kita.",
+  "scenario": "Kamu membuka terminal dan siap mulai, tapi belum yakin terminal sedang berada di folder mana. Kalau salah folder, command Git bisa jalan di tempat yang keliru, atau malah menolak karena nggak menemukan repo.",
+  "concept": "Terminal selalu punya satu folder aktif. Semua command, termasuk command Git, dijalankan dari folder itu, dan path seperti kopi-kita atau .. dihitung dari situ. Saat kamu menjalankan command Git, Git mencari folder .git mulai dari folder aktif, lalu naik ke folder induknya satu per satu. Kalau sampai atas nggak ketemu, Git menolak dengan pesan not a git repository. Pesan itu bukan tanda Git rusak, tapi tanda kamu belum berada di dalam repo.",
+  "analogy": "Terminal itu seperti kamu yang sedang berdiri di satu ruangan. Perintah \"ambil buku di meja\" selalu berarti meja di ruangan tempat kamu berdiri. Git juga begitu: ia hanya melihat folder tempat terminal sedang berada, plus folder-folder di atasnya.",
   "steps": [
     {
-      "title": "Temukan root repository",
-      "command": "git rev-parse --show-toplevel",
-      "explanation": "Hasilnya path absolut root repo. Di luar repo, Git akan memberi pesan bukan repository."
+      "title": "Cek kamu sedang di folder mana",
+      "command": "pwd",
+      "explanation": "pwd menampilkan folder aktif terminal. Perintah ini jalan di PowerShell, Git Bash, macOS, dan Linux. Hasilnya berupa path, misalnya C:\\Users\\kamu di Windows atau /Users/kamu di macOS."
     },
     {
-      "title": "Periksa folder melalui -C",
-      "command": "git -C \"kopi-kita\" status",
-      "explanation": "Contoh ini dijalankan dari folder induk yang memiliki subfolder kopi-kita. Sesuaikan dengan lokasi sebenarnya."
+      "title": "Buat folder kopi-kita dan masuk ke dalamnya",
+      "command": "mkdir kopi-kita\ncd kopi-kita",
+      "explanation": "mkdir membuat folder baru di dalam folder aktif, dan cd memindahkan terminal ke folder itu. Jalankan pwd lagi: path-nya sekarang berakhir dengan kopi-kita. Untuk kembali ke folder induk, pakai cd .."
+    },
+    {
+      "title": "Tanya Git: apakah ini sebuah repo?",
+      "command": "git rev-parse --show-toplevel",
+      "explanation": "Command ini menampilkan folder utama repo tempat kamu berada. Karena kopi-kita belum dijadikan repo, Git akan menolak dengan pesan fatal: not a git repository. Untuk sekarang, itu memang hasil yang benar. Di bab berikutnya kamu menjalankan git init, dan command yang sama akan menampilkan path folder kopi-kita."
     }
   ],
-  "result": "Kamu dapat menyebut repo yang akan terkena operasi sebelum menjalankan command yang mengubah keadaan.",
-  "pitfall": "Prompt terminal dan folder editor tidak selalu menunjuk lokasi yang sama. Periksa root sebelum restore, reset, atau clean.",
-  "practice": "Buka terminal pada repo latihan, lalu satu tingkat di atasnya. Bandingkan status biasa dengan git -C \"kopi-kita\" status.",
+  "result": "Terminal-mu berada di folder kopi-kita yang masih kosong, dan kamu tahu cara mengecek lokasi terminal sebelum menjalankan command Git.",
+  "pitfall": "Nama folder yang mengandung spasi harus diapit tanda kutip, misalnya cd \"Proyek Kopi\". Tanpa kutip, terminal membaca kata kedua sebagai bagian terpisah. Jangan juga membuat kopi-kita di dalam folder yang sudah menjadi repo lain: kalau langkah ketiga malah menampilkan sebuah path, pindahkan kopi-kita ke luar folder itu.",
+  "practice": "Dari dalam kopi-kita, jalankan cd .. lalu pwd untuk melihat folder induknya. Masuk lagi dengan cd kopi-kita, lalu pastikan dengan pwd bahwa kamu sudah kembali.",
   "quiz": {
-    "question": "Apa fungsi git -C PATH?",
+    "question": "Kamu menjalankan git rev-parse --show-toplevel dan muncul fatal: not a git repository. Apa artinya?",
     "options": [
-      "Membuat commit otomatis",
-      "Mengubah seluruh konfigurasi global",
-      "Menjalankan Git dengan konteks folder PATH"
+      "Git belum terpasang dengan benar",
+      "Folder aktif terminal belum berada di dalam repo Git",
+      "File di folder itu rusak"
     ],
-    "answer": 2,
-    "explanation": "-C memilih konteks direktori untuk proses tersebut."
+    "answer": 1,
+    "explanation": "Git mencari folder .git mulai dari folder aktif ke atas, dan pesan ini muncul kalau nggak ada satu pun yang ditemukan. Kalau Git belum terpasang, pesannya justru command not found atau not recognized."
   },
-  "commands": ["git rev-parse", "git -C"],
-  "visual": "snapshot",
+  "commands": ["git rev-parse --show-toplevel"],
+  "visual": "none",
   "minutes": 7,
   "level": "Dasar",
   "prerequisites": ["setup"],
-  "initialState": "Tersedia folder repo kopi-kita dan folder induknya. Perhatikan dari folder mana setiap command dijalankan.",
-  "lab": "basics",
+  "initialState": "Git sudah terpasang dan identitasmu sudah diatur di materi sebelumnya. Terminal terbuka di folder mana saja, biasanya folder akun penggunamu.",
   "objectives": [
-    "Kenali lokasi terminal, root repository, dan path relatif.",
-    "Periksa hasilnya: Kamu dapat menyebut repo yang akan terkena operasi sebelum menjalankan command yang mengubah keadaan."
+    "Bisa mengecek dan memindahkan folder aktif terminal",
+    "Paham cara Git mencari repo dari folder aktif",
+    "Punya folder kopi-kita yang siap dijadikan repo"
   ],
   "sources": [
     {
@@ -49,9 +54,8 @@
     }
   ],
   "verification": {
-    "command": "git rev-parse --show-toplevel",
-    "explanation": "Kamu dapat menyebut repo yang akan terkena operasi sebelum menjalankan command yang mengubah keadaan."
+    "command": "pwd",
+    "explanation": "Path yang tampil harus berakhir dengan kopi-kita. Kalau belum, pakai cd untuk pindah ke folder itu sebelum lanjut ke bab berikutnya."
   },
-  "order": 2,
-  "preparationURL": "/persiapan/"
+  "order": 2
 }

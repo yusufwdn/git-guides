@@ -31,7 +31,7 @@
     "answer": 2,
     "explanation": "Layanan hosting menyimpan data tambahan di luar object dan refs Git."
   },
-  "commands": ["git branch", "git log"],
+  "commands": ["git branch", "git log", "git clone"],
   "visual": "graph",
   "minutes": 7,
   "level": "Dasar",
@@ -50,6 +50,10 @@
     {
       "title": "Manual git log",
       "url": "https://git-scm.com/docs/git-log"
+    },
+    {
+      "title": "Manual git clone",
+      "url": "https://git-scm.com/docs/git-clone"
     }
   ],
   "verification": {

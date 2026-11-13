@@ -1,7 +1,7 @@
 {
   "basics": {
     "title": "Tiga area",
-    "lesson": "tiga-area",
+    "lesson": "snapshot",
     "goal": "Baca diskon 0 di HEAD/index dan diskon 10 di working tree.",
     "hints": [
       "Bandingkan show HEAD:diskon.js dan show :diskon.js.",

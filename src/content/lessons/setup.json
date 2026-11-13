@@ -1,51 +1,51 @@
 {
   "chapter": 1,
   "id": "setup",
-  "title": "Siapkan Git untuk pekerjaanmu.",
-  "summary": "Pasang Git dan atur identitas yang akan tercatat pada commit.",
-  "scenario": "Kamu baru bergabung di proyek Kopi Kita. Commit pertama justru memakai nama pengguna komputer lama.",
-  "concept": "Instal Git dari git-scm.com/install untuk sistem operasimu. Di Windows kamu bisa memakai PowerShell atau Git Bash; macOS/Linux bisa memakai terminal yang tersedia. Konfigurasi --global berlaku untuk akun pengguna, sedangkan --local berlaku untuk satu repository dan menimpa nilai global untuk repo tersebut.",
-  "analogy": "Identitas commit seperti nama penulis di buku catatan. Nama ini mencatat kepengarangan; ia bukan password dan tidak otomatis membuatmu login ke server.",
+  "title": "Setup: atur nama dan email untuk commit",
+  "summary": "Setiap commit mencatat siapa pembuatnya. Atur nama dan email sekali di komputermu, dan Git akan memakainya di semua repo.",
+  "scenario": "Kamu baru selesai memasang Git dan siap mulai mengerjakan Kopi Kita. Sebelum commit pertama, Git perlu tahu siapa kamu, karena nama dan email itu akan tercatat di setiap commit yang kamu buat dan bisa dilihat rekan setim.",
+  "concept": "git config menyimpan pengaturan Git. Pengaturan dengan opsi --global berlaku untuk semua repo milik akun pengguna di komputermu, jadi cukup diatur sekali. Kalau suatu saat sebuah repo butuh identitas lain, misalnya repo kantor yang memakai email kerja, kamu bisa menjalankan git config tanpa --global di dalam repo itu. Nilai lokal seperti ini menang atas nilai global, tapi hanya untuk repo tersebut. Perlu diingat, nama dan email ini cuma label di commit, bukan akun untuk login. Urusan login ke server seperti GitHub dibahas di bab remote.",
+  "analogy": "Mirip stempel nama di setiap surat yang kamu kirim. Stempel umum dipakai untuk semua surat, tapi untuk surat kantor kamu bisa memakai stempel khusus. Stempel itu menunjukkan siapa pengirimnya, bukan kunci untuk masuk ke kantor pos.",
   "steps": [
     {
-      "title": "Periksa instalasi",
+      "title": "Cek apakah Git sudah terpasang",
       "command": "git --version",
-      "explanation": "Buka terminal baru sesudah instalasi bila perintah belum dikenali."
+      "explanation": "Kalau versi Git muncul, kamu siap lanjut. Kalau yang muncul pesan not recognized atau command not found, ikuti dulu halaman persiapan."
     },
     {
-      "title": "Atur identitas",
+      "title": "Atur nama dan email",
       "command": "git config --global user.name \"Nama Kamu\"\ngit config --global user.email \"kamu@example.com\"",
-      "explanation": "Ganti dengan identitasmu. Untuk proyek kantor tertentu, jalankan konfigurasi tanpa --global dari dalam repo."
+      "explanation": "Ganti dengan nama dan email yang boleh dilihat orang lain, karena keduanya ikut tersimpan di setiap commit. Kalau repo-mu nanti dipublikasikan, siapa pun bisa membacanya. Kalau berhasil, command ini nggak menampilkan apa-apa."
     },
     {
-      "title": "Periksa asal konfigurasi",
-      "command": "git config --list --show-origin",
-      "explanation": "Lihat file mana yang memberikan nilai konfigurasi. Hindari membagikan output yang berisi informasi sensitif."
+      "title": "Cek hasilnya",
+      "command": "git config --global --list",
+      "explanation": "Perintah ini menampilkan semua pengaturan global, satu per baris. Cari baris user.name dan user.email. Kalau ada baris lain, biarkan saja; itu pengaturan yang pernah dibuat sebelumnya."
     }
   ],
-  "result": "Commit baru menggunakan identitas yang benar. Konfigurasi identitas tidak mengubah author pada commit lama.",
-  "pitfall": "Email commit dapat terlihat ketika repository dibagikan. Gunakan email yang memang boleh dipublikasikan atau alamat privasi dari layanan hosting.",
-  "practice": "Atur identitas global lalu gunakan --local di repo latihan. Periksa nilai user.email dari dalam dan luar repo.",
+  "result": "Nama dan email-mu sudah tersimpan di pengaturan global. Semua commit yang kamu buat di komputer ini, termasuk di repo Kopi Kita nanti, akan memakai identitas tersebut.",
+  "pitfall": "Salah ketik email biasanya baru ketahuan setelah banyak commit dibuat, jadi cek ulang sekarang. Ingat juga bahwa user.name bukan username GitHub dan nggak dipakai untuk login. Mengubahnya nggak akan memperbaiki masalah izin akses ke server.",
+  "practice": "Jalankan git config --global user.name tanpa nilai di belakangnya. Git akan menampilkan nama yang tersimpan. Lakukan hal yang sama untuk user.email, lalu pastikan keduanya benar.",
   "quiz": {
-    "question": "Konfigurasi mana yang menang untuk repo tertentu?",
+    "question": "Kamu sudah menjalankan git config --global user.name \"Rani\". Di mana nama ini dipakai?",
     "options": [
-      "Nilai --global selalu menang",
-      "Nilai --local pada repo itu",
-      "Yang namanya paling pendek"
+      "Hanya di repo yang sedang terbuka",
+      "Di semua repo milik akunmu di komputer ini, kecuali repo yang punya pengaturan lokal sendiri",
+      "Sebagai username untuk login ke GitHub"
     ],
     "answer": 1,
-    "explanation": "Konfigurasi repository menimpa nilai global yang sama."
+    "explanation": "--global berlaku untuk semua repo di akunmu. Repo yang punya pengaturan lokal memakai nilai lokalnya sendiri. Nama ini cuma label di commit, bukan akun login."
   },
   "commands": ["git config", "git --version"],
-  "visual": "snapshot",
+  "visual": "config",
   "minutes": 8,
   "level": "Dasar",
   "prerequisites": ["kenalan-git"],
-  "initialState": "Jika Git belum terpasang atau terminal belum dikenal, selesaikan halaman persiapan terlebih dahulu. Repository Kopi Kita dari persiapan sudah mempunyai commit pertama.",
-  "lab": "basics",
+  "initialState": "Git sudah terpasang dan terminal sudah terbuka. Belum perlu ada folder proyek, karena pengaturan global bisa dibuat dari folder mana pun.",
   "objectives": [
-    "Pasang Git dan atur identitas yang akan tercatat pada commit.",
-    "Periksa hasilnya: Commit baru menggunakan identitas yang benar. Konfigurasi identitas tidak mengubah author pada commit lama."
+    "Bisa mengatur nama dan email yang tercatat di commit",
+    "Tahu bedanya pengaturan global dan lokal",
+    "Paham bahwa identitas commit berbeda dengan akun login"
   ],
   "sources": [
     {
@@ -59,7 +59,7 @@
   ],
   "verification": {
     "command": "git config --show-origin --get user.name\ngit config --show-origin --get user.email",
-    "explanation": "Commit baru menggunakan identitas yang benar. Konfigurasi identitas tidak mengubah author pada commit lama."
+    "explanation": "Setiap baris menampilkan lokasi file pengaturan di kiri dan nilainya di kanan. Untuk pengaturan --global, file-nya biasanya .gitconfig di folder akun penggunamu. Pastikan nama dan email di kolom kanan sudah benar."
   },
   "order": 1,
   "preparationURL": "/persiapan/"

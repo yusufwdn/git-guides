@@ -1,60 +1,56 @@
 {
   "chapter": 1,
   "id": "bantuan",
-  "title": "Saat lupa, tahu tempat bertanya.",
-  "summary": "Gunakan bantuan bawaan Git dan pahami terminal sebelum menyalin command.",
-  "scenario": "Tutorial memakai opsi yang belum kamu kenal. Kamu ingin memeriksanya sebelum menjalankan command pada pekerjaan asli.",
-  "concept": "git <command> -h menampilkan bantuan singkat. git help <command> membuka manual yang lebih lengkap. Placeholder seperti <file> harus diganti dan tanda kurung sudutnya tidak ikut diketik. Teks output bukan command yang perlu dijalankan.",
-  "analogy": "Bantuan singkat seperti label pada alat; manual lengkap seperti buku petunjuk. Baca bagian yang sesuai pekerjaanmu.",
+  "title": "Bantuan: cari tahu sendiri cara pakai command",
+  "summary": "Lupa opsi sebuah command itu wajar. Git punya bantuan singkat dan manual lengkap yang bisa dibuka kapan saja, tanpa internet.",
+  "scenario": "Kamu ingat ada command git config, tapi lupa cara menampilkan semua pengaturannya. Daripada menebak atau menyalin command acak dari internet, kamu ingin mengecek langsung ke sumbernya.",
+  "concept": "Tambahkan -h di belakang command untuk melihat ringkasan cara pakainya, misalnya git config -h. Untuk penjelasan lengkap, buka manual dengan git help diikuti nama command, misalnya git help config. Di ringkasan bantuan, tulisan dalam kurung sudut seperti <name> adalah bagian yang harus kamu ganti, dan tulisan dalam kurung siku seperti [--global] artinya boleh dipakai, boleh juga nggak. Kurungnya sendiri nggak ikut diketik.",
+  "analogy": "Mirip daftar menu dan buku resep di dapur. Bantuan singkat seperti daftar menu yang cukup untuk mengingatkan pilihan, sedangkan manual seperti buku resep yang menjelaskan setiap langkah dan bahannya.",
   "steps": [
     {
-      "title": "Baca ringkasan",
-      "command": "git stash -h",
-      "explanation": "Perhatikan opsi -u dan -m. Bantuan singkat bisa keluar dengan exit code nonzero walau informasinya berhasil ditampilkan."
+      "title": "Lihat ringkasan cara pakai",
+      "command": "git config -h",
+      "explanation": "Git menampilkan bentuk-bentuk penulisan command beserta daftar opsinya langsung di terminal. Cocok untuk mengingat nama opsi yang lupa."
     },
     {
-      "title": "Buka manual",
-      "command": "git help stash",
-      "explanation": "Di pager tekan / untuk mencari dan q untuk keluar. Jika manual lokal tidak tersedia, buka manual resmi online."
+      "title": "Buka manual lengkap",
+      "command": "git help config",
+      "explanation": "Manual berisi penjelasan setiap opsi dan contoh pemakaiannya. Di Windows manual biasanya terbuka di browser, sedangkan di macOS dan Linux muncul di terminal. Gunakan tombol panah untuk menggulir dan tekan q untuk keluar."
     }
   ],
-  "result": "Kamu bisa memeriksa sintaks tanpa mengubah repository.",
-  "pitfall": "Command dari shell POSIX belum tentu bekerja di PowerShell, terutama kutip, variabel, dan perintah membuat file. Command Git dasar pada panduan ini dipilih agar bisa digunakan di keduanya.",
-  "practice": "Cari arti --staged pada bantuan git diff. Jelaskan apa yang dibandingkan tanpa mencoba menghafal semua opsi.",
+  "result": "Kamu bisa mencari sendiri cara pakai sebuah command lewat -h dan git help, tanpa harus menghafal semua opsinya.",
+  "pitfall": "Saat menyalin command dari internet, jangan ikut mengetik tanda prompt seperti $ atau PS C:\\> dan jangan menyalin contoh output. Ganti juga bagian dalam kurung sudut dengan nilai milikmu sendiri. Kalau ragu dengan command yang belum kamu kenal, cek dulu dengan -h sebelum menjalankannya.",
+  "practice": "Buka git help config dan cari bagian yang menjelaskan opsi --global. Lalu jalankan git help -g untuk melihat daftar panduan konsep yang disediakan Git, dan pilih satu judul yang menurutmu menarik untuk dibaca nanti.",
   "quiz": {
-    "question": "Dalam git add <file>, apa yang kamu ketik?",
+    "question": "Di bantuan tertulis git config set [--global] <name> <value>. Mana yang benar untuk diketik?",
     "options": [
-      "git add menu.json untuk file menu.json",
-      "git add <file> secara literal",
-      "Hanya nama file"
+      "git config set [--global] <name> <value>",
+      "git config set --global user.name \"Nama Kamu\"",
+      "git config set <user.name> <\"Nama Kamu\">"
     ],
-    "answer": 0,
-    "explanation": "Tanda <...> menandai nilai yang perlu kamu ganti."
+    "answer": 1,
+    "explanation": "Kurung siku menandai bagian yang boleh dipakai atau dilewati, dan kurung sudut menandai bagian yang harus diganti. Kurungnya sendiri nggak ikut diketik."
   },
-  "commands": ["git help", "git stash -h"],
-  "visual": "snapshot",
+  "commands": ["git help", "git config -h"],
+  "visual": "none",
   "minutes": 6,
   "level": "Dasar",
   "prerequisites": ["terminal-folder"],
-  "initialState": "Git terpasang. Bantuan command tidak memerlukan file proyek berubah; manual lokal mungkin tidak tersedia pada semua instalasi.",
-  "lab": "basics",
+  "initialState": "Git sudah terpasang dan identitasmu sudah diatur. Materi ini bisa dicoba dari folder mana pun, termasuk folder kopi-kita yang baru kamu buat.",
   "objectives": [
-    "Gunakan bantuan bawaan Git dan pahami terminal sebelum menyalin command.",
-    "Periksa hasilnya: Kamu bisa memeriksa sintaks tanpa mengubah repository."
+    "Bisa melihat ringkasan cara pakai dengan -h",
+    "Bisa membuka manual lengkap dengan git help",
+    "Bisa membaca tanda kurung sudut dan kurung siku di bantuan"
   ],
   "sources": [
     {
       "title": "Manual git help",
       "url": "https://git-scm.com/docs/git-help"
-    },
-    {
-      "title": "Manual git stash",
-      "url": "https://git-scm.com/docs/git-stash"
     }
   ],
   "verification": {
-    "command": "git stash -h",
-    "explanation": "Kamu bisa memeriksa sintaks tanpa mengubah repository."
+    "command": "git config -h",
+    "explanation": "Baris pertamanya diawali kata usage, diikuti bentuk penulisan git config. Bentuk persisnya bisa berbeda di tiap versi Git. Kalau yang muncul justru pesan error, periksa lagi ejaan command-nya."
   },
   "order": 3,
   "checkpoint": {

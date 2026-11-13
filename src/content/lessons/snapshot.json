@@ -1,46 +1,48 @@
 {
   "chapter": 2,
   "id": "snapshot",
-  "title": "Yang direkam adalah keadaan proyek.",
-  "summary": "Bedakan snapshot, patch, dan file yang belum direkam.",
-  "scenario": "Menu kembali ke harga lama setelah pindah branch. Kamu khawatir file terbaru hilang, padahal kedua versi sudah di-commit.",
-  "concept": "Snapshot menjelaskan keadaan file tracked pada commit. Patch menjelaskan perbedaannya terhadap keadaan lain. Git dapat berbagi object yang sama antarsnapshot, sehingga snapshot tidak berarti menyalin folder penuh secara fisik setiap kali commit.",
-  "analogy": "Dua daftar menu bisa memakai foto kopi yang sama. Edisinya berbeda, tetapi bahan yang tidak berubah tidak perlu dibuat ulang.",
+  "title": "Snapshot: baca versi file yang tersimpan",
+  "summary": "Setiap commit menyimpan snapshot utuh proyekmu. Dengan git show, kamu bisa membaca isi file di commit terakhir maupun di staging area tanpa mengubah file yang sedang kamu kerjakan.",
+  "scenario": "Kamu masih mencoba-coba nilai diskon, sampai diskon.js punya tiga versi sekaligus: 0 di commit terakhir, 5 yang sudah kamu add, dan 10 yang baru saja kamu ketik. Kamu ingin melihat ketiga versi itu tanpa membatalkan apa pun.",
+  "concept": "Commit menyimpan snapshot, yaitu potret isi semua file yang dilacak pada saat commit dibuat, bukan cuma daftar baris yang berubah. Karena itu kamu bisa membaca isi file dari commit kapan pun. git show HEAD:diskon.js menampilkan diskon.js di commit terakhir. git show :diskon.js, dengan titik dua di depan tanpa nama commit, menampilkan isinya di staging area. Isi working tree cukup dibaca langsung di editor. Ketiganya boleh berbeda, dan itu normal. Git juga cukup hemat: file yang nggak berubah antarcommit nggak disimpan ulang, jadi snapshot nggak berarti menyalin seluruh folder setiap kali commit.",
+  "analogy": "Mirip album foto. Foto lama tetap bisa dilihat kapan saja tanpa mengubah kondisi kedai sekarang. Membaca isi commit dengan git show juga begitu: cuma melihat, nggak mengubah apa pun.",
   "steps": [
     {
-      "title": "Baca isi tanpa pindah branch",
-      "command": "git show HEAD:menu.json",
-      "explanation": "Bentuk COMMIT:path mengambil file dari snapshot. Editor dan working tree tidak berubah."
+      "title": "Siapkan tiga versi diskon.js",
+      "command": "git add diskon.js",
+      "explanation": "Ubah nilai di diskon.js menjadi 5, simpan, lalu jalankan git add diskon.js. Setelah itu ubah lagi menjadi 10 dan simpan tanpa add. Sekarang commit terakhir berisi 0, staging area berisi 5, dan working tree berisi 10."
     },
     {
-      "title": "Bandingkan dengan index",
-      "command": "git diff --staged -- menu.json",
-      "explanation": "Patch ini menjelaskan beda index terhadap HEAD, bukan seluruh isi snapshot."
+      "title": "Baca versi di commit terakhir dan di staging area",
+      "command": "git show HEAD:diskon.js\ngit show :diskon.js",
+      "explanation": "Command pertama menampilkan const diskon = 0; yaitu isi di commit terakhir. Command kedua menampilkan const diskon = 5; yaitu isi di staging area. File di editormu tetap berisi 10, karena git show cuma membaca."
+    },
+    {
+      "title": "Bandingkan staging area dengan commit terakhir",
+      "command": "git diff --staged",
+      "explanation": "Hasilnya menunjukkan perubahan dari 0 menjadi 5. Inilah yang akan tersimpan kalau kamu commit sekarang. Perubahan menjadi 10 belum ikut, karena belum di-add."
     }
   ],
-  "result": "Kamu dapat membaca versi tersimpan tanpa menimpa file yang sedang dikerjakan.",
-  "pitfall": "File baru yang untracked belum ada pada HEAD. git show HEAD:file-baru akan gagal sampai file masuk commit.",
-  "practice": "Di latihan staging, bandingkan show HEAD:menu.json, file editor, dan diff. Jelaskan tiga bentuk informasi itu.",
+  "result": "Kamu bisa membaca isi file dari commit terakhir dan dari staging area tanpa mengubah working tree. diskon.js sengaja dibiarkan dalam tiga versi karena kondisi ini dipakai lagi di bab berikutnya.",
+  "pitfall": "git show HEAD:nama-file cuma bisa membaca file yang sudah pernah di-commit. Untuk file baru yang belum di-commit, Git menolak dengan pesan exists on disk, but not in HEAD. Tulis path dengan garis miring biasa walaupun kamu di Windows, misalnya HEAD:src/menu.json.",
+  "practice": "Jalankan git diff tanpa --staged dan bandingkan hasilnya dengan git diff --staged. Jelaskan dengan kata-katamu sendiri kenapa yang satu menunjukkan 5 menjadi 10, sedangkan yang lain 0 menjadi 5. Jangan commit dulu.",
   "quiz": {
-    "question": "git show HEAD:menu.json mengubah working tree?",
-    "options": [
-      "Ya, selalu menimpa editor",
-      "Tidak, hanya membaca snapshot",
-      "Hanya jika memakai Windows"
-    ],
-    "answer": 1,
-    "explanation": "Membaca object berbeda dari checkout atau restore yang memperbarui file."
+    "question": "Command mana yang menampilkan isi menu.json di commit terakhir tanpa mengubah file di working tree?",
+    "options": ["git show HEAD:menu.json", "git add menu.json", "git commit menu.json"],
+    "answer": 0,
+    "explanation": "git show cuma membaca isi dari riwayat. add dan commit justru memindahkan perubahan ke staging area dan ke riwayat."
   },
-  "commands": ["git show", "git diff"],
+  "commands": ["git show", "git diff --staged"],
   "visual": "snapshot",
   "minutes": 7,
   "level": "Dasar",
   "prerequisites": ["staging"],
-  "initialState": "Repo punya commit HEAD yang melacak menu.json. Working tree boleh berbeda; perintah contoh hanya membaca. Siapkan keadaan ini melalui halaman Persiapan: repo pertama dan contoh tiga versi.",
+  "initialState": "Lanjutan dari materi staging: repo kopi-kita punya dua commit, dan diskon.js masih berubah dari 0 menjadi 10 tanpa di-add.",
   "lab": "basics",
   "objectives": [
-    "Bedakan snapshot, patch, dan file yang belum direkam.",
-    "Periksa hasilnya: Kamu dapat membaca versi tersimpan tanpa menimpa file yang sedang dikerjakan."
+    "Paham bahwa commit menyimpan snapshot utuh, bukan cuma daftar perubahan",
+    "Bisa membaca isi file dari commit terakhir dan dari staging area dengan git show",
+    "Bisa menjelaskan kenapa satu file bisa punya tiga versi sekaligus"
   ],
   "sources": [
     {
@@ -53,15 +55,14 @@
     }
   ],
   "verification": {
-    "command": "git show HEAD:menu.json",
-    "explanation": "Kamu dapat membaca versi tersimpan tanpa menimpa file yang sedang dikerjakan."
+    "command": "git show HEAD:diskon.js\ngit show :diskon.js",
+    "explanation": "Hasilnya harus const diskon = 0; lalu const diskon = 5;. Kalau keduanya sama, kemungkinan kamu lupa menjalankan git add saat nilainya 5."
   },
   "order": 7,
-  "preparationURL": "/persiapan/",
   "checkpoint": {
-    "question": "HEAD berisi diskon 0, index 5, dan file kerja 10. Commit tanpa add lagi menyimpan nilai berapa?",
+    "question": "diskon.js berisi 0 di commit terakhir, 5 di staging area, dan 10 di working tree. Kalau kamu commit sekarang tanpa add lagi, nilai berapa yang tersimpan?",
     "options": ["0", "5", "10"],
     "answer": 1,
-    "explanation": "Commit merekam index. Edit menjadi 10 belum disalin ke index."
+    "explanation": "Commit menyimpan isi staging area, yaitu 5. Perubahan menjadi 10 belum di-add, jadi tetap tinggal di working tree."
   }
 }

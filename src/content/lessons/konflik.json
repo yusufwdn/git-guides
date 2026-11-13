@@ -1,51 +1,62 @@
 {
   "chapter": 6,
   "id": "konflik",
-  "title": "Konflik itu keputusan yang tertunda.",
-  "summary": "Baca kedua perubahan, putuskan hasil yang benar, lalu lanjutkan merge.",
-  "scenario": "Kamu dan Rani mengubah harga kopi pada baris yang sama. Git tidak tahu harga mana yang disepakati tim.",
-  "concept": "Konflik berarti Git membutuhkan keputusanmu. Marker <<<<<<<, =======, dan >>>>>>> memisahkan versi yang bentrok. Dalam merge biasa, ours merujuk branch aktif dan theirs ke sisi yang digabung. Maknanya bisa membingungkan pada rebase, jadi baca konteks dan isi file.",
-  "analogy": "Dua orang memberi koreksi berbeda pada satu kalimat. Penyunting harus memilih atau merangkai kalimat akhir berdasarkan maksud kedua perubahan.",
+  "title": "Konflik merge: putuskan hasil akhirnya",
+  "summary": "Konflik terjadi saat dua branch mengubah baris yang sama. Git berhenti dan menyerahkan keputusannya padamu: pilih atau susun hasil akhir, lalu selesaikan merge.",
+  "scenario": "Rani menyiapkan branch harga-promo yang menurunkan harga kopi susu menjadi 18000. Di waktu yang sama, harga kopi susu di main dinaikkan menjadi 22000. Saat kedua perubahan digabung, Git nggak bisa menebak harga mana yang benar.",
+  "concept": "Git bisa menggabungkan otomatis selama kedua branch mengubah bagian file yang berbeda. Kalau keduanya mengubah baris yang sama, Git berhenti dengan pesan CONFLICT dan menandai file itu. Di dalam file, bagian yang bentrok diapit penanda: dari <<<<<<< HEAD sampai ======= berisi versi branch aktif, dan dari ======= sampai >>>>>>> diikuti nama branch berisi versi branch yang digabung. Tugasmu: edit file sampai berisi hasil akhir yang benar, hapus semua penanda, lalu git add file itu untuk menandai konfliknya sudah selesai. Terakhir, git commit menyimpan merge commit-nya. Selama konflik, git status --short menandai file itu dengan UU, artinya diubah di kedua sisi dan belum diselesaikan.",
+  "analogy": "Mirip dua orang mengoreksi kalimat yang sama di satu dokumen dengan cara berbeda. Penyunting nggak bisa memakai keduanya sekaligus, jadi harus memilih salah satu atau menyusun kalimat baru berdasarkan maksud keduanya.",
   "steps": [
     {
-      "title": "Baca keadaan konflik",
-      "command": "git merge fitur-menu\ngit status\ngit diff",
-      "explanation": "Buka file yang konflik dan pahami maksud kedua sisi. Edit hasil akhirnya, lalu hapus semua marker."
+      "title": "Buat branch harga-promo",
+      "command": "git switch -c harga-promo",
+      "explanation": "Setelah menjalankan command di bawah, ubah kopiSusu di menu.json dari 20000 menjadi 18000 lalu simpan."
     },
     {
-      "title": "Tandai sudah diselesaikan",
-      "command": "git add menu.json\ngit diff --staged",
-      "explanation": "Add berarti kamu menyatakan file ini sudah diselesaikan. Periksa dan uji hasilnya."
+      "title": "Commit di harga-promo, lalu kembali ke main",
+      "command": "git add menu.json\ngit commit -m \"Harga promo kopi susu\"\ngit switch main",
+      "explanation": "Setelah kembali ke main, menu.json berisi 20000 lagi. Ubah kopiSusu menjadi 22000 dan simpan, lalu lanjut ke langkah berikutnya."
     },
     {
-      "title": "Selesaikan atau batalkan",
-      "command": "git merge --continue",
-      "explanation": "Jika belum ingin melanjutkan, alternatifnya adalah git merge --abort selama merge masih berlangsung."
+      "title": "Commit di main, lalu gabungkan",
+      "command": "git add menu.json\ngit commit -m \"Naikkan harga kopi susu\"\ngit merge -m \"Gabungkan harga promo\" harga-promo",
+      "explanation": "Merge berhenti dengan pesan CONFLICT (content): Merge conflict in menu.json dan Automatic merge failed. Ini bukan kerusakan; Git cuma butuh keputusanmu."
+    },
+    {
+      "title": "Baca konfliknya",
+      "command": "git status --short",
+      "explanation": "Hasilnya UU menu.json. Buka menu.json: ada baris <<<<<<< HEAD, lalu versi main dengan 22000, baris =======, versi harga-promo dengan 18000, dan terakhir >>>>>>> harga-promo."
+    },
+    {
+      "title": "Selesaikan dan commit",
+      "command": "git add menu.json\ngit commit -m \"Selesaikan konflik harga kopi susu\"",
+      "explanation": "Misalkan pemilik kedai memutuskan harga 22000. Edit menu.json sampai isinya tinggal satu baris {\"kopiSusu\":22000,\"esKopi\":22000,\"teh\":16000} tanpa penanda apa pun, simpan, lalu jalankan command di bawah. git add menandai konflik sudah diselesaikan, dan git commit menyimpan merge commit-nya."
     }
   ],
-  "result": "Merge selesai dengan hasil yang kamu pilih, atau proses dibatalkan sebelum diselesaikan.",
-  "pitfall": "Jangan hanya menghapus marker dan menganggap hasil sudah benar. Perubahan yang tidak bentrok secara teks pun bisa bermasalah secara logika.",
-  "practice": "Di repo latihan, ubah baris menu yang sama di dua branch. Gabungkan, pilih harga yang disepakati, dan periksa tidak ada marker tersisa.",
+  "result": "Merge selesai dengan harga kopi susu 22000 sesuai keputusan. Riwayat main punya merge commit Selesaikan konflik harga kopi susu dengan dua parent.",
+  "pitfall": "Jangan cuma menghapus penanda lalu menganggap hasilnya pasti benar. Baca isi kedua versi dan pastikan hasil akhirnya masuk akal, karena perubahan yang nggak bentrok secara teks pun bisa salah secara logika. Pastikan juga nggak ada penanda <<<<<<< yang tertinggal sebelum git add. Kamu mungkin melihat petunjuk git merge --continue; command itu juga menyelesaikan merge, tapi membuka editor untuk pesan commit.",
+  "practice": "Ulangi dengan branch baru yang mengubah harga es kopi, sementara main mengubah harga yang sama ke angka lain. Kali ini susun hasil akhir dengan angka ketiga yang berbeda dari kedua sisi, lalu selesaikan merge.",
   "quiz": {
-    "question": "Setelah mengedit file konflik, langkah berikutnya?",
+    "question": "Setelah selesai mengedit file yang konflik, apa langkah berikutnya?",
     "options": [
-      "Menghapus seluruh repository",
-      "git add file yang diselesaikan",
-      "Langsung force push"
+      "Hapus seluruh repository",
+      "git add file yang sudah diselesaikan, lalu commit",
+      "Langsung pindah branch"
     ],
     "answer": 1,
-    "explanation": "Add memperbarui index dengan hasil penyelesaian sebelum merge dilanjutkan."
+    "explanation": "git add menandai konflik di file itu sudah diselesaikan. Setelah semua file konflik di-add, git commit menyimpan merge commit-nya."
   },
-  "commands": ["git merge --continue", "git merge --abort"],
+  "commands": ["git merge", "git merge --continue"],
   "visual": "conflict",
   "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["merge", "staging"],
-  "initialState": "Latihan merge-conflict: main harga 20000 dan fitur-menu harga 22000 mengubah baris yang sama dari dasar 18000.",
+  "prerequisites": ["merge", "status-singkat"],
+  "initialState": "Lanjutan dari materi fast-forward: main dan fitur-teh menunjuk commit Naikkan harga teh, dan working tree bersih.",
   "lab": "merge-conflict",
   "objectives": [
-    "Baca kedua perubahan, putuskan hasil yang benar, lalu lanjutkan merge.",
-    "Periksa hasilnya: Merge selesai dengan hasil yang kamu pilih, atau proses dibatalkan sebelum diselesaikan."
+    "Paham kenapa konflik terjadi",
+    "Bisa membaca penanda konflik di dalam file",
+    "Bisa menyelesaikan konflik dengan edit, add, dan commit"
   ],
   "sources": [
     {
@@ -54,8 +65,8 @@
     }
   ],
   "verification": {
-    "command": "git status\ngit log --parents -1",
-    "explanation": "Merge selesai dengan hasil yang kamu pilih, atau proses dibatalkan sebelum diselesaikan."
+    "command": "git status --short\ngit log --oneline --graph -4",
+    "explanation": "git status --short harus kosong. Grafik log menunjukkan jalur Harga promo kopi susu dan Naikkan harga kopi susu yang bertemu di Selesaikan konflik harga kopi susu."
   },
   "order": 20
 }

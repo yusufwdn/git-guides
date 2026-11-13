@@ -1,46 +1,57 @@
 {
   "chapter": 6,
   "id": "abort-merge",
-  "title": "Berhenti sebelum keputusan disimpan.",
-  "summary": "Batalkan merge yang masih berlangsung dan periksa pemulihannya.",
-  "scenario": "Harga yang benar belum disepakati, sementara merge menu sudah berhenti dengan konflik. Kamu ingin kembali dulu ke keadaan sebelumnya.",
-  "concept": "git merge --abort mencoba mengembalikan keadaan sebelum merge yang masih berlangsung. Memulai dari working tree bersih membuat batas pemulihan lebih jelas. Bila perubahan lokal sudah ada sebelum merge atau ikut diedit saat konflik, rekonstruksi seluruh perubahan awal tidak selalu terjamin.",
-  "analogy": "Kamu membatalkan sesi penyuntingan yang belum disahkan. Lebih mudah kembali jika meja sudah rapi saat sesi dimulai.",
+  "title": "Batalkan merge: kembali sebelum konflik",
+  "summary": "Kalau merge berhenti karena konflik dan kamu belum siap memutuskan, git merge --abort mengembalikan repo ke kondisi sebelum merge dimulai.",
+  "scenario": "Ada usulan diskon 30 persen di branch diskon-besar, sementara main baru saja menaikkan diskon jadi 20 persen. Saat digabung, muncul konflik, padahal pemilik kedai belum memutuskan diskon mana yang dipakai. Kamu ingin membatalkan merge dulu sambil menunggu keputusan.",
+  "concept": "Selama merge masih berhenti di tengah karena konflik, git merge --abort membatalkan seluruh proses dan mengembalikan branch, staging area, dan working tree ke kondisi tepat sebelum git merge dijalankan. Branch yang digabung nggak terpengaruh, jadi kamu bisa mencoba merge lagi nanti. Abort paling aman dipakai saat working tree bersih sebelum merge dimulai. Kalau sebelum merge masih ada perubahan yang belum di-commit, Git mungkin nggak bisa mengembalikannya dengan sempurna, jadi biasakan commit dulu sebelum merge.",
+  "analogy": "Mirip membatalkan rapat penyuntingan yang belum menghasilkan keputusan. Dokumen kembali seperti sebelum rapat, dan usulan perubahannya tetap tersimpan untuk dibahas lagi nanti.",
   "steps": [
     {
-      "title": "Mulai dari kondisi latihan bersih",
-      "command": "git merge fitur-menu",
-      "explanation": "Pada latihan merge-abort, konflik memang diharapkan. Jangan commit hasilnya."
+      "title": "Siapkan usulan di branch diskon-besar",
+      "command": "git switch -c diskon-besar",
+      "explanation": "Setelah menjalankan command di bawah, ubah baris pertama diskon.js menjadi const diskon = 30; lalu simpan."
     },
     {
-      "title": "Periksa lalu batalkan",
-      "command": "git status\ngit merge --abort",
-      "explanation": "Setelah abort, periksa status dan isi menu. Tidak ada proses merge yang perlu diteruskan."
+      "title": "Commit usulan, lalu kembali ke main",
+      "command": "git add diskon.js\ngit commit -m \"Usulan diskon 30 persen\"\ngit switch main",
+      "explanation": "Di main, ubah baris pertama diskon.js menjadi const diskon = 20; dan simpan, lalu lanjut ke langkah berikutnya."
+    },
+    {
+      "title": "Commit di main, lalu coba gabungkan",
+      "command": "git add diskon.js\ngit commit -m \"Naikkan diskon jadi 20 persen\"\ngit log --oneline -1\ngit merge -m \"Gabungkan diskon besar\" diskon-besar",
+      "explanation": "Catat potongan hash dari git log --oneline -1, yaitu commit Naikkan diskon jadi 20 persen. Merge lalu berhenti dengan CONFLICT di diskon.js."
+    },
+    {
+      "title": "Batalkan merge",
+      "command": "git merge --abort\ngit status",
+      "explanation": "git status sekarang menampilkan nothing to commit, working tree clean. Proses merge sudah dibatalkan, dan diskon.js kembali berisi 20."
     }
   ],
-  "result": "HEAD main, index, dan working tree kembali ke keadaan awal latihan.",
-  "pitfall": "--abort bukan cara membalik merge yang sudah di-commit. Untuk riwayat yang sudah dibagikan, pelajari revert dengan pemilihan mainline.",
-  "practice": "Jalankan start merge-abort. Catat hash HEAD, buat konflik, abort, lalu bandingkan hash dan status.",
+  "result": "main kembali ke commit Naikkan diskon jadi 20 persen seperti sebelum merge. Branch diskon-besar tetap ada dan bisa digabung lagi setelah ada keputusan.",
+  "pitfall": "git merge --abort cuma bisa dipakai selama merge masih berlangsung. Merge yang sudah di-commit nggak bisa dibatalkan dengan abort; cara membatalkan commit dibahas di bab 10.",
+  "practice": "Jalankan git merge -m \"Gabungkan diskon besar\" diskon-besar sekali lagi, lalu lihat git status saat konflik terjadi. Cari baris yang menyarankan git merge --abort di output itu, lalu batalkan lagi.",
   "quiz": {
-    "question": "Kapan merge --abort digunakan?",
+    "question": "Kapan git merge --abort dipakai?",
     "options": [
-      "Setelah semua rilis untuk menghapus riwayat",
-      "Untuk membatalkan stash pop",
-      "Saat merge masih berlangsung"
+      "Setelah merge di-commit, untuk menghapusnya dari riwayat",
+      "Saat merge berhenti karena konflik dan belum diselesaikan",
+      "Untuk menghapus branch yang digabung"
     ],
-    "answer": 2,
-    "explanation": "Perintah ini menangani proses merge yang belum selesai."
+    "answer": 1,
+    "explanation": "Abort membatalkan merge yang masih berlangsung. Merge yang sudah di-commit butuh cara lain, dan branch yang digabung tetap utuh."
   },
   "commands": ["git merge --abort"],
   "visual": "conflict",
   "minutes": 7,
   "level": "Menengah",
   "prerequisites": ["konflik"],
-  "initialState": "Latihan merge-abort dimulai bersih di main. Kedua branch mengubah satu baris menu sehingga merge akan berkonflik.",
+  "initialState": "Lanjutan dari materi konflik merge: main berisi merge commit Selesaikan konflik harga kopi susu, dan working tree bersih.",
   "lab": "merge-abort",
   "objectives": [
-    "Batalkan merge yang masih berlangsung dan periksa pemulihannya.",
-    "Periksa hasilnya: HEAD main, index, dan working tree kembali ke keadaan awal latihan."
+    "Bisa membatalkan merge yang berhenti karena konflik",
+    "Tahu bahwa abort nggak menghapus branch yang digabung",
+    "Tahu kapan abort sudah nggak bisa dipakai"
   ],
   "sources": [
     {
@@ -49,14 +60,14 @@
     }
   ],
   "verification": {
-    "command": "git status\ngit rev-parse HEAD",
-    "explanation": "HEAD main, index, dan working tree kembali ke keadaan awal latihan."
+    "command": "git log --oneline -1\ngit branch",
+    "explanation": "Hash dan pesan commit terakhir harus sama dengan yang kamu catat di langkah 3. git branch masih menampilkan diskon-besar, karena abort nggak menghapus branch yang digabung."
   },
   "order": 21,
   "checkpoint": {
-    "question": "Merge sedang konflik. Kamu ingin kembali ke keadaan sebelum merge, bukan menyelesaikannya. Pilih tindakan.",
-    "options": ["git merge --abort", "git stash --continue", "git push --force"],
+    "question": "Merge berhenti karena konflik. Kamu ingin kembali ke kondisi sebelum merge, bukan menyelesaikannya. Command mana yang tepat?",
+    "options": ["git merge --abort", "git commit -m \"Batal\"", "git switch -c batal"],
     "answer": 0,
-    "explanation": "Abort menghentikan proses merge yang belum selesai. Periksa status dan perubahan lokal lebih dahulu."
+    "explanation": "git merge --abort membatalkan merge yang masih berlangsung. git commit justru menyimpan hasil merge, dan membuat branch baru nggak menghentikan proses merge."
   }
 }

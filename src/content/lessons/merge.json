@@ -1,47 +1,47 @@
 {
   "chapter": 6,
   "id": "merge",
-  "title": "Dua jalur, satu hasil bersama.",
-  "summary": "Pahami fast-forward dan merge commit sebelum menggabungkan branch.",
-  "scenario": "Fitur diskon selesai. Kamu ingin memasukkannya ke main tanpa kehilangan perubahan yang sudah masuk di main.",
-  "concept": "Merge memasukkan riwayat branch lain ke branch aktif. Jika main adalah ancestor fitur, fast-forward cukup menggeser referensi main. Jika keduanya berkembang sendiri, merge biasanya membuat commit dengan dua parent. Jalankan merge dari branch yang ingin menerima hasil.",
-  "analogy": "Dua jalur perjalanan bertemu. Jika satu jalur hanya meneruskan yang lain, cukup majukan penanda. Jika keduanya punya langkah sendiri, catat titik pertemuannya.",
+  "title": "Merge: gabungkan dua branch",
+  "summary": "git merge memasukkan pekerjaan dari branch lain ke branch yang sedang aktif. Kalau riwayatnya bercabang, hasilnya adalah merge commit dengan dua parent.",
+  "scenario": "Pemilik kedai setuju memakai diskon akhir pekan. Sekarang perubahan di fitur-diskon perlu masuk ke main, tanpa menghilangkan menu teh yang sudah lebih dulu masuk ke main.",
+  "concept": "git merge diikuti nama branch memasukkan commit dari branch itu ke branch yang sedang aktif. Jadi pindah dulu ke branch penerima, biasanya main, baru jalankan merge. Karena main dan fitur-diskon sudah bercabang, Git menggabungkan perubahan keduanya sejak merge base, lalu membuat merge commit baru. Merge commit punya dua parent: parent pertama adalah commit sebelumnya di main, dan parent kedua adalah ujung fitur-diskon. Dalam revision, HEAD^1 menunjuk parent pertama dan HEAD^2 menunjuk parent kedua. Pakai opsi -m untuk menulis pesan merge commit; tanpa -m, Git membuka editor teks untuk meminta pesan.",
+  "analogy": "Mirip dua jalan yang bertemu di satu persimpangan. Persimpangan itu adalah merge commit: satu titik baru yang terhubung ke kedua jalan sebelumnya.",
   "steps": [
     {
-      "title": "Pilih penerima",
+      "title": "Pindah ke branch penerima",
       "command": "git switch main\ngit status",
-      "explanation": "Pastikan pekerjaan lokal sudah ditangani sebelum integrasi."
+      "explanation": "Merge selalu memasukkan perubahan ke branch yang aktif. Pastikan kamu di main dan git status menunjukkan working tree bersih."
     },
     {
-      "title": "Gabungkan fitur",
-      "command": "git merge fitur-diskon",
-      "explanation": "Git dapat melakukan fast-forward, membuat merge commit, atau berhenti karena konflik."
+      "title": "Gabungkan fitur-diskon",
+      "command": "git merge -m \"Gabungkan diskon akhir pekan\" fitur-diskon",
+      "explanation": "Git membalas Merge made by the 'ort' strategy, diikuti ringkasan file yang berubah. ort adalah nama cara Git menggabungkan perubahan, dan kamu nggak perlu mengaturnya. Sekarang diskon.js di main berisi 15, dan menu.json tetap punya teh."
     },
     {
-      "title": "Periksa hasil",
-      "command": "git log --oneline --graph --decorate -8",
-      "explanation": "Uji aplikasinya juga; merge tanpa konflik belum menjamin perilaku program benar."
+      "title": "Lihat bentuk riwayatnya",
+      "command": "git log --oneline --graph -5\ngit log --oneline -1 HEAD^2",
+      "explanation": "Grafik menunjukkan dua jalur yang bertemu di commit Gabungkan diskon akhir pekan. HEAD^2 adalah parent kedua merge commit itu, yaitu Diskon akhir pekan 15 persen dari fitur-diskon."
     }
   ],
-  "result": "main mencakup perubahan fitur, dengan bentuk riwayat sesuai hubungan kedua branch.",
-  "pitfall": "Menggabungkan main saat sedang di branch fitur tidak otomatis memperbarui referensi main. Arah merge mengikuti branch aktif.",
-  "practice": "Buat satu commit fitur saat main belum berubah, lalu merge. Ulangi dengan main yang juga berubah dan bandingkan grafiknya.",
+  "result": "main sekarang berisi menu teh dan diskon akhir pekan 15 persen, disatukan oleh merge commit Gabungkan diskon akhir pekan.",
+  "pitfall": "Arah merge mengikuti branch yang aktif. Kalau kamu menjalankan git merge main saat berada di fitur-diskon, yang berubah adalah fitur-diskon, bukan main. Kalau tanpa sengaja menjalankan merge tanpa -m dan editor terbuka, simpan pesan bawaannya lalu tutup editor; kalau editornya vim, ketik :wq lalu tekan Enter. Merge tanpa konflik juga belum menjamin program berjalan benar, jadi tetap cek hasilnya.",
+  "practice": "Bandingkan isi diskon.js di main dengan isinya di parent pertama memakai git show HEAD^1:diskon.js. Jelaskan perubahan mana yang datang dari fitur-diskon.",
   "quiz": {
-    "question": "git merge fitur saat branch aktif main memperbarui apa?",
-    "options": ["Hanya fitur", "Semua remote", "main"],
+    "question": "Kamu berada di main lalu menjalankan git merge fitur-diskon. Branch mana yang berubah?",
+    "options": ["Cuma fitur-diskon", "Semua branch", "main"],
     "answer": 2,
-    "explanation": "Branch aktif menerima hasil integrasi."
+    "explanation": "Merge memasukkan perubahan ke branch yang sedang aktif, jadi main yang maju. fitur-diskon tetap di tempatnya."
   },
   "commands": ["git merge"],
   "visual": "graph",
   "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["branch"],
-  "initialState": "Branch main aktif dan bersih; branch fitur-diskon sudah mempunyai perubahan commit. Jangan merge dari branch penerima yang salah.",
-  "lab": "merge-ff",
+  "prerequisites": ["diff-versi"],
+  "initialState": "Lanjutan dari materi diff antarbranch: main dan fitur-diskon bercabang, masing-masing dengan satu commit sendiri.",
   "objectives": [
-    "Pahami fast-forward dan merge commit sebelum menggabungkan branch.",
-    "Periksa hasilnya: main mencakup perubahan fitur, dengan bentuk riwayat sesuai hubungan kedua branch."
+    "Bisa menggabungkan branch dengan git merge",
+    "Paham bahwa merge commit punya dua parent",
+    "Bisa menyebut parent merge commit dengan HEAD^1 dan HEAD^2"
   ],
   "sources": [
     {
@@ -50,8 +50,8 @@
     }
   ],
   "verification": {
-    "command": "git log --graph --oneline --all",
-    "explanation": "main mencakup perubahan fitur, dengan bentuk riwayat sesuai hubungan kedua branch."
+    "command": "git log --oneline -1 HEAD^1\ngit log --oneline -1 HEAD^2",
+    "explanation": "HEAD^1 harus Tambah teh ke menu, dan HEAD^2 harus Diskon akhir pekan 15 persen. Dua parent ini tanda bahwa commit terakhir adalah merge commit."
   },
   "order": 18
 }

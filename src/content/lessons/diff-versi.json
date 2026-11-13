@@ -1,46 +1,51 @@
 {
   "chapter": 6,
   "id": "diff-versi",
-  "title": "Jelaskan dua sisi perbandingan.",
-  "summary": "Pilih diff working tree, staged, atau snapshot secara sengaja.",
-  "scenario": "Reviewer bertanya apa yang berubah antara main dan fitur. Kamu tidak ingin mencampurnya dengan edit lokal yang belum di-commit.",
-  "concept": "git diff tanpa revision membandingkan working tree tracked dengan index. --staged membandingkan index terhadap HEAD. git diff A B membandingkan snapshot A dan B; git diff A...B membandingkan merge base A/B dengan B. Tiga titik berguna untuk melihat perubahan sisi fitur sejak titik bersama, dan berbeda dari tiga titik pada log.",
-  "analogy": "Sebutkan dua edisi yang dibandingkan sebelum membahas halaman yang berubah. “Ada perbedaan” belum menjawab perbedaan dari mana.",
+  "title": "Diff antarbranch: lihat bedanya sebelum digabung",
+  "summary": "Sebelum menggabungkan branch, lihat dulu apa yang akan masuk. git diff dengan dua ujung dan dengan tiga titik menjawab dua pertanyaan yang berbeda.",
+  "scenario": "Selagi fitur-diskon menunggu keputusan, main mendapat commit baru: teh ditambahkan ke menu. Sekarang kedua branch punya commit masing-masing. Sebelum menggabungkan, kamu ingin tahu persis apa yang dibawa fitur-diskon.",
+  "concept": "Saat dua branch sama-sama punya commit baru sejak berpisah, riwayatnya bercabang. Commit terakhir yang dimiliki keduanya disebut merge base, yaitu titik tempat mereka berpisah. git diff main fitur-diskon membandingkan isi ujung kedua branch secara langsung, jadi perubahan dari kedua sisi tercampur: tambahan teh di main ikut tampil, seolah-olah dihapus oleh fitur-diskon. git diff main...fitur-diskon, dengan tiga titik, membandingkan merge base dengan ujung fitur-diskon, jadi yang tampil cuma perubahan yang dibuat di fitur-diskon. Bentuk tiga titik inilah yang biasanya kamu perlukan untuk menjawab pertanyaan: apa yang akan dibawa branch ini?",
+  "analogy": "Bayangkan dua orang menyalin dokumen yang sama, lalu masing-masing mengeditnya. Membandingkan kedua salinan secara langsung membuat edit dua orang itu tercampur. Membandingkan dokumen asli dengan salinan orang kedua menunjukkan apa yang diubah orang itu saja.",
   "steps": [
     {
-      "title": "Periksa snapshot dua branch",
-      "command": "git diff main fitur-diskon",
-      "explanation": "Tidak memasukkan edit working tree yang belum direkam."
+      "title": "Buat commit baru di main",
+      "command": "git add menu.json\ngit commit -m \"Tambah teh ke menu\"\ngit log --oneline --graph --all",
+      "explanation": "Pastikan kamu di main, lalu ubah menu.json menjadi {\"kopiSusu\":20000,\"esKopi\":22000,\"teh\":15000} dan simpan sebelum menjalankan command di bawah. Sekarang grafik log bercabang: main dan fitur-diskon sama-sama punya satu commit di atas Batasi diskon maksimal 50 persen, yang menjadi merge base keduanya."
     },
     {
-      "title": "Periksa sejak dasar bersama",
+      "title": "Bandingkan ujung kedua branch",
+      "command": "git diff main fitur-diskon",
+      "explanation": "Hasilnya berisi dua perubahan: diskon dari 10 menjadi 15, dan baris menu yang kehilangan teh. Teh terlihat hilang karena fitur-diskon memang belum punya commit teh, bukan karena fitur-diskon menghapusnya."
+    },
+    {
+      "title": "Lihat apa yang dibawa fitur-diskon",
       "command": "git diff main...fitur-diskon",
-      "explanation": "Pada latihan rebase sebelum proses, ini menampilkan perubahan fitur sejak branch berpisah."
+      "explanation": "Dengan tiga titik, hasilnya cuma perubahan diskon dari 10 menjadi 15. Inilah perubahan yang akan masuk ke main kalau fitur-diskon digabungkan."
     }
   ],
-  "result": "Kamu tahu sumber setiap patch dan tidak mengira diff kosong selalu berarti repo bersih.",
-  "pitfall": "Rentang A..B pada log memilih kumpulan commit; pada diff dua titik setara perbandingan dua endpoint. Konteks command penting.",
-  "practice": "Pada latihan rebase, bandingkan diff main fitur-diskon dan diff main...fitur-diskon. Jelaskan mengapa perubahan main dapat muncul pada bentuk pertama.",
+  "result": "main dan fitur-diskon sekarang bercabang, masing-masing dengan satu commit sendiri. Kamu tahu fitur-diskon cuma membawa perubahan diskon.",
+  "pitfall": "Titik di git log dan git diff punya arti berbeda. Di git log, main..fitur-diskon berarti commit yang ada di fitur-diskon tapi belum ada di main. Di git diff, main..fitur-diskon sama saja dengan git diff main fitur-diskon. Tiga titik di git diff selalu berarti perbandingan dimulai dari merge base.",
+  "practice": "Jalankan git diff fitur-diskon...main, dengan urutan branch dibalik. Hasilnya adalah perubahan yang dibuat di main sejak berpisah, yaitu tambahan teh. Jelaskan kenapa urutan nama branch mengubah hasilnya.",
   "quiz": {
-    "question": "Diff A...B membandingkan apa?",
+    "question": "git diff A...B membandingkan apa?",
     "options": [
-      "A dengan B secara langsung selalu",
-      "Working tree dengan semua tag",
-      "Merge base A/B dengan B"
+      "Ujung A dengan ujung B secara langsung",
+      "Working tree dengan semua branch",
+      "Merge base A dan B dengan ujung B"
     ],
     "answer": 2,
-    "explanation": "Tiga titik pada diff memilih dasar bersama menuju sisi B."
+    "explanation": "Tiga titik di git diff memulai perbandingan dari merge base, jadi yang tampil cuma perubahan di sisi B sejak kedua branch berpisah."
   },
   "commands": ["git diff"],
   "visual": "graph",
   "minutes": 7,
   "level": "Dasar",
-  "prerequisites": ["branch", "revision"],
-  "initialState": "main dan fitur-diskon sama-sama ada dan sudah divergen. Latihan rebase menyediakan keadaan ini sebelum proses dimulai.",
-  "lab": "rebase",
+  "prerequisites": ["kelola-branch", "revision"],
+  "initialState": "Lanjutan dari materi kelola branch: kamu berada di main, dan fitur-diskon satu commit di depan main.",
   "objectives": [
-    "Pilih diff working tree, staged, atau snapshot secara sengaja.",
-    "Periksa hasilnya: Kamu tahu sumber setiap patch dan tidak mengira diff kosong selalu berarti repo bersih."
+    "Paham arti merge base",
+    "Tahu beda git diff dengan dua ujung dan dengan tiga titik",
+    "Bisa mengecek apa yang akan dibawa sebuah branch sebelum digabung"
   ],
   "sources": [
     {
@@ -49,8 +54,8 @@
     }
   ],
   "verification": {
-    "command": "git diff main...fitur-diskon",
-    "explanation": "Kamu tahu sumber setiap patch dan tidak mengira diff kosong selalu berarti repo bersih."
+    "command": "git diff --stat main...fitur-diskon",
+    "explanation": "Opsi --stat meringkas diff jadi daftar file. Hasilnya cuma diskon.js dengan satu baris diganti, artinya fitur-diskon nggak menyentuh menu.json."
   },
   "order": 17
 }

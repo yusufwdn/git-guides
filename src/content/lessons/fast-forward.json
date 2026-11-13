@@ -1,46 +1,52 @@
 {
   "chapter": 6,
   "id": "fast-forward",
-  "title": "Kadang merge cukup memajukan label.",
-  "summary": "Kenali syarat fast-forward dan kegunaan --ff-only.",
-  "scenario": "Main belum berubah sejak fitur diskon bercabang. Kamu ingin menerima fitur tanpa membuat commit pertemuan tambahan.",
-  "concept": "Fast-forward dapat dilakukan ketika ujung branch penerima merupakan ancestor ujung sumber. --ff-only membatasi operasi pada keadaan ini dan berhenti bila riwayat divergen. --no-ff justru meminta merge commit ketika integrasi membutuhkan merge dan fast-forward memungkinkan; gunakan berdasarkan aturan tim.",
-  "analogy": "Penanda main tertinggal beberapa halaman di jalur yang sama. Kamu cukup memajukannya ke halaman fitur.",
+  "title": "Fast-forward: merge tanpa commit baru",
+  "summary": "Kalau branch penerima belum punya commit baru sejak branch lain berpisah, merge cukup memajukan label branch. Opsi --ff-only memastikan hanya itu yang terjadi.",
+  "scenario": "Harga teh perlu dinaikkan dari 15000 menjadi 16000. Kamu mengerjakannya di branch fitur-teh, dan selama itu nggak ada commit lain yang masuk ke main. Kamu ingin memasukkannya ke main tanpa membuat merge commit yang nggak perlu.",
+  "concept": "Fast-forward terjadi saat branch penerima masih berada di jalur yang sama dengan branch yang digabung, cuma tertinggal di belakang. Git nggak perlu menggabungkan apa pun; label main cukup dimajukan ke commit yang sama dengan fitur-teh. Nggak ada merge commit baru, jadi riwayatnya tetap lurus. git merge biasa otomatis melakukan fast-forward kalau bisa. Opsi --ff-only menambahkan pengaman: kalau ternyata riwayatnya sudah bercabang, Git menolak alih-alih membuat merge commit, sehingga kamu bisa memutuskan dulu langkah selanjutnya.",
+  "analogy": "Pembatas main tertinggal beberapa halaman di belakang pembatas fitur-teh, di deretan halaman yang sama. Menggabungkannya cukup dengan memindahkan pembatas main ke halaman terakhir.",
   "steps": [
     {
-      "title": "Pastikan penerima main",
-      "command": "git switch main\ngit log --oneline --graph --all",
-      "explanation": "Pada latihan merge-ff, main berada tepat sebelum commit fitur."
+      "title": "Buat branch fitur-teh",
+      "command": "git switch -c fitur-teh",
+      "explanation": "Branch baru ini dimulai dari commit main saat ini, yaitu merge commit dari materi sebelumnya."
     },
     {
-      "title": "Majukan tanpa commit baru",
-      "command": "git merge --ff-only fitur-diskon",
-      "explanation": "Sesudah berhasil, kedua nama branch menunjuk commit yang sama."
+      "title": "Commit perubahan harga",
+      "command": "git add menu.json\ngit commit -m \"Naikkan harga teh\"",
+      "explanation": "Ubah teh di menu.json dari 15000 menjadi 16000, simpan, lalu jalankan command di bawah."
+    },
+    {
+      "title": "Gabungkan dengan fast-forward",
+      "command": "git switch main\ngit merge --ff-only fitur-teh",
+      "explanation": "Git membalas Updating diikuti dua potongan hash, lalu Fast-forward. Artinya main cukup dimajukan ke commit Naikkan harga teh, tanpa merge commit baru."
     }
   ],
-  "result": "Jumlah commit tetap sama dan referensi main bergerak ke commit fitur.",
-  "pitfall": "Jika --ff-only gagal, itu bukan alasan langsung memakai force. Riwayat mungkin telah bercabang dan memerlukan keputusan integrasi.",
-  "practice": "Selesaikan latihan merge-ff. Bandingkan hash main dan fitur-diskon menggunakan rev-parse.",
+  "result": "main dan fitur-teh menunjuk commit yang sama, Naikkan harga teh, dan riwayat main tetap lurus tanpa merge commit tambahan.",
+  "pitfall": "Kalau --ff-only menolak dengan pesan Not possible to fast-forward, artinya main sudah punya commit sendiri sejak fitur berpisah. Itu bukan error yang harus dipaksa. Pilih apakah kamu ingin membuat merge commit dengan git merge biasa, atau cara lain yang dibahas di bab 11.",
+  "practice": "Jalankan git log --oneline --graph -3. Bandingkan bentuk riwayat setelah fast-forward ini dengan merge commit di materi sebelumnya, lalu jelaskan kapan merge menghasilkan merge commit dan kapan cukup fast-forward.",
   "quiz": {
-    "question": "Apa yang baru pada fast-forward?",
+    "question": "Apa yang berubah saat fast-forward?",
     "options": [
-      "Posisi referensi penerima",
-      "Selalu satu object merge commit",
-      "Semua hash commit lama"
+      "Posisi label branch penerima",
+      "Selalu muncul merge commit baru",
+      "Hash semua commit lama"
     ],
     "answer": 0,
-    "explanation": "Tidak perlu commit baru untuk menghubungkan jalur yang sudah linear."
+    "explanation": "Fast-forward cuma memajukan label branch penerima ke commit yang sudah ada. Nggak ada commit baru yang dibuat."
   },
   "commands": ["git merge --ff-only"],
   "visual": "merge",
   "minutes": 7,
   "level": "Menengah",
   "prerequisites": ["merge"],
-  "initialState": "Latihan merge-ff: main pada A; fitur-diskon pada B dengan parent A. Tidak ada commit tambahan di main.",
+  "initialState": "Lanjutan dari materi merge: main berisi merge commit Gabungkan diskon akhir pekan, dan working tree bersih.",
   "lab": "merge-ff",
   "objectives": [
-    "Kenali syarat fast-forward dan kegunaan --ff-only.",
-    "Periksa hasilnya: Jumlah commit tetap sama dan referensi main bergerak ke commit fitur."
+    "Paham kapan merge cukup berupa fast-forward",
+    "Bisa memakai --ff-only sebagai pengaman",
+    "Bisa membuktikan dua branch menunjuk commit yang sama"
   ],
   "sources": [
     {
@@ -49,8 +55,8 @@
     }
   ],
   "verification": {
-    "command": "git rev-parse main fitur-diskon",
-    "explanation": "Jumlah commit tetap sama dan referensi main bergerak ke commit fitur."
+    "command": "git rev-parse --short main\ngit rev-parse --short fitur-teh",
+    "explanation": "Kedua command harus menampilkan potongan hash yang sama, karena main dan fitur-teh sekarang menunjuk commit yang sama."
   },
   "order": 19
 }

@@ -1,46 +1,51 @@
 {
   "chapter": 5,
   "id": "detached-head",
-  "title": "Saat HEAD lepas dari branch.",
-  "summary": "Jelajahi commit lama dan beri nama pada pekerjaan yang ingin disimpan.",
-  "scenario": "Kamu membuka versi lama untuk menguji bug. Sesudah mencoba perbaikan, Git menyebut detached HEAD.",
-  "concept": "Dalam detached HEAD, HEAD menunjuk commit secara langsung. Kamu masih dapat membuat commit, tetapi tidak ada branch aktif yang bergerak bersamanya. Buat branch sebelum meninggalkan pekerjaan yang ingin dipertahankan. Nama checkout dalam tutorial lama bisa berarti pindah branch ataupun memulihkan file; switch dan restore memisahkan tujuannya.",
-  "analogy": "Kamu sedang membaca halaman tertentu tanpa memasang penanda bernama. Pasang penanda baru agar mudah kembali ke hasil pekerjaanmu.",
+  "title": "Detached HEAD: membuka commit lama",
+  "summary": "git switch --detach membawamu ke commit lama tanpa lewat branch. Cocok untuk melihat atau menguji versi lama, asal kamu tahu cara kembali dan cara menyimpan hasilnya.",
+  "scenario": "Rekanmu bilang website terasa berbeda sejak batas diskon ditambahkan. Kamu ingin membuka proyek persis seperti sebelum commit itu untuk mengeceknya, tanpa mengubah main.",
+  "concept": "Biasanya HEAD menunjuk sebuah branch, lalu branch itu menunjuk commit. Dengan git switch --detach diikuti revision, HEAD langsung menunjuk sebuah commit tanpa lewat branch. Keadaan ini disebut detached HEAD. Working tree berisi snapshot commit tersebut, jadi kamu bisa membuka dan menguji versi lama itu. Kamu juga tetap bisa commit, tapi karena nggak ada branch yang ikut maju, commit itu mudah hilang dari pandangan setelah kamu pindah. Kalau ingin menyimpan posisi atau hasil kerjamu, buat branch dengan git switch -c sebelum pindah. Untuk sekadar kembali, cukup git switch main.",
+  "analogy": "Mirip membuka halaman lama di buku catatan tanpa memasang pembatas. Kamu bebas membaca, bahkan menulis di sana. Tapi kalau buku langsung ditutup tanpa memasang pembatas, halaman itu bakal susah ditemukan lagi.",
   "steps": [
     {
-      "title": "Kunjungi versi lama",
-      "command": "git switch --detach HEAD~1",
-      "explanation": "Jalankan hanya jika parent tersebut ada. Kamu sekarang berada pada commit tanpa branch aktif."
+      "title": "Buka commit sebelum batas diskon",
+      "command": "git switch --detach HEAD~1\ngit status",
+      "explanation": "HEAD~1 di sini adalah commit Tambah es kopi ke menu. Git membalas HEAD is now at diikuti hash dan pesan commit itu, dan git status menampilkan HEAD detached at diikuti hash yang sama. Buka diskon.js: baris const maksDiskon = 50; belum ada."
     },
     {
-      "title": "Pertahankan pekerjaan",
-      "command": "git switch -c investigasi-checkout",
-      "explanation": "Branch baru menunjuk commit saat ini, termasuk commit percobaan yang sudah kamu buat di detached HEAD."
+      "title": "Simpan posisi ini sebagai branch",
+      "command": "git switch -c cek-versi-lama",
+      "explanation": "Kalau kamu ingin kembali ke posisi ini nanti, atau sempat membuat commit percobaan, beri nama dengan branch baru. Branch cek-versi-lama sekarang menunjuk commit yang sedang kamu buka, dan HEAD nggak lagi detached."
+    },
+    {
+      "title": "Kembali ke main",
+      "command": "git switch main\ngit branch",
+      "explanation": "git branch sekarang menampilkan tiga branch: cek-versi-lama, fitur-diskon, dan main yang aktif. diskon.js kembali punya baris maksDiskon."
     }
   ],
-  "result": "Pekerjaan mempunyai branch yang dapat ditemukan sebelum kamu kembali ke main.",
-  "pitfall": "Jika sudah terlanjur pindah, reflog mungkin membantu menemukan commit. Jangan menganggap semua perubahan yang belum direkam bisa dipulihkan.",
-  "practice": "Buka commit sebelumnya dalam repo latihan, buat branch investigasi, lalu periksa posisi HEAD dengan log --decorate.",
+  "result": "Kamu sudah membuka versi lama tanpa mengubah main, menyimpannya sebagai branch cek-versi-lama, lalu kembali ke main.",
+  "pitfall": "Commit yang dibuat di detached HEAD lalu ditinggal tanpa branch nggak langsung hilang, tapi juga nggak muncul di git log biasa. Git akan memperingatkanmu saat pindah, dan cara mencarinya kembali dibahas di bab 10. Jadi biasakan membuat branch dulu sebelum meninggalkan pekerjaan di detached HEAD. Di tutorial lama, git checkout diikuti hash juga menghasilkan detached HEAD.",
+  "practice": "Buka commit pertama dengan git switch --detach diikuti potongan hash Menu awal Kopi Kita dari git log --oneline. Lihat isi menu.json dan diskon.js di versi itu, lalu kembali dengan git switch main tanpa membuat branch.",
   "quiz": {
-    "question": "Bagaimana menyimpan jalur pekerjaan detached HEAD?",
+    "question": "Kamu membuat commit percobaan saat detached HEAD dan ingin menyimpannya. Apa yang dilakukan sebelum pindah ke main?",
     "options": [
       "Hapus folder .git",
-      "Jalankan push tanpa memeriksa apa pun",
-      "Buat branch pada commit pekerjaan itu"
+      "Buat branch di posisi itu dengan git switch -c",
+      "Langsung git switch main"
     ],
-    "answer": 2,
-    "explanation": "Branch memberi referensi bernama pada commit agar jalurnya mudah dipertahankan."
+    "answer": 1,
+    "explanation": "Branch memberi nama pada commit itu supaya mudah ditemukan lagi. Kalau langsung pindah, commit percobaan tadi nggak punya label dan sulit dicari."
   },
   "commands": ["git switch --detach", "git switch -c"],
-  "visual": "graph",
+  "visual": "detached",
   "minutes": 6,
   "level": "Menengah",
-  "prerequisites": ["branch"],
-  "initialState": "Repo mempunyai dua commit atau lebih. Simpan pekerjaan lokal sebelum membuka commit parent.",
-  "lab": "rebase",
+  "prerequisites": ["branch", "revision"],
+  "initialState": "Lanjutan dari materi branch: kamu berada di main, dan fitur-diskon satu commit di depan main.",
   "objectives": [
-    "Jelajahi commit lama dan beri nama pada pekerjaan yang ingin disimpan.",
-    "Periksa hasilnya: Pekerjaan mempunyai branch yang dapat ditemukan sebelum kamu kembali ke main."
+    "Paham arti detached HEAD",
+    "Bisa membuka commit lama dengan git switch --detach lalu kembali ke branch",
+    "Bisa menyimpan posisi detached HEAD sebagai branch baru"
   ],
   "sources": [
     {
@@ -49,8 +54,8 @@
     }
   ],
   "verification": {
-    "command": "git status\ngit log --oneline --decorate -3",
-    "explanation": "Pekerjaan mempunyai branch yang dapat ditemukan sebelum kamu kembali ke main."
+    "command": "git status\ngit branch",
+    "explanation": "git status harus menampilkan On branch main, bukan HEAD detached. git branch menampilkan tiga branch dengan tanda bintang di main."
   },
   "order": 15
 }

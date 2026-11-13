@@ -109,6 +109,41 @@ export default (context) => {
       ['set promo', ['working tree cuma', 'promo + file utama'], 'SPARSE CHECKOUT'],
       ['Partial clone', ['isi file diunduh', 'saat dibutuhkan'], 'BUTUH SERVER'],
     ],
+    attributes: [
+      ['Repo', ['file teks disimpan', 'dengan akhir baris LF'], 'SERAGAM'],
+      ['* text=auto', ['Git mendeteksi', 'file teks sendiri'], '.GITATTRIBUTES'],
+      ['Working tree', ['CRLF di Windows,', 'LF di macOS dan Linux'], 'SESUAI SISTEM'],
+    ],
+    secrets: [
+      ['.env', ['token dan password', 'cuma di laptop'], 'DIABAIKAN'],
+      ['.gitignore', ['mencegah file', 'ikut di-add'], 'PENCEGAHAN'],
+      ['Terlanjur di-push', ['ganti token dulu,', 'lalu bersihkan riwayat'], 'ANGGAP BOCOR'],
+    ],
+    hooks: [
+      ['git commit', ['memicu hook', 'pre-commit'], 'PERISTIWA'],
+      ['pre-commit', ['script di', '.git/hooks'], 'PEMERIKSAAN'],
+      ['Exit code', ['0 lanjut,', 'selain 0 batal'], 'KEPUTUSAN'],
+    ],
+    alias: [
+      ['git lg', ['yang kamu', 'ketik'], 'ALIAS'],
+      ['alias.lg', ['tersimpan di', 'config repo'], 'PENGATURAN'],
+      ['Command asli', ['log --oneline', '--graph --all'], 'YANG DIJALANKAN'],
+    ],
+    refs: [
+      ['Branch', ['refs/heads/main'], 'LOKAL'],
+      ['Refspec fetch', ['refs/heads/* di server', 'jadi refs/remotes/origin/*'], 'PEMETAAN'],
+      ['Tag', ['refs/tags/v1.0.0', 'menunjuk object tag'], 'RILIS'],
+    ],
+    reach: [
+      ['Terjangkau', ['bisa dicapai dari', 'branch atau tag'], 'AMAN'],
+      ['Cuma di reflog', ['commit setelah reset,', 'masih bisa dipulihkan'], 'SEMENTARA'],
+      ['Tak terjangkau', ['tanpa nama', 'dan tanpa jejak'], 'BISA DIBERSIHKAN GC'],
+    ],
+    maintenance: [
+      ['count-objects', ['jumlah dan ukuran', 'object'], 'UKUR'],
+      ['gc dan fsck', ['padatkan dan', 'periksa object'], 'RAWAT'],
+      ['bundle', ['satu file berisi', 'seluruh riwayat'], 'CADANGKAN'],
+    ],
     squash: [
       ['Merge commit', ['semua commit fitur', 'plus commit pertemuan'], 'RIWAYAT LENGKAP'],
       ['Squash', ['satu commit baru', 'berisi semua perubahan'], 'RIWAYAT RINGKAS'],

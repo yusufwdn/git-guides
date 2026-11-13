@@ -94,6 +94,16 @@ export default (context) => {
       ['Untracked ??', ['dihapus', 'dengan -f'], 'TARGET CLEAN'],
       ['Diabaikan !!', ['aman kecuali', 'memakai -x'], 'DILINDUNGI .GITIGNORE'],
     ],
+    amend: [
+      ['--amend', ['ganti commit', 'terakhir'], 'SATU COMMIT'],
+      ['rebase -i', ['pick, fixup, squash,', 'reword, atau hapus'], 'BEBERAPA COMMIT'],
+      ['Hash baru', ['jangan untuk commit', 'yang sudah di-push'], 'HATI-HATI'],
+    ],
+    search: [
+      ['git grep', ['cari teks di', 'versi sekarang'], 'DI MANA'],
+      ['git blame', ['commit terakhir', 'per baris'], 'SIAPA DAN KAPAN'],
+      ['git log -S / -G', ['commit yang', 'mengubah teks'], 'SEJAK KAPAN'],
+    ],
     squash: [
       ['Merge commit', ['semua commit fitur', 'plus commit pertemuan'], 'RIWAYAT LENGKAP'],
       ['Squash', ['satu commit baru', 'berisi semua perubahan'], 'RIWAYAT RINGKAS'],

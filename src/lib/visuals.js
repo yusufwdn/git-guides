@@ -309,79 +309,79 @@ Object.assign(scenarios, {
     ],
   ),
   bisect: areas(
-    'Persempit lokasi awal bug.',
-    'Good dan bad berasal dari pengujian yang dapat diulang, bukan perkiraan.',
+    'Persempit lokasi perubahan diskon.',
+    'Good berarti diskon.js masih berisi diskon 10. Bad berarti nilainya sudah lain.',
     [
       {
         title: 'Tentukan batas',
-        command: 'git bisect start\ngit bisect bad\ngit bisect good awal',
+        command: 'git bisect start\ngit bisect bad\ngit bisect good HASH',
         explanation:
-          'Versi awal sudah diuji baik; HEAD diuji buruk. Git memilih kandidat di antara dua batas tersebut.',
+          'Atur diskon 10 persen sudah pasti baik, dan HEAD sudah pasti buruk. Git memilih kandidat di tengah kedua batas.',
         areas: [
-          ['Batas baik', 'A · diskon tidak negatif'],
-          ['Kandidat', 'B C D E F'],
-          ['Batas buruk', 'G · diskon negatif'],
+          ['Batas baik', 'Atur diskon 10 persen'],
+          ['Kandidat', 'Commit di antara kedua batas'],
+          ['Batas buruk', 'HEAD · diskon 15'],
         ],
       },
       {
-        title: 'Uji kandidat',
-        command: 'git show HEAD:diskon.js\ngit bisect bad',
+        title: 'Nilai kandidat',
+        command: 'git bisect bad',
         explanation:
-          'Contoh: kandidat D terbukti buruk. Git mempersempit pencarian ke perubahan setelah A sampai D.',
+          'Kandidat pertama, Naikkan diskon jadi 20 persen, berisi diskon 20. Commit itu buruk, jadi commit sesudahnya nggak perlu diuji lagi.',
         areas: [
-          ['Tetap baik', 'A'],
-          ['Masih mungkin', 'B C D'],
-          ['Tidak perlu diuji lagi', 'E F G untuk mencari awal bug'],
+          ['Tetap baik', 'Atur diskon 10 persen'],
+          ['Masih mungkin', 'Commit sebelum Naikkan diskon jadi 20 persen'],
+          ['Tidak perlu diuji lagi', 'Naikkan diskon jadi 20 persen dan sesudahnya'],
         ],
       },
       {
         title: 'Catat temuan',
-        command: 'git branch bug-ditemukan HASH_BURUK_PERTAMA\ngit bisect reset',
+        command: 'git bisect reset',
         explanation:
-          'Catat hash yang diumumkan Git sebagai bad pertama. HEAD saat pengumuman belum tentu hash itu. Tutup proses bisect setelah menyimpan temuan.',
+          'Git mengumumkan Diskon akhir pekan 15 persen sebagai commit buruk pertama. Catat hash-nya, lalu tutup bisect supaya kembali ke main.',
         areas: [
-          ['Hasil diagnosis', 'Commit C pertama yang buruk pada contoh'],
-          ['Branch temuan', 'bug-ditemukan → C'],
-          ['Selesai', 'Kembali ke branch sebelum bisect'],
+          ['Hasil', 'Diskon akhir pekan 15 persen'],
+          ['Perubahan', 'Diskon 10 diganti 15'],
+          ['Selesai', 'Kembali ke main'],
         ],
       },
     ],
   ),
   'cherry-pick': areas(
-    'Satu patch dipilih dari jalur lain.',
-    'Eksperimen harga dan perbaikan checkout berada pada commit yang berbeda.',
+    'Satu commit dipilih dari jalur lain.',
+    'diskon-member berisi fitur member dan keputusan diskon 15. main cuma butuh yang kedua.',
     [
       {
         title: 'Pilih sumber',
-        command: 'git log --oneline fitur-eksperimen\ngit show HASH_PERBAIKAN',
+        command: 'git log --oneline main..diskon-member',
         explanation:
-          'Commit sumber memperbaiki checkout. Commit eksperimen harga sebelumnya tidak diminta pada branch rilis.',
+          'Turunkan diskon jadi 15 persen dibutuhkan sekarang. Tambah diskon member belum siap dirilis.',
         areas: [
-          ['Sumber', 'A → eksperimen harga → perbaikan checkout'],
-          ['Penerima', 'rilis → A'],
-          ['Yang dipilih', 'Patch perbaikan checkout'],
+          ['Sumber', 'diskon-member: fitur member → diskon 15'],
+          ['Penerima', 'main'],
+          ['Yang dipilih', 'Turunkan diskon jadi 15 persen'],
         ],
       },
       {
-        title: 'Terapkan patch',
-        command: 'git switch rilis\ngit cherry-pick HASH_PERBAIKAN',
+        title: 'Terapkan perubahan',
+        command: 'git switch main\ngit cherry-pick HASH',
         explanation:
-          'Git menerapkan perubahan commit sumber pada parent rilis dan membuat commit hasil yang baru.',
+          'Git menerapkan perubahan commit itu di atas main dan membuat commit baru dengan pesan yang sama.',
         areas: [
-          ['Sumber tetap', 'Jalur eksperimen tidak berpindah'],
-          ['Rilis', 'A → perbaikan baru'],
-          ['Menu rilis', 'Tetap 18000'],
+          ['Sumber tetap', 'diskon-member nggak berubah'],
+          ['main', 'Commit baru: diskon 15'],
+          ['Fitur member', 'Nggak ikut'],
         ],
       },
       {
         title: 'Buktikan isi',
-        command: 'git show HEAD:checkout.js\ngit show HEAD:menu.json',
+        command: 'git show HEAD:diskon.js',
         explanation:
-          'Rilis mempunyai validasi Math.max, sedangkan harga eksperimen tidak ikut. Identitas commit hasil dapat berbeda dari sumbernya.',
+          'diskon.js di main berisi diskon 15 tanpa baris diskonMember. Hash commit baru berbeda dari sumbernya karena parent-nya berbeda.',
         areas: [
-          ['Checkout rilis', 'Validasi jumlah tersedia'],
-          ['Menu rilis', 'Eksperimen harga tidak ikut'],
-          ['Riwayat', 'Commit sumber tetap di jalur semula'],
+          ['diskon.js di main', 'const diskon = 15;'],
+          ['diskonMember', 'Nggak ada di main'],
+          ['Riwayat', 'Commit sumber tetap di diskon-member'],
         ],
       },
     ],
@@ -455,31 +455,31 @@ Object.assign(scenarios, {
     [
       {
         title: 'Posisi yang diketahui',
-        command: 'git fetch origin\ngit log --graph --oneline --all',
+        command: 'git commit --amend -m "Tambah singkong goreng"',
         explanation:
-          'Misalkan branch remote tercatat di R. Kamu meninjau pekerjaan bersama sebelum menulis ulang commit lokal.',
+          'origin/menu-sore mencatat R, commit yang terakhir kamu push. Amend membuat L′ yang bukan lanjutan R.',
         areas: [
-          ['Remote diketahui', 'R'],
-          ['Lokal setelah rebase', 'L′'],
-          ['Yang harus disepakati', 'Riwayat branch ini boleh ditulis ulang'],
+          ['Catatan origin/menu-sore', 'R'],
+          ['Lokal setelah amend', 'L′'],
+          ['Yang harus disepakati', 'Branch ini boleh ditulis ulang'],
         ],
       },
       {
         title: 'Remote berubah',
-        command: 'git push --force-with-lease origin fitur',
+        command: 'git push --force-with-lease',
         explanation:
-          'Jika lease mengharapkan R tetapi server sudah di S, push ditolak. Ini melindungi dari perubahan remote yang tidak sesuai ekspektasi lease.',
+          'Lease mengharapkan server masih di R, tetapi Rani sudah menambah S (kopi tubruk). Push ditolak dengan stale info.',
         areas: [
           ['Ekspektasi lease', 'R'],
-          ['Posisi server', 'S dari rekan'],
-          ['Hasil', 'Ditolak; tinjau S dan koordinasikan'],
+          ['Posisi server', 'S dari Rani'],
+          ['Hasil', 'Ditolak; commit Rani aman'],
         ],
       },
       {
         title: 'Periksa ulang',
-        command: 'git fetch origin\ngit log --oneline --all --graph',
+        command: 'git fetch origin\ngit log --oneline --graph -4 menu-sore origin/menu-sore',
         explanation:
-          'Fetch dapat memperbarui ref yang menjadi acuan lease default. Jangan menganggap lease sebagai audit otomatis terhadap pekerjaan rekan yang sekarang tercatat.',
+          'Fetch memperbarui catatan menjadi S. Setelah itu lease akan lolos lagi, jadi tinjau commit Rani dulu sebelum memutuskan menimpa atau mengikuti server.',
         areas: [
           ['Catatan lokal', 'Sekarang mengetahui S'],
           ['Tanggung jawab', 'Tinjau isi dan sepakati integrasi'],

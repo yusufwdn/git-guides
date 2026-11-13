@@ -1,51 +1,57 @@
 {
   "chapter": 11,
   "id": "cherry-pick",
-  "title": "Ambil satu perubahan yang dibutuhkan.",
-  "summary": "Pindahkan perubahan tertentu tanpa menggabungkan seluruh branch sumber.",
-  "scenario": "Perbaikan checkout ada di branch eksperimen bersama fitur yang belum siap. Branch rilis hanya memerlukan perbaikan checkout.",
-  "concept": "Cherry-pick menerapkan perubahan dari commit terpilih pada branch aktif dan biasanya membuat commit baru. Ini tidak memindahkan object sumber dari branch asal. Perubahan bisa memerlukan dependensi commit sebelumnya dan dapat mengalami konflik.",
-  "analogy": "Kamu mengambil satu resep dari buku percobaan untuk buku menu utama. Periksa apakah resep itu membutuhkan bahan yang baru dijelaskan di halaman sebelumnya.",
+  "title": "Cherry-pick: ambil satu commit dari branch lain",
+  "summary": "git cherry-pick menerapkan perubahan satu commit ke branch yang sedang aktif, tanpa membawa commit lain dari branch asalnya.",
+  "scenario": "Pemilik kedai ingin diskon 15 persen berlaku hari ini. Keputusan itu ada di branch diskon-member, tapi fitur member di branch yang sama belum siap dirilis. Kamu cuma butuh satu commit.",
+  "concept": "Merge membawa semua commit dari sebuah branch, padahal kadang kamu cuma butuh satu, misalnya perbaikan kecil yang kebetulan dikerjakan di branch fitur. git cherry-pick diikuti hash commit menghitung perubahan commit itu terhadap parent-nya, lalu menerapkannya di branch yang sedang aktif sebagai commit baru dengan pesan yang sama. Commit aslinya tetap di branch asal. Karena parent-nya berbeda, hash commit baru juga berbeda. Kalau perubahannya bentrok dengan isi branch aktif, cherry-pick berhenti dengan konflik: selesaikan, jalankan git add, lalu git cherry-pick --continue, atau batalkan dengan git cherry-pick --abort.",
+  "analogy": "Seperti menyalin satu resep dari buku catatan rekan ke buku menu utama, tanpa menyalin halaman lain yang masih coretan.",
   "steps": [
     {
-      "title": "Pilih commit dengan konteks",
-      "command": "git log --oneline fitur-eksperimen\ngit show HASH",
-      "explanation": "Ganti HASH dengan commit perbaikan yang benar. Periksa apakah ia bergantung pada perubahan lain."
+      "title": "Lihat commit di diskon-member",
+      "command": "git switch main\ngit log --oneline main..diskon-member",
+      "explanation": "Ada dua commit: Turunkan diskon jadi 15 persen dan Tambah diskon member. Catat hash commit Turunkan diskon jadi 15 persen."
     },
     {
-      "title": "Terapkan di penerima",
-      "command": "git switch rilis\ngit cherry-pick HASH",
-      "explanation": "Branch rilis harus sudah ada. Uji hasilnya setelah penerapan."
+      "title": "Periksa isinya",
+      "command": "git show HASH",
+      "explanation": "Ganti HASH dengan hash yang kamu catat. Perubahannya cuma baris pertama diskon.js: 20 menjadi 15."
     },
     {
-      "title": "Kelola konflik bila ada",
-      "command": "git status",
-      "explanation": "Setelah resolve dan add, gunakan git cherry-pick --continue. Untuk membatalkan proses, gunakan git cherry-pick --abort."
+      "title": "Ambil commit itu",
+      "command": "git cherry-pick HASH\ngit log --oneline -2",
+      "explanation": "Git menulis Auto-merging diskon.js lalu membuat commit baru di main dengan pesan Turunkan diskon jadi 15 persen, di atas Perpanjang jam buka sampai 22.00. Hash-nya berbeda dari hash yang kamu catat."
+    },
+    {
+      "title": "Cek isi dan kirim",
+      "command": "git show HEAD:diskon.js\ngit push",
+      "explanation": "diskon.js di main berisi diskon 15 tanpa baris diskonMember. Fitur member tetap tinggal di diskon-member."
     }
   ],
-  "result": "Branch rilis mendapatkan perubahan yang dipilih tanpa seluruh pekerjaan eksperimen.",
-  "pitfall": "Perubahan yang sama pada dua branch bisa menimbulkan kebingungan saat integrasi berikutnya. Catat asal perubahan dan periksa riwayat.",
-  "practice": "Buat dua commit pada branch fitur. Cherry-pick hanya commit kedua ke branch latihan dan cek apakah hasilnya tetap berfungsi.",
+  "result": "main punya diskon 15 persen dan sudah terkirim ke server, sementara fitur member tetap menunggu di branch diskon-member.",
+  "pitfall": "Cherry-pick membuat salinan, bukan memindahkan. Perubahan yang sama kini ada di dua commit dengan hash berbeda, satu di main dan satu di diskon-member. Saat diskon-member digabung nanti, Git biasanya bisa menangani perubahan yang identik, tapi cherry-pick yang terlalu sering membuat riwayat sulit dibaca. Pakai untuk perbaikan kecil yang mendesak, bukan pengganti merge.",
+  "practice": "Jalankan git log --oneline --graph -4 main diskon-member dan temukan dua commit berjudul Turunkan diskon jadi 15 persen. Jelaskan kenapa hash-nya berbeda.",
   "quiz": {
-    "question": "Cherry-pick biasanya menghasilkan apa?",
+    "question": "diskon-member punya commit A (fitur member) lalu B (diskon 15). Kamu menjalankan git cherry-pick B di main. Apa yang masuk ke main?",
     "options": [
-      "Pemindahan semua branch",
-      "Commit baru yang menerapkan perubahan terpilih",
-      "Penghapusan commit sumber"
+      "A dan B",
+      "Cuma perubahan B, sebagai commit baru",
+      "Nggak ada, karena B bergantung pada A"
     ],
     "answer": 1,
-    "explanation": "Commit sumber tetap; perubahan diterapkan pada jalur penerima."
+    "explanation": "Cherry-pick menerapkan perubahan satu commit saja. Kalau perubahan itu bisa diterapkan tanpa A, hasilnya bersih."
   },
   "commands": ["git cherry-pick"],
   "visual": "graph",
   "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["branch", "riwayat"],
-  "initialState": "Latihan cherry-pick: branch rilis pada dasar awal; fitur-eksperimen punya eksperimen menu lalu commit perbaikan checkout yang independen.",
+  "prerequisites": ["rebase-dasar", "log-filter"],
+  "initialState": "Lanjutan dari materi rebase: kamu berada di branch menu-sore, dan main berisi commit Perpanjang jam buka sampai 22.00.",
   "lab": "cherry-pick",
   "objectives": [
-    "Pindahkan perubahan tertentu tanpa menggabungkan seluruh branch sumber.",
-    "Periksa hasilnya: Branch rilis mendapatkan perubahan yang dipilih tanpa seluruh pekerjaan eksperimen."
+    "Tahu kapan cherry-pick lebih cocok daripada merge",
+    "Bisa menerapkan satu commit ke branch lain dengan git cherry-pick",
+    "Tahu bahwa cherry-pick membuat salinan dengan hash baru"
   ],
   "sources": [
     {
@@ -54,8 +60,8 @@
     }
   ],
   "verification": {
-    "command": "git show HEAD:menu.json\ngit show HEAD:checkout.js",
-    "explanation": "Branch rilis mendapatkan perubahan yang dipilih tanpa seluruh pekerjaan eksperimen."
+    "command": "git log --oneline -1\ngit status",
+    "explanation": "Commit teratas Turunkan diskon jadi 15 persen, dan git status menulis Your branch is up to date with 'origin/main'."
   },
   "order": 43
 }

@@ -1,42 +1,52 @@
 {
   "chapter": 12,
   "id": "log-pickaxe",
-  "title": "Cari kapan sebuah aturan mulai ada.",
-  "summary": "Bedakan pencarian string -S dari pencarian patch -G.",
-  "scenario": "Aturan MINIMUM_BELANJA diganti namanya beberapa kali. Kamu perlu menemukan commit yang memperkenalkan atau mengubah penggunaannya.",
-  "concept": "-S memilih perubahan yang mengubah jumlah kemunculan string. -G memilih commit dengan baris patch yang cocok regex. Pemindahan string tanpa perubahan jumlah bisa luput dari -S. Setelah kandidat ditemukan, lihat seluruh konteks karena satu baris jarang menceritakan semua alasan.",
-  "analogy": "Menghitung jumlah kata berbeda dari mencari kalimat yang direvisi. Pilih metode sesuai pertanyaan.",
+  "title": "Log -S dan -G: cari commit yang mengubah teks",
+  "summary": "git log -S mencari commit yang menambah atau menghapus sebuah teks, dan git log -G mencari commit yang mengubah baris berisi pola tertentu.",
+  "scenario": "Kamu ingin tahu kapan roti bakar masuk ke menu, dan berapa kali nilai diskon pernah diganti sejak awal.",
+  "concept": "git log -S diikuti teks menampilkan commit yang mengubah jumlah kemunculan teks itu, artinya commit yang menambahkan atau menghapusnya. Ini cocok untuk mencari kapan sesuatu muncul atau hilang. git log -G diikuti pola menampilkan commit yang diff-nya berisi baris dengan pola itu, termasuk commit yang cuma mengganti nilainya. Pola -G adalah regular expression, jadi titik dan beberapa tanda lain punya arti khusus. Keduanya bisa dibatasi ke satu file dengan menambahkan -- dan nama file di akhir, lalu digabung dengan --oneline atau -p untuk melihat isi perubahannya.",
+  "analogy": "-S seperti bertanya kapan sebuah nama pertama kali ditulis atau dicoret dari daftar. -G seperti bertanya kapan saja baris berisi nama itu pernah disunting.",
   "steps": [
     {
-      "title": "Cari perubahan jumlah string",
-      "command": "git log -p -S \"diskon\" -- diskon.js",
-      "explanation": "Pada latihan rebase, perubahan nilai tetap memakai jumlah kata diskon yang sama sehingga tidak semua perubahan terpilih."
+      "title": "Kapan roti bakar masuk?",
+      "command": "git log --oneline -S rotiBakar",
+      "explanation": "Hasilnya satu commit dari Rani: Tambah roti bakar ke menu."
     },
     {
-      "title": "Cari baris patch yang cocok",
-      "command": "git log -p -G \"diskon.*10\" -- diskon.js",
-      "explanation": "Regex ini menelusuri baris perubahan yang menyebut nilai 10."
+      "title": "Cari dengan -S di diskon.js",
+      "command": "git log --oneline -S \"const diskon\" -- diskon.js",
+      "explanation": "Hasilnya cuma Menu awal Kopi Kita. Baris const diskon cuma ditambahkan sekali; commit lain mengganti nilainya tanpa mengubah jumlah kemunculan teks itu."
+    },
+    {
+      "title": "Cari dengan -G di diskon.js",
+      "command": "git log --oneline -G \"const diskon\" -- diskon.js",
+      "explanation": "Hasilnya lima commit, dari Turunkan diskon jadi 15 persen sampai Menu awal Kopi Kita. -G menangkap setiap commit yang mengubah baris berisi const diskon. Catat hash commit Atur diskon 10 persen untuk materi berikutnya."
+    },
+    {
+      "title": "Lihat isi perubahannya",
+      "command": "git log -p -G \"const diskon\" -- diskon.js",
+      "explanation": "Opsi -p menampilkan diff setiap commit. Perhatikan pasangan baris - dan + yang mengganti nilai diskon. Tekan q untuk keluar."
     }
   ],
-  "result": "Hasil dua pencarian dapat berbeda dan kamu tahu alasannya.",
-  "pitfall": "Quote dan regex diproses sesuai shell sebelum diterima Git. Gunakan contoh sederhana dan periksa bantuan untuk pola kompleks.",
-  "practice": "Gunakan latihan rebase sebelum proses. Bandingkan commit yang dipilih -S diskon dan -G diskon.",
+  "result": "Kamu tahu roti bakar ditambahkan Rani, dan nilai diskon sudah diganti empat kali sejak barisnya dibuat.",
+  "pitfall": "-S cuma melihat jumlah kemunculan teks, bukan isi baris. Kalau sebuah commit mengubah const diskon = 10; menjadi const diskon = 15;, teks const diskon tetap muncul sekali, jadi commit itu nggak ditampilkan -S. Pakai -G untuk perubahan seperti ini. Ingat juga bahwa -G memakai regular expression: titik berarti karakter apa saja, jadi tulis \\. kalau maksudnya titik sungguhan.",
+  "practice": "Jalankan git log --oneline -S pisangGoreng, lalu ulangi dengan tambahan --all. Jelaskan kenapa commit pisang goreng cuma muncul dengan --all.",
   "quiz": {
-    "question": "String dipindah tanpa perubahan jumlah. -S pasti memilihnya?",
-    "options": ["Ya, selalu", "Tidak selalu", "Tidak ada hubungan dengan jumlah"],
+    "question": "Commit X mengubah const diskon = 10; menjadi const diskon = 15;. Pencarian mana yang menemukan X?",
+    "options": ["git log -S \"const diskon\"", "git log -G \"const diskon\"", "Keduanya"],
     "answer": 1,
-    "explanation": "-S berfokus pada perubahan jumlah kemunculan string."
+    "explanation": "Jumlah kemunculan const diskon nggak berubah, jadi -S melewatkannya. -G memeriksa baris yang berubah."
   },
   "commands": ["git log -S", "git log -G"],
-  "visual": "snapshot",
-  "minutes": 7,
+  "visual": "search",
+  "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["pencarian"],
-  "initialState": "Latihan rebase mempunyai beberapa perubahan nilai diskon dengan jumlah kata diskon yang tetap. Tidak perlu menjalankan rebase dahulu.",
-  "lab": "rebase",
+  "prerequisites": ["pencarian", "log-filter"],
+  "initialState": "Lanjutan dari materi grep dan blame: kamu berada di branch main, dan working tree bersih.",
   "objectives": [
-    "Bedakan pencarian string -S dari pencarian patch -G.",
-    "Periksa hasilnya: Hasil dua pencarian dapat berbeda dan kamu tahu alasannya."
+    "Bisa mencari commit yang menambah atau menghapus teks dengan -S",
+    "Bisa mencari commit yang mengubah baris tertentu dengan -G",
+    "Tahu kapan memakai -S dan kapan -G"
   ],
   "sources": [
     {
@@ -45,8 +55,8 @@
     }
   ],
   "verification": {
-    "command": "git log --oneline -G \"diskon\" -- diskon.js",
-    "explanation": "Hasil dua pencarian dapat berbeda dan kamu tahu alasannya."
+    "command": "git log --oneline -1 -S rotiBakar",
+    "explanation": "Hasilnya Tambah roti bakar ke menu."
   },
   "order": 46
 }

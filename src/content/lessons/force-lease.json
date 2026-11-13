@@ -1,46 +1,71 @@
 {
   "chapter": 11,
   "id": "force-lease",
-  "title": "Menulis ulang remote perlu ekspektasi jelas.",
-  "summary": "Pahami lease, koordinasi, dan keterbatasan pemeriksaannya.",
-  "scenario": "Tim menyetujui rebase branch pribadi yang sudah di-push. Sementara itu rekan mungkin menambah commit di branch server tersebut.",
-  "concept": "--force-with-lease mengizinkan pembaruan non-fast-forward hanya bila referensi tujuan memenuhi nilai yang diharapkan. Bentuk tanpa nilai eksplisit biasanya memakai remote-tracking ref; fetch otomatis dapat memperbarui acuan itu. Bentuk ref:expected menyatakan ekspektasi lebih jelas, tetapi tetap tidak menilai apakah perubahan yang kamu buang layak dipertahankan.",
-  "analogy": "Kamu meminta penggantian dokumen hanya bila edisi di lemari masih sama dengan edisi yang sudah disepakati. Pemeriksaan edisi tidak menggantikan persetujuan orang yang memakai dokumen.",
+  "title": "Force with lease: timpa branch remote dengan aman",
+  "summary": "Setelah menulis ulang commit yang sudah di-push, push biasa ditolak. git push --force-with-lease menimpa branch di server cuma kalau server masih berada di posisi yang kamu ketahui.",
+  "scenario": "menu-sore sudah di-push supaya Rani bisa ikut mengerjakan. Lalu kamu mengubah pesan commit terakhir dengan amend. Push biasa ditolak, padahal kamu memang ingin menimpa versi lama.",
+  "concept": "Setelah amend atau rebase, commit di branch lokal nggak lagi melanjutkan commit di server, sehingga push biasa ditolak sebagai non-fast-forward. git push --force menimpa branch di server tanpa syarat, termasuk commit yang mungkin baru saja dikirim rekan. git push --force-with-lease lebih aman: Git membandingkan posisi branch di server dengan catatan remote-tracking milikmu, misalnya origin/menu-sore. Kalau sama, artinya belum ada yang mengubah branch itu sejak terakhir kamu lihat, dan push dilanjutkan. Kalau berbeda, push ditolak dengan stale info. Perlindungan ini bergantung pada catatan lokal, jadi setelah git fetch, periksa dulu commit baru yang terambil sebelum menimpa. Menulis ulang branch bersama tetap perlu kesepakatan tim.",
+  "analogy": "Sebelum mengganti dokumen di map bersama, kamu memastikan isinya masih sama seperti yang terakhir kamu baca. Kalau ternyata sudah ada tambahan dari rekan, kamu berhenti dan membacanya dulu.",
   "steps": [
     {
-      "title": "Periksa dan sepakati jalur",
-      "command": "git fetch origin\ngit log --graph --oneline --all -12",
-      "explanation": "Bahas commit mana yang diganti dan apakah ada pekerjaan orang lain. Catat object ID tujuan yang benar-benar diperiksa."
+      "title": "Kirim menu-sore ke server",
+      "command": "git switch menu-sore\ngit push -u origin menu-sore",
+      "explanation": "Sekarang menu-sore ada di server dan bisa diambil Rani."
     },
     {
-      "title": "Pelajari bentuk eksplisit",
-      "command": "git push --force-with-lease=refs/heads/fitur-diskon:OID_YANG_DITINJAU origin fitur-diskon",
-      "explanation": "Ini template, bukan command siap salin. Ganti OID dengan nilai tujuan yang sudah ditinjau dan jalankan hanya pada jalur yang memang disetujui untuk ditulis ulang."
+      "title": "Ubah pesan, lalu coba push",
+      "command": "git commit --amend -m \"Tambah singkong goreng ke menu sore\"\ngit push",
+      "explanation": "Push ditolak dengan ! [rejected] menu-sore -> menu-sore (non-fast-forward). Commit lama di server bukan lagi leluhur commit hasil amend."
+    },
+    {
+      "title": "Timpa dengan lease",
+      "command": "git push --force-with-lease",
+      "explanation": "Git menulis baris berawalan + diikuti menu-sore -> menu-sore (forced update). Server belum berubah sejak push terakhir, jadi lease terpenuhi."
+    },
+    {
+      "title": "Rani mengambil menu-sore",
+      "command": "cd ../kopi-kita-rani\ngit fetch origin\ngit switch menu-sore",
+      "explanation": "Karena origin/menu-sore ada, git switch membuat branch menu-sore lokal yang langsung mengikutinya. Ubah isi menu.json menjadi {\"kopiSusu\":22000,\"esKopi\":22000,\"teh\":17000,\"kue\":18000,\"rotiBakar\":15000,\"nasiUduk\":18000,\"tehTarik\":15000,\"pisangGoreng\":12000,\"singkongGoreng\":11000,\"kopiTubruk\":12000} lalu simpan."
+    },
+    {
+      "title": "Rani commit dan push",
+      "command": "git add menu.json\ngit commit -m \"Tambah kopi tubruk ke menu sore\"\ngit push",
+      "explanation": "Server sekarang punya commit Rani yang belum diketahui repo milikmu."
+    },
+    {
+      "title": "Coba timpa lagi",
+      "command": "cd ../kopi-kita\ngit commit --amend -m \"Tambah singkong goreng\"\ngit push --force-with-lease",
+      "explanation": "Push ditolak dengan ! [rejected] menu-sore -> menu-sore (stale info). Lease melindungi commit kopi tubruk dari Rani. Dengan --force biasa, commit itu akan hilang dari server."
+    },
+    {
+      "title": "Ikuti versi server",
+      "command": "git fetch origin\ngit reset --hard origin/menu-sore\ngit log --oneline -3",
+      "explanation": "Amend kedua cuma mengubah pesan, jadi aman dibuang. Setelah reset, menu-sore sama dengan server: Tambah kopi tubruk ke menu sore di atas Tambah singkong goreng ke menu sore."
     }
   ],
-  "result": "Kamu bisa menjelaskan apa yang diperiksa lease dan apa yang tetap memerlukan keputusan tim.",
-  "pitfall": "Jangan menambahkan force setelah push rejected tanpa diagnosis. Protected branch juga bisa melarang operasi ini.",
-  "practice": "Gambarkan server pada hash X yang telah ditinjau, lalu berubah ke Y. Prediksi hasil lease yang masih mengharapkan X sebelum mencoba pada repo latihan pribadi.",
+  "result": "menu-sore di repo milikmu, di laptop Rani, dan di server berisi commit yang sama, termasuk kopi tubruk dari Rani.",
+  "pitfall": "Jangan memakai git push --force untuk branch yang juga dipakai orang lain. Force biasa nggak memeriksa apa pun dan bisa menghapus commit rekan tanpa peringatan. Jangan juga menimpa main yang dipakai seluruh tim; banyak layanan hosting melarangnya lewat protected branch.",
+  "practice": "Jalankan git log --oneline -1 menu-sore di kopi-kita dan di kopi-kita-rani. Pastikan hash teratas di kedua repo sama.",
   "quiz": {
-    "question": "Lease memeriksa apa?",
+    "question": "Kenapa --force-with-lease lebih aman daripada --force?",
     "options": [
-      "Kebenaran seluruh logika program",
-      "Izin moral untuk membuang perubahan tim",
-      "Kesesuaian referensi tujuan dengan ekspektasi"
+      "Karena push-nya lebih cepat",
+      "Karena push dibatalkan kalau branch di server sudah berubah sejak terakhir kamu ambil",
+      "Karena commit rekan otomatis digabung"
     ],
-    "answer": 2,
-    "explanation": "Lease menambah pemeriksaan posisi referensi, bukan audit seluruh perubahan."
+    "answer": 1,
+    "explanation": "Lease cuma menimpa kalau server masih di posisi yang kamu ketahui. Ia nggak menggabungkan commit siapa pun."
   },
   "commands": ["git push --force-with-lease"],
   "visual": "remote",
-  "minutes": 7,
+  "minutes": 10,
   "level": "Menengah",
-  "prerequisites": ["push", "rebase-dasar"],
-  "initialState": "Penulisan ulang branch remote sudah disepakati. Referensi tujuan dan object ID ekspektasi telah diperiksa. Command memuat placeholder.",
-  "lab": "remote",
+  "prerequisites": ["amend-rebase", "push"],
+  "initialState": "Lanjutan dari materi cherry-pick: kamu berada di branch main, dan menu-sore berisi dua commit menu sore yang belum pernah di-push.",
   "objectives": [
-    "Pahami lease, koordinasi, dan keterbatasan pemeriksaannya.",
-    "Periksa hasilnya: Kamu bisa menjelaskan apa yang diperiksa lease dan apa yang tetap memerlukan keputusan tim."
+    "Tahu kenapa push ditolak setelah amend atau rebase",
+    "Bisa menimpa branch remote dengan git push --force-with-lease",
+    "Tahu kenapa --force biasa berbahaya"
   ],
   "sources": [
     {
@@ -49,18 +74,18 @@
     }
   ],
   "verification": {
-    "command": "git branch -vv",
-    "explanation": "Kamu bisa menjelaskan apa yang diperiksa lease dan apa yang tetap memerlukan keputusan tim."
+    "command": "git status",
+    "explanation": "Git menulis On branch menu-sore dan Your branch is up to date with 'origin/menu-sore'."
   },
   "order": 44,
   "checkpoint": {
-    "question": "Rebase mengubah parent dua commit fitur. Apa yang perlu diantisipasi sebelum membagikannya?",
+    "question": "Kamu me-rebase branch yang sudah di-push, dan push biasa ditolak. Rekan juga memakai branch itu. Langkah mana yang paling aman?",
     "options": [
-      "Identitas commit berubah dan riwayat bersama perlu dikoordinasikan",
-      "Main otomatis terhapus",
-      "Semua file untracked otomatis ikut commit"
+      "Kabari rekan, lalu git push --force-with-lease",
+      "git push --force tanpa memeriksa apa pun",
+      "Hapus branch di server lalu buat ulang"
     ],
     "answer": 0,
-    "explanation": "Parent merupakan bagian data commit. Penulisan ulang jalur yang dibagikan perlu koordinasi."
+    "explanation": "Penulisan ulang branch bersama perlu kesepakatan, dan lease mencegah commit rekan yang belum kamu lihat ikut tertimpa."
   }
 }

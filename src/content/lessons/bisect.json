@@ -1,47 +1,53 @@
 {
   "chapter": 12,
   "id": "bisect",
-  "title": "Cari bug dengan membelah riwayat.",
-  "summary": "Gunakan bisect untuk mempersempit commit yang memperkenalkan masalah.",
-  "scenario": "Checkout masih bekerja minggu lalu, tetapi sekarang gagal. Ada puluhan commit di antara dua keadaan itu.",
-  "concept": "Bisect melakukan pencarian biner pada riwayat berdasarkan penilaian good dan bad. Kamu perlu kondisi pengujian yang cukup stabil dan commit baik yang diketahui. Jika suatu versi tidak dapat diuji, skip lebih tepat daripada menebak hasilnya.",
-  "analogy": "Mencari halaman yang mulai salah tidak perlu satu per satu: periksa bagian tengah, lalu lanjutkan pada separuh yang masih mungkin mengandung masalah.",
+  "title": "Bisect: cari commit penyebab masalah",
+  "summary": "git bisect membelah riwayat menjadi dua berulang kali sampai menemukan commit pertama yang buruk. Kamu cukup menilai setiap commit yang dipilih Git: good atau bad.",
+  "scenario": "Ada laporan bahwa diskon seharusnya 10 persen seperti aturan awal. Kamu ingin menemukan commit pertama yang mengubahnya, tanpa memeriksa belasan commit satu per satu.",
+  "concept": "Untuk memulai, tandai dua batas: commit yang sudah pasti buruk (biasanya HEAD) dengan git bisect bad, dan commit yang masih baik dengan git bisect good diikuti hash-nya. Git lalu checkout commit di tengah-tengah dalam keadaan detached HEAD, seperti di bab 5. Periksa commit itu, lalu jawab git bisect good atau git bisect bad. Setiap jawaban membuang separuh kandidat, sehingga belasan commit cukup diperiksa dalam beberapa langkah. Saat tersisa satu, Git menulis is the first bad commit beserta detailnya. git bisect reset mengakhiri pencarian dan mengembalikanmu ke branch semula. Dalam proyek sungguhan, menilai good atau bad biasanya berarti menjalankan aplikasi atau tes.",
+  "analogy": "Seperti mencari halaman salah cetak di buku tebal: buka bagian tengah, tentukan salahnya sebelum atau sesudah halaman itu, lalu ulangi di separuh yang tersisa.",
   "steps": [
     {
-      "title": "Tandai batas awal",
-      "command": "git bisect start\ngit bisect bad\ngit bisect good HASH_BAIK",
-      "explanation": "Ganti HASH_BAIK dengan commit yang sudah kamu verifikasi benar. Simpan pekerjaan lokal sebelum berpindah snapshot."
+      "title": "Tandai batas pencarian",
+      "command": "git bisect start\ngit bisect bad\ngit bisect good HASH",
+      "explanation": "Ganti HASH dengan hash Atur diskon 10 persen yang kamu catat di materi sebelumnya. Git menulis Bisecting: 10 revisions left to test after this (roughly 4 steps), lalu checkout commit pertama yang perlu diperiksa. Angka di komputermu bisa berbeda."
     },
     {
-      "title": "Uji commit pilihan",
+      "title": "Nilai commit yang dipilih",
+      "command": "git bisect bad",
+      "explanation": "Buka diskon.js. Kalau baris pertamanya const diskon = 10;, jalankan git bisect good. Kalau nilainya lain, jalankan git bisect bad seperti contoh di atas. Git lalu memilih commit berikutnya."
+    },
+    {
+      "title": "Ulangi sampai ketemu",
       "command": "git bisect good",
-      "explanation": "Jalankan jika versi yang sedang diuji baik. Jika buruk, gunakan git bisect bad; jika tidak bisa diuji, gunakan git bisect skip."
+      "explanation": "Terus nilai setiap commit dengan cara yang sama. Setelah beberapa kali, Git menulis hash diikuti is the first bad commit, lalu detail commit Diskon akhir pekan 15 persen."
     },
     {
-      "title": "Kembali setelah selesai",
+      "title": "Akhiri bisect",
       "command": "git bisect reset",
-      "explanation": "Catat commit pertama yang dianggap buruk, lalu periksa penyebab dan buat perbaikan di branch yang sesuai."
+      "explanation": "Git kembali ke branch main. Jangan lupa langkah ini, karena selama bisect berjalan kamu berada di detached HEAD."
     }
   ],
-  "result": "Rentang kandidat menyempit sampai Git menemukan kandidat commit yang memperkenalkan perubahan perilaku.",
-  "pitfall": "Hasil bergantung pada definisi good/bad. Test yang tidak stabil atau perubahan dependency di luar repo bisa membuat diagnosis menyesatkan.",
-  "practice": "Buat enam commit di repo latihan dengan satu perubahan yang merusak teks keluaran. Cari commit penyebab menggunakan bisect.",
+  "result": "Kamu menemukan bahwa diskon mulai berubah dari 10 di commit Diskon akhir pekan 15 persen, dan repo kembali ke main.",
+  "pitfall": "Salah menjawab satu kali membuat hasil bisect salah, karena separuh kandidat dibuang berdasarkan jawabanmu. git bisect log menampilkan jawaban yang sudah diberikan, dan git bisect reset memulai dari awal. Kalau commit yang dipilih nggak bisa dinilai, misalnya karena rusak oleh hal lain, jalankan git bisect skip.",
+  "practice": "Ulangi bisect, lalu sebelum reset jalankan git bisect log. Hitung berapa kali kamu menjawab good atau bad, dan bandingkan dengan jumlah commit di git log --oneline HASH..main.",
   "quiz": {
-    "question": "Commit pilihan bisect tidak bisa dibangun. Apa yang tepat?",
-    "options": ["Tebak good", "Hapus commit itu dari semua branch", "git bisect skip"],
-    "answer": 2,
-    "explanation": "Skip menandai bahwa commit tidak dapat dinilai dengan pengujian yang tersedia."
+    "question": "Git memilih sebuah commit, dan diskon.js di commit itu masih berisi 10. Apa jawabanmu?",
+    "options": ["git bisect good", "git bisect bad", "git bisect reset"],
+    "answer": 0,
+    "explanation": "Commit itu masih sesuai aturan awal, jadi good. Git lalu mencari di commit-commit sesudahnya."
   },
   "commands": ["git bisect"],
   "visual": "graph",
-  "minutes": 8,
+  "minutes": 9,
   "level": "Menengah",
-  "prerequisites": ["riwayat"],
-  "initialState": "Latihan bisect: tag awal baik, HEAD buruk, working tree bersih. Bug yang dicari adalah diskon negatif.",
+  "prerequisites": ["log-pickaxe", "detached-head"],
+  "initialState": "Lanjutan dari materi log -S dan -G: kamu berada di branch main, working tree bersih, dan kamu sudah mencatat hash commit Atur diskon 10 persen.",
   "lab": "bisect",
   "objectives": [
-    "Gunakan bisect untuk mempersempit commit yang memperkenalkan masalah.",
-    "Periksa hasilnya: Rentang kandidat menyempit sampai Git menemukan kandidat commit yang memperkenalkan perubahan perilaku."
+    "Tahu cara kerja bisect yang membelah riwayat",
+    "Bisa menandai commit good dan bad",
+    "Bisa mengakhiri bisect dengan git bisect reset"
   ],
   "sources": [
     {
@@ -50,8 +56,8 @@
     }
   ],
   "verification": {
-    "command": "git show bug-ditemukan:diskon.js",
-    "explanation": "Setelah latihan pendamping, bug-ditemukan menunjuk commit pertama diskon negatif. Bila hanya mencatat hash tanpa membuat branch, gunakan hash temuan pada git show."
+    "command": "git status",
+    "explanation": "Git menulis On branch main. Kalau masih tertulis You are currently bisecting, jalankan git bisect reset."
   },
   "order": 47
 }

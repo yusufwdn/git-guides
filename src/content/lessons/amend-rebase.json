@@ -1,51 +1,66 @@
 {
   "chapter": 11,
   "id": "amend-rebase",
-  "title": "Rapikan cerita sebelum dibagikan.",
-  "summary": "Perbaiki commit terakhir atau susun beberapa commit dengan sadar.",
-  "scenario": "Branch fitur berisi commit coba, typo, fix-lagi, dan akhirnya hasil yang benar. Kamu ingin reviewer membaca cerita yang lebih jelas.",
-  "concept": "Amend membuat pengganti commit terakhir. Interactive rebase memutar ulang commit dan memungkinkan reword, squash, fixup, atau mengubah urutannya. Identitas commit berubah karena isi, metadata, atau parent berubah. Hindari menulis ulang riwayat yang sudah menjadi dasar kerja orang lain tanpa koordinasi.",
-  "analogy": "Kamu menyunting draf sebelum menyerahkannya. Sesudah orang lain memakai draf itu, pergantian versi harus dibicarakan.",
+  "title": "Amend dan rebase -i: rapikan commit sebelum dibagikan",
+  "summary": "git commit --amend memperbaiki commit terakhir, dan git rebase -i menyusun ulang beberapa commit terakhir. Keduanya membuat commit baru, jadi pakai sebelum commit itu di-push.",
+  "scenario": "Kamu mulai menyiapkan menu sore di branch menu-sore. Commit pertama salah harga dan pesannya kurang jelas, lalu ada commit kecil yang cuma memperbaiki harga singkong. Sebelum menu sore ditinjau, kamu ingin riwayatnya rapi.",
+  "concept": "git commit --amend mengganti commit terakhir dengan commit baru berisi isi staging area saat ini. File yang sudah di-add ikut masuk, dan opsi -m mengganti pesannya. Untuk merapikan beberapa commit sekaligus, git rebase -i HEAD~2 membuka editor berisi daftar dua commit terakhir, dari yang paling lama. Setiap baris diawali perintah pick. Ganti pick dengan fixup untuk melebur commit itu ke commit di atasnya tanpa menyimpan pesannya, squash untuk melebur sambil menggabungkan pesan, reword untuk mengganti pesan, atau hapus barisnya untuk membuang commit. Setelah file disimpan dan editor ditutup, Git membuat ulang commit-commit itu. Amend dan rebase sama-sama menghasilkan hash baru, karena isi atau parent commit-nya berubah.",
+  "analogy": "Sebelum menyerahkan laporan, kamu masih boleh mengganti halaman terakhir atau menyatukan dua halaman catatan kecil. Setelah laporan dibagikan ke semua orang, mengganti halaman diam-diam bikin bingung.",
   "steps": [
     {
-      "title": "Perbaiki pesan terakhir",
-      "command": "git commit --amend",
-      "explanation": "Jika index berisi perubahan, perubahan itu ikut dalam commit pengganti. Periksa staged diff dulu."
+      "title": "Buat branch menu sore",
+      "command": "git switch -c menu-sore",
+      "explanation": "Ubah isi menu.json menjadi {\"kopiSusu\":22000,\"esKopi\":22000,\"teh\":17000,\"kue\":18000,\"rotiBakar\":15000,\"nasiUduk\":18000,\"tehTarik\":15000,\"pisangGoreng\":1200} lalu simpan. Harga pisang goreng sengaja salah ketik."
     },
     {
-      "title": "Susun tiga commit lokal",
-      "command": "git rebase -i HEAD~3",
-      "explanation": "Perlu tiga commit dalam rentang yang dimaksud. Editor menampilkan instruksi; pilih reword/squash/fixup sesuai tujuan."
+      "title": "Commit dengan kesalahan",
+      "command": "git add menu.json\ngit commit -m \"Tambah pisang goreng\"",
+      "explanation": "Harganya salah ketik, dan pesannya kurang lengkap."
     },
     {
-      "title": "Jika rebase berhenti",
-      "command": "git status",
-      "explanation": "Selesaikan konflik, add file, lalu git rebase --continue. Gunakan git rebase --abort bila ingin kembali ke keadaan sebelum proses."
+      "title": "Perbaiki dengan amend",
+      "command": "git add menu.json\ngit commit --amend -m \"Tambah pisang goreng ke menu\"\ngit log --oneline -2",
+      "explanation": "Sebelum menjalankan command, ubah nilai pisangGoreng menjadi 12000 lalu simpan. Log cuma menampilkan satu commit menu sore, Tambah pisang goreng ke menu, di atas Tambah teh tarik ke menu. Commit lama sudah diganti."
+    },
+    {
+      "title": "Tambah singkong goreng",
+      "command": "git add menu.json\ngit commit -m \"Tambah singkong goreng ke menu\"",
+      "explanation": "Sebelum menjalankan command, tambahkan \"singkongGoreng\":10000 di akhir menu.json lalu simpan."
+    },
+    {
+      "title": "Perbaiki harga singkong",
+      "command": "git add menu.json\ngit commit -m \"Perbaiki harga singkong\"",
+      "explanation": "Sebelum menjalankan command, ubah nilai singkongGoreng menjadi 11000 lalu simpan. Commit kecil ini sebaiknya nggak berdiri sendiri di riwayat."
+    },
+    {
+      "title": "Lebur commit perbaikan",
+      "command": "git rebase -i HEAD~2",
+      "explanation": "Editor terbuka berisi pick diikuti hash dan Tambah singkong goreng ke menu, lalu pick untuk Perbaiki harga singkong. Ganti pick di baris kedua menjadi fixup, simpan, lalu tutup editor. Kalau editornya vim, tekan i untuk mulai mengetik, Esc untuk berhenti, lalu ketik :wq dan Enter. Git menulis Successfully rebased and updated refs/heads/menu-sore."
     }
   ],
-  "result": "Riwayat branch pribadi lebih mudah dibaca dan kamu tahu bahwa hash commit bisa berubah.",
-  "pitfall": "--force-with-lease tetap menulis ulang remote. Ia menambahkan pemeriksaan lease, bukan izin untuk menimpa pekerjaan tanpa koordinasi.",
-  "practice": "Di branch latihan, buat tiga commit kecil lalu gabungkan dua yang memiliki tujuan sama. Bandingkan hash sebelum dan sesudah.",
+  "result": "menu-sore punya dua commit rapi: Tambah pisang goreng ke menu dan Tambah singkong goreng ke menu, dengan harga singkong 11000. Commit perbaikan kecil sudah melebur.",
+  "pitfall": "Jangan amend atau rebase commit yang sudah di-push dan mungkin dipakai orang lain. Hash-nya berubah, sehingga push biasa ditolak dan riwayat rekan jadi nggak cocok. Kalau rebase berhenti di tengah jalan, misalnya karena konflik, baca petunjuk dari git status; git rebase --abort mengembalikan branch ke keadaan sebelum rebase.",
+  "practice": "Jalankan git log --oneline -3 dan git show HEAD. Pastikan commit singkong sudah berisi harga 11000 walaupun commit perbaikannya nggak ada lagi.",
   "quiz": {
-    "question": "Apakah amend mempertahankan identitas commit yang diganti?",
+    "question": "Kamu baru commit dan sadar ada satu file yang lupa di-add. Commit itu belum di-push. Cara paling rapi?",
     "options": [
-      "Ya, selalu",
-      "Hanya mengubah working tree",
-      "Umumnya menghasilkan commit pengganti dengan hash berbeda"
+      "Add file itu, lalu git commit --amend",
+      "Buat branch baru",
+      "git revert commit itu"
     ],
-    "answer": 2,
-    "explanation": "Commit bersifat immutable. Amend membuat object commit pengganti."
+    "answer": 0,
+    "explanation": "Amend mengganti commit terakhir dengan versi yang sudah berisi file itu. Revert justru menambah commit pembatalan."
   },
   "commands": ["git commit --amend", "git rebase -i"],
-  "visual": "graph",
-  "minutes": 8,
+  "visual": "amend",
+  "minutes": 10,
   "level": "Menengah",
-  "prerequisites": ["commit-atomik", "reset-revert"],
-  "initialState": "Branch pribadi punya setidaknya tiga commit dalam rentang yang ingin dirapikan. Periksa index sebelum amend; jangan ubah jalur bersama tanpa koordinasi.",
-  "lab": "rebase",
+  "prerequisites": ["commit-atomik", "reset-modes"],
+  "initialState": "Lanjutan dari bab 10: kamu berada di branch main, working tree bersih, dan commit teratas Tambah teh tarik ke menu.",
   "objectives": [
-    "Perbaiki commit terakhir atau susun beberapa commit dengan sadar.",
-    "Periksa hasilnya: Riwayat branch pribadi lebih mudah dibaca dan kamu tahu bahwa hash commit bisa berubah."
+    "Bisa memperbaiki commit terakhir dengan git commit --amend",
+    "Bisa melebur commit kecil dengan git rebase -i dan fixup",
+    "Tahu kenapa amend dan rebase nggak dipakai untuk commit yang sudah di-push"
   ],
   "sources": [
     {
@@ -55,11 +70,15 @@
     {
       "title": "Manual git rebase",
       "url": "https://git-scm.com/docs/git-rebase"
+    },
+    {
+      "title": "Pro Git: rewriting history",
+      "url": "https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History"
     }
   ],
   "verification": {
-    "command": "git log --oneline --graph -6",
-    "explanation": "Riwayat branch pribadi lebih mudah dibaca dan kamu tahu bahwa hash commit bisa berubah."
+    "command": "git log --oneline -3\ngit show HEAD:menu.json",
+    "explanation": "Dua commit teratas Tambah singkong goreng ke menu dan Tambah pisang goreng ke menu. menu.json berisi pisangGoreng 12000 dan singkongGoreng 11000."
   },
   "order": 41
 }

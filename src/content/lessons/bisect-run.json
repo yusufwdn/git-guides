@@ -1,47 +1,47 @@
 {
   "chapter": 12,
   "id": "bisect-run",
-  "title": "Biarkan pengujian menjawab good atau bad.",
-  "summary": "Kenali kontrak exit code sebelum mengotomatiskan bisect.",
-  "scenario": "Bug bisa diuji lewat script yang stabil. Kamu ingin mengurangi penilaian manual pada setiap kandidat commit.",
-  "concept": "bisect run menjalankan command berulang pada kandidat. Exit 0 berarti good, 1–127 selain 125 berarti bad, dan 125 berarti skip. Kesalahan setup yang kebetulan menghasilkan exit 1 dapat dianggap bug, sehingga script harus membedakan build gagal, versi tidak dapat diuji, dan perilaku yang memang salah.",
-  "analogy": "Petugas pemeriksa boleh membantu membelah tumpukan, tetapi kode hasil pemeriksaannya harus konsisten.",
+  "title": "Bisect run: biarkan command yang menilai",
+  "summary": "git bisect run menjalankan sebuah command di setiap commit yang dipilih, lalu memakai exit code-nya sebagai jawaban good atau bad. Pencarian berjalan otomatis sampai selesai.",
+  "scenario": "Menjawab good atau bad satu per satu cukup melelahkan. Pemeriksaan diskon sebenarnya sederhana: apakah diskon.js berisi const diskon = 10;? Pemeriksaan seperti ini bisa diserahkan ke command.",
+  "concept": "Setiap command di terminal selesai dengan exit code: 0 berarti berhasil, angka lain berarti gagal. git bisect run diikuti sebuah command menjalankan command itu di setiap commit yang dipilih. Exit code 0 dianggap good, 125 berarti lewati commit ini, dan angka lain dari 1 sampai 127 dianggap bad. grep -q diikuti teks dan nama file adalah contoh command yang pas: ia nggak menampilkan apa pun, tapi selesai dengan 0 kalau teksnya ketemu dan 1 kalau nggak. Batas pencarian juga bisa ditulis langsung saat memulai: git bisect start diikuti commit bad lalu commit good. Di proyek sungguhan, command-nya biasanya script tes, misalnya npm test.",
+  "analogy": "Daripada memeriksa setiap halaman sendiri, kamu memberi mesin pemindai satu aturan: kalau halaman berisi kata ini, tandai lolos. Mesin itu yang membalik halaman dan mencatat hasilnya.",
   "steps": [
     {
-      "title": "Tetapkan batas yang sudah diuji",
-      "command": "git bisect start\ngit bisect bad\ngit bisect good awal",
-      "explanation": "Pada latihan bisect, tag awal adalah titik baik. Pastikan working tree bersih."
+      "title": "Mulai dengan dua batas",
+      "command": "git bisect start HEAD HASH",
+      "explanation": "Ganti HASH dengan hash Atur diskon 10 persen. HEAD adalah batas bad, dan HASH batas good."
     },
     {
-      "title": "Gunakan script pengujian milikmu",
-      "command": "git bisect run node ../uji-diskon.cjs",
-      "explanation": "Siapkan script di luar working tree yang berpindah commit. Script harus mengikuti kontrak exit code; ini template bila script belum dibuat."
+      "title": "Jalankan pemeriksaan otomatis",
+      "command": "git bisect run grep -q \"const diskon = 10;\" diskon.js",
+      "explanation": "Git menulis running 'grep' untuk setiap commit yang dipilih, lalu berhenti dengan is the first bad commit dan bisect found first bad commit. Hasilnya sama dengan bisect manual: Diskon akhir pekan 15 persen."
     },
     {
-      "title": "Tutup proses setelah hasil dicatat",
+      "title": "Akhiri bisect",
       "command": "git bisect reset",
-      "explanation": "Verifikasi kandidat buruk dengan membaca patch dan mengulang pengujian yang relevan."
+      "explanation": "Git kembali ke branch main."
     }
   ],
-  "result": "Kamu memahami kapan otomasi bisect dapat dipercaya dan kapan kandidat harus di-skip.",
-  "pitfall": "Jangan memakai test yang bergantung internet, waktu, atau layanan tidak stabil sebagai penentu tanpa kontrol yang memadai.",
-  "practice": "Selesaikan bisect manual dahulu. Tulis rancangan script yang mengembalikan 0 untuk diskon >= 0 dan 1 untuk diskon negatif.",
+  "result": "Commit penyebab ditemukan tanpa menjawab good atau bad sendiri, dan repo kembali ke main.",
+  "pitfall": "Hasil bisect run cuma sebaik command-nya. Kalau command gagal karena alasan lain, misalnya file belum ada di commit lama, commit itu dianggap bad dan hasilnya salah. Pastikan command bekerja dengan benar di batas good, atau buat script yang keluar dengan 125 untuk commit yang nggak bisa dinilai. grep tersedia di Git Bash, macOS, dan Linux, dan Git for Windows juga menyediakannya untuk git bisect run di PowerShell.",
+  "practice": "Ulangi bisect run, lalu sebelum reset jalankan git bisect log. Hitung berapa commit yang diperiksa grep dan bandingkan dengan jumlah langkah saat bisect manual.",
   "quiz": {
-    "question": "Exit code 125 berarti apa bagi bisect run?",
-    "options": ["Skip kandidat", "Good", "Bad selalu"],
+    "question": "Command di git bisect run selesai dengan exit code 0. Bagaimana Git menilai commit itu?",
+    "options": ["good", "bad", "dilewati"],
     "answer": 0,
-    "explanation": "125 menandai bahwa versi ini tidak dapat dinilai."
+    "explanation": "0 berarti good, 125 berarti dilewati, dan angka lain sampai 127 berarti bad."
   },
   "commands": ["git bisect run"],
   "visual": "graph",
-  "minutes": 9,
+  "minutes": 8,
   "level": "Menengah",
   "prerequisites": ["bisect"],
-  "initialState": "Gunakan latihan bisect yang baru. Script ../uji-diskon.cjs harus dibuat lebih dahulu dan stabil untuk seluruh kandidat yang diuji.",
-  "lab": "bisect",
+  "initialState": "Lanjutan dari materi bisect: kamu berada di branch main, bisect sudah di-reset, dan hash commit Atur diskon 10 persen masih tercatat.",
   "objectives": [
-    "Kenali kontrak exit code sebelum mengotomatiskan bisect.",
-    "Periksa hasilnya: Kamu memahami kapan otomasi bisect dapat dipercaya dan kapan kandidat harus di-skip."
+    "Tahu bagaimana exit code dipakai sebagai jawaban good atau bad",
+    "Bisa menjalankan bisect otomatis dengan git bisect run",
+    "Tahu risiko command pemeriksaan yang keliru"
   ],
   "sources": [
     {
@@ -50,14 +50,14 @@
     }
   ],
   "verification": {
-    "command": "git status\ngit log --oneline -3",
-    "explanation": "Kamu memahami kapan otomasi bisect dapat dipercaya dan kapan kandidat harus di-skip."
+    "command": "git status",
+    "explanation": "Git menulis On branch main."
   },
   "order": 48,
   "checkpoint": {
-    "question": "Bisect memilih commit yang tidak bisa dibangun karena masalah yang tidak terkait bug yang dicari. Pilih penilaian.",
-    "options": ["good agar cepat selesai", "skip", "bad tanpa pengujian"],
-    "answer": 1,
-    "explanation": "Skip menyatakan commit tersebut tidak bisa dinilai. Hasil tetap bergantung pada uji good/bad yang stabil."
+    "question": "Saat bisect, Git memilih commit yang nggak bisa diperiksa karena file yang dibutuhkan rusak oleh masalah lain. Apa yang sebaiknya dilakukan?",
+    "options": ["Jawab git bisect skip", "Jawab git bisect good supaya cepat", "Hapus commit itu"],
+    "answer": 0,
+    "explanation": "skip membiarkan Git memilih kandidat lain tanpa menebak. Jawaban asal bisa membuat hasil bisect salah."
   }
 }

@@ -1,57 +1,76 @@
 {
   "chapter": 11,
   "id": "rebase-dasar",
-  "title": "Pindahkan dasar, simpan maksud perubahannya.",
-  "summary": "Lihat commit fitur diputar ulang di atas main yang lebih baru.",
-  "scenario": "Main mendapat harga terbaru, sedangkan fitur-diskon punya dua commit lokal yang belum dipakai orang lain.",
-  "concept": "Rebase memilih perubahan commit fitur dan menerapkannya di dasar baru. Jika parent berubah, identitas commit berubah. Branch main tidak otomatis bergerak. Commit yang sudah setara dengan perubahan di upstream dapat dilewati; contoh ini memakai dua perubahan fitur yang memang unik.",
-  "analogy": "Kamu menyalin dua koreksi draf ke edisi naskah terbaru. Maksudnya dipertahankan, tetapi halaman dan hubungan riwayatnya baru.",
+  "title": "Rebase: pindahkan branch ke ujung main",
+  "summary": "git rebase main menyalin commit branch-mu ke atas commit terbaru di main. Hasilnya riwayat lurus tanpa merge commit.",
+  "scenario": "Saat kamu menyiapkan menu sore, main mendapat commit baru: jam buka diperpanjang sampai 22.00. Kamu ingin menu-sore dibangun di atas main terbaru supaya mudah ditinjau dan digabung tanpa merge commit.",
+  "concept": "Branch menu-sore berangkat dari commit lama di main. git rebase main yang dijalankan dari menu-sore mencari commit yang cuma ada di menu-sore, lalu memutar ulang perubahan commit-commit itu satu per satu di atas ujung main. Hasilnya commit baru dengan perubahan dan pesan yang sama, tapi parent dan hash-nya berbeda. Commit lama nggak lagi ditunjuk branch. Setelah rebase, main tinggal di belakang menu-sore dalam satu garis lurus, jadi merge berikutnya bisa fast-forward. Kalau perubahan yang diputar ulang bentrok dengan main, rebase berhenti di commit itu. Selesaikan konflik, jalankan git add, lalu git rebase --continue, atau batalkan semuanya dengan git rebase --abort.",
+  "analogy": "Kamu menulis lanjutan cerita dari bab 3, padahal temanmu sudah menambah bab 4. Rebase seperti menulis ulang lanjutanmu supaya dimulai setelah bab 4, dengan isi yang sama.",
   "steps": [
     {
+      "title": "Pindah ke main",
+      "command": "git switch main",
+      "explanation": "Ubah isi jam-buka.txt menjadi Buka setiap hari pukul 07.00-22.00 lalu simpan."
+    },
+    {
+      "title": "Commit dan kirim jam buka",
+      "command": "git add jam-buka.txt\ngit commit -m \"Perpanjang jam buka sampai 22.00\"\ngit push",
+      "explanation": "Push ini juga mengirim commit Tambah teh tarik ke menu dari bab 10 yang belum terkirim."
+    },
+    {
       "title": "Lihat dua jalur",
-      "command": "git log --oneline --graph --all",
-      "explanation": "Pada latihan rebase, menu berubah di main dan diskon berubah di fitur-diskon."
+      "command": "git log --oneline --graph -5 main menu-sore",
+      "explanation": "Dengan dua nama branch, log menampilkan riwayat keduanya. menu-sore dan main bercabang dari Tambah teh tarik ke menu. Catat hash commit Tambah pisang goreng ke menu."
     },
     {
-      "title": "Putar ulang fitur",
-      "command": "git switch fitur-diskon\ngit rebase main",
-      "explanation": "Contoh tidak bentrok karena file berbeda. Konflik nyata membutuhkan resolve, add, dan rebase --continue."
+      "title": "Rebase menu-sore ke main",
+      "command": "git switch menu-sore\ngit rebase main",
+      "explanation": "Git menulis Successfully rebased and updated refs/heads/menu-sore."
     },
     {
-      "title": "Periksa garis hasil",
-      "command": "git log --oneline --graph --all\ngit diff main...fitur-diskon",
-      "explanation": "Main tetap pada harga baru; dua commit fitur sekarang berada setelahnya."
+      "title": "Lihat hasilnya",
+      "command": "git log --oneline --graph -5 main menu-sore",
+      "explanation": "Sekarang riwayatnya satu garis: dua commit menu sore berada di atas Perpanjang jam buka sampai 22.00. Hash Tambah pisang goreng ke menu berbeda dari yang kamu catat, karena parent-nya berubah."
     }
   ],
-  "result": "Fitur memuat harga terbaru dan diskon 10, dengan dua commit baru di atas main.",
-  "pitfall": "Rebase dapat mengubah banyak hash meski pesan mirip. Koordinasikan penulisan ulang jalur yang sudah dibagikan.",
-  "practice": "Selesaikan latihan rebase. Catat hash dua commit fitur sebelum dan sesudah, lalu jelaskan perubahan parent.",
+  "result": "menu-sore berisi jam buka terbaru plus dua commit menu sore dalam satu garis lurus. main nggak berubah.",
+  "pitfall": "Rebase menulis ulang commit, sama seperti amend. Jangan rebase branch yang sudah di-push dan dipakai orang lain tanpa kesepakatan, karena rekan masih memegang commit versi lama. Materi force with lease di akhir bab ini membahas cara aman kalau penulisan ulang itu memang disepakati.",
+  "practice": "Jalankan git diff main...menu-sore dan pastikan yang tampil cuma perubahan menu sore, tanpa perubahan jam buka.",
   "quiz": {
-    "question": "Apakah git rebase main pada branch fitur memajukan main?",
-    "options": ["Tidak, yang disusun ulang adalah jalur fitur", "Ya, selalu", "Menghapus main"],
-    "answer": 0,
-    "explanation": "Main berperan sebagai dasar, bukan branch penerima yang otomatis berubah."
+    "question": "Apa yang berubah pada commit menu sore setelah git rebase main?",
+    "options": [
+      "Isi perubahan dan pesannya hilang",
+      "Parent dan hash-nya, sedangkan isi perubahan dan pesannya tetap",
+      "Commit-nya pindah ke main"
+    ],
+    "answer": 1,
+    "explanation": "Rebase membuat commit baru dengan perubahan yang sama di atas dasar baru. Branch main sendiri nggak bergerak."
   },
   "commands": ["git rebase"],
   "visual": "rebase",
   "minutes": 9,
   "level": "Menengah",
-  "prerequisites": ["branch", "merge", "amend-rebase"],
-  "initialState": "Latihan rebase: main punya harga baru; fitur-diskon punya dua commit diskon yang belum digabung, index dan working tree bersih.",
+  "prerequisites": ["amend-rebase", "merge"],
+  "initialState": "Lanjutan dari materi amend: kamu berada di branch menu-sore dengan dua commit menu sore, dan working tree bersih.",
   "lab": "rebase",
   "objectives": [
-    "Lihat commit fitur diputar ulang di atas main yang lebih baru.",
-    "Periksa hasilnya: Fitur memuat harga terbaru dan diskon 10, dengan dua commit baru di atas main."
+    "Tahu apa yang dilakukan git rebase terhadap commit branch",
+    "Bisa memindahkan branch ke ujung main dengan git rebase main",
+    "Tahu cara melanjutkan atau membatalkan rebase yang berhenti"
   ],
   "sources": [
     {
       "title": "Manual git rebase",
       "url": "https://git-scm.com/docs/git-rebase"
+    },
+    {
+      "title": "Pro Git: rebasing",
+      "url": "https://git-scm.com/book/en/v2/Git-Branching-Rebasing"
     }
   ],
   "verification": {
-    "command": "git log --oneline --graph --all\ngit diff main...fitur-diskon",
-    "explanation": "Fitur memuat harga terbaru dan diskon 10, dengan dua commit baru di atas main."
+    "command": "git log --oneline -3",
+    "explanation": "Dua commit teratas adalah commit menu sore, diikuti Perpanjang jam buka sampai 22.00."
   },
   "order": 42
 }

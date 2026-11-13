@@ -1,65 +1,70 @@
 {
   "chapter": 12,
   "id": "pencarian",
-  "title": "Cari alasan, bukan kambing hitam.",
-  "summary": "Gabungkan blame, grep, dan pencarian riwayat untuk memahami perubahan.",
-  "scenario": "Aturan diskon yang aneh muncul pada checkout. Kamu ingin tahu kapan dan mengapa aturan itu ditambahkan.",
-  "concept": "git blame mengaitkan baris dengan commit terakhir yang memengaruhinya sesuai penelusuran. git grep mencari teks pada file tracked. git log -S mencari perubahan jumlah kemunculan string; -G mencari patch dengan baris yang cocok regex. Setelah menemukan commit, baca konteks dan diskusi terkait.",
-  "analogy": "Asal catatan membantu menemukan konteks keputusan. Nama terakhir yang menyentuh baris belum tentu pencipta masalah.",
+  "title": "Grep dan blame: cari teks dan asal setiap baris",
+  "summary": "git grep mencari teks di file yang dilacak Git, dan git blame menunjukkan commit terakhir yang mengubah setiap baris sebuah file.",
+  "scenario": "Pelanggan bertanya kenapa diskon dibatasi maksimal 50 persen. Kamu ingin menemukan di file mana aturan itu ditulis, dan commit mana yang menambahkannya.",
+  "concept": "git grep diikuti teks mencari teks itu di semua file yang dilacak Git, mirip fitur cari di editor, tapi melewati file untracked dan file yang diabaikan. Opsi -n menampilkan nomor baris, dan -i mengabaikan huruf besar kecil. git blame diikuti nama file menampilkan setiap baris file beserta potongan hash commit terakhir yang mengubahnya, nama author, dan tanggalnya. Dari hash itu, git log atau git show menjelaskan alasan perubahannya lewat pesan commit. Blame cuma menunjukkan siapa yang terakhir menyentuh sebuah baris, bukan siapa yang salah. Baris yang cuma dirapikan formatnya juga ikut tercatat atas nama orang yang merapikan.",
+  "analogy": "grep seperti mencari kata di indeks buku. blame seperti catatan revisi di pinggir halaman: siapa yang terakhir mengubah kalimat itu dan kapan.",
   "steps": [
     {
-      "title": "Temukan lokasinya",
-      "command": "git grep -n \"diskon\"",
-      "explanation": "Cari pada file yang dilacak. Untuk konteks lebih luas, buka file di editor."
+      "title": "Cari kata diskon",
+      "command": "git switch main\ngit grep -n -i diskon",
+      "explanation": "Hasilnya dua baris: diskon.js:1:const diskon = 15; dan diskon.js:2:const maksDiskon = 50;. Tanpa -i, baris maksDiskon nggak ketemu karena huruf D-nya kapital."
     },
     {
-      "title": "Telusuri perubahan baris",
-      "command": "git blame -L 1,30 -- checkout.js",
-      "explanation": "Rentang baris disesuaikan dengan file. Gunakan hash yang ditemukan untuk git show."
+      "title": "Cari nama menu",
+      "command": "git grep -n tehTarik",
+      "explanation": "Hasilnya menu.json:1 diikuti isi barisnya. catatan.txt nggak ikut dicari karena diabaikan."
     },
     {
-      "title": "Cari asal aturan",
-      "command": "git log -p -S \"MINIMUM_BELANJA\" -- checkout.js",
-      "explanation": "Periksa perubahan jumlah kemunculan string tersebut dalam riwayat file."
+      "title": "Lihat asal setiap baris",
+      "command": "git blame diskon.js",
+      "explanation": "Setiap baris diawali potongan hash, nama author, tanggal, dan nomor baris. Catat potongan hash di baris maksDiskon."
+    },
+    {
+      "title": "Baca alasan perubahannya",
+      "command": "git log --oneline -1 HASH",
+      "explanation": "Ganti HASH dengan potongan hash yang kamu catat. Hasilnya Batasi diskon maksimal 50 persen."
     }
   ],
-  "result": "Kamu menemukan konteks keputusan yang membantu membuat perbaikan tepat.",
-  "pitfall": "Blame bukan penilaian kesalahan orang. Refactor dan pemindahan kode bisa memengaruhi hasil atribusi.",
-  "practice": "Tambahkan string unik ke file latihan, ubah pada commit berikutnya, lalu temukan kedua perubahan melalui log -S.",
+  "result": "Kamu tahu aturan batas diskon ada di baris 2 diskon.js dan berasal dari commit Batasi diskon maksimal 50 persen.",
+  "pitfall": "Blame kurang membantu untuk file yang isinya cuma satu baris panjang, seperti menu.json. Setiap perubahan harga mengganti seluruh baris, jadi blame cuma menunjukkan commit terakhir yang menyentuh file itu. Untuk kasus seperti ini, pencarian lewat git log di materi berikutnya lebih berguna.",
+  "practice": "Jalankan git blame menu.json dan jelaskan kenapa hasilnya cuma satu baris dengan commit Tambah teh tarik ke menu.",
   "quiz": {
-    "question": "Untuk mencari string pada file tracked saat ini, pakai apa?",
-    "options": ["git grep", "git reset", "git stash drop"],
-    "answer": 0,
-    "explanation": "Git grep mencari isi file; log -S mencari perubahan kemunculan string dalam riwayat."
+    "question": "Apa yang ditunjukkan git blame untuk sebuah baris?",
+    "options": [
+      "Orang yang menyebabkan bug",
+      "Commit terakhir yang mengubah baris itu",
+      "Semua commit yang pernah menyentuh file"
+    ],
+    "answer": 1,
+    "explanation": "Blame menunjuk commit terakhir yang mengubah baris. Apakah commit itu sumber masalah perlu diperiksa dari isi dan pesannya."
   },
-  "commands": ["git blame", "git grep", "git log -S"],
-  "visual": "snapshot",
+  "commands": ["git grep", "git blame"],
+  "visual": "search",
   "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["riwayat"],
-  "initialState": "checkout.js atau diskon.js tracked dan mempunyai riwayat. Sesuaikan rentang baris blame jika panjang file berbeda.",
-  "lab": "cherry-pick",
+  "prerequisites": ["riwayat", "force-lease"],
+  "initialState": "Lanjutan dari bab 11: kamu berada di branch menu-sore di kopi-kita, dan working tree bersih.",
   "objectives": [
-    "Gabungkan blame, grep, dan pencarian riwayat untuk memahami perubahan.",
-    "Periksa hasilnya: Kamu menemukan konteks keputusan yang membantu membuat perbaikan tepat."
+    "Bisa mencari teks di file yang dilacak dengan git grep",
+    "Bisa membaca asal setiap baris dengan git blame",
+    "Tahu batasan blame"
   ],
   "sources": [
-    {
-      "title": "Manual git blame",
-      "url": "https://git-scm.com/docs/git-blame"
-    },
     {
       "title": "Manual git grep",
       "url": "https://git-scm.com/docs/git-grep"
     },
     {
-      "title": "Manual git log",
-      "url": "https://git-scm.com/docs/git-log"
+      "title": "Manual git blame",
+      "url": "https://git-scm.com/docs/git-blame"
     }
   ],
   "verification": {
-    "command": "git log --oneline -- checkout.js",
-    "explanation": "Kamu menemukan konteks keputusan yang membantu membuat perbaikan tepat."
+    "command": "git grep -n maksDiskon",
+    "explanation": "Hasilnya diskon.js:2:const maksDiskon = 50;."
   },
   "order": 45
 }

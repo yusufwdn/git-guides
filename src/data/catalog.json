@@ -39,13 +39,13 @@
     {
       "id": 7,
       "title": "Kenalan dengan remote",
-      "description": "Hubungkan repo lokal dengan server dan ambil perubahan dari tim.",
+      "description": "Salin repo ke server, kirim commit, dan ambil perubahan dari rekan.",
       "group": "Kerja sehari-hari"
     },
     {
       "id": 8,
       "title": "Kirim dan kerja bareng tim",
-      "description": "Kirim commit ke server, minta review, dan sepakati alur kerja tim.",
+      "description": "Atur upstream, tangani push yang ditolak, minta review, dan sepakati alur kerja tim.",
       "group": "Kerja sehari-hari"
     },
     {

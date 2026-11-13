@@ -1,57 +1,80 @@
 {
   "chapter": 8,
   "id": "strategi-pull",
-  "title": "Pull punya pilihan cara bertemu.",
-  "summary": "Pilih fast-forward, merge, atau rebase sesuai keadaan dan aturan tim.",
-  "scenario": "Kamu dan Rani sama-sama punya commit baru. Pull meminta keputusan cara mempertemukan kedua jalur.",
-  "concept": "Pull mengambil data lalu mengintegrasikan branch yang dipilih. --ff-only menolak divergensi; --no-rebase memilih merge; --rebase memutar ulang commit lokal di atas hasil yang diambil. Perubahan hash akibat rebase perlu dipahami sebelum jalur lokal yang sudah dibagikan ditulis ulang.",
-  "analogy": "Menerima kiriman baru bisa berarti melanjutkan halaman yang sama, membuat titik pertemuan, atau menyusun ulang draf sendiri.",
+  "title": "Pull: pilih cara menggabungkan saat jalur bercabang",
+  "summary": "git pull menjalankan fetch lalu menggabungkan. Kalau commitmu dan commit dari server bercabang, kamu perlu memilih caranya: fast-forward saja, merge, atau rebase.",
+  "scenario": "Kamu menambah file jam buka dan ingin mengirimnya. Ternyata Rani lebih dulu mengirim commit roti bakar ke server, sehingga push-mu ditolak.",
+  "concept": "git pull adalah fetch yang langsung diikuti penggabungan origin/main ke main. Kalau main cuma tertinggal, hasilnya fast-forward. Kalau main dan origin/main bercabang karena keduanya punya commit baru, ada tiga pilihan. Opsi --ff-only menolak dan berhenti, jadi aman dipakai saat kamu cuma ingin mengikuti server. Opsi --no-rebase membuat merge commit, sama seperti git merge di bab 6. Opsi --rebase menyalin commit lokalmu ke atas commit dari server sehingga riwayat tetap lurus; rebase dibahas di bab 11. Perilaku git pull tanpa opsi bergantung pada pengaturan pull.rebase dan pull.ff. Git for Windows memakai merge sebagai bawaan, sedangkan instalasi lain bisa berhenti dengan pesan Need to specify how to reconcile divergent branches. Karena itu, biasakan menulis opsinya secara eksplisit.",
+  "analogy": "Seperti dua orang yang menulis lanjutan cerita dari halaman yang sama. Kamu bisa menunda sampai ada kesepakatan, menyatukan kedua lanjutan di halaman pertemuan, atau menulis ulang lanjutanmu supaya dimulai setelah lanjutan rekanmu.",
   "steps": [
     {
-      "title": "Tentukan keadaan dahulu",
-      "command": "git fetch origin\ngit log --graph --oneline --all -10",
-      "explanation": "Lihat apakah main hanya tertinggal atau benar-benar divergen."
+      "title": "Pindah ke laptop Rani",
+      "command": "cd ../kopi-kita-rani",
+      "explanation": "Ubah menu.json di kopi-kita-rani menjadi {\"kopiSusu\":22000,\"esKopi\":22000,\"teh\":16000,\"kue\":18000,\"rotiBakar\":15000} lalu simpan."
     },
     {
-      "title": "Jika hanya tertinggal",
-      "command": "git pull --ff-only origin main",
-      "explanation": "Contoh ini untuk main aktif pada latihan remote sebelum commit lokal tambahan."
+      "title": "Rani commit dan push",
+      "command": "git add menu.json\ngit commit -m \"Tambah roti bakar ke menu\"\ngit push origin main",
+      "explanation": "Server sekarang punya commit roti bakar yang belum ada di repo milikmu."
     },
     {
-      "title": "Alternatif pada branch pribadi",
-      "command": "git pull --rebase origin main",
-      "explanation": "Ini pilihan berbeda ketika commit lokal memang boleh diputar ulang. Jangan jalankan sebagai langkah lanjutan wajib setelah contoh sebelumnya."
+      "title": "Kembali ke repo milikmu",
+      "command": "cd ../kopi-kita",
+      "explanation": "Buat file baru jam-buka.txt di folder kopi-kita berisi satu baris: Buka setiap hari pukul 07.00-21.00, lalu simpan."
+    },
+    {
+      "title": "Commit jam buka dan coba kirim",
+      "command": "git add jam-buka.txt\ngit commit -m \"Tambah jam buka\"\ngit push",
+      "explanation": "Commit berhasil, tapi push ditolak dengan ! [rejected] main -> main (fetch first) dan petunjuk Updates were rejected because the remote contains work that you do not have locally. Server punya commit Rani yang belum ada di repo milikmu."
+    },
+    {
+      "title": "Coba pull yang cuma boleh maju",
+      "command": "git pull --ff-only\ngit status",
+      "explanation": "Git mengambil commit Rani, lalu berhenti dengan fatal: Not possible to fast-forward, aborting. git status menulis Your branch and 'origin/main' have diverged: masing-masing punya satu commit yang nggak dimiliki yang lain. File kerjamu nggak berubah."
+    },
+    {
+      "title": "Gabungkan dengan merge, lalu kirim",
+      "command": "git pull --no-rebase --no-edit\ngit push",
+      "explanation": "Opsi --no-edit memakai pesan merge bawaan tanpa membuka editor. Git menulis Merge made by the 'ort' strategy. Push sekarang diterima karena main sudah berisi commit Rani."
     }
   ],
-  "result": "Strategi integrasi dipilih secara sadar dan tidak tergantung tebakan tentang default konfigurasi.",
-  "pitfall": "Perilaku default pull dapat berbeda karena konfigurasi. Tulis opsi eksplisit saat sedang belajar.",
-  "practice": "Selesaikan latihan remote melalui fetch + merge --ff-only, lalu jelaskan hubungannya dengan pull --ff-only.",
+  "result": "main berisi merge commit yang menyatukan Tambah jam buka dan Tambah roti bakar ke menu, dan server sudah menerimanya. git status menampilkan Your branch is up to date with 'origin/main'.",
+  "pitfall": "Jangan menjawab push yang ditolak dengan git push --force. Opsi itu menimpa branch di server dengan milikmu, sehingga commit roti bakar dari Rani hilang dari server. Pilihan --rebase juga punya aturan sendiri: commit yang disalin mendapat hash baru, jadi jangan me-rebase commit yang sudah dipakai orang lain. Detailnya ada di bab 11.",
+  "practice": "Jalankan git log --oneline -1 HEAD^2 dan pastikan hasilnya commit Tambah roti bakar ke menu. Lalu jelaskan kenapa parent kedua merge commit ini adalah commit dari Rani.",
   "quiz": {
-    "question": "Strategi mana yang menolak divergensi?",
-    "options": ["--ff-only", "--rebase selalu menolak", "--no-rebase selalu menolak"],
-    "answer": 0,
-    "explanation": "FF-only mengizinkan integrasi yang cukup memajukan referensi."
+    "question": "main milikmu punya satu commit baru, dan origin/main punya satu commit baru dari Rani. Apa hasil git pull --ff-only?",
+    "options": [
+      "main maju ke commit Rani dan commitmu hilang",
+      "Git berhenti tanpa mengubah main karena jalurnya bercabang",
+      "Git otomatis membuat merge commit"
+    ],
+    "answer": 1,
+    "explanation": "--ff-only cuma mengizinkan main maju lurus. Saat jalur bercabang, Git berhenti dan menyerahkan pilihan merge atau rebase kepadamu."
   },
-  "commands": ["git pull --ff-only", "git pull --rebase"],
-  "visual": "remote",
-  "minutes": 9,
+  "commands": ["git pull --ff-only", "git pull --no-rebase", "git pull --rebase"],
+  "visual": "pull",
+  "minutes": 10,
   "level": "Menengah",
-  "prerequisites": ["fetch-pull", "fast-forward"],
-  "initialState": "Latihan remote dimulai pada main yang hanya tertinggal. Contoh --rebase adalah alternatif untuk keadaan berbeda, bukan urutan wajib.",
-  "lab": "remote",
+  "prerequisites": ["upstream", "merge"],
+  "initialState": "Lanjutan dari materi upstream: terminal berada di kopi-kita, dan main mengikuti origin/main.",
   "objectives": [
-    "Pilih fast-forward, merge, atau rebase sesuai keadaan dan aturan tim.",
-    "Periksa hasilnya: Strategi integrasi dipilih secara sadar dan tidak tergantung tebakan tentang default konfigurasi."
+    "Tahu bahwa git pull adalah fetch yang diikuti penggabungan",
+    "Bisa membaca penolakan push dan status diverged",
+    "Bisa memilih --ff-only, --no-rebase, atau --rebase secara sadar"
   ],
   "sources": [
     {
       "title": "Manual git pull",
       "url": "https://git-scm.com/docs/git-pull"
+    },
+    {
+      "title": "Manual git push",
+      "url": "https://git-scm.com/docs/git-push"
     }
   ],
   "verification": {
-    "command": "git log --oneline --graph --all",
-    "explanation": "Strategi integrasi dipilih secara sadar dan tidak tergantung tebakan tentang default konfigurasi."
+    "command": "git log --oneline --graph -4",
+    "explanation": "Commit teratas adalah Merge branch 'main' of ../kopi-kita-server, dengan dua cabang di bawahnya: Tambah jam buka dan Tambah roti bakar ke menu. Keduanya bertemu lagi di Tambah kue ke menu."
   },
   "order": 28
 }

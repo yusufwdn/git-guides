@@ -1,51 +1,57 @@
 {
   "chapter": 8,
   "id": "fork-upstream",
-  "title": "Berkontribusi lewat salinan milikmu.",
-  "summary": "Susun remote origin dan upstream pada model fork.",
-  "scenario": "Kamu tidak punya akses menulis ke repo komunitas Kopi Kita, tetapi ingin mengirim perbaikan dokumentasi.",
-  "concept": "Fork adalah fitur layanan hosting untuk salinan repo pada akun lain. Secara konvensi origin menunjuk fork milikmu dan upstream menunjuk repo sumber. Perubahan dikirim ke branch fork, lalu diajukan lewat PR/MR. Nama remote bebas dipilih dan tidak memberikan izin khusus.",
-  "analogy": "Kamu mengerjakan salinan naskah sendiri, lalu mengirim usulan koreksi kepada pemilik naskah utama.",
+  "title": "Fork: berkontribusi tanpa akses tulis",
+  "summary": "Fork adalah salinan repo di akunmu sendiri. Kamu mengirim perubahan ke fork, lalu mengajukannya ke repo asli lewat pull request.",
+  "scenario": "Kopi Kita membuka repo menunya untuk umum. Seorang pelanggan ingin menambahkan info hari libur, tapi dia nggak punya izin menulis ke server Kopi Kita. Di materi ini kamu memerankan pelanggan itu.",
+  "concept": "Di proyek terbuka, kebanyakan orang nggak punya izin push ke repo aslinya. Solusinya fork: layanan hosting membuat salinan repo di akunmu, dan kamu bebas push ke salinan itu. Fork adalah fitur layanan hosting, bukan command Git; di latihan ini kamu menirunya dengan git clone --bare. Setelah fork dibuat, clone fork itu ke laptop, sehingga origin menunjuk fork milikmu. Tambahkan juga remote kedua yang menunjuk repo asli. Kebiasaannya remote ini diberi nama upstream. Dari upstream kamu mengambil perubahan terbaru dengan git fetch upstream, sedangkan ke origin kamu push branch usulan. Setelah itu, buka pull request dari branch di fork menuju main di repo asli. Pemilik repo asli yang memutuskan untuk menggabungkannya.",
+  "analogy": "Seperti memfotokopi buku resep milik kedai, menulis usulan resep di fotokopianmu, lalu menyerahkan halaman itu ke pemilik kedai. Kamu nggak menulis langsung di buku aslinya.",
   "steps": [
     {
-      "title": "Tinjau remote",
-      "command": "git remote -v",
-      "explanation": "Pastikan origin benar-benar fork milikmu. URL contoh pada penjelasan harus diganti alamat layanan yang sah."
+      "title": "Buat fork dan clone ke laptop",
+      "command": "cd ..\ngit clone --bare kopi-kita-server.git kopi-kita-fork.git\ngit clone kopi-kita-fork.git kopi-kita-kontribusi",
+      "explanation": "kopi-kita-fork.git berperan sebagai fork di akunmu. Di GitHub, clone pertama ini diganti tombol Fork di website. Clone kedua adalah salinan fork di laptopmu."
     },
     {
-      "title": "Ambil kabar sumber setelah dikonfigurasi",
+      "title": "Tambahkan repo asli sebagai upstream",
+      "command": "cd kopi-kita-kontribusi\ngit remote add upstream ../kopi-kita-server.git\ngit remote -v",
+      "explanation": "Sekarang ada dua remote: origin menunjuk kopi-kita-fork.git, dan upstream menunjuk kopi-kita-server.git."
+    },
+    {
+      "title": "Ambil kabar dari repo asli",
       "command": "git fetch upstream",
-      "explanation": "Sebelum langkah ini, tambahkan remote upstream dengan URL repo sumber melalui git remote add upstream URL_SUMBER."
+      "explanation": "Git membuat catatan seperti upstream/main dan upstream/menu-sarapan. Nama catatan mengikuti nama remote, sama seperti origin/main."
     },
     {
-      "title": "Bagikan usulan di fork",
-      "command": "git push -u origin perbaikan-dokumen",
-      "explanation": "Buat PR/MR menuju branch sumber yang disepakati. Push ini bukan merge ke upstream."
+      "title": "Buat branch usulan",
+      "command": "git switch -c info-libur",
+      "explanation": "Setelah pindah branch, tambahkan baris kedua di jam-buka.txt: Libur setiap Senin, lalu simpan."
+    },
+    {
+      "title": "Commit dan kirim ke fork",
+      "command": "git add jam-buka.txt\ngit commit -m \"Tambah info hari libur\"\ngit push -u origin info-libur",
+      "explanation": "Push masuk ke fork, bukan ke repo asli. Di GitHub, langkah berikutnya adalah membuka pull request dari info-libur di fork menuju main di repo Kopi Kita."
     }
   ],
-  "result": "Kamu tahu tujuan setiap remote dan dapat mengajukan kontribusi tanpa akses push ke sumber.",
-  "pitfall": "Nama upstream pada remote berbeda dari istilah upstream branch. Satu nama adalah alamat repo, satunya hubungan konfigurasi branch.",
-  "practice": "Gambarkan alur repo sumber → fork → branch usulan → PR. Tandai operasi yang berasal dari Git dan fitur hosting.",
+  "result": "Branch info-libur ada di kopi-kita-fork.git dan siap diajukan, sedangkan kopi-kita-server.git nggak berubah. Terminalmu berada di kopi-kita-kontribusi.",
+  "pitfall": "Jangan tertukar antara remote bernama upstream dan upstream branch dari awal bab ini. Remote upstream adalah alamat repo asli, sedangkan upstream branch adalah pengaturan branch mana yang diikuti. Nama remote juga nggak memberi izin apa pun: kalau kamu menjalankan git push upstream ke GitHub tanpa izin tulis, server tetap menolak. Di latihan ini push ke upstream akan berhasil karena semua folder ada di komputermu, jadi jangan dicoba.",
+  "practice": "Fork bisa ketinggalan dari repo asli. Setelah ada commit baru di repo asli, main di fork diperbarui dengan git switch main, git fetch upstream, git merge --ff-only upstream/main, lalu git push origin main. Jelaskan arah perpindahan commit di setiap langkah.",
   "quiz": {
-    "question": "Apakah remote bernama upstream otomatis punya izin menulis?",
-    "options": [
-      "Tidak, nama tidak memberi izin",
-      "Ya, karena namanya khusus",
-      "Hanya setelah clone"
-    ],
-    "answer": 0,
-    "explanation": "Hak akses ditentukan server dan akun, bukan nama remote."
+    "question": "Di model fork, ke mana kamu push branch usulan?",
+    "options": ["Ke upstream, repo asli", "Ke origin, fork milikmu", "Ke keduanya sekaligus"],
+    "answer": 1,
+    "explanation": "Kamu cuma punya izin tulis di fork. Perubahan masuk ke repo asli lewat pull request yang disetujui pemiliknya."
   },
-  "commands": ["git remote", "git fetch", "git push"],
-  "visual": "remote",
-  "minutes": 9,
+  "commands": ["git remote add", "git fetch", "git push -u"],
+  "visual": "fork",
+  "minutes": 10,
   "level": "Menengah",
-  "prerequisites": ["fetch-pull", "review"],
-  "initialState": "Fork sudah dibuat melalui layanan hosting. origin mengarah ke fork, remote upstream perlu ditambahkan memakai URL sumber yang sah.",
-  "lab": "remote",
+  "prerequisites": ["review"],
+  "initialState": "Lanjutan dari materi review: terminal berada di kopi-kita, dan branch menu-sarapan sudah ada di server.",
   "objectives": [
-    "Susun remote origin dan upstream pada model fork.",
-    "Periksa hasilnya: Kamu tahu tujuan setiap remote dan dapat mengajukan kontribusi tanpa akses push ke sumber."
+    "Tahu peran fork, origin, dan upstream dalam kontribusi",
+    "Bisa menambahkan remote kedua dan mengambil kabar darinya",
+    "Tahu bahwa nama remote nggak menentukan izin"
   ],
   "sources": [
     {
@@ -53,17 +59,13 @@
       "url": "https://git-scm.com/docs/git-remote"
     },
     {
-      "title": "Manual git fetch",
-      "url": "https://git-scm.com/docs/git-fetch"
-    },
-    {
-      "title": "Manual git push",
-      "url": "https://git-scm.com/docs/git-push"
+      "title": "GitHub Docs: about forks",
+      "url": "https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks"
     }
   ],
   "verification": {
-    "command": "git remote -v",
-    "explanation": "Kamu tahu tujuan setiap remote dan dapat mengajukan kontribusi tanpa akses push ke sumber."
+    "command": "git branch -r",
+    "explanation": "Ada origin/info-libur, tapi nggak ada upstream/info-libur. Branch usulan cuma ada di fork sampai pemilik repo asli menggabungkan pull request-nya."
   },
   "order": 30
 }

@@ -1,51 +1,66 @@
 {
   "chapter": 8,
   "id": "review",
-  "title": "Bikin perubahan mudah ditinjau.",
-  "summary": "Hubungkan branch, commit, dan pull request dalam satu alur kontribusi.",
-  "scenario": "Fitur keranjang sudah selesai. Rekanmu perlu memahami tujuan perubahan dan mengusulkan koreksi sebelum digabung.",
-  "concept": "Pull request atau merge request adalah fitur layanan hosting, bukan command Git inti. Alur umum adalah membuat branch, commit terarah, push branch, lalu membuka permintaan review di layanan tim. Pada model fork, origin biasanya fork milikmu dan upstream dapat menunjuk repo sumber; nama ini hanyalah kebiasaan.",
-  "analogy": "Sebelum menu baru dicetak, kamu mengirim usulan beserta alasan dan cara mencobanya. Reviewer mengomentari usulan, lalu kamu memperbaruinya.",
+  "title": "Review: bagikan branch fitur untuk ditinjau",
+  "summary": "Perubahan yang perlu ditinjau dikerjakan di branch sendiri, dikirim dengan git push -u, lalu dibahas lewat pull request di layanan hosting.",
+  "scenario": "Pemilik kedai ingin menambah nasi uduk untuk menu sarapan, tapi Rani perlu mengecek harganya dulu sebelum masuk ke main. Kamu ingin mengirim perubahan ini tanpa menyentuh main.",
+  "concept": "Alur review di tim biasanya begini: buat branch fitur, commit perubahan, kirim branch itu ke server, lalu minta rekan meninjaunya. Karena branch fitur belum ada di server, kirim dengan git push -u origin diikuti nama branch supaya upstream-nya langsung diatur. Permintaan review disebut pull request di GitHub atau merge request di GitLab. Ini fitur layanan hosting, bukan command Git: kamu membukanya di website layanan itu, lalu menuliskan apa yang diubah, kenapa, dan cara mengeceknya. Reviewer bisa melihat perubahannya di website, atau mengambilnya dengan git fetch lalu membandingkannya sendiri. Kalau ada koreksi, cukup tambahkan commit baru di branch yang sama lalu push. Pull request ikut diperbarui otomatis.",
+  "analogy": "Seperti mengirim draf menu baru ke rekan sebelum dicetak. Kamu menyertakan catatan alasannya, rekan memberi komentar, lalu kamu mengirim revisi di draf yang sama sampai disetujui.",
   "steps": [
     {
-      "title": "Siapkan perubahan terarah",
-      "command": "git switch -c fitur-keranjang\ngit status",
-      "explanation": "Kerjakan satu tujuan dan buat commit yang menjelaskannya."
+      "title": "Buat branch untuk menu sarapan",
+      "command": "git switch -c menu-sarapan",
+      "explanation": "Setelah pindah branch, ubah menu.json menjadi {\"kopiSusu\":22000,\"esKopi\":22000,\"teh\":16000,\"kue\":18000,\"rotiBakar\":15000,\"nasiUduk\":20000} lalu simpan."
     },
     {
-      "title": "Kirim untuk ditinjau",
-      "command": "git push -u origin fitur-keranjang",
-      "explanation": "Buka PR/MR melalui layanan hosting. Sertakan masalah, hasil perubahan, dan cara pengujian."
+      "title": "Commit nasi uduk",
+      "command": "git add menu.json\ngit commit -m \"Tambah nasi uduk ke menu\"",
+      "explanation": "Commit ini cuma memajukan menu-sarapan. main tetap di merge commit dari materi sebelumnya."
     },
     {
-      "title": "Tindak lanjuti review",
-      "command": "git add keranjang.js\ngit commit -m \"Validasi jumlah item keranjang\"\ngit push",
-      "explanation": "Commit baru pada branch yang sama umumnya memperbarui permintaan review yang terkait."
+      "title": "Kirim branch ke server",
+      "command": "git push -u origin menu-sarapan",
+      "explanation": "Output berisi * [new branch] menu-sarapan -> menu-sarapan dan branch 'menu-sarapan' set up to track 'origin/menu-sarapan'. Di GitHub, langkah berikutnya adalah membuka pull request dari menu-sarapan ke main lewat website."
+    },
+    {
+      "title": "Rani meninjau dari laptopnya",
+      "command": "cd ../kopi-kita-rani\ngit fetch origin\ngit log --oneline origin/main..origin/menu-sarapan\ngit diff origin/main...origin/menu-sarapan",
+      "explanation": "Rani membandingkan dengan origin/main, bukan main miliknya, karena main di laptop Rani belum berisi merge jam buka. Log menampilkan satu commit, dan diff menunjukkan tambahan \"nasiUduk\":20000. Rani minta harganya diturunkan jadi 18000."
+    },
+    {
+      "title": "Kembali dan perbaiki harga",
+      "command": "cd ../kopi-kita",
+      "explanation": "Kamu masih berada di branch menu-sarapan. Ubah nilai nasiUduk di menu.json menjadi 18000 lalu simpan."
+    },
+    {
+      "title": "Kirim perbaikan dari review",
+      "command": "git add menu.json\ngit commit -m \"Turunkan harga nasi uduk\"\ngit push",
+      "explanation": "Karena -u sudah mengatur upstream, git push cukup tanpa argumen. Di GitHub, commit ini otomatis muncul di pull request yang sama."
     }
   ],
-  "result": "Tim bisa mendiskusikan dan menguji perubahan sebelum mengintegrasikannya.",
-  "pitfall": "Perubahan lintas tujuan membuat review lebih sulit. Pisahkan refactor besar dari perbaikan kecil bila memungkinkan.",
-  "practice": "Tulis deskripsi review untuk koreksi harga: masalah awal, perilaku baru, dan langkah verifikasi.",
+  "result": "Branch menu-sarapan ada di server dengan dua commit: Tambah nasi uduk ke menu dan Turunkan harga nasi uduk. main belum berubah, karena perubahan ini belum disetujui untuk digabung.",
+  "pitfall": "Satu pull request sebaiknya berisi satu tujuan. Kalau nasi uduk, perbaikan diskon, dan perapian format digabung dalam satu branch, reviewer sulit menilai mana yang aman. Selain itu, git push tanpa argumen di branch baru yang belum punya upstream akan ditolak dengan pesan has no upstream branch, jadi pakai -u pada push pertama.",
+  "practice": "Tulis deskripsi pull request untuk branch menu-sarapan: apa yang berubah, kenapa, dan cara mengeceknya. Cukup tiga sampai lima kalimat.",
   "quiz": {
-    "question": "Pull request merupakan fitur apa?",
+    "question": "Di mana pull request dibuat?",
     "options": [
-      "Command git pull dengan tampilan baru",
-      "Folder wajib di .git",
-      "Layanan kolaborasi seperti GitHub/GitLab"
+      "Lewat command git pull request",
+      "Di website layanan hosting seperti GitHub atau GitLab",
+      "Otomatis saat menjalankan git push -u"
     ],
-    "answer": 2,
-    "explanation": "Git menyediakan riwayat dan transport; layanan hosting menambahkan alur review."
+    "answer": 1,
+    "explanation": "Pull request adalah fitur layanan hosting. Git menyediakan branch dan push, lalu layanan hosting menambahkan diskusi dan persetujuan di atasnya."
   },
-  "commands": ["git push", "git switch -c"],
-  "visual": "graph",
-  "minutes": 8,
+  "commands": ["git push -u", "git switch -c"],
+  "visual": "review",
+  "minutes": 10,
   "level": "Menengah",
-  "prerequisites": ["branch", "commit-atomik"],
-  "initialState": "Untuk alur nyata, tersedia repo hosting dengan izin membuat branch/PR. Perintah lokal tidak otomatis membuat pull request.",
-  "lab": "branch",
+  "prerequisites": ["strategi-pull", "diff-versi"],
+  "initialState": "Lanjutan dari materi strategi pull: terminal berada di kopi-kita di branch main, dan main sudah sejajar dengan origin/main.",
   "objectives": [
-    "Hubungkan branch, commit, dan pull request dalam satu alur kontribusi.",
-    "Periksa hasilnya: Tim bisa mendiskusikan dan menguji perubahan sebelum mengintegrasikannya."
+    "Bisa mengirim branch baru ke server dengan git push -u",
+    "Tahu bahwa pull request adalah fitur layanan hosting, bukan command Git",
+    "Bisa meninjau branch rekan dari terminal"
   ],
   "sources": [
     {
@@ -53,13 +68,13 @@
       "url": "https://git-scm.com/docs/git-push"
     },
     {
-      "title": "Manual git switch",
-      "url": "https://git-scm.com/docs/git-switch"
+      "title": "GitHub Docs: about pull requests",
+      "url": "https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests"
     }
   ],
   "verification": {
-    "command": "git log --oneline -3",
-    "explanation": "Tim bisa mendiskusikan dan menguji perubahan sebelum mengintegrasikannya."
+    "command": "git branch -vv",
+    "explanation": "Baris menu-sarapan berisi [origin/menu-sarapan] tanpa ahead, artinya kedua commit sudah ada di server. Baris main tetap di merge commit dari materi sebelumnya."
   },
   "order": 29
 }

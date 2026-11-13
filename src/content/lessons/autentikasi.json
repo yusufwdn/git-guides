@@ -1,46 +1,61 @@
 {
   "chapter": 7,
   "id": "autentikasi",
-  "title": "Identitas commit berbeda dari izin server.",
-  "summary": "Bedakan user.name, credential helper, HTTPS, dan SSH.",
-  "scenario": "Nama author sudah benar, tetapi push ke server kantor tetap ditolak. Kamu mengira mengganti user.email akan memberi akses.",
-  "concept": "Identitas author adalah metadata commit. Autentikasi membuktikan akun yang mengakses server; otorisasi menentukan izin akun itu. HTTPS dapat memakai credential helper dan mekanisme login/token layanan. SSH memakai pasangan kunci dan kebijakan server. Ikuti petunjuk penyedia tanpa memasukkan token ke URL yang dibagikan.",
-  "analogy": "Nama di dokumen tidak sama dengan kartu akses gedung. Mengganti nama penulis tidak membuka pintu server.",
+  "title": "Remote: alamat server dan izin akses",
+  "summary": "Remote adalah nama pendek untuk alamat repo lain. Di materi ini kamu menghubungkan kopi-kita ke server, lalu membedakan identitas commit dari izin mengakses server.",
+  "scenario": "Rani mau mulai commit dari laptopnya, dan repo kopi-kita milikmu juga perlu tahu alamat server. Kalian juga penasaran: kalau nanti servernya di GitHub, apakah cukup mengisi user.name dengan nama admin supaya boleh mengirim commit?",
+  "concept": "Remote adalah nama pendek yang disimpan repo untuk alamat repo lain. git clone otomatis membuat remote bernama origin yang menunjuk ke sumber clone. Repo yang dibuat dengan git init belum punya remote, jadi kamu menambahkannya sendiri dengan git remote add diikuti nama dan alamat. git remote -v menampilkan semua remote beserta alamatnya. Alamat bisa berupa path folder, URL HTTPS seperti https://github.com/akun/kopi-kita.git, atau alamat SSH seperti git@github.com:akun/kopi-kita.git. Untuk path folder, yang menentukan boleh atau nggak adalah izin file di komputermu. Untuk HTTPS dan SSH, server meminta bukti siapa kamu (autentikasi), lalu memeriksa apa saja yang boleh kamu lakukan (otorisasi). HTTPS biasanya memakai login atau token yang disimpan oleh credential helper, sedangkan SSH memakai pasangan kunci. user.name dan user.email nggak ikut dalam proses itu; keduanya cuma label yang dicatat di commit.",
+  "analogy": "Nama yang kamu tulis di formulir nggak sama dengan kartu akses gedung. Menulis nama manajer di formulir nggak membuat pintu ruang server terbuka.",
   "steps": [
     {
-      "title": "Periksa alamat remote",
-      "command": "git remote get-url origin",
-      "explanation": "Kenali apakah protokolnya HTTPS, SSH, atau path lokal. Jangan membagikan URL jika telanjur berisi kredensial."
+      "title": "Lihat remote di salinan Rani",
+      "command": "git remote -v",
+      "explanation": "Ada dua baris origin, satu untuk (fetch) dan satu untuk (push). Keduanya menunjuk folder kopi-kita-server.git. Remote ini dibuat otomatis oleh git clone, dan alamatnya disimpan sebagai path lengkap."
     },
     {
-      "title": "Lihat helper yang dikonfigurasi",
-      "command": "git config --get-all credential.helper",
-      "explanation": "Output dapat kosong. Pengaturan helper berbeda antar sistem; jangan menyalin konfigurasi acak tanpa mengetahui alat yang tersedia."
+      "title": "Atur identitas Rani untuk repo ini",
+      "command": "git config user.name \"Rani\"\ngit config user.email \"rani@example.com\"",
+      "explanation": "Tanpa --global, pengaturan ini cuma berlaku di kopi-kita-rani, seperti yang kamu pelajari di materi bantuan. Commit dari salinan ini akan tercatat atas nama Rani, sedangkan repo lain tetap memakai namamu."
+    },
+    {
+      "title": "Pindah ke repo milikmu dan cek remote-nya",
+      "command": "cd ../kopi-kita\ngit remote -v",
+      "explanation": "Nggak ada output, karena kopi-kita dibuat dengan git init dan belum pernah dihubungkan ke repo lain."
+    },
+    {
+      "title": "Tambahkan server sebagai origin",
+      "command": "git remote add origin ../kopi-kita-server.git\ngit remote -v",
+      "explanation": "Sekarang origin muncul dengan alamat ../kopi-kita-server.git, persis seperti yang kamu ketik. Nama origin cuma kebiasaan untuk server utama; Git nggak memperlakukannya secara khusus."
+    },
+    {
+      "title": "Lihat penyimpan login HTTPS",
+      "command": "git config --get credential.helper",
+      "explanation": "Di Windows hasilnya biasanya manager, yaitu Git Credential Manager yang menyimpan login HTTPS. Di macOS bisa osxkeychain, dan di sistem lain bisa kosong. Latihan ini memakai path folder, jadi helper ini nggak dipakai sama sekali."
     }
   ],
-  "result": "Kamu dapat membedakan error identitas, koneksi, autentikasi, dan izin branch.",
-  "pitfall": "Jangan pernah mengunggah private key atau menaruh token dalam commit. Latihan remote pada panduan ini memakai path lokal sehingga tidak memerlukan token.",
-  "practice": "Pada latihan remote, temukan URL origin. Jelaskan mengapa server lokal dapat diakses tanpa login GitHub.",
+  "result": "Repo kopi-kita punya remote origin yang menunjuk ke kopi-kita-server.git, dan salinan Rani mencatat commit atas nama Rani. Terminalmu berada di kopi-kita.",
+  "pitfall": "Kalau push ke GitHub ditolak dengan pesan seperti Permission denied atau Authentication failed, mengganti user.name atau user.email nggak akan membantu. Periksa cara login yang dipakai (token HTTPS atau kunci SSH) dan izin akunmu di repo itu. Jangan pernah menaruh token di URL remote, di file yang di-commit, atau di tangkapan layar, karena siapa pun yang melihatnya bisa memakai aksesmu.",
+  "practice": "Jalankan git remote get-url origin di kopi-kita-rani, lalu bandingkan dengan hasilnya di kopi-kita. Jelaskan kenapa yang satu berupa path lengkap dan yang lain path relatif.",
   "quiz": {
-    "question": "Mengubah user.name memperbaiki izin push?",
+    "question": "Push ke GitHub ditolak karena akunmu nggak punya izin menulis. Apa yang membantu?",
     "options": [
-      "Ya, asal memakai nama admin",
-      "Tidak, izin server adalah urusan terpisah",
-      "Ya, setelah commit baru"
+      "Mengganti user.name menjadi nama pemilik repo",
+      "Meminta akses ke pemilik repo atau login dengan akun yang punya izin",
+      "Mengganti nama remote dari origin menjadi upstream"
     ],
     "answer": 1,
-    "explanation": "Author commit tidak memberikan hak akses ke remote."
+    "explanation": "Izin ditentukan oleh akun yang login ke server. user.name cuma label di commit, dan nama remote cuma nama pendek untuk alamat."
   },
-  "commands": ["git remote get-url", "git config"],
-  "visual": "remote",
-  "minutes": 7,
+  "commands": ["git remote add", "git remote -v", "git config"],
+  "visual": "access",
+  "minutes": 9,
   "level": "Dasar",
-  "prerequisites": ["setup", "git-terdistribusi"],
-  "initialState": "Repo mempunyai origin. Latihan remote menggunakan path lokal; contoh HTTPS/SSH membutuhkan konfigurasi penyedia bila dipakai nyata.",
-  "lab": "remote",
+  "prerequisites": ["bantuan", "git-terdistribusi"],
+  "initialState": "Lanjutan dari materi clone: terminal berada di folder kopi-kita-rani, dan folder kopi-kita-server.git ada di sebelahnya.",
   "objectives": [
-    "Bedakan user.name, credential helper, HTTPS, dan SSH.",
-    "Periksa hasilnya: Kamu dapat membedakan error identitas, koneksi, autentikasi, dan izin branch."
+    "Tahu apa itu remote dan origin",
+    "Bisa menambahkan remote ke repo yang dibuat dengan git init",
+    "Bisa membedakan identitas commit dari login dan izin server"
   ],
   "sources": [
     {
@@ -48,13 +63,17 @@
       "url": "https://git-scm.com/docs/git-remote"
     },
     {
-      "title": "Manual git config",
-      "url": "https://git-scm.com/docs/git-config"
+      "title": "Pro Git: protokol akses server",
+      "url": "https://git-scm.com/book/en/v2/Git-on-the-Server-The-Protocols"
+    },
+    {
+      "title": "Dokumentasi gitcredentials",
+      "url": "https://git-scm.com/docs/gitcredentials"
     }
   ],
   "verification": {
     "command": "git remote get-url origin",
-    "explanation": "Kamu dapat membedakan error identitas, koneksi, autentikasi, dan izin branch."
+    "explanation": "git remote get-url diikuti nama remote menampilkan alamat satu remote saja. Hasilnya ../kopi-kita-server.git. Kalau muncul error: No such remote 'origin', berarti git remote add belum berhasil atau kamu sedang berada di folder lain."
   },
   "order": 23
 }

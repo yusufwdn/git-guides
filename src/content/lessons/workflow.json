@@ -1,46 +1,56 @@
 {
   "chapter": 8,
   "id": "workflow",
-  "title": "Sepakati cara jalur bertemu.",
-  "summary": "Pilih merge, squash, dan kebijakan branch berdasarkan kebutuhan tim.",
-  "scenario": "Tim ingin main selalu siap dirilis. Beberapa fitur mempunyai banyak commit percobaan yang belum layak menjadi cerita akhir.",
-  "concept": "Feature branch memisahkan pekerjaan sampai siap diintegrasikan. Merge commit mempertahankan titik percabangan; squash merge membuat satu commit hasil pada branch tujuan; rebase menyalin perubahan menjadi commit baru pada dasar baru. Protected branch adalah kebijakan layanan hosting yang dapat membatasi push dan mewajibkan review atau checks.",
-  "analogy": "Tim menyepakati cara menyunting buku bersama: mempertahankan catatan percobaan, meringkas satu usulan, atau menyusun ulang urutan ceritanya.",
+  "title": "Workflow: sepakati cara menggabungkan ke main",
+  "summary": "Tim perlu sepakat bagaimana branch fitur masuk ke main: merge commit, squash, atau rebase. Di materi ini kamu menggabungkan menu-sarapan dengan squash.",
+  "scenario": "Rani menyetujui menu-sarapan. Tim Kopi Kita ingin riwayat main tetap ringkas: satu fitur jadi satu commit, tanpa commit revisi kecil seperti Turunkan harga nasi uduk.",
+  "concept": "Ada tiga cara umum menggabungkan branch fitur. Merge commit mempertahankan semua commit fitur ditambah satu commit pertemuan, jadi riwayatnya lengkap tapi bercabang. Squash merge menyatukan semua perubahan fitur menjadi satu commit baru di main, jadi riwayat main ringkas, tapi commit di branch fitur nggak ikut menjadi bagian riwayat main. Rebase menyalin commit fitur ke ujung main sehingga riwayat lurus; ini dibahas di bab 11. Di terminal, squash dilakukan dengan git merge --squash diikuti nama branch: Git menyiapkan hasil gabungan di staging area tanpa membuat commit, lalu kamu commit sendiri. Di GitHub atau GitLab, pilihan ini muncul saat menggabungkan pull request. Layanan hosting juga menyediakan protected branch, yaitu aturan yang melarang push langsung ke main dan mewajibkan review atau pengecekan otomatis sebelum merge.",
+  "analogy": "Merge commit seperti menyimpan semua draf beserta catatan rapatnya. Squash seperti menyimpan versi final saja. Rebase seperti menulis ulang draf supaya seolah dikerjakan setelah versi terbaru.",
   "steps": [
     {
-      "title": "Perbarui pengetahuan remote",
-      "command": "git fetch origin",
-      "explanation": "Sebelum integrasi, ketahui keadaan branch tujuan."
+      "title": "Kembali ke main di repo milikmu",
+      "command": "cd ../kopi-kita\ngit switch main\ngit pull --ff-only",
+      "explanation": "Pull memastikan main sejajar dengan server sebelum menggabungkan. Git menjawab Already up to date karena belum ada commit baru di main server."
     },
     {
-      "title": "Lihat bentuk riwayat",
-      "command": "git log --graph --oneline --all --decorate",
-      "explanation": "Bahas bersama tim apakah bentuk ini cocok untuk penelusuran masalah dan proses rilis."
+      "title": "Gabungkan dengan squash",
+      "command": "git merge --squash menu-sarapan\ngit status",
+      "explanation": "Output berisi Squash commit -- not updating HEAD. Abaikan kata Fast-forward di atasnya: dengan --squash, main nggak ikut maju. git status menampilkan menu.json di Changes to be committed, artinya perubahan dari dua commit fitur sudah disatukan di staging area."
+    },
+    {
+      "title": "Commit dan kirim",
+      "command": "git commit -m \"Tambah nasi uduk ke menu\"\ngit push",
+      "explanation": "Satu commit baru membawa harga akhir nasi uduk, 18000. Push diterima karena main di server cuma maju."
+    },
+    {
+      "title": "Bandingkan bentuk riwayat",
+      "command": "git log --oneline --graph --all -6",
+      "explanation": "Commit Tambah nasi uduk ke menu di main nggak tersambung ke menu-sarapan. Dua commit fitur tetap ada di branch menu-sarapan, di jalur terpisah."
     }
   ],
-  "result": "Tim memiliki aturan integrasi yang jelas, termasuk siapa yang boleh menulis ke branch utama.",
-  "pitfall": "Jangan menganggap satu workflow cocok untuk semua tim. Rebase pada riwayat yang sudah dipakai bersama perlu koordinasi karena identitas commit berubah.",
-  "practice": "Tentukan aturan untuk tim tiga orang: tujuan branch, syarat review, checks, dan cara menggabungkan fitur.",
+  "result": "main berisi satu commit Tambah nasi uduk ke menu yang membawa seluruh perubahan menu-sarapan, dan server sudah menerimanya. Riwayat main tetap ringkas.",
+  "pitfall": "Setelah squash, Git nggak menganggap menu-sarapan sudah digabung, karena commit di main adalah commit baru, bukan commit dari branch itu. Jangan lanjut menambah commit di branch yang sudah di-squash; buat branch baru dari main untuk pekerjaan berikutnya. Nggak ada workflow yang paling benar untuk semua tim. Yang penting tim sepakat, menuliskannya, dan menerapkannya lewat protected branch bila perlu.",
+  "practice": "Tulis aturan kerja singkat untuk tim Kopi Kita: siapa yang boleh push langsung ke main, apakah setiap perubahan wajib lewat pull request, dan cara menggabungkannya (merge commit, squash, atau rebase) beserta alasannya.",
   "quiz": {
-    "question": "Apa dampak utama squash merge ke branch tujuan?",
+    "question": "Apa hasil squash merge di main?",
     "options": [
-      "Selalu mempertahankan semua commit fitur sebagai ancestor",
-      "Satu commit hasil merangkum perubahan fitur",
-      "Menghapus semua tag"
+      "Semua commit fitur ikut masuk satu per satu",
+      "Satu commit baru yang berisi seluruh perubahan fitur",
+      "Branch fitur otomatis dihapus"
     ],
     "answer": 1,
-    "explanation": "Squash merangkum perubahan menjadi commit baru; hubungan riwayatnya berbeda dari merge commit biasa."
+    "explanation": "Squash menyatukan perubahan menjadi satu commit baru. Commit aslinya tetap ada di branch fitur, dan branch itu nggak terhapus otomatis."
   },
-  "commands": ["git merge --squash", "git log"],
-  "visual": "graph",
-  "minutes": 6,
+  "commands": ["git merge --squash"],
+  "visual": "squash",
+  "minutes": 9,
   "level": "Menengah",
-  "prerequisites": ["review", "merge"],
-  "initialState": "Tim mempunyai branch utama dan kesepakatan integrasi. Materi ini membandingkan pilihan, bukan meminta semua strategi dijalankan berurutan.",
-  "lab": "merge-ff",
+  "prerequisites": ["review"],
+  "initialState": "Lanjutan dari materi fork: terminal berada di kopi-kita-kontribusi, dan branch menu-sarapan di repo milikmu sudah disetujui Rani.",
   "objectives": [
-    "Pilih merge, squash, dan kebijakan branch berdasarkan kebutuhan tim.",
-    "Periksa hasilnya: Tim memiliki aturan integrasi yang jelas, termasuk siapa yang boleh menulis ke branch utama."
+    "Tahu bedanya merge commit, squash, dan rebase untuk menggabungkan fitur",
+    "Bisa melakukan squash merge dengan git merge --squash",
+    "Tahu fungsi protected branch di layanan hosting"
   ],
   "sources": [
     {
@@ -48,23 +58,27 @@
       "url": "https://git-scm.com/docs/git-merge"
     },
     {
-      "title": "Manual git log",
-      "url": "https://git-scm.com/docs/git-log"
+      "title": "GitHub Docs: about merge methods",
+      "url": "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/about-merge-methods-on-github"
+    },
+    {
+      "title": "GitHub Docs: about protected branches",
+      "url": "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches"
     }
   ],
   "verification": {
-    "command": "git log --graph --oneline --all",
-    "explanation": "Tim memiliki aturan integrasi yang jelas, termasuk siapa yang boleh menulis ke branch utama."
+    "command": "git branch --merged main",
+    "explanation": "Daftar ini nggak berisi menu-sarapan, walaupun isinya sudah masuk ke main. Begitulah squash: Git mengenali commit, bukan kesamaan isi."
   },
   "order": 31,
   "checkpoint": {
-    "question": "user.name sudah benar, tetapi server menolak push karena akun tidak punya izin. Apa yang diperiksa?",
+    "question": "Kamu commit di main, lalu git push ditolak dengan pesan (fetch first). Langkah mana yang paling aman?",
     "options": [
-      "Mengganti author menjadi nama admin",
-      "Metode login dan izin akun pada repository",
-      "Menghapus folder .git"
+      "git push --force supaya commitmu masuk",
+      "Ambil dan gabungkan commit dari server, misalnya dengan git pull --no-rebase, lalu push lagi",
+      "Ganti user.name, lalu push ulang"
     ],
     "answer": 1,
-    "explanation": "Author commit dan hak akses server merupakan dua hal terpisah."
+    "explanation": "Penolakan itu berarti server punya commit yang belum kamu punya. Gabungkan dulu, lalu push. --force menghapus commit orang lain dari server, dan user.name nggak berhubungan dengan penolakan ini."
   }
 }

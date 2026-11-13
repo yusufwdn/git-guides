@@ -1,65 +1,66 @@
 {
-  "chapter": 8,
+  "chapter": 7,
   "id": "push",
-  "title": "Kirim perubahan yang sudah direkam.",
-  "summary": "Atur upstream dan tangani penolakan push dengan memahami riwayat.",
-  "scenario": "Branch fitur sudah punya commit lokal. Kamu ingin membagikannya agar rekan dapat melakukan review.",
-  "concept": "Push mengirim object yang dibutuhkan dan meminta server memperbarui referensi tujuan. Upstream menghubungkan branch lokal dengan branch remote untuk operasi tertentu. Push non-fast-forward bisa ditolak ketika perubahan tujuan tidak tercakup dalam jalur yang kamu kirim.",
-  "analogy": "Kamu mengirim halaman baru ke album bersama. Jika versi bersama sudah maju dengan halaman lain, jangan langsung menimpanya; pelajari kedua jalurnya.",
+  "title": "Push: kirim commit ke server",
+  "summary": "git push mengirim commit dari repo lokal ke remote dan memajukan branch di sana. Di materi ini Rani mengirim commit kue ke server.",
+  "scenario": "Commit Tambah kue ke menu masih tersimpan di laptop Rani. Supaya kamu dan anggota tim lain bisa mengambilnya, Rani perlu mengirimnya ke server.",
+  "concept": "git push diikuti nama remote dan nama branch, misalnya git push origin main, mengirim commit yang belum dimiliki server lalu meminta server memajukan branch main ke commit terbaru. Setelah push berhasil, Git juga memperbarui catatan origin/main di repo pengirim, jadi tanda ahead hilang. Push cuma mengirim commit. Perubahan yang belum di-commit, isi staging area, dan file yang diabaikan nggak ikut terkirim. Server menerima push kalau hasilnya cuma memajukan branch, sama seperti fast-forward: commit terbaru di server harus menjadi leluhur commit yang kamu kirim. Kalau server sudah punya commit yang belum kamu miliki, push ditolak supaya commit orang lain nggak tertimpa. Cara menanganinya dibahas di bab 8.",
+  "analogy": "Seperti menempelkan halaman baru di papan bersama. Papan cuma mau menerima halaman yang melanjutkan halaman terakhir di sana. Kalau orang lain sudah menempel halaman baru, kamu perlu membaca halaman itu dulu sebelum menempel punyamu.",
   "steps": [
     {
-      "title": "Periksa tujuan",
-      "command": "git remote -v\ngit branch -vv",
-      "explanation": "Pastikan remote dan branch aktif sesuai. Autentikasi remote terpisah dari user.name dan user.email."
+      "title": "Cek apa yang akan dikirim",
+      "command": "git status",
+      "explanation": "Pastikan kamu masih di kopi-kita-rani. Git menulis Your branch is ahead of 'origin/main' by 1 commit, diikuti saran (use \"git push\" to publish your local commits)."
     },
     {
-      "title": "Bagikan branch fitur",
-      "command": "git push -u origin fitur-diskon",
-      "explanation": "Opsi -u menetapkan upstream setelah push berhasil. Remote harus ada dan kamu harus memiliki akses."
+      "title": "Kirim main ke server",
+      "command": "git push origin main",
+      "explanation": "Baris terakhir output berbentuk a9047a1..025a794  main -> main. Artinya branch main di server maju dari commit lama ke commit Tambah kue ke menu. Hash di komputermu bisa berbeda."
     },
     {
-      "title": "Jika push ditolak",
-      "command": "git fetch origin\ngit log --oneline --graph --all -12",
-      "explanation": "Periksa perbedaan, lalu integrasikan menurut workflow tim sebelum mencoba push lagi."
+      "title": "Cek catatan setelah push",
+      "command": "git branch -vv",
+      "explanation": "Sekarang tertulis [origin/main] tanpa ahead. Push yang berhasil ikut memperbarui catatan origin/main di laptop Rani."
+    },
+    {
+      "title": "Lihat isi server",
+      "command": "cd ../kopi-kita-server.git\ngit log --oneline -2",
+      "explanation": "Command Git juga bisa dijalankan di dalam bare repository. Commit teratas di server sekarang Tambah kue ke menu. Server nggak punya working tree, jadi kamu nggak akan menemukan menu.json di folder ini."
     }
   ],
-  "result": "Commit fitur tersedia di remote dan branch mempunyai upstream.",
-  "pitfall": "Jangan memakai --force sebagai obat setiap push rejected. Penolakan juga bisa berasal dari izin, autentikasi, atau protected branch.",
-  "practice": "Bagikan branch latihan ke bare repository lokal dan lihat upstream melalui branch -vv.",
+  "result": "Server punya commit Tambah kue ke menu, dan main di laptop Rani sejajar dengan origin/main. Repo kopi-kita milikmu belum tahu tentang commit ini. Terminalmu berada di kopi-kita-server.git.",
+  "pitfall": "Kalau push ditolak dengan pesan ! [rejected] diikuti fetch first atau non-fast-forward, jangan langsung mencari opsi --force. Penolakan itu berarti server punya commit yang belum ada di repo-mu, dan memaksa push akan menghapus commit tersebut dari server. Langkah yang benar adalah mengambil dan menggabungkan commit itu dulu, seperti di materi strategi pull di bab 8. Push juga bisa ditolak karena login atau izin, dan itu urusan akun, bukan riwayat.",
+  "practice": "Kembali ke kopi-kita-rani dan jalankan git push origin main sekali lagi. Baca pesan Everything up-to-date, lalu jelaskan kenapa nggak ada yang dikirim.",
   "quiz": {
-    "question": "Push biasa mengirim perubahan yang belum di-commit?",
+    "question": "Rani mengedit menu.json tapi belum commit, lalu menjalankan git push origin main. Apa yang terkirim?",
     "options": [
-      "Ya, semua yang terlihat di editor",
-      "Hanya jika file berakhiran .js",
-      "Tidak, push bekerja dengan object dan refs yang direkam"
+      "Perubahan menu.json yang terbaru",
+      "Nggak ada perubahan baru, karena push cuma mengirim commit",
+      "Semua file di folder, termasuk catatan.txt"
     ],
-    "answer": 2,
-    "explanation": "Simpan perubahan ke commit terlebih dahulu jika ingin membagikannya sebagai riwayat branch."
+    "answer": 1,
+    "explanation": "Push mengirim commit. Perubahan yang belum di-commit tetap berada di working tree laptop Rani."
   },
-  "commands": ["git push", "git branch -vv"],
-  "visual": "remote",
+  "commands": ["git push"],
+  "visual": "push",
   "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["fetch-pull", "autentikasi"],
-  "initialState": "Branch fitur-diskon punya commit yang ingin dibagikan. Remote origin sudah diatur dan tersedia sesuai hak akses pengguna.",
-  "lab": "remote",
+  "prerequisites": ["branch-tracking", "fast-forward"],
+  "initialState": "Lanjutan dari materi remote-tracking branch: terminal berada di kopi-kita-rani, dan main di sana satu commit di depan origin/main.",
   "objectives": [
-    "Atur upstream dan tangani penolakan push dengan memahami riwayat.",
-    "Periksa hasilnya: Commit fitur tersedia di remote dan branch mempunyai upstream."
+    "Bisa mengirim commit ke server dengan git push origin main",
+    "Tahu bahwa push yang berhasil ikut memperbarui origin/main",
+    "Tahu kenapa server menolak push yang bukan fast-forward"
   ],
   "sources": [
     {
       "title": "Manual git push",
       "url": "https://git-scm.com/docs/git-push"
-    },
-    {
-      "title": "Manual git branch",
-      "url": "https://git-scm.com/docs/git-branch"
     }
   ],
   "verification": {
-    "command": "git branch -vv",
-    "explanation": "Commit fitur tersedia di remote dan branch mempunyai upstream."
+    "command": "git log --oneline -1",
+    "explanation": "Di folder kopi-kita-server.git, hasilnya Tambah kue ke menu. Hash-nya sama dengan commit yang dibuat Rani."
   },
-  "order": 27
+  "order": 25
 }

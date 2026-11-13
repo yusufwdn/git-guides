@@ -1,42 +1,56 @@
 {
   "chapter": 7,
   "id": "branch-tracking",
-  "title": "main dan origin/main bukan kembaran live.",
-  "summary": "Bedakan branch lokal, remote-tracking ref, dan upstream.",
-  "scenario": "Kamu melihat main dan origin/main pada grafik, tetapi keduanya menunjuk commit berbeda setelah Rani bekerja.",
-  "concept": "main adalah branch lokal. origin/main adalah referensi lokal yang biasanya diperbarui fetch dari remote origin. Upstream adalah hubungan konfigurasi branch lokal ke referensi pelacakan tertentu; nama branch lokal dan remote tidak harus sama. Informasi ahead/behind menggunakan pengetahuan lokal terakhir.",
-  "analogy": "Papan kerja sendiri berbeda dari foto papan tim yang terakhir kamu ambil. Foto itu baru diperbarui ketika kamu mengambil kabar lagi.",
+  "title": "Remote-tracking branch: catatan posisi server",
+  "summary": "origin/main adalah catatan di laptopmu tentang posisi main di server saat terakhir kalian berkomunikasi. Catatan itu nggak berubah sendiri.",
+  "scenario": "Rani menambahkan kue ke menu dari laptopnya. git status di laptop Rani langsung bilang branch-nya lebih maju dari origin/main, padahal Rani belum mengirim apa pun ke server. Dari mana Git tahu, dan apa sebenarnya origin/main?",
+  "concept": "Saat clone, Git membuat remote-tracking branch seperti origin/main untuk setiap branch di server. Ini adalah catatan lokal: origin/main menunjuk commit tempat main di server berada saat terakhir kali repo ini berkomunikasi dengan origin. Kamu nggak bisa commit langsung ke origin/main, karena catatan ini cuma diperbarui saat bertukar data dengan server. git branch -r menampilkan semua remote-tracking branch. Hasil clone juga mengatur main supaya mengikuti origin/main. Hubungan ini disebut upstream. Karena itu git branch -vv dan git status bisa membandingkan keduanya dan menampilkan ahead (kamu punya commit yang belum ada di catatan server) atau behind (catatan server punya commit yang belum kamu punya). Perbandingan ini dihitung dari data lokal, tanpa menghubungi server.",
+  "analogy": "origin/main seperti foto papan pengumuman yang kamu ambil kemarin. Foto itu berguna untuk membandingkan, tapi nggak ikut berubah kalau ada yang menempel pengumuman baru. Kamu harus memotret ulang untuk tahu keadaan terbaru.",
   "steps": [
     {
-      "title": "Lihat hubungan branch",
-      "command": "git branch -vv",
-      "explanation": "Perhatikan label upstream dan angka ahead/behind bila ada."
+      "title": "Kembali ke laptop Rani",
+      "command": "cd ../kopi-kita-rani\ngit branch -vv",
+      "explanation": "Hasilnya * main a9047a1 [origin/main] Naikkan diskon jadi 20 persen. Bagian [origin/main] berarti main mengikuti origin/main. Hash di komputermu bisa berbeda."
     },
     {
-      "title": "Perbarui lalu periksa lagi",
-      "command": "git fetch origin\ngit branch -vv",
-      "explanation": "Pada latihan remote, origin/main maju sementara main lokal tetap pada commit sebelumnya."
+      "title": "Lihat remote-tracking branch",
+      "command": "git branch -r",
+      "explanation": "Muncul origin/main dan branch lain yang ikut di-clone dari server, seperti origin/fitur-diskon. Baris origin/HEAD -> origin/main menandai branch utama di server."
+    },
+    {
+      "title": "Rani menambah kue ke menu",
+      "command": "git add menu.json\ngit commit -m \"Tambah kue ke menu\"",
+      "explanation": "Sebelum menjalankan command, ubah isi menu.json di kopi-kita-rani menjadi {\"kopiSusu\":22000,\"esKopi\":22000,\"teh\":16000,\"kue\":18000} lalu simpan. Commit ini tercatat atas nama Rani."
+    },
+    {
+      "title": "Bandingkan dengan catatan server",
+      "command": "git branch -vv\ngit status",
+      "explanation": "git branch -vv sekarang menampilkan [origin/main: ahead 1]. git status menulis Your branch is ahead of 'origin/main' by 1 commit. Git menghitungnya dari data lokal: main sudah maju satu commit, sedangkan origin/main masih di commit lama."
     }
   ],
-  "result": "Perbedaan posisi dapat dijelaskan tanpa menganggap fetch melakukan merge.",
-  "pitfall": "Angka behind bisa kedaluwarsa sebelum fetch. Jangan menyamakan nama remote origin dengan branch origin/main.",
-  "practice": "Bandingkan tiga posisi pada latihan remote sebelum dan sesudah fetch: server main, origin/main, dan main lokal.",
+  "result": "main di laptop Rani satu commit di depan origin/main. Commit Tambah kue ke menu baru ada di kopi-kita-rani; server dan repo milikmu belum memilikinya.",
+  "pitfall": "ahead dan behind cuma seakurat catatan terakhir. Kalau orang lain sudah mengirim commit ke server, git status tetap bilang up to date sampai kamu mengambil kabar terbaru dengan git fetch, yang dibahas dua materi lagi. Jangan juga menyamakan origin dengan origin/main: origin adalah nama remote, sedangkan origin/main adalah catatan posisi satu branch di remote itu.",
+  "practice": "Jalankan git log --oneline --graph --all -3 di kopi-kita-rani. Temukan label HEAD -> main dan origin/main, lalu jelaskan kenapa keduanya berada di commit yang berbeda.",
   "quiz": {
-    "question": "Apa yang biasanya menggerakkan origin/main saat mengambil kabar?",
-    "options": ["Mengedit file menu", "git fetch origin", "git add ."],
+    "question": "Rani sudah mengirim commit baru ke server, tapi kamu belum mengambil kabar apa pun. Apa kata git status di laptopmu?",
+    "options": [
+      "Your branch is behind, karena Git mengecek server setiap saat",
+      "Tetap up to date, karena perbandingannya memakai catatan lokal yang belum diperbarui",
+      "Error, karena origin/main sudah kedaluwarsa"
+    ],
     "answer": 1,
-    "explanation": "Fetch memperbarui referensi remote-tracking sesuai refspec yang dikonfigurasi."
+    "explanation": "git status membandingkan main dengan origin/main yang tersimpan di laptopmu. Catatan itu baru berubah setelah kamu mengambil kabar dari server."
   },
-  "commands": ["git branch -vv", "git fetch"],
-  "visual": "remote",
-  "minutes": 7,
+  "commands": ["git branch -vv", "git branch -r"],
+  "visual": "tracking",
+  "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["branch", "git-terdistribusi"],
-  "initialState": "Latihan remote: main dan origin/main lokal masih di A, sedangkan server sudah punya commit B dari Rani.",
-  "lab": "remote",
+  "prerequisites": ["autentikasi"],
+  "initialState": "Lanjutan dari materi remote: terminal berada di kopi-kita, dan kopi-kita-rani sudah diatur memakai nama Rani.",
   "objectives": [
-    "Bedakan branch lokal, remote-tracking ref, dan upstream.",
-    "Periksa hasilnya: Perbedaan posisi dapat dijelaskan tanpa menganggap fetch melakukan merge."
+    "Tahu bedanya branch lokal main dengan remote-tracking branch origin/main",
+    "Bisa membaca ahead dan behind di git branch -vv dan git status",
+    "Tahu bahwa perbandingan itu memakai catatan lokal"
   ],
   "sources": [
     {
@@ -44,13 +58,13 @@
       "url": "https://git-scm.com/docs/git-branch"
     },
     {
-      "title": "Manual git fetch",
-      "url": "https://git-scm.com/docs/git-fetch"
+      "title": "Pro Git: remote branches",
+      "url": "https://git-scm.com/book/en/v2/Git-Branching-Remote-Branches"
     }
   ],
   "verification": {
-    "command": "git branch -vv",
-    "explanation": "Perbedaan posisi dapat dijelaskan tanpa menganggap fetch melakukan merge."
+    "command": "git log --oneline -1 origin/main",
+    "explanation": "Hasilnya masih Naikkan diskon jadi 20 persen. origin/main belum bergerak walaupun main sudah punya commit Tambah kue ke menu."
   },
   "order": 24
 }

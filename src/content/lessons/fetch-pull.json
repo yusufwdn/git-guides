@@ -1,47 +1,57 @@
 {
   "chapter": 7,
   "id": "fetch-pull",
-  "title": "Ambil kabar dulu. Baru gabungkan.",
-  "summary": "Pisahkan fetch dari integrasi supaya arah perubahan lebih mudah dipahami.",
-  "scenario": "Rani sudah menambah menu di remote. Kamu ingin memeriksa perubahannya tanpa langsung mengubah file kerja.",
-  "concept": "git fetch mengambil object dan memperbarui remote-tracking refs sesuai konfigurasi, misalnya origin/main. Ia tidak otomatis menggabungkannya ke branch lokal. git pull menjalankan fetch lalu integrasi; hasilnya dipengaruhi opsi dan konfigurasi merge, rebase, atau fast-forward.",
-  "analogy": "Fetch seperti menerima surat ke kotak masuk. Merge atau rebase adalah keputusan untuk memasukkan kabar itu ke pekerjaanmu.",
+  "title": "Fetch: ambil kabar dari server tanpa mengubah file",
+  "summary": "git fetch mengambil commit baru dari remote dan memperbarui origin/main, tapi nggak mengubah branch atau file kerjamu. Menggabungkannya adalah langkah terpisah.",
+  "scenario": "Rani sudah mengirim commit kue ke server. Kamu ingin tahu apa yang berubah dan memeriksanya dulu sebelum perubahan itu masuk ke main milikmu.",
+  "concept": "git fetch diikuti nama remote menghubungi remote itu, mengunduh commit yang belum kamu punya, lalu memperbarui remote-tracking branch seperti origin/main. Branch lokal, staging area, dan working tree nggak disentuh sama sekali. Karena origin/main sekarang menunjuk commit terbaru, kamu bisa memeriksanya dengan command yang sudah kamu kenal: git log main..origin/main menampilkan commit yang ada di origin/main tapi belum ada di main, dan git diff main origin/main menampilkan perubahan isinya. Setelah yakin, gabungkan dengan git merge --ff-only origin/main. git pull adalah jalan pintas yang menjalankan fetch lalu langsung menggabungkannya. Pull dibahas di bab 8, karena hasilnya bergantung pada pengaturan dan bentuk riwayat.",
+  "analogy": "Fetch seperti mengambil surat dari kotak pos ke meja. Suratnya sudah ada di rumah dan bisa kamu baca, tapi isinya belum kamu salin ke catatanmu sendiri. Merge adalah saat kamu memutuskan menyalinnya.",
   "steps": [
     {
-      "title": "Ambil pembaruan",
+      "title": "Kembali ke repo milikmu",
+      "command": "cd ../kopi-kita\ngit log --oneline -1",
+      "explanation": "Commit teratas masih Naikkan diskon jadi 20 persen. Repo milikmu belum tahu tentang commit Rani."
+    },
+    {
+      "title": "Ambil kabar dari server",
       "command": "git fetch origin",
-      "explanation": "origin adalah nama remote, bukan branch. Kamu dapat melihat URL-nya melalui git remote -v."
+      "explanation": "Karena ini fetch pertama dari server, Git menampilkan beberapa baris * [new branch], salah satunya main -> origin/main. Artinya catatan origin/main baru dibuat di repo milikmu. Buka menu.json: isinya belum berubah."
     },
     {
-      "title": "Bandingkan lokal dan catatan remote",
+      "title": "Lihat commit yang belum kamu punya",
       "command": "git log --oneline main..origin/main\ngit diff main origin/main",
-      "explanation": "Ini memeriksa perbedaan terhadap keadaan remote yang terakhir diambil."
+      "explanation": "git log menampilkan satu commit, Tambah kue ke menu. git diff menunjukkan baris menu.json berubah dengan tambahan \"kue\":18000."
     },
     {
-      "title": "Integrasi yang hanya boleh maju",
-      "command": "git switch main\ngit merge --ff-only origin/main",
-      "explanation": "Jika jalurnya sudah bercabang, perintah berhenti. Tentukan strategi integrasi sesuai kesepakatan tim."
+      "title": "Gabungkan ke main",
+      "command": "git merge --ff-only origin/main",
+      "explanation": "Git menulis Updating, lalu Fast-forward. main cuma tertinggal tanpa bercabang, jadi bisa langsung maju. Sekarang menu.json di folder kopi-kita berisi kue."
     }
   ],
-  "result": "Kamu mengetahui perubahan remote sebelum memutuskan integrasi.",
-  "pitfall": "origin/main adalah catatan lokal tentang branch remote pada saat fetch terakhir, bukan tampilan live server.",
-  "practice": "Gunakan dua clone repo latihan. Push dari clone pertama, fetch dari clone kedua, dan amati bahwa file kerja clone kedua belum berubah.",
+  "result": "main di repo milikmu sudah berisi commit Tambah kue ke menu, sama dengan server dan laptop Rani. Kamu memeriksa perubahan Rani sebelum menggabungkannya.",
+  "pitfall": "origin/main nggak berubah sendiri. Setiap kali ingin tahu keadaan server terbaru, jalankan git fetch dulu. Perhatikan juga bahwa main di repo milikmu belum punya upstream, karena repo ini dibuat dengan git init dan origin baru ditambahkan belakangan. Akibatnya git status belum bisa menulis ahead atau behind. Cara mengaturnya dibahas di materi pertama bab 8.",
+  "practice": "Jalankan git fetch origin sekali lagi. Kali ini nggak ada output, karena nggak ada commit baru di server. Lalu jalankan git log --oneline --graph --all -3 dan pastikan main dan origin/main berada di commit yang sama.",
   "quiz": {
-    "question": "Apakah fetch otomatis mengubah file di branch aktif?",
-    "options": ["Tidak, fetch bukan integrasi", "Ya, selalu", "Ya, jika namanya origin"],
+    "question": "Setelah git fetch origin, apa yang berubah di repo milikmu?",
+    "options": [
+      "origin/main menunjuk commit terbaru dari server, sedangkan main dan file kerja tetap",
+      "main langsung maju dan menu.json ikut berubah",
+      "Nggak ada, fetch cuma mengecek koneksi"
+    ],
     "answer": 0,
-    "explanation": "Fetch memperbarui data dan referensi remote-tracking; integrasi adalah langkah lain."
+    "explanation": "Fetch memperbarui catatan remote-tracking. Memajukan main adalah langkah terpisah, misalnya dengan git merge --ff-only origin/main."
   },
-  "commands": ["git fetch", "git pull", "git remote"],
+  "commands": ["git fetch", "git pull"],
   "visual": "remote",
   "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["branch-tracking", "merge"],
-  "initialState": "Latihan remote: server dan clone Rani sudah punya harga baru, tetapi main serta origin/main lokal masih lama.",
+  "prerequisites": ["push"],
+  "initialState": "Lanjutan dari materi push: terminal berada di kopi-kita-server.git, dan server sudah berisi commit Tambah kue ke menu dari Rani.",
   "lab": "remote",
   "objectives": [
-    "Pisahkan fetch dari integrasi supaya arah perubahan lebih mudah dipahami.",
-    "Periksa hasilnya: Kamu mengetahui perubahan remote sebelum memutuskan integrasi."
+    "Bisa mengambil commit baru dari server dengan git fetch",
+    "Bisa memeriksa perubahan dari server sebelum menggabungkannya",
+    "Tahu bedanya fetch dengan pull"
   ],
   "sources": [
     {
@@ -51,25 +61,21 @@
     {
       "title": "Manual git pull",
       "url": "https://git-scm.com/docs/git-pull"
-    },
-    {
-      "title": "Manual git remote",
-      "url": "https://git-scm.com/docs/git-remote"
     }
   ],
   "verification": {
-    "command": "git log --oneline --graph --all\ngit branch -vv",
-    "explanation": "Kamu mengetahui perubahan remote sebelum memutuskan integrasi."
+    "command": "git log --oneline -1\ngit status",
+    "explanation": "Commit teratas Tambah kue ke menu. git status menampilkan On branch main dan nothing to commit, working tree clean, tanpa baris Your branch is up to date. Baris itu baru muncul setelah upstream diatur di materi berikutnya."
   },
-  "order": 25,
+  "order": 26,
   "checkpoint": {
-    "question": "Server sudah di B, main lokal masih A. Setelah git fetch, apa yang masih harus dilakukan untuk memperbarui main?",
+    "question": "Server sudah punya commit baru dari Rani, dan kamu baru menjalankan git fetch origin. Apa yang masih perlu dilakukan supaya main milikmu ikut berisi commit itu?",
     "options": [
-      "Integrasi yang sesuai, misalnya merge --ff-only jika memungkinkan",
-      "Mengganti user.email",
-      "Tidak ada; fetch selalu mengubah main"
+      "Menggabungkan origin/main ke main, misalnya dengan git merge --ff-only origin/main",
+      "Menjalankan git push origin main",
+      "Nggak ada, fetch sudah memajukan main"
     ],
     "answer": 0,
-    "explanation": "Fetch memperbarui remote-tracking refs; integrasi ke main merupakan langkah terpisah."
+    "explanation": "Fetch cuma memperbarui origin/main. main baru maju setelah kamu menggabungkannya. Push justru bekerja ke arah sebaliknya, dari laptopmu ke server."
   }
 }

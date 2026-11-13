@@ -1,65 +1,70 @@
 {
   "chapter": 7,
   "id": "git-terdistribusi",
-  "title": "Riwayat ada di laptopmu juga.",
-  "summary": "Pahami kemampuan lokal dan batas salinan repository.",
-  "scenario": "Wi-Fi toko mati, tetapi kamu masih harus membuat branch dan merekam perbaikan sebelum pulang.",
-  "concept": "Commit, branch, log, dan sebagian besar diff berjalan lokal. Clone biasa membawa riwayat yang dapat dijangkau melalui referensi yang diambil. Shallow clone dan partial clone dapat membatasi data awal; jangan menyamakan setiap clone dengan backup lengkap semua data server.",
-  "analogy": "Setiap penulis punya salinan buku kerja. Pertukaran halaman membutuhkan koneksi, tetapi menulis di salinan sendiri tidak.",
+  "title": "Clone: salin repo lengkap dengan riwayatnya",
+  "summary": "Setiap clone Git membawa salinan riwayatnya sendiri. Di materi ini kamu membuat server latihan dan laptop rekan kerja dari repo kopi-kita, tanpa internet.",
+  "scenario": "Rani mulai ikut mengurus menu Kopi Kita dan butuh salinan proyeknya. Biasanya tim berbagi lewat server seperti GitHub, tapi untuk latihan, server dan laptop Rani cukup dibuat sebagai folder di sebelah kopi-kita.",
+  "concept": "Git disebut terdistribusi karena setiap salinan repo menyimpan riwayatnya sendiri, bukan cuma file terbaru. git clone diikuti alamat repo dan nama folder tujuan membuat salinan baru lengkap dengan commit dan branch-nya. Server Git biasanya berupa bare repository: repo tanpa working tree yang isinya cuma data Git, karena di server nggak ada yang mengedit file secara langsung. Opsi --bare pada git clone membuat salinan seperti itu. Alamat repo boleh berupa URL internet atau path folder biasa, dan cara kerjanya sama. Setelah clone selesai, log, diff, branch, dan commit berjalan tanpa koneksi. Jaringan cuma dibutuhkan saat bertukar commit dengan repo lain.",
+  "analogy": "Mirip memfotokopi seluruh buku catatan, bukan cuma halaman terakhir. Setiap orang bisa membaca catatan lama dan menulis halaman baru di bukunya sendiri. Buku-buku itu baru perlu dicocokkan saat kalian bertemu.",
   "steps": [
     {
-      "title": "Lihat branch lokal",
-      "command": "git branch --list",
-      "explanation": "Tanda bintang menunjukkan branch aktif. Belum ada komunikasi jaringan."
+      "title": "Keluar ke folder induk kopi-kita",
+      "command": "cd ..\npwd",
+      "explanation": "Semua folder latihan bab ini dibuat berdampingan dengan kopi-kita. Pastikan pwd menampilkan folder induknya, bukan folder kopi-kita."
     },
     {
-      "title": "Baca riwayat lokal",
-      "command": "git log --oneline -5",
-      "explanation": "Commit yang sudah tersedia dapat dibaca tanpa server."
+      "title": "Buat server latihan",
+      "command": "git clone --bare kopi-kita kopi-kita-server.git",
+      "explanation": "Git membalas Cloning into bare repository 'kopi-kita-server.git'... lalu done. Folder ini berperan sebagai server. Akhiran .git cuma kebiasaan penamaan untuk bare repository."
+    },
+    {
+      "title": "Buat salinan untuk laptop Rani",
+      "command": "git clone kopi-kita-server.git kopi-kita-rani",
+      "explanation": "Kali ini tanpa --bare, jadi kopi-kita-rani punya working tree yang bisa diedit, persis seperti hasil clone dari GitHub."
+    },
+    {
+      "title": "Baca riwayat di salinan Rani",
+      "command": "cd kopi-kita-rani\ngit log --oneline -3",
+      "explanation": "Tiga commit teratas sama persis dengan repo kopi-kita milikmu, termasuk hash-nya, mulai dari Naikkan diskon jadi 20 persen. Riwayat ikut tersalin dan bisa dibaca tanpa server."
     }
   ],
-  "result": "Kamu tahu operasi mana yang tetap bisa dilakukan offline dan mana yang perlu menghubungi remote.",
-  "pitfall": "PR, issue, secrets server, dan aturan akses layanan hosting bukan bagian dari riwayat Git yang otomatis ikut clone.",
-  "practice": "Matikan koneksi bila nyaman, lalu jalankan status, log, dan buat branch latihan. Jelaskan mengapa push ke server internet berbeda.",
+  "result": "Sekarang ada tiga repo berdampingan: kopi-kita milikmu, kopi-kita-server.git sebagai server, dan kopi-kita-rani sebagai laptop Rani. Terminalmu sedang berada di kopi-kita-rani.",
+  "pitfall": "Clone cuma menyalin yang tercatat di commit. catatan.txt nggak ada di kopi-kita-rani karena file itu diabaikan .gitignore dan nggak pernah di-commit. Hal yang sama berlaku untuk perubahan yang belum di-commit. Clone dari layanan hosting juga nggak membawa issue, pull request, atau pengaturan akses, karena semua itu disimpan oleh layanannya, bukan di riwayat Git.",
+  "practice": "Buka folder kopi-kita-rani di File Explorer atau Finder, lalu bandingkan isinya dengan kopi-kita. Cari file yang nggak ikut tersalin dan jelaskan alasannya.",
   "quiz": {
-    "question": "Apa yang biasanya tidak ikut dalam clone Git?",
+    "question": "Kamu baru clone repo dari server, lalu internet mati. Mana yang masih bisa kamu lakukan?",
     "options": [
-      "Riwayat commit yang diambil",
-      "Object file yang dibutuhkan snapshot",
-      "Issue dan pengaturan akun layanan hosting"
+      "Cuma membaca file, karena riwayat tersimpan di server",
+      "Membaca log, membuat branch, dan commit",
+      "Nggak ada, Git butuh koneksi untuk semua command"
     ],
-    "answer": 2,
-    "explanation": "Layanan hosting menyimpan data tambahan di luar object dan refs Git."
+    "answer": 1,
+    "explanation": "Clone membawa salinan riwayat ke laptopmu. log, branch, dan commit bekerja dengan data lokal itu. Koneksi baru dibutuhkan saat bertukar commit dengan server."
   },
-  "commands": ["git branch", "git log", "git clone"],
-  "visual": "graph",
-  "minutes": 7,
+  "commands": ["git clone", "git clone --bare"],
+  "visual": "clone",
+  "minutes": 8,
   "level": "Dasar",
-  "prerequisites": ["branch"],
-  "initialState": "Repo lokal sudah punya setidaknya satu commit dan sebuah branch. Tidak memerlukan remote internet. Siapkan keadaan ini melalui halaman Persiapan: repo pertama dan contoh tiga versi.",
-  "lab": "basics",
+  "prerequisites": ["terminal-folder", "abort-merge"],
+  "initialState": "Lanjutan dari bab 6: terminal berada di folder kopi-kita, branch main berisi commit Naikkan diskon jadi 20 persen, dan working tree bersih.",
   "objectives": [
-    "Pahami kemampuan lokal dan batas salinan repository.",
-    "Periksa hasilnya: Kamu tahu operasi mana yang tetap bisa dilakukan offline dan mana yang perlu menghubungi remote."
+    "Tahu kenapa Git disebut terdistribusi",
+    "Bisa menyalin repo dengan git clone, termasuk bare repository untuk server",
+    "Tahu apa saja yang nggak ikut tersalin oleh clone"
   ],
   "sources": [
     {
-      "title": "Manual git branch",
-      "url": "https://git-scm.com/docs/git-branch"
-    },
-    {
-      "title": "Manual git log",
-      "url": "https://git-scm.com/docs/git-log"
-    },
-    {
       "title": "Manual git clone",
       "url": "https://git-scm.com/docs/git-clone"
+    },
+    {
+      "title": "Pro Git: menyiapkan Git di server",
+      "url": "https://git-scm.com/book/en/v2/Git-on-the-Server-Getting-Git-on-a-Server"
     }
   ],
   "verification": {
-    "command": "git log --oneline -5",
-    "explanation": "Kamu tahu operasi mana yang tetap bisa dilakukan offline dan mana yang perlu menghubungi remote."
+    "command": "git log --oneline -1\ngit status",
+    "explanation": "Commit teratas adalah Naikkan diskon jadi 20 persen, sama dengan repo milikmu. git status menampilkan On branch main dan Your branch is up to date with 'origin/main'. Arti origin/main dibahas dua materi lagi."
   },
-  "order": 22,
-  "preparationURL": "/persiapan/"
+  "order": 22
 }

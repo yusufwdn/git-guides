@@ -1,42 +1,56 @@
 {
   "chapter": 8,
   "id": "upstream",
-  "title": "Tentukan branch pembandingmu.",
-  "summary": "Atur upstream dan baca dampaknya pada pull serta push.",
-  "scenario": "Branch baru sudah ada di server, tetapi pull lokal tidak tahu branch mana yang perlu diikuti.",
-  "concept": "Upstream disimpan melalui konfigurasi branch. push -u dapat menetapkannya setelah push berhasil. --set-upstream-to menghubungkan ke remote-tracking ref yang sudah tersedia. Tujuan push juga dipengaruhi push.default dan opsi eksplisit; upstream tidak berarti semua command selalu memilih tujuan yang sama.",
-  "analogy": "Kamu menuliskan alamat korespondensi pada buku kerja. Alamat itu membantu kebiasaan operasi, tetapi instruksi alamat eksplisit tetap perlu dibaca.",
+  "title": "Upstream: hubungkan main dengan origin/main",
+  "summary": "Upstream adalah branch remote yang diikuti sebuah branch lokal. Setelah diatur, git status bisa membandingkan, dan git push serta git pull tahu tujuannya tanpa disebutkan.",
+  "scenario": "Di laptop Rani, git status selalu memberi tahu posisi main terhadap origin/main. Di repo milikmu, baris itu nggak pernah muncul, dan setiap push atau pull harus menyebut origin main secara lengkap. Kamu ingin repo milikmu bekerja seperti milik Rani.",
+  "concept": "Upstream adalah pengaturan per branch yang menyimpan remote-tracking branch mana yang diikuti branch itu. git clone mengaturnya otomatis untuk main, jadi main di laptop Rani mengikuti origin/main. Repo milikmu dibuat dengan git init, jadi upstream perlu diatur sendiri dengan git branch --set-upstream-to=origin/main. Setelah itu, git status menampilkan ahead atau behind, git push tanpa argumen mengirim main ke main di origin, dan git pull tanpa argumen tahu harus mengambil dari mana. Untuk branch baru yang belum ada di server, git push -u origin diikuti nama branch mengirim branch itu sekaligus mengatur upstream-nya. Mengatur upstream cuma mengubah pengaturan: nggak ada commit yang dikirim, diambil, atau digabung.",
+  "analogy": "Seperti menyimpan nomor rekan di daftar kontak. Sebelum disimpan, kamu harus mengetik nomor lengkap setiap kali menelepon. Setelah disimpan, cukup pilih namanya. Menyimpan kontak nggak sama dengan menelepon.",
   "steps": [
     {
-      "title": "Periksa upstream saat ini",
+      "title": "Lihat branch tanpa upstream",
       "command": "git branch -vv",
-      "explanation": "Latihan remote sudah memiliki main yang mengikuti origin/main."
+      "explanation": "Baris main nggak punya tanda kurung siku. Bandingkan dengan laptop Rani di materi remote-tracking branch, yang menampilkan [origin/main]."
     },
     {
-      "title": "Atur hubungan yang sudah tersedia",
-      "command": "git branch --set-upstream-to=origin/main main",
-      "explanation": "Jalankan setelah origin/main tersedia dari fetch. Tidak menggabungkan commit atau mengubah file."
+      "title": "Atur upstream main",
+      "command": "git branch --set-upstream-to=origin/main",
+      "explanation": "Git membalas branch 'main' set up to track 'origin/main'. Tanpa nama branch di akhir, pengaturan berlaku untuk branch yang sedang aktif."
+    },
+    {
+      "title": "Cek hasilnya",
+      "command": "git branch -vv\ngit status",
+      "explanation": "Baris main sekarang berisi [origin/main], dan git status menulis Your branch is up to date with 'origin/main'."
+    },
+    {
+      "title": "Coba push tanpa argumen",
+      "command": "git push",
+      "explanation": "Git menjawab Everything up-to-date. Push tanpa argumen sekarang tahu tujuannya, dan nggak ada yang dikirim karena server sudah punya semua commit di main."
     }
   ],
-  "result": "Hubungan main ke origin/main terlihat pada branch -vv.",
-  "pitfall": "Menetapkan upstream tidak memperbaiki riwayat divergen, menambah izin, atau mengirim commit.",
-  "practice": "Pada latihan remote, catat posisi main, atur upstream, lalu buktikan posisi commit tidak bergerak.",
+  "result": "main di repo milikmu mengikuti origin/main. git status menampilkan posisi terhadap server, dan git push serta git pull bisa dijalankan tanpa argumen.",
+  "pitfall": "Upstream nggak memperbarui catatannya sendiri. git status tetap membandingkan dengan origin/main terakhir, jadi jalankan git fetch kalau ingin tahu keadaan server terbaru. Jangan tertukar juga dengan remote yang diberi nama upstream di materi fork. Nama remote itu cuma kebiasaan dan nggak ada hubungannya dengan pengaturan upstream branch.",
+  "practice": "Jalankan git log --oneline --graph --all -3 dan pastikan posisi commit sama seperti sebelum upstream diatur. Jelaskan dengan kalimatmu sendiri kenapa mengatur upstream nggak menggeser commit apa pun.",
   "quiz": {
-    "question": "Menetapkan upstream otomatis melakukan merge?",
-    "options": ["Ya, selalu", "Tidak", "Hanya bila repo bare"],
+    "question": "Apa yang terjadi saat kamu menjalankan git branch --set-upstream-to=origin/main?",
+    "options": [
+      "main digabung dengan origin/main",
+      "main mencatat bahwa ia mengikuti origin/main, tanpa memindahkan commit",
+      "Semua commit di main dikirim ke server"
+    ],
     "answer": 1,
-    "explanation": "Ini mengubah konfigurasi hubungan branch, bukan snapshot."
+    "explanation": "Command ini cuma mengubah pengaturan branch. Menggabungkan butuh merge, dan mengirim butuh push."
   },
   "commands": ["git branch --set-upstream-to", "git push -u"],
-  "visual": "remote",
+  "visual": "upstream",
   "minutes": 7,
   "level": "Menengah",
   "prerequisites": ["fetch-pull"],
-  "initialState": "Remote origin dan referensi origin/main sudah tersedia. Pengaturan upstream tidak memindahkan commit.",
-  "lab": "remote",
+  "initialState": "Lanjutan dari materi fetch: terminal berada di kopi-kita, main sudah berisi commit Tambah kue ke menu, dan origin/main menunjuk commit yang sama.",
   "objectives": [
-    "Atur upstream dan baca dampaknya pada pull serta push.",
-    "Periksa hasilnya: Hubungan main ke origin/main terlihat pada branch -vv."
+    "Tahu apa itu upstream dan kenapa hasil clone sudah memilikinya",
+    "Bisa mengatur upstream dengan --set-upstream-to",
+    "Tahu kapan memakai git push -u"
   ],
   "sources": [
     {
@@ -49,8 +63,8 @@
     }
   ],
   "verification": {
-    "command": "git branch -vv",
-    "explanation": "Hubungan main ke origin/main terlihat pada branch -vv."
+    "command": "git config --get branch.main.remote\ngit config --get branch.main.merge",
+    "explanation": "Hasilnya origin dan refs/heads/main. Di situlah Git menyimpan upstream: main mengikuti branch main di remote origin."
   },
-  "order": 26
+  "order": 27
 }

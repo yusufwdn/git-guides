@@ -21,8 +21,8 @@ assert(lessons.length >= 60 && lessons.length <= 80);
 assert.equal(new Set(lessons.map((lesson) => lesson.id)).size, lessons.length);
 for (const chapter of chapters)
   assert(
-    lessons.filter((lesson) => lesson.chapter === chapter.id).length >= 4,
-    `Bab ${chapter.id} harus mempunyai setidaknya empat materi.`,
+    lessons.filter((lesson) => lesson.chapter === chapter.id).length >= 3,
+    `Bab ${chapter.id} harus mempunyai setidaknya tiga materi.`,
   );
 for (const lesson of lessons) {
   for (const key of [

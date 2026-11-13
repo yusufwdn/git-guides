@@ -58,13 +58,13 @@
   },
   "order": 31,
   "checkpoint": {
-    "question": "Perbaikan checkout dan eksperimen harga tidak saling bergantung. Bagaimana menyusun commit agar mudah direview?",
+    "question": "user.name sudah benar, tetapi server menolak push karena akun tidak punya izin. Apa yang diperiksa?",
     "options": [
-      "Gabungkan semua perubahan agar hanya satu commit",
-      "Pisahkan berdasarkan tujuan dan periksa staged diff",
-      "Commit semua file lalu hilangkan pesan commit"
+      "Mengganti author menjadi nama admin",
+      "Metode login dan izin akun pada repository",
+      "Menghapus folder .git"
     ],
     "answer": 1,
-    "explanation": "Satu tujuan dapat mencakup beberapa file. Pembagiannya mengikuti maksud perubahan."
+    "explanation": "Author commit dan hak akses server merupakan dua hal terpisah."
   }
 }

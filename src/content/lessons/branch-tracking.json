@@ -1,5 +1,5 @@
 {
-  "chapter": 5,
+  "chapter": 7,
   "id": "branch-tracking",
   "title": "main dan origin/main bukan kembaran live.",
   "summary": "Bedakan branch lokal, remote-tracking ref, dan upstream.",
@@ -52,11 +52,5 @@
     "command": "git branch -vv",
     "explanation": "Perbedaan posisi dapat dijelaskan tanpa menganggap fetch melakukan merge."
   },
-  "order": 19,
-  "checkpoint": {
-    "question": "main dan fitur menunjuk A. Satu commit B dibuat ketika fitur aktif. Di mana main sekarang?",
-    "options": ["Di A", "Di B", "Terhapus"],
-    "answer": 0,
-    "explanation": "Commit memajukan branch aktif fitur. Referensi main tetap di A."
-  }
+  "order": 24
 }

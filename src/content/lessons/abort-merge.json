@@ -52,7 +52,7 @@
     "command": "git status\ngit rev-parse HEAD",
     "explanation": "HEAD main, index, dan working tree kembali ke keadaan awal latihan."
   },
-  "order": 23,
+  "order": 21,
   "checkpoint": {
     "question": "Merge sedang konflik. Kamu ingin kembali ke keadaan sebelum merge, bukan menyelesaikannya. Pilih tindakan.",
     "options": ["git merge --abort", "git stash --continue", "git push --force"],

@@ -61,15 +61,5 @@
     "command": "git ls-files -- .env\ngit status --short --ignored",
     "explanation": "File lokal diabaikan untuk penambahan berikutnya, dan aturan ignore bisa dibagikan melalui commit."
   },
-  "order": 11,
-  "checkpoint": {
-    "question": "menu.json sudah tracked sebelum masuk .gitignore. Apa dampak aturan ignore baru?",
-    "options": [
-      "File langsung keluar dari riwayat",
-      "Perubahan tracked tetap dapat muncul pada status",
-      "Semua commit menu.json dihapus"
-    ],
-    "answer": 1,
-    "explanation": "Ignore tidak melepaskan file yang sudah tracked. Menentukan file yang keluar dari tracking adalah tindakan terpisah."
-  }
+  "order": 9
 }

@@ -56,7 +56,7 @@
     "command": "git log --oneline -5",
     "explanation": "Kamu bisa menyebut dua titik yang dibandingkan dan membedakan rentang log dari perbandingan snapshot."
   },
-  "order": 15,
+  "order": 13,
   "checkpoint": {
     "question": "Kamu ingin membaca menu.json dari commit sebelumnya tanpa mengubah file kerja. Pilih tindakan.",
     "options": ["git show HEAD~1:menu.json", "git reset --hard HEAD~1", "git clean -fd"],

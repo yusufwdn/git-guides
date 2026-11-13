@@ -1,5 +1,5 @@
 {
-  "chapter": 3,
+  "chapter": 2,
   "id": "mulai-repo",
   "title": "Mulai dari satu repository.",
   "summary": "Pilih init untuk proyek baru atau clone untuk meneruskan proyek yang sudah ada.",
@@ -65,6 +65,6 @@
     "command": "git status --short",
     "explanation": "Proyek baru memiliki folder .git, atau proyek tim sudah tersedia sebagai hasil clone."
   },
-  "order": 8,
+  "order": 4,
   "preparationURL": "/persiapan/"
 }

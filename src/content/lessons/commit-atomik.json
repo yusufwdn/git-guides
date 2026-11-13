@@ -1,5 +1,5 @@
 {
-  "chapter": 8,
+  "chapter": 3,
   "id": "commit-atomik",
   "title": "Biar satu commit menjawab satu alasan.",
   "summary": "Pisahkan perubahan yang bisa ditinjau dan dibatalkan secara masuk akal.",
@@ -35,7 +35,7 @@
   "visual": "staging",
   "minutes": 7,
   "level": "Menengah",
-  "prerequisites": ["staging"],
+  "prerequisites": ["staging", "status-singkat"],
   "initialState": "Latihan staging: menu dan diskon sama-sama berubah, belum staged. Hanya koreksi menu siap menjadi commit.",
   "lab": "staging",
   "objectives": [
@@ -56,5 +56,15 @@
     "command": "git show --stat HEAD\ngit status --short",
     "explanation": "Reviewer bisa menjelaskan tujuan commit tanpa menebak hubungan perubahan yang tidak relevan."
   },
-  "order": 28
+  "order": 10,
+  "checkpoint": {
+    "question": "menu.json sudah tracked sebelum masuk .gitignore. Apa dampak aturan ignore baru?",
+    "options": [
+      "File langsung keluar dari riwayat",
+      "Perubahan tracked tetap dapat muncul pada status",
+      "Semua commit menu.json dihapus"
+    ],
+    "answer": 1,
+    "explanation": "Ignore tidak melepaskan file yang sudah tracked. Menentukan file yang keluar dari tracking adalah tindakan terpisah."
+  }
 }

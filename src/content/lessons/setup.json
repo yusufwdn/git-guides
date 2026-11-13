@@ -1,5 +1,5 @@
 {
-  "chapter": 2,
+  "chapter": 1,
   "id": "setup",
   "title": "Siapkan Git untuk pekerjaanmu.",
   "summary": "Pasang Git dan atur identitas yang akan tercatat pada commit.",
@@ -61,6 +61,6 @@
     "command": "git config --show-origin --get user.name\ngit config --show-origin --get user.email",
     "explanation": "Commit baru menggunakan identitas yang benar. Konfigurasi identitas tidak mengubah author pada commit lama."
   },
-  "order": 4,
+  "order": 1,
   "preparationURL": "/persiapan/"
 }

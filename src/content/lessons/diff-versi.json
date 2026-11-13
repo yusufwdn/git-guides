@@ -1,5 +1,5 @@
 {
-  "chapter": 4,
+  "chapter": 6,
   "id": "diff-versi",
   "title": "Jelaskan dua sisi perbandingan.",
   "summary": "Pilih diff working tree, staged, atau snapshot secara sengaja.",
@@ -35,7 +35,7 @@
   "visual": "graph",
   "minutes": 7,
   "level": "Dasar",
-  "prerequisites": ["riwayat"],
+  "prerequisites": ["branch", "revision"],
   "initialState": "main dan fitur-diskon sama-sama ada dan sudah divergen. Latihan rebase menyediakan keadaan ini sebelum proses dimulai.",
   "lab": "rebase",
   "objectives": [
@@ -52,5 +52,5 @@
     "command": "git diff main...fitur-diskon",
     "explanation": "Kamu tahu sumber setiap patch dan tidak mengira diff kosong selalu berarti repo bersih."
   },
-  "order": 14
+  "order": 17
 }

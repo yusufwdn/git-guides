@@ -1,5 +1,5 @@
 {
-  "chapter": 7,
+  "chapter": 8,
   "id": "push",
   "title": "Kirim perubahan yang sudah direkam.",
   "summary": "Atur upstream dan tangani penolakan push dengan memahami riwayat.",
@@ -61,5 +61,5 @@
     "command": "git branch -vv",
     "explanation": "Commit fitur tersedia di remote dan branch mempunyai upstream."
   },
-  "order": 26
+  "order": 27
 }

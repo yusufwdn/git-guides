@@ -36,7 +36,7 @@
   "visual": "graph",
   "minutes": 8,
   "level": "Dasar",
-  "prerequisites": ["staging"],
+  "prerequisites": ["snapshot"],
   "initialState": "Repo punya beberapa commit dan menu.json tracked. Jika pencarian kosong, periksa apakah file pernah berubah pada riwayat itu.",
   "lab": "tags",
   "objectives": [
@@ -57,5 +57,5 @@
     "command": "git log --oneline -- menu.json",
     "explanation": "Kamu menemukan perubahan yang relevan dan bisa membaca patch-nya sebelum mengambil tindakan."
   },
-  "order": 12
+  "order": 11
 }

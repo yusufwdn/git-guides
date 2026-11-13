@@ -1,51 +1,52 @@
 {
-  "chapter": 3,
+  "chapter": 2,
   "id": "staging",
-  "title": "Pilih perubahan. Baru rekam.",
-  "summary": "Pahami git add dan commit dengan melihat isi yang benar-benar masuk snapshot.",
-  "scenario": "Kamu memperbaiki harga pada menu.json dan masih bereksperimen pada diskon.js. Hanya koreksi menu yang sudah siap.",
-  "concept": "git add menyalin isi file saat itu ke index. git commit merekam snapshot index. Gunakan path yang spesifik untuk memisahkan pekerjaan, lalu periksa diff --staged sebelum commit. File lain yang masih berubah tetap berada di working tree.",
-  "analogy": "Sebelum mengirim paket, pilih barang yang memang siap, periksa isinya, lalu segel. Barang di meja yang belum dipilih tidak ikut terkirim.",
+  "title": "Staging: pilih dulu, baru commit",
+  "summary": "Lewat git add, kamu memilih perubahan mana yang masuk ke commit berikutnya. Dengan begitu satu commit bisa berisi satu tujuan saja.",
+  "scenario": "Kamu baru saja membetulkan harga di menu.json, sementara diskon.js masih kamu utak-atik. Koreksi harga sudah siap di-commit, tapi eksperimen diskonnya belum.",
+  "concept": "git add menyalin isi file saat itu ke staging area, yang juga disebut index. Lalu git commit menyimpan apa pun yang ada di staging area sebagai snapshot baru. Jadi isi commit ditentukan oleh staging area, bukan oleh file yang sedang terbuka di editor. Kalau kamu cuma add satu file, perubahan di file lain tetap tinggal di working tree dan nggak ikut masuk commit. Biasakan menjalankan git diff --staged sebelum commit untuk melihat apa yang benar-benar akan masuk.",
+  "analogy": "Mirip mengemas paket. Barang-barang masih berserakan di meja (working tree). Kamu pilih yang sudah siap dan masukkan ke kardus (staging area), cek isinya, lalu segel dan kirim (commit). Barang yang masih di meja nggak ikut terkirim.",
   "steps": [
     {
-      "title": "Lihat pekerjaanmu",
+      "title": "Lihat dulu apa saja yang berubah",
       "command": "git status\ngit diff",
-      "explanation": "Pastikan kamu tahu file mana yang sudah siap dan perubahan mana yang masih percobaan."
+      "explanation": "git status menunjukkan file mana yang berubah, sedangkan git diff menunjukkan baris apa saja yang berubah. Dari sini kamu bisa memutuskan mana yang sudah siap dan mana yang masih percobaan."
     },
     {
-      "title": "Siapkan hanya menu",
+      "title": "Masukkan menu.json saja ke staging",
       "command": "git add menu.json\ngit diff --staged",
-      "explanation": "Yang disiapkan adalah versi menu saat add dijalankan. Perubahan checkout belum ikut."
+      "explanation": "git diff --staged menampilkan isi yang akan masuk ke commit. Di sini seharusnya cuma ada perubahan harga di menu.json, tanpa diskon.js. Yang masuk staging adalah isi file saat add dijalankan, jadi kalau menu.json kamu edit lagi sesudahnya, jalankan add sekali lagi."
     },
     {
-      "title": "Rekam satu tujuan",
+      "title": "Commit dengan pesan yang jelas",
       "command": "git commit -m \"Perbaiki harga kopi susu\"",
-      "explanation": "Pesan menjelaskan tujuan perubahan. Gunakan status lagi untuk melihat pekerjaan yang masih tersisa."
+      "explanation": "Tulis pesan yang menjelaskan tujuan perubahan, bukan sekadar nama file. Setelah itu jalankan git status lagi: diskon.js masih tercatat berubah karena memang belum kamu add."
     }
   ],
-  "result": "Ada satu commit baru untuk koreksi menu. Eksperimen diskon tetap belum di-commit.",
-  "pitfall": "git add . dapat memasukkan perubahan yang belum kamu maksudkan. Periksa status dan staged diff, terutama saat banyak file berubah.",
-  "practice": "Ubah dua file di repo latihan. Commit hanya satu, lalu buktikan file kedua masih berubah melalui status.",
+  "result": "Ada satu commit baru yang isinya cuma koreksi harga menu. Perubahan di diskon.js masih ada di working tree dan belum di-commit.",
+  "pitfall": "git add . memasukkan semua perubahan di folder saat ini, termasuk yang belum kamu niatkan untuk di-commit. Kalau banyak file berubah, lebih aman add per file lalu cek git diff --staged sebelum commit.",
+  "practice": "Di repo latihan, ubah dua file. Commit salah satunya saja, lalu buktikan lewat git status bahwa file kedua masih berubah dan belum masuk commit.",
   "quiz": {
-    "question": "Apa yang direkam oleh git commit?",
+    "question": "Isi commit diambil dari mana?",
     "options": [
-      "Seluruh file di komputer",
-      "Snapshot pada index",
-      "Hanya file yang sedang dibuka di editor"
+      "Semua perubahan terbaru di folder proyek",
+      "Staging area (index)",
+      "File yang sedang terbuka di editor"
     ],
     "answer": 1,
-    "explanation": "Index menentukan isi snapshot commit berikutnya."
+    "explanation": "git commit menyimpan isi staging area. File yang berubah tapi belum di-add nggak ikut masuk."
   },
   "commands": ["git add", "git commit", "git diff --staged"],
   "visual": "staging",
   "minutes": 8,
   "level": "Dasar",
-  "prerequisites": ["status-singkat"],
-  "initialState": "Branch fitur-diskon. menu.json berubah 18000→20000, diskon.js berubah 0→10; belum ada perubahan staged.",
+  "prerequisites": ["tiga-area"],
+  "initialState": "Kamu ada di branch fitur-diskon. Harga di menu.json sudah diubah dari 18000 menjadi 20000, dan nilai di diskon.js diubah dari 0 menjadi 10. Belum ada yang di-add.",
   "lab": "staging",
   "objectives": [
-    "Pahami git add dan commit dengan melihat isi yang benar-benar masuk snapshot.",
-    "Periksa hasilnya: Ada satu commit baru untuk koreksi menu. Eksperimen checkout tetap belum di-commit."
+    "Paham peran staging area di antara file kerja dan commit",
+    "Bisa meng-commit satu file tanpa ikut membawa perubahan file lain",
+    "Terbiasa mengecek git diff --staged sebelum commit"
   ],
   "sources": [
     {
@@ -63,7 +64,7 @@
   ],
   "verification": {
     "command": "git show HEAD:menu.json\ngit diff -- diskon.js",
-    "explanation": "Ada satu commit baru untuk koreksi menu. Eksperimen checkout tetap belum di-commit."
+    "explanation": "git show HEAD:menu.json harus menampilkan harga 20000, artinya koreksi menu sudah masuk commit. git diff -- diskon.js masih menampilkan perubahan dari 0 ke 10, artinya eksperimen diskon belum ikut di-commit."
   },
-  "order": 10
+  "order": 6
 }

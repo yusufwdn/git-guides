@@ -52,5 +52,5 @@
     "command": "git rev-parse main fitur-diskon",
     "explanation": "Jumlah commit tetap sama dan referensi main bergerak ke commit fitur."
   },
-  "order": 21
+  "order": 19
 }

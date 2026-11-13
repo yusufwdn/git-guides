@@ -52,5 +52,5 @@
     "command": "git log --oneline -- checkout.js",
     "explanation": "Pencarian menghasilkan kandidat yang bisa ditinjau satu per satu."
   },
-  "order": 13
+  "order": 12
 }

@@ -52,5 +52,5 @@
     "command": "git status\ngit log --oneline --decorate -3",
     "explanation": "Pekerjaan mempunyai branch yang dapat ditemukan sebelum kamu kembali ke main."
   },
-  "order": 17
+  "order": 15
 }

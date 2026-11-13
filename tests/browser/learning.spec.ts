@@ -100,7 +100,7 @@ test('pencarian isi mendalam dan seluruh hasil; kuis menyimpan hasil', async ({ 
   await expect(page.locator('#search-results a[href="/belajar/bisect-run/"]')).toContainText('125');
   await page.locator('#search-input').fill('git');
   await expect.poll(() => page.locator('#search-results a').count()).toBeGreaterThan(12);
-  await page.goto('/belajar/tiga-area/');
+  await page.goto('/belajar/snapshot/');
   const payload = JSON.parse((await page.locator('#page-data').textContent()) || '{}');
   await page.locator(`#quiz-form input[value="${payload.lesson.quiz.answer}"]`).check();
   await page.locator('#quiz-form button[type=submit]').click();

@@ -1,5 +1,5 @@
 {
-  "chapter": 7,
+  "chapter": 8,
   "id": "upstream",
   "title": "Tentukan branch pembandingmu.",
   "summary": "Atur upstream dan baca dampaknya pada pull serta push.",
@@ -52,5 +52,5 @@
     "command": "git branch -vv",
     "explanation": "Hubungan main ke origin/main terlihat pada branch -vv."
   },
-  "order": 25
+  "order": 26
 }

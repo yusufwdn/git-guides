@@ -1,5 +1,5 @@
 {
-  "chapter": 7,
+  "chapter": 8,
   "id": "strategi-pull",
   "title": "Pull punya pilihan cara bertemu.",
   "summary": "Pilih fast-forward, merge, atau rebase sesuai keadaan dan aturan tim.",
@@ -53,15 +53,5 @@
     "command": "git log --oneline --graph --all",
     "explanation": "Strategi integrasi dipilih secara sadar dan tidak tergantung tebakan tentang default konfigurasi."
   },
-  "order": 27,
-  "checkpoint": {
-    "question": "Server sudah di B, main lokal masih A. Setelah git fetch, apa yang masih harus dilakukan untuk memperbarui main?",
-    "options": [
-      "Integrasi yang sesuai, misalnya merge --ff-only jika memungkinkan",
-      "Mengganti user.email",
-      "Tidak ada; fetch selalu mengubah main"
-    ],
-    "answer": 0,
-    "explanation": "Fetch memperbarui remote-tracking refs; integrasi ke main merupakan langkah terpisah."
-  }
+  "order": 28
 }

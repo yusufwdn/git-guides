@@ -1,5 +1,5 @@
 {
-  "chapter": 1,
+  "chapter": 2,
   "id": "tiga-area",
   "title": "Kenali tiga tempat perubahanmu.",
   "summary": "Working tree, staging area, dan snapshot HEAD menjawab tiga pertanyaan yang berbeda.",
@@ -40,7 +40,7 @@
   "visual": "snapshot",
   "minutes": 8,
   "level": "Dasar",
-  "prerequisites": ["snapshot"],
+  "prerequisites": ["mulai-repo"],
   "initialState": "Repo sudah mempunyai HEAD. Satu file tracked diedit, di-add, lalu diedit lagi agar staged dan unstaged dapat dibandingkan. Siapkan keadaan ini melalui halaman Persiapan: repo pertama dan contoh tiga versi.",
   "lab": "basics",
   "objectives": [
@@ -61,12 +61,6 @@
     "command": "git diff\ngit diff --staged",
     "explanation": "Kamu tahu apakah suatu perubahan masih di working tree, sudah staged, atau sudah menjadi bagian commit."
   },
-  "order": 3,
-  "preparationURL": "/persiapan/",
-  "checkpoint": {
-    "question": "HEAD berisi diskon 0, index 5, dan file kerja 10. Commit tanpa add lagi menyimpan nilai berapa?",
-    "options": ["0", "5", "10"],
-    "answer": 1,
-    "explanation": "Commit merekam index. Edit menjadi 10 belum disalin ke index."
-  }
+  "order": 5,
+  "preparationURL": "/persiapan/"
 }

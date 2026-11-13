@@ -2,50 +2,50 @@
   "chapters": [
     {
       "id": 1,
-      "title": "Memahami Git",
-      "description": "Mulai dari alasan Git ada, lalu kenali keadaan pekerjaanmu.",
+      "title": "Kenalan dengan Git",
+      "description": "Apa itu Git, cara menyiapkannya di komputermu, dan cara mencari bantuan saat lupa.",
       "group": "Fondasi"
     },
     {
       "id": 2,
-      "title": "Siapkan tempat kerja",
-      "description": "Siapkan Git, identitas, dan cara mencari bantuan.",
+      "title": "Commit pertama",
+      "description": "Buat repository Kopi Kita dan simpan versi pertamanya.",
       "group": "Fondasi"
     },
     {
       "id": 3,
-      "title": "Perubahan jadi commit",
-      "description": "Pilih perubahan dengan sengaja dan buat snapshot pertama.",
+      "title": "Rapi sebelum commit",
+      "description": "Baca status dengan cepat, abaikan file yang nggak perlu dilacak, dan buat commit yang fokus.",
       "group": "Fondasi"
     },
     {
       "id": 4,
-      "title": "Membaca jejak perubahan",
-      "description": "Jelajahi riwayat dan bandingkan versi proyek.",
+      "title": "Membaca riwayat",
+      "description": "Telusuri commit lama dan tunjuk versi tertentu di riwayat.",
       "group": "Fondasi"
     },
     {
       "id": 5,
       "title": "Bekerja dengan branch",
-      "description": "Beri pekerjaan baru jalurnya sendiri.",
+      "description": "Bikin jalur terpisah untuk setiap pekerjaan baru.",
       "group": "Kerja sehari-hari"
     },
     {
       "id": 6,
       "title": "Merge tanpa panik",
-      "description": "Gabungkan pekerjaan dan pahami konflik.",
+      "description": "Bandingkan dua branch, gabungkan, lalu selesaikan konflik.",
       "group": "Kerja sehari-hari"
     },
     {
       "id": 7,
-      "title": "Lokal bertemu remote",
-      "description": "Pahami arah perjalanan fetch, pull, dan push.",
+      "title": "Kenalan dengan remote",
+      "description": "Hubungkan repo lokal dengan server dan ambil perubahan dari tim.",
       "group": "Kerja sehari-hari"
     },
     {
       "id": 8,
-      "title": "Git untuk kerja tim",
-      "description": "Berkontribusi, menerima review, dan memilih workflow.",
+      "title": "Kirim dan kerja bareng tim",
+      "description": "Kirim commit ke server, minta review, dan sepakati alur kerja tim.",
       "group": "Kerja sehari-hari"
     },
     {

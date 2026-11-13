@@ -61,5 +61,15 @@
     "command": "git log --oneline --graph --all\ngit branch -vv",
     "explanation": "Kamu mengetahui perubahan remote sebelum memutuskan integrasi."
   },
-  "order": 24
+  "order": 25,
+  "checkpoint": {
+    "question": "Server sudah di B, main lokal masih A. Setelah git fetch, apa yang masih harus dilakukan untuk memperbarui main?",
+    "options": [
+      "Integrasi yang sesuai, misalnya merge --ff-only jika memungkinkan",
+      "Mengganti user.email",
+      "Tidak ada; fetch selalu mengubah main"
+    ],
+    "answer": 0,
+    "explanation": "Fetch memperbarui remote-tracking refs; integrasi ke main merupakan langkah terpisah."
+  }
 }

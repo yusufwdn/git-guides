@@ -1,5 +1,5 @@
 {
-  "chapter": 2,
+  "chapter": 7,
   "id": "autentikasi",
   "title": "Identitas commit berbeda dari izin server.",
   "summary": "Bedakan user.name, credential helper, HTTPS, dan SSH.",
@@ -35,7 +35,7 @@
   "visual": "remote",
   "minutes": 7,
   "level": "Dasar",
-  "prerequisites": ["setup"],
+  "prerequisites": ["setup", "git-terdistribusi"],
   "initialState": "Repo mempunyai origin. Latihan remote menggunakan path lokal; contoh HTTPS/SSH membutuhkan konfigurasi penyedia bila dipakai nyata.",
   "lab": "remote",
   "objectives": [
@@ -56,15 +56,5 @@
     "command": "git remote get-url origin",
     "explanation": "Kamu dapat membedakan error identitas, koneksi, autentikasi, dan izin branch."
   },
-  "order": 7,
-  "checkpoint": {
-    "question": "user.name sudah benar, tetapi server menolak push karena akun tidak punya izin. Apa yang diperiksa?",
-    "options": [
-      "Mengganti author menjadi nama admin",
-      "Metode login dan izin akun pada repository",
-      "Menghapus folder .git"
-    ],
-    "answer": 1,
-    "explanation": "Author commit dan hak akses server merupakan dua hal terpisah."
-  }
+  "order": 23
 }

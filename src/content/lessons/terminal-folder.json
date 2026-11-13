@@ -1,5 +1,5 @@
 {
-  "chapter": 2,
+  "chapter": 1,
   "id": "terminal-folder",
   "title": "Pastikan sedang bekerja di folder yang benar.",
   "summary": "Kenali lokasi terminal, root repository, dan path relatif.",
@@ -52,6 +52,6 @@
     "command": "git rev-parse --show-toplevel",
     "explanation": "Kamu dapat menyebut repo yang akan terkena operasi sebelum menjalankan command yang mengubah keadaan."
   },
-  "order": 5,
+  "order": 2,
   "preparationURL": "/persiapan/"
 }

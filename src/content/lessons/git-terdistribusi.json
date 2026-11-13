@@ -1,5 +1,5 @@
 {
-  "chapter": 1,
+  "chapter": 7,
   "id": "git-terdistribusi",
   "title": "Riwayat ada di laptopmu juga.",
   "summary": "Pahami kemampuan lokal dan batas salinan repository.",
@@ -35,7 +35,7 @@
   "visual": "graph",
   "minutes": 7,
   "level": "Dasar",
-  "prerequisites": ["snapshot"],
+  "prerequisites": ["branch"],
   "initialState": "Repo lokal sudah punya setidaknya satu commit dan sebuah branch. Tidak memerlukan remote internet. Siapkan keadaan ini melalui halaman Persiapan: repo pertama dan contoh tiga versi.",
   "lab": "basics",
   "objectives": [
@@ -56,6 +56,6 @@
     "command": "git log --oneline -5",
     "explanation": "Kamu tahu operasi mana yang tetap bisa dilakukan offline dan mana yang perlu menghubungi remote."
   },
-  "order": 2,
+  "order": 22,
   "preparationURL": "/persiapan/"
 }

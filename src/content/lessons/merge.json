@@ -53,5 +53,5 @@
     "command": "git log --graph --oneline --all",
     "explanation": "main mencakup perubahan fitur, dengan bentuk riwayat sesuai hubungan kedua branch."
   },
-  "order": 20
+  "order": 18
 }

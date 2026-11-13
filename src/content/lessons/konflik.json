@@ -57,5 +57,5 @@
     "command": "git status\ngit log --parents -1",
     "explanation": "Merge selesai dengan hasil yang kamu pilih, atau proses dibatalkan sebelum diselesaikan."
   },
-  "order": 22
+  "order": 20
 }

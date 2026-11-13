@@ -35,7 +35,7 @@
   "visual": "staging",
   "minutes": 7,
   "level": "Dasar",
-  "prerequisites": ["mulai-repo", "tiga-area"],
+  "prerequisites": ["staging"],
   "initialState": "Branch fitur-diskon, HEAD diskon 0, index diskon 5, working tree diskon 10. Gunakan latihan stash-index.",
   "lab": "stash-index",
   "objectives": [
@@ -56,5 +56,5 @@
     "command": "git status --short\ngit show :diskon.js",
     "explanation": "Kamu bisa menjelaskan status MM tanpa menganggap Git menggandakan file."
   },
-  "order": 9
+  "order": 8
 }

@@ -1,5 +1,5 @@
 {
-  "chapter": 1,
+  "chapter": 2,
   "id": "snapshot",
   "title": "Yang direkam adalah keadaan proyek.",
   "summary": "Bedakan snapshot, patch, dan file yang belum direkam.",
@@ -35,7 +35,7 @@
   "visual": "snapshot",
   "minutes": 7,
   "level": "Dasar",
-  "prerequisites": ["kenalan-git"],
+  "prerequisites": ["staging"],
   "initialState": "Repo punya commit HEAD yang melacak menu.json. Working tree boleh berbeda; perintah contoh hanya membaca. Siapkan keadaan ini melalui halaman Persiapan: repo pertama dan contoh tiga versi.",
   "lab": "basics",
   "objectives": [
@@ -56,6 +56,12 @@
     "command": "git show HEAD:menu.json",
     "explanation": "Kamu dapat membaca versi tersimpan tanpa menimpa file yang sedang dikerjakan."
   },
-  "order": 1,
-  "preparationURL": "/persiapan/"
+  "order": 7,
+  "preparationURL": "/persiapan/",
+  "checkpoint": {
+    "question": "HEAD berisi diskon 0, index 5, dan file kerja 10. Commit tanpa add lagi menyimpan nilai berapa?",
+    "options": ["0", "5", "10"],
+    "answer": 1,
+    "explanation": "Commit merekam index. Edit menjadi 10 belum disalin ke index."
+  }
 }

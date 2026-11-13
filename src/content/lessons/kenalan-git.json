@@ -1,46 +1,47 @@
 {
   "chapter": 1,
   "id": "kenalan-git",
-  "title": "Versi berubah. Jejaknya tetap ada.",
-  "summary": "Kenali Git sebagai pencatat snapshot proyek, supaya perubahan bisa dipahami dan ditinjau kembali.",
-  "scenario": "Bayangkan kamu mengubah harga pada menu website Kopi Kita. Supaya versi lama tetap ada, kamu membuat salinan file menu.json dengan nama menu-lama.json, menu-baru.json, dan menu-final.json. Rekanmu mengedit salinan yang berbeda. Versi mana yang sebenarnya dipakai?",
-  "concept": "Git adalah version control terdistribusi. Commit merekam snapshot file yang dilacak beserta metadata dan hubungan ke riwayat sebelumnya. Repository lokal bisa dipakai tanpa koneksi internet. GitHub dan GitLab adalah layanan yang bisa menyimpan repository remote dan menambahkan fitur kolaborasi.",
-  "analogy": "Bayangkan album foto perkembangan tokomu. Foto menyimpan keadaan pada suatu waktu, sementara keterangan menjelaskan alasan perubahan. Git menyimpan snapshot proyek, bukan foto layar dan bukan hanya daftar baris yang diedit.",
+  "title": "Kenalan dulu dengan Git",
+  "summary": "Git mencatat setiap versi proyekmu, jadi kamu selalu bisa melihat apa yang berubah, kapan, dan kenapa.",
+  "scenario": "Kamu mau mengubah harga di menu website Kopi Kita. Biar versi lama nggak hilang, kamu bikin salinan: menu-lama.json, menu-baru.json, lalu menu-final.json. Ternyata rekanmu juga mengedit salah satu salinan itu. Sekarang, file mana yang sebenarnya dipakai?",
+  "concept": "Git adalah version control, yaitu alat untuk mencatat perubahan proyek dari waktu ke waktu. Setiap kali kamu membuat commit, Git menyimpan potret (snapshot) semua file yang dilacaknya, lengkap dengan siapa yang mengubah, kapan, dan pesan yang menjelaskan alasannya. Seluruh catatan ini tersimpan di komputermu sendiri, jadi kamu tetap bisa commit tanpa internet. GitHub dan GitLab itu hal yang berbeda: keduanya adalah layanan untuk menaruh salinan repository di server supaya bisa dipakai bareng tim.",
+  "analogy": "Bayangkan album foto perkembangan kedaimu. Tiap foto menunjukkan keadaan kedai pada satu waktu, dan keterangan di bawahnya menjelaskan apa yang berubah. Commit mirip seperti itu: yang disimpan adalah keadaan seluruh proyek, bukan cuma daftar baris yang kamu edit.",
   "steps": [
     {
-      "title": "Kenali Git yang terpasang",
+      "title": "Cek versi Git di komputermu",
       "command": "git --version",
-      "explanation": "Perintah ini menampilkan versi Git di komputermu. Jika belum tersedia, buka halaman persiapan untuk memasangnya."
+      "explanation": "Perintah ini menampilkan versi Git yang terpasang. Kalau yang muncul justru pesan command not found atau not recognized, berarti Git belum terpasang. Ikuti dulu halaman persiapan."
     },
     {
-      "title": "Baca pengantar lokal",
+      "title": "Buka manual bawaan Git",
       "command": "git help git",
-      "explanation": "Buka manual utama. Sebagian sistem menampilkan manual di browser atau pager; tekan q untuk keluar dari pager."
+      "explanation": "Git punya manual lengkap yang bisa dibuka tanpa internet. Di Windows biasanya manual terbuka di browser, sedangkan di macOS dan Linux muncul langsung di terminal. Tekan q untuk keluar dari tampilan manual di terminal."
     }
   ],
-  "result": "Kamu bisa membedakan Git, repository, commit, dan layanan hosting. Tidak ada file proyek yang berubah dalam demonstrasi ini.",
-  "pitfall": "Git bukan backup otomatis seluruh komputer. Perubahan yang belum direkam dan file yang tidak dilacak tidak otomatis tersimpan dalam riwayat.",
-  "practice": "Bayangkan perubahan harga menu minggu ini. Tuliskan keadaan yang perlu direkam dan alasan yang akan kamu sertakan pada commit.",
+  "result": "Kamu bisa membedakan Git, repository, commit, dan layanan seperti GitHub. Belum ada file proyek yang berubah di materi ini.",
+  "pitfall": "Git bukan backup otomatis. Perubahan yang belum di-commit dan file yang tidak dilacak Git nggak tersimpan di riwayat. Riwayatnya sendiri juga cuma ada di laptopmu sampai kamu mengirimnya ke remote, jadi kalau laptopnya rusak, riwayat itu ikut hilang.",
+  "practice": "Bayangkan kamu mengubah harga menu minggu ini. Tulis apa saja yang berubah, lalu buat satu kalimat singkat yang akan kamu pakai sebagai pesan commit-nya.",
   "quiz": {
-    "question": "Mana yang bisa dilakukan tanpa internet?",
+    "question": "Mana yang tetap bisa kamu lakukan tanpa internet?",
     "options": [
       "Membuat commit di repository lokal",
-      "Mengirim push ke server internet",
+      "Push ke server",
       "Membuka pull request di GitHub"
     ],
     "answer": 0,
-    "explanation": "Commit adalah operasi lokal. Komunikasi dengan server memerlukan akses ke remote tersebut."
+    "explanation": "Commit cuma menulis ke repository di komputermu, jadi nggak butuh internet. Push dan pull request perlu terhubung ke server."
   },
   "commands": ["git --version", "git help"],
   "visual": "snapshot",
   "minutes": 6,
   "level": "Dasar",
   "prerequisites": [],
-  "initialState": "Kamu bisa membaca pengenalan tanpa menyiapkan proyek. Untuk mencoba git --version, Git perlu terpasang; panduan instalasi tersedia di halaman persiapan.",
+  "initialState": "Materi ini bisa dibaca tanpa menyiapkan proyek apa pun. Untuk mencoba git --version, Git perlu terpasang dulu. Caranya ada di halaman persiapan.",
   "lab": "basics",
   "objectives": [
-    "Kenali Git sebagai pencatat snapshot proyek, supaya perubahan bisa dipahami dan ditinjau kembali.",
-    "Periksa hasilnya: Kamu bisa membedakan Git, repository, commit, dan layanan hosting. Tidak ada file proyek yang berubah dalam demonstrasi ini."
+    "Tahu bedanya Git, repository, commit, dan layanan seperti GitHub atau GitLab",
+    "Paham kenapa commit bisa dibuat tanpa internet",
+    "Bisa mengecek apakah Git sudah terpasang di komputermu"
   ],
   "sources": [
     {
@@ -50,7 +51,7 @@
   ],
   "verification": {
     "command": "git --version",
-    "explanation": "Kamu bisa membedakan Git, repository, commit, dan layanan hosting. Tidak ada file proyek yang berubah dalam demonstrasi ini."
+    "explanation": "Kalau muncul tulisan seperti git version 2.47.0, Git sudah siap dipakai. Angka versinya boleh berbeda dari contoh ini."
   },
   "order": 0,
   "preparationURL": "/persiapan/"

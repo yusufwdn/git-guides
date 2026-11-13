@@ -1,5 +1,5 @@
 {
-  "chapter": 2,
+  "chapter": 1,
   "id": "bantuan",
   "title": "Saat lupa, tahu tempat bertanya.",
   "summary": "Gunakan bantuan bawaan Git dan pahami terminal sebelum menyalin command.",
@@ -56,5 +56,11 @@
     "command": "git stash -h",
     "explanation": "Kamu bisa memeriksa sintaks tanpa mengubah repository."
   },
-  "order": 6
+  "order": 3,
+  "checkpoint": {
+    "question": "Di laptopmu, user.name global diisi \"Rani\". Di repo kopi-kita, kamu menjalankan git config user.name \"Rani Kopi Kita\". Nama mana yang tercatat saat kamu commit di repo itu?",
+    "options": ["Rani", "Rani Kopi Kita", "Git menolak commit karena namanya bentrok"],
+    "answer": 1,
+    "explanation": "Pengaturan lokal di sebuah repo lebih diutamakan daripada pengaturan global. Jadi commit di kopi-kita memakai Rani Kopi Kita, sedangkan repo lain tetap memakai Rani."
+  }
 }

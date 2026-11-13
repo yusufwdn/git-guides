@@ -53,5 +53,11 @@
     "command": "git branch -vv",
     "explanation": "Nama branch rapi dan kamu tahu apakah operasi hanya berlaku lokal."
   },
-  "order": 18
+  "order": 16,
+  "checkpoint": {
+    "question": "main dan fitur menunjuk A. Satu commit B dibuat ketika fitur aktif. Di mana main sekarang?",
+    "options": ["Di A", "Di B", "Terhapus"],
+    "answer": 0,
+    "explanation": "Commit memajukan branch aktif fitur. Referensi main tetap di A."
+  }
 }

@@ -57,5 +57,5 @@
     "command": "git log --graph --oneline --all --decorate",
     "explanation": "main dan fitur-diskon dapat menunjuk titik yang berbeda tanpa kehilangan riwayat yang sama."
   },
-  "order": 16
+  "order": 14
 }

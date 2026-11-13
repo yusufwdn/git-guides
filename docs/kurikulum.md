@@ -35,6 +35,8 @@ Bab 1-8 disusun ulang. Bab 9-16 tetap di urutan 32-65.
 | 7   | Kenalan dengan remote      | git-terdistribusi, autentikasi, branch-tracking, fetch-pull    |
 | 8   | Kirim dan kerja bareng tim | upstream, push, strategi-pull, review, fork-upstream, workflow |
 
+Susunan bab 7-8 di tabel ini diubah lagi oleh keputusan 2026-11-14 di bawah.
+
 Materi yang pindah bab:
 
 | Materi                                | Bab lama | Bab baru |
@@ -61,3 +63,31 @@ Alternatif yang ditolak: mempertahankan bab 1 sebagai konsep murni tanpa praktik
   - `tiga-area`, `staging`, dan `snapshot` membangun repo Kopi Kita secara berurutan.
   - `riwayat` tidak memakai `--graph --all` sebelum branch diajarkan. `revision` tidak membahas `HEAD^2` sebelum merge.
   - `status-singkat` dan materi lain yang verifikasinya memakai command dari bab lebih belakang diperiksa ulang.
+
+## Catatan keputusan: remote lokal dan posisi `push` (2026-11-14)
+
+### Masalah
+
+Bab 7-8 membutuhkan server dan rekan kerja. Susunan sebelumnya juga menaruh `fetch-pull` (bab 7) sebelum `push` (bab 8), padahal `fetch` baru terlihat hasilnya kalau ada orang lain yang sudah push ke server.
+
+### Keputusan
+
+1. **Server latihan berupa bare repository lokal.** Pembaca membuat `kopi-kita-server.git` dengan `git clone --bare kopi-kita kopi-kita-server.git`, lalu `kopi-kita-rani` sebagai clone biasa yang berperan sebagai laptop rekan. Materi fork menambah `kopi-kita-fork.git` dan `kopi-kita-kontribusi`. Semua folder berdampingan dengan `kopi-kita`, sehingga alamat remote cukup `../nama-folder`.
+2. **`push` pindah ke bab 7**, di antara `branch-tracking` dan `fetch-pull`. Urutannya menjadi: Rani commit (ahead 1), Rani push, lalu pembaca fetch dan merge.
+
+| Bab | Materi                                                            |
+| --- | ----------------------------------------------------------------- |
+| 7   | git-terdistribusi, autentikasi, branch-tracking, push, fetch-pull |
+| 8   | upstream, strategi-pull, review, fork-upstream, workflow          |
+
+Alternatif yang ditolak:
+
+- **Memakai GitHub sungguhan.** Realistis untuk pull request, tetapi pembaca wajib punya akun, langkahnya bergantung pada tampilan website yang bisa berubah, dan alurnya tidak bisa diverifikasi otomatis. Hal yang khusus layanan hosting (login, pull request, tombol Fork, protected branch) dijelaskan sebagai catatan "di GitHub, langkah berikutnya adalah ...".
+- **Fetch dari laptop Rani langsung tanpa server.** Benar secara Git, tetapi tidak mencerminkan alur tim sehari-hari dan membuat `origin` menunjuk laptop rekan.
+
+### Konsekuensi
+
+- Pembaca bekerja di beberapa folder. Setiap materi menyebut folder aktif di `initialState` dan memakai `cd` di langkah pertama ketika pindah folder.
+- Perilaku `git pull` tanpa opsi berbeda antarinstalasi: Git for Windows mengatur `pull.rebase=false` di konfigurasi sistem, instalasi lain berhenti dengan pesan `Need to specify how to reconcile divergent branches`. Materi selalu menulis `--ff-only`, `--no-rebase`, atau `--rebase` secara eksplisit.
+- Commit merge dari pull memakai `--no-edit` supaya editor tidak terbuka.
+- Paket latihan `remote` tetap dipasang hanya di `fetch-pull`, karena isinya memakai `fetch` dan `push` yang baru lengkap diajarkan di materi itu.

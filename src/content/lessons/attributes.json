@@ -1,0 +1,60 @@
+{
+  "chapter": 15,
+  "id": "attributes",
+  "title": "Biar beda komputer tetap selaras.",
+  "summary": "Atur atribut file agar line endings dan perlakuan file konsisten.",
+  "scenario": "Kamu memakai Windows, Rani memakai Linux. Satu perubahan kecil terlihat seperti seluruh file berubah karena perbedaan akhir baris.",
+  "concept": ".gitattributes menyimpan aturan per path yang bisa dibagikan bersama repository. Misalnya * text=auto dan *.sh text eol=lf. Pengaturan text mengatur normalisasi pada index, sedangkan eol memengaruhi working tree. File biner perlu diperlakukan sesuai jenisnya.",
+  "analogy": "Tim menyepakati format kertas sebelum saling mengoreksi, agar pergantian format tidak menyamar sebagai perubahan isi.",
+  "steps": [
+    {
+      "title": "Periksa atribut yang berlaku",
+      "command": "git check-attr text eol -- checkout.js",
+      "explanation": "Buat .gitattributes melalui editor dengan aturan yang disepakati tim."
+    },
+    {
+      "title": "Normalisasi dengan peninjauan",
+      "command": "git add --renormalize .\ngit diff --staged",
+      "explanation": "Lakukan saat working tree sudah dipahami dan sebagai perubahan khusus. Tinjau file yang terdampak sebelum commit."
+    }
+  ],
+  "result": "Perubahan format dapat dipisahkan dari perubahan logika dan aturan konsisten ikut dibagikan.",
+  "pitfall": "Jangan menjalankan normalisasi besar bersama bug fix kecil. Ia dapat mempersulit review dan memicu konflik pada branch lain.",
+  "practice": "Buat aturan eol=lf untuk file .sh pada repo latihan dan periksa hasil check-attr.",
+  "quiz": {
+    "question": "File mana yang tepat untuk atribut path bersama tim?",
+    "options": [".gitattributes", ".gitignore sebagai pengganti semua aturan", ".env"],
+    "answer": 0,
+    "explanation": "Attributes mengatur perlakuan file; ignore mengatur file untracked yang diabaikan."
+  },
+  "commands": ["git check-attr", "git add --renormalize"],
+  "visual": "snapshot",
+  "minutes": 6,
+  "level": "Lanjutan",
+  "prerequisites": ["partial-staging"],
+  "initialState": "Repo latihan bersih sebelum normalisasi. Buat .gitattributes melalui editor; jangan gabungkan renormalisasi dengan edit logika yang belum ditinjau.",
+  "lab": "basics",
+  "objectives": [
+    "Atur atribut file agar line endings dan perlakuan file konsisten.",
+    "Periksa hasilnya: Perubahan format dapat dipisahkan dari perubahan logika dan aturan konsisten ikut dibagikan."
+  ],
+  "sources": [
+    {
+      "title": "Manual git check-attr",
+      "url": "https://git-scm.com/docs/git-check-attr"
+    },
+    {
+      "title": "Manual git add",
+      "url": "https://git-scm.com/docs/git-add"
+    },
+    {
+      "title": "Aturan atribut path",
+      "url": "https://git-scm.com/docs/gitattributes"
+    }
+  ],
+  "verification": {
+    "command": "git check-attr text eol -- checkout.js",
+    "explanation": "Perubahan format dapat dipisahkan dari perubahan logika dan aturan konsisten ikut dibagikan."
+  },
+  "order": 58
+}

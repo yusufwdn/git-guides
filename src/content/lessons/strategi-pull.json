@@ -1,0 +1,57 @@
+{
+  "chapter": 7,
+  "id": "strategi-pull",
+  "title": "Pull punya pilihan cara bertemu.",
+  "summary": "Pilih fast-forward, merge, atau rebase sesuai keadaan dan aturan tim.",
+  "scenario": "Kamu dan Rani sama-sama punya commit baru. Pull meminta keputusan cara mempertemukan kedua jalur.",
+  "concept": "Pull mengambil data lalu mengintegrasikan branch yang dipilih. --ff-only menolak divergensi; --no-rebase memilih merge; --rebase memutar ulang commit lokal di atas hasil yang diambil. Perubahan hash akibat rebase perlu dipahami sebelum jalur lokal yang sudah dibagikan ditulis ulang.",
+  "analogy": "Menerima kiriman baru bisa berarti melanjutkan halaman yang sama, membuat titik pertemuan, atau menyusun ulang draf sendiri.",
+  "steps": [
+    {
+      "title": "Tentukan keadaan dahulu",
+      "command": "git fetch origin\ngit log --graph --oneline --all -10",
+      "explanation": "Lihat apakah main hanya tertinggal atau benar-benar divergen."
+    },
+    {
+      "title": "Jika hanya tertinggal",
+      "command": "git pull --ff-only origin main",
+      "explanation": "Contoh ini untuk main aktif pada latihan remote sebelum commit lokal tambahan."
+    },
+    {
+      "title": "Alternatif pada branch pribadi",
+      "command": "git pull --rebase origin main",
+      "explanation": "Ini pilihan berbeda ketika commit lokal memang boleh diputar ulang. Jangan jalankan sebagai langkah lanjutan wajib setelah contoh sebelumnya."
+    }
+  ],
+  "result": "Strategi integrasi dipilih secara sadar dan tidak tergantung tebakan tentang default konfigurasi.",
+  "pitfall": "Perilaku default pull dapat berbeda karena konfigurasi. Tulis opsi eksplisit saat sedang belajar.",
+  "practice": "Selesaikan latihan remote melalui fetch + merge --ff-only, lalu jelaskan hubungannya dengan pull --ff-only.",
+  "quiz": {
+    "question": "Strategi mana yang menolak divergensi?",
+    "options": ["--ff-only", "--rebase selalu menolak", "--no-rebase selalu menolak"],
+    "answer": 0,
+    "explanation": "FF-only mengizinkan integrasi yang cukup memajukan referensi."
+  },
+  "commands": ["git pull --ff-only", "git pull --rebase"],
+  "visual": "remote",
+  "minutes": 9,
+  "level": "Menengah",
+  "prerequisites": ["push"],
+  "initialState": "Latihan remote dimulai pada main yang hanya tertinggal. Contoh --rebase adalah alternatif untuk keadaan berbeda, bukan urutan wajib.",
+  "lab": "remote",
+  "objectives": [
+    "Pilih fast-forward, merge, atau rebase sesuai keadaan dan aturan tim.",
+    "Periksa hasilnya: Strategi integrasi dipilih secara sadar dan tidak tergantung tebakan tentang default konfigurasi."
+  ],
+  "sources": [
+    {
+      "title": "Manual git pull",
+      "url": "https://git-scm.com/docs/git-pull"
+    }
+  ],
+  "verification": {
+    "command": "git log --oneline --graph --all",
+    "explanation": "Strategi integrasi dipilih secara sadar dan tidak tergantung tebakan tentang default konfigurasi."
+  },
+  "order": 27
+}

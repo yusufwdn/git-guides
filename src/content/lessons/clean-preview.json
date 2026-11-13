@@ -1,0 +1,57 @@
+{
+  "chapter": 10,
+  "id": "clean-preview",
+  "title": "Lihat daftar sebelum membersihkan.",
+  "summary": "Gunakan dry-run dan path spesifik untuk file untracked.",
+  "scenario": "Ada catatan sementara, cache ignored, dan edit harga yang belum di-commit. Kamu hanya ingin membuang catatan sementara.",
+  "concept": "Clean menghapus file untracked sesuai opsi/path. -n adalah dry-run, -d menyertakan direktori, dan -f meminta pelaksanaan. File ignored dikecualikan secara default; -x mengubah cakupan itu. Clean tidak memindahkan HEAD dan bukan cara mengembalikan isi tracked.",
+  "analogy": "Sebelum membuang barang di meja, tulis daftar yang akan masuk tempat sampah. Pilih satu barang bila hanya itu yang ingin dibuang.",
+  "steps": [
+    {
+      "title": "Lihat kandidat",
+      "command": "git status --short\ngit clean -nd",
+      "explanation": "Latihan clean punya satu catatan untracked dan satu folder cache ignored. Perhatikan yang tidak masuk daftar."
+    },
+    {
+      "title": "Hapus path yang memang dipilih",
+      "command": "git clean -f -- catatan-sementara.txt",
+      "explanation": "Hapus hanya file contoh itu. Tidak perlu menambahkan -x."
+    },
+    {
+      "title": "Periksa yang dipertahankan",
+      "command": "git diff -- menu.json\ngit status --short --ignored",
+      "explanation": "Edit menu dan cache seharusnya tetap ada."
+    }
+  ],
+  "result": "Hanya catatan-sementara.txt terhapus; cache dan perubahan tracked tetap ada.",
+  "pitfall": "Untracked yang dihapus clean biasanya tidak bisa dikembalikan oleh Git. Mulai dari preview dan jangan menjadikan -fdx kebiasaan.",
+  "practice": "Selesaikan latihan clean dan jelaskan mengapa status biasa tidak menampilkan cache ignored.",
+  "quiz": {
+    "question": "Opsi mana yang hanya menampilkan rencana clean?",
+    "options": ["-n", "-f", "-x"],
+    "answer": 0,
+    "explanation": "Dry-run tidak menghapus file."
+  },
+  "commands": ["git clean -n", "git clean"],
+  "visual": "snapshot",
+  "minutes": 9,
+  "level": "Menengah",
+  "prerequisites": ["reflog-rescue"],
+  "initialState": "Latihan clean: catatan-sementara.txt untracked, cache/data.txt ignored, dan menu.json tracked berubah. Hanya catatan boleh dibuang.",
+  "lab": "clean",
+  "objectives": [
+    "Gunakan dry-run dan path spesifik untuk file untracked.",
+    "Periksa hasilnya: Hanya catatan-sementara.txt terhapus; cache dan perubahan tracked tetap ada."
+  ],
+  "sources": [
+    {
+      "title": "Manual git clean",
+      "url": "https://git-scm.com/docs/git-clean"
+    }
+  ],
+  "verification": {
+    "command": "git status --short --ignored\ngit diff -- menu.json",
+    "explanation": "Hanya catatan-sementara.txt terhapus; cache dan perubahan tracked tetap ada."
+  },
+  "order": 40
+}

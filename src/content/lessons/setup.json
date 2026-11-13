@@ -1,0 +1,61 @@
+{
+  "chapter": 2,
+  "id": "setup",
+  "title": "Siapkan Git untuk pekerjaanmu.",
+  "summary": "Pasang Git dan atur identitas yang akan tercatat pada commit.",
+  "scenario": "Kamu baru bergabung di proyek Kopi Kita. Commit pertama justru memakai nama pengguna komputer lama.",
+  "concept": "Instal Git dari git-scm.com/install untuk sistem operasimu. Di Windows kamu bisa memakai PowerShell atau Git Bash; macOS/Linux bisa memakai terminal yang tersedia. Konfigurasi --global berlaku untuk akun pengguna, sedangkan --local berlaku untuk satu repository dan menimpa nilai global untuk repo tersebut.",
+  "analogy": "Identitas commit seperti nama penulis di buku catatan. Nama ini mencatat kepengarangan; ia bukan password dan tidak otomatis membuatmu login ke server.",
+  "steps": [
+    {
+      "title": "Periksa instalasi",
+      "command": "git --version",
+      "explanation": "Buka terminal baru sesudah instalasi bila perintah belum dikenali."
+    },
+    {
+      "title": "Atur identitas",
+      "command": "git config --global user.name \"Nama Kamu\"\ngit config --global user.email \"kamu@example.com\"",
+      "explanation": "Ganti dengan identitasmu. Untuk proyek kantor tertentu, jalankan konfigurasi tanpa --global dari dalam repo."
+    },
+    {
+      "title": "Periksa asal konfigurasi",
+      "command": "git config --list --show-origin",
+      "explanation": "Lihat file mana yang memberikan nilai konfigurasi. Hindari membagikan output yang berisi informasi sensitif."
+    }
+  ],
+  "result": "Commit baru menggunakan identitas yang benar. Konfigurasi identitas tidak mengubah author pada commit lama.",
+  "pitfall": "Email commit dapat terlihat ketika repository dibagikan. Gunakan email yang memang boleh dipublikasikan atau alamat privasi dari layanan hosting.",
+  "practice": "Atur identitas global lalu gunakan --local di repo latihan. Periksa nilai user.email dari dalam dan luar repo.",
+  "quiz": {
+    "question": "Konfigurasi mana yang menang untuk repo tertentu?",
+    "options": [
+      "Nilai --local pada repo itu",
+      "Nilai --global selalu menang",
+      "Yang namanya paling pendek"
+    ],
+    "answer": 0,
+    "explanation": "Konfigurasi repository menimpa nilai global yang sama."
+  },
+  "commands": ["git config", "git --version"],
+  "visual": "snapshot",
+  "minutes": 8,
+  "level": "Dasar",
+  "prerequisites": ["kenalan-git"],
+  "initialState": "Git terpasang. Contoh --global memang mengubah preferensi pengguna; gunakan nilai identitas sendiri. Scope --local memerlukan repo.",
+  "lab": "basics",
+  "objectives": [
+    "Pasang Git dan atur identitas yang akan tercatat pada commit.",
+    "Periksa hasilnya: Commit baru menggunakan identitas yang benar. Konfigurasi identitas tidak mengubah author pada commit lama."
+  ],
+  "sources": [
+    {
+      "title": "Manual git config",
+      "url": "https://git-scm.com/docs/git-config"
+    }
+  ],
+  "verification": {
+    "command": "git config --show-origin --get user.name\ngit config --show-origin --get user.email",
+    "explanation": "Commit baru menggunakan identitas yang benar. Konfigurasi identitas tidak mengubah author pada commit lama."
+  },
+  "order": 4
+}

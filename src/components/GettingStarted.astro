@@ -1,0 +1,151 @@
+---
+import Pages from '../renderers/index.js';
+const command = Pages.commandBlock;
+---
+
+<article class="page-container onboarding">
+  <div class="breadcrumbs">
+    <a href="/">Beranda</a>
+    <span>›</span>
+    <strong>Sebelum mulai</strong>
+  </div>
+  <div class="eyebrow">DARI KOMPUTER KOSONG KE COMMIT PERTAMA</div>
+  <h1 class="page-title">
+    Siapkan tempat
+    <br />
+    untuk mencoba.
+  </h1>
+  <p class="page-intro">
+    Belum punya Git atau belum pernah membuka terminal? Ikuti lima langkah ini. Repository pertama
+    ini dipakai untuk contoh dasar pada bab 1. Latihan lanjutan menyediakan folder awalnya sendiri.
+  </p>
+  <section class="lesson-section" id="instalasi">
+    <h2>1. Pasang Git sesuai sistem operasi.</h2>
+    <details open>
+      <summary>Windows · PowerShell atau Git Bash</summary>
+      <p>
+        Unduh installer dari{' '}
+        <a href="https://git-scm.com/install/windows" target="_blank" rel="noopener noreferrer">
+          halaman Git untuk Windows
+        </a>
+        , jalankan, lalu gunakan pilihan agar Git tersedia dari command line. Setelah selesai, buka
+        PowerShell baru melalui menu Start. Git Bash yang ikut terpasang juga bisa digunakan.
+      </p>
+    </details>
+    <details>
+      <summary>macOS · Terminal</summary>
+      <p>
+        Buka aplikasi Terminal. Jalankan perintah di bawah untuk memeriksa Git; bila sistem
+        menawarkan Command Line Tools, selesaikan pemasangannya. Pilihan instalasi lain tersedia di{' '}
+        <a href="https://git-scm.com/install/mac" target="_blank" rel="noopener noreferrer">
+          panduan resmi macOS
+        </a>
+        .
+      </p>
+    </details>
+    <details>
+      <summary>Linux · Terminal</summary>
+      <p>
+        Pasang Git melalui pengelola paket distro. Contoh Ubuntu/Debian:{' '}
+        <code>sudo apt update</code>, lalu <code>sudo apt install git</code>. Untuk distro lain,
+        gunakan{' '}
+        <a href="https://git-scm.com/install/linux" target="_blank" rel="noopener noreferrer">
+          panduan instalasi Linux
+        </a>
+        .
+      </p>
+    </details>
+    <Fragment set:html={command('git --version')} />
+    <p>
+      Hasil yang diharapkan: <code>git version ...</code>. Jika muncul “command not found” atau “not
+      recognized”, tutup terminal, buka lagi, dan periksa instalasi Git. Jangan ketik tanda{' '}
+      <code>$</code> dari contoh prompt.
+    </p>
+  </section>
+  <section class="lesson-section" id="folder">
+    <h2>2. Buka terminal pada folder latihan.</h2>
+    <p>
+      Buat folder baru bernama <code>kopi-kita</code> melalui File Explorer/Finder. Di Windows, klik
+      kanan di folder lalu pilih “Open in Terminal”; di macOS/Linux, buka Terminal dan gunakan{' '}
+      <code>cd</code> menuju folder itu. Path yang mengandung spasi perlu diapit tanda kutip.
+    </p>
+    <p>
+      <code>cd ..</code> berpindah ke folder induk. PowerShell memakai <code>Get-Location</code>{' '}
+      untuk menunjukkan lokasi; macOS/Linux memakai <code>pwd</code>. Prompt bukan bagian dari
+      command.
+    </p>
+    <p>Di dalam folder baru yang masih kosong, jalankan:</p>
+    <Fragment set:html={command('git init -b main')} />
+  </section>
+  <section class="lesson-section" id="identitas">
+    <h2>3. Isi identitas untuk repo latihan ini.</h2>
+    <p>
+      Ganti nama dan email berikut dengan identitas yang boleh terlihat pada commit. Pengaturan ini
+      hanya berlaku di repository latihan.
+    </p>
+    <Fragment
+      set:html={command(
+        'git config user.name "Nama Kamu"\ngit config user.email "kamu@example.com"',
+      )}
+    />
+  </section>
+  <section class="lesson-section" id="commit-pertama">
+    <h2>4. Buat dua file dan rekam keadaan awal.</h2>
+    <p>
+      Gunakan editor teks biasa, misalnya VS Code. Simpan kedua file berikut di folder{' '}
+      <code>kopi-kita</code>. Pastikan nama file tidak mendapat tambahan <code>.txt</code>.
+    </p>
+    <h3>menu.json</h3>
+    <Fragment set:html={command('{"kopiSusu":18000}')} />
+    <h3>diskon.js</h3>
+    <Fragment set:html={command('const diskon = 0;')} />
+    <p>
+      Dua kotak di atas adalah isi file, bukan command terminal. Sesudah menyimpan file, jalankan:
+    </p>
+    <Fragment
+      set:html={command(
+        'git status\ngit add menu.json diskon.js\ngit commit -m "Menu awal Kopi Kita"\ngit log --oneline\ngit status',
+      )}
+    />
+    <p>
+      Hasil yang diharapkan: satu commit “Menu awal Kopi Kita”, branch <code>main</code>, dan pesan{' '}
+      <code>working tree clean</code>. Hash commit di komputermu boleh berbeda.
+    </p>
+  </section>
+  <section class="lesson-section" id="tiga-versi">
+    <h2>5. Siapkan contoh tiga keadaan.</h2>
+    <p>
+      Ubah isi <code>diskon.js</code> menjadi <code>const diskon = 5;</code>, simpan, lalu jalankan{' '}
+      <code>git add diskon.js</code>. Setelah itu ubah lagi menjadi <code>const diskon = 10;</code>{' '}
+      dan simpan tanpa menjalankan add lagi.
+    </p>
+    <Fragment
+      set:html={command(
+        'git show HEAD:diskon.js\ngit show :diskon.js\ngit diff -- diskon.js\ngit status --short',
+      )}
+    />
+    <p>
+      Sekarang HEAD berisi diskon 0, index 5, dan file kerja 10. Inilah titik awal untuk memahami
+      snapshot dan tiga area. Jangan commit dulu; cukup amati.
+    </p>
+    <a class="button" href="/belajar/snapshot/">
+      Lanjut ke snapshot →
+    </a>
+  </section>
+  <section class="lesson-section" id="latihan-terminal">
+    <h2>Untuk paket latihan berikutnya.</h2>
+    <p>
+      Materi bisa dibaca dan simulator bisa digunakan tanpa memasang Node.js di komputermu. Paket
+      ZIP latihan terminal memakai Git 2.34+ dan Node.js 22+. Jika ingin menggunakannya, pasang
+      Node.js LTS dari{' '}
+      <a href="https://nodejs.org/en/download" target="_blank" rel="noopener noreferrer">
+        situs resmi Node.js
+      </a>
+      , buka terminal baru, lalu periksa <code>node --version</code>. Setiap skenario membuat folder
+      latihan baru dengan kondisi yang sudah disiapkan.
+    </p>
+    <a class="text-button" href="/latihan/">
+      Lihat paket latihan terminal →
+    </a>
+  </section>
+</article>

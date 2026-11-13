@@ -1,0 +1,61 @@
+{
+  "chapter": 9,
+  "id": "stash-konflik",
+  "title": "Kalau lacinya ketemu perubahan baru.",
+  "summary": "Tangani konflik stash dengan memeriksa isi dan mempertahankan simpanan sampai aman.",
+  "scenario": "Saat diskon disimpan, baris yang sama diubah di branch tujuan. Pop sekarang berhenti dengan konflik.",
+  "concept": "Stash diterapkan pada keadaan working tree saat ini, sehingga bisa berbenturan dengan perubahan lain. Tidak ada git stash --continue. Selesaikan file, gunakan add jika ingin menandai hasil di index, periksa, lalu buat commit saat pekerjaan memang siap. stash branch dapat memulai branch dari dasar asli stash.",
+  "analogy": "Bahan di laci dibuat untuk rancangan meja yang lama. Ketika meja sudah berubah, kamu perlu menyesuaikan bahan itu, bukan menumpuknya sembarangan.",
+  "steps": [
+    {
+      "title": "Baca konflik dan simpanan",
+      "command": "git status\ngit stash list",
+      "explanation": "Jangan menghapus entri yang masih menjadi pegangan. Buka file dan tentukan hasil yang benar."
+    },
+    {
+      "title": "Periksa hasil penyelesaian",
+      "command": "git add diskon.js\ngit diff --staged",
+      "explanation": "Setelah marker dihapus dan logika diuji, periksa hasil yang akan di-commit."
+    },
+    {
+      "title": "Alternatif dari dasar semula",
+      "command": "git stash branch pulihkan-diskon \"stash@{0}\"",
+      "explanation": "Ini alternatif pada keadaan kerja yang sesuai, bukan langkah wajib setelah add. Jika berhasil dari ref stash, entri itu di-drop."
+    }
+  ],
+  "result": "Perubahan dipulihkan dengan keputusan isi yang jelas atau dipindahkan ke branch berdasarkan dasar aslinya.",
+  "pitfall": "Jangan berasumsi merge --abort membatalkan stash apply/pop. Untuk membuang hasil percobaan, identifikasi dahulu seluruh perubahan lokal yang harus dipertahankan.",
+  "practice": "Buat benturan satu baris di repo latihan. Pop, periksa stash tetap ada, lalu selesaikan isi tanpa membuang perubahan yang dibutuhkan.",
+  "quiz": {
+    "question": "Adakah git stash --continue untuk konflik?",
+    "options": [
+      "Ya, selalu wajib",
+      "Tidak; selesaikan dan periksa file sesuai kebutuhan",
+      "Hanya pada branch main"
+    ],
+    "answer": 1,
+    "explanation": "Stash tidak mempunyai alur continue seperti rebase."
+  },
+  "commands": ["git stash branch", "git stash show"],
+  "visual": "conflict",
+  "minutes": 8,
+  "level": "Menengah",
+  "prerequisites": ["apply-pop"],
+  "initialState": "Latihan stash-conflict: HEAD dan file diskon 15; stash menyimpan perubahan dari 0 ke 10. Index bersih sebelum pop.",
+  "lab": "stash-conflict",
+  "objectives": [
+    "Tangani konflik stash dengan memeriksa isi dan mempertahankan simpanan sampai aman.",
+    "Periksa hasilnya: Perubahan dipulihkan dengan keputusan isi yang jelas atau dipindahkan ke branch berdasarkan dasar aslinya."
+  ],
+  "sources": [
+    {
+      "title": "Manual git stash",
+      "url": "https://git-scm.com/docs/git-stash"
+    }
+  ],
+  "verification": {
+    "command": "git ls-files -u\ngit stash list",
+    "explanation": "Perubahan dipulihkan dengan keputusan isi yang jelas atau dipindahkan ke branch berdasarkan dasar aslinya."
+  },
+  "order": 35
+}

@@ -1,0 +1,65 @@
+{
+  "chapter": 16,
+  "id": "maintenance",
+  "title": "Riwayat punya cara disimpan dan dirawat.",
+  "summary": "Kenali packfiles, reachability, dan batas pemulihan repository.",
+  "scenario": "Repository makin besar. Kamu ingin memahami apa yang dilakukan maintenance dan mengapa object tanpa referensi belum tentu tersimpan selamanya.",
+  "concept": "Git dapat mengemas object ke packfiles untuk efisiensi, termasuk kompresi delta. Reachability ditentukan dari referensi dan hubungan object. Reflog bisa mempertahankan informasi posisi lama untuk sementara; masa retensi dan garbage collection memengaruhi peluang pemulihan. Refspec menjelaskan pemetaan referensi saat transport.",
+  "analogy": "Gudang mengemas bahan agar hemat tempat. Bahan yang tidak lagi terhubung ke catatan aktif punya aturan penyimpanan; jangan menganggap semuanya selalu tersedia.",
+  "steps": [
+    {
+      "title": "Periksa ukuran object",
+      "command": "git count-objects -vH",
+      "explanation": "Amati perbedaan loose objects dan object dalam pack. Ini tidak menghapus apa pun."
+    },
+    {
+      "title": "Periksa konsistensi",
+      "command": "git fsck --full",
+      "explanation": "Baca hasil dengan konteks. Object dangling tidak otomatis berarti repository rusak."
+    },
+    {
+      "title": "Buat paket riwayat bernama",
+      "command": "git bundle create kopi-kita.bundle --all",
+      "explanation": "Bundle dapat memindahkan refs dan object yang dicakup, tetapi bukan backup edit working tree, index, hooks, atau semua konfigurasi."
+    }
+  ],
+  "result": "Kamu mengetahui fungsi penyimpanan object, pemeriksaan konsistensi, dan bundle tanpa menganggapnya menyimpan semua keadaan lokal.",
+  "pitfall": "Hindari prune agresif ketika sedang mencoba memulihkan pekerjaan. Buat salinan yang sesuai sebelum tindakan maintenance berisiko.",
+  "practice": "Buat bundle repo latihan lalu verifikasi dengan git bundle verify kopi-kita.bundle. Catat data lokal apa yang tidak termasuk.",
+  "quiz": {
+    "question": "Apakah bundle --all menyimpan edit working tree yang belum di-commit?",
+    "options": ["Tidak", "Ya, seluruh folder otomatis", "Hanya file JavaScript"],
+    "answer": 0,
+    "explanation": "Bundle berisi refs dan object yang dicakup, bukan seluruh keadaan folder kerja."
+  },
+  "commands": ["git count-objects", "git fsck", "git bundle"],
+  "visual": "objects",
+  "minutes": 8,
+  "level": "Lanjutan",
+  "prerequisites": ["reachability"],
+  "initialState": "Repo lokal mempunyai object dan referensi. Bundle adalah file baru; pilih nama output yang belum ada dan cukup ruang.",
+  "lab": "objects",
+  "objectives": [
+    "Kenali packfiles, reachability, dan batas pemulihan repository.",
+    "Periksa hasilnya: Kamu mengetahui fungsi penyimpanan object, pemeriksaan konsistensi, dan bundle tanpa menganggapnya menyimpan semua keadaan lokal."
+  ],
+  "sources": [
+    {
+      "title": "Manual git count-objects",
+      "url": "https://git-scm.com/docs/git-count-objects"
+    },
+    {
+      "title": "Manual git fsck",
+      "url": "https://git-scm.com/docs/git-fsck"
+    },
+    {
+      "title": "Manual git bundle",
+      "url": "https://git-scm.com/docs/git-bundle"
+    }
+  ],
+  "verification": {
+    "command": "git bundle verify kopi-kita.bundle",
+    "explanation": "Kamu mengetahui fungsi penyimpanan object, pemeriksaan konsistensi, dan bundle tanpa menganggapnya menyimpan semua keadaan lokal."
+  },
+  "order": 65
+}

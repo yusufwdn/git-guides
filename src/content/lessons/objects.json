@@ -1,0 +1,69 @@
+{
+  "chapter": 16,
+  "id": "objects",
+  "title": "Snapshot dibangun dari object.",
+  "summary": "Hubungkan blob, tree, commit, dan referensi dengan yang sudah kamu praktikkan.",
+  "scenario": "Kamu bertanya mengapa rename branch murah, tetapi rebase menghasilkan hash commit baru.",
+  "concept": "Blob menyimpan isi file. Tree menghubungkan nama dan mode path ke object. Commit merujuk root tree, parent, dan metadata. Referensi branch menunjuk commit; HEAD biasanya merujuk branch itu. Commit membentuk directed acyclic graph melalui hubungan parent. Object yang sama dapat dipakai oleh banyak snapshot.",
+  "analogy": "Album mempunyai halaman isi, daftar susunan, dan catatan waktu. Penanda bernama menunjuk halaman riwayat; mengganti nama penanda tidak menyalin seluruh album.",
+  "steps": [
+    {
+      "title": "Lihat object commit",
+      "command": "git cat-file -p HEAD",
+      "explanation": "Cari baris tree, parent bila ada, author, committer, serta pesan commit."
+    },
+    {
+      "title": "Lihat susunan snapshot",
+      "command": "git ls-tree HEAD",
+      "explanation": "Setiap entri menyertakan mode, jenis object, object ID, dan nama path."
+    },
+    {
+      "title": "Periksa referensi aktif",
+      "command": "git symbolic-ref HEAD",
+      "explanation": "Pada branch biasa hasilnya refs/heads/nama. Pada detached HEAD perintah ini gagal karena HEAD bukan symbolic reference."
+    }
+  ],
+  "result": "Model file, index, commit, dan branch tersambung ke struktur data yang sebenarnya.",
+  "pitfall": "Jangan mengedit file internal .git secara sembarangan. Gunakan command resmi untuk memperbarui object dan referensi.",
+  "practice": "Temukan root tree dari satu commit, lalu lihat satu blob dengan cat-file -p OBJECT_ID. Bandingkan dengan isi file pada snapshot itu.",
+  "quiz": {
+    "question": "Object mana yang menyimpan isi file?",
+    "options": ["Blob", "Branch", "Remote"],
+    "answer": 0,
+    "explanation": "Blob menyimpan isi; nama dan hubungan path dicatat pada tree."
+  },
+  "commands": ["git cat-file", "git ls-tree", "git symbolic-ref"],
+  "visual": "objects",
+  "minutes": 8,
+  "level": "Lanjutan",
+  "prerequisites": ["attributes"],
+  "initialState": "Latihan objects mempunyai HEAD, menu.json tracked, dan branch main aktif. Semua command contoh bersifat membaca.",
+  "lab": "objects",
+  "objectives": [
+    "Hubungkan blob, tree, commit, dan referensi dengan yang sudah kamu praktikkan.",
+    "Periksa hasilnya: Model file, index, commit, dan branch tersambung ke struktur data yang sebenarnya."
+  ],
+  "sources": [
+    {
+      "title": "Manual git cat-file",
+      "url": "https://git-scm.com/docs/git-cat-file"
+    },
+    {
+      "title": "Manual git ls-tree",
+      "url": "https://git-scm.com/docs/git-ls-tree"
+    },
+    {
+      "title": "Manual git symbolic-ref",
+      "url": "https://git-scm.com/docs/git-symbolic-ref"
+    },
+    {
+      "title": "Model object Git",
+      "url": "https://git-scm.com/book/en/v2/Git-Internals-Git-Objects"
+    }
+  ],
+  "verification": {
+    "command": "git cat-file -p HEAD\ngit ls-tree HEAD",
+    "explanation": "Model file, index, commit, dan branch tersambung ke struktur data yang sebenarnya."
+  },
+  "order": 62
+}

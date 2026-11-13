@@ -1,0 +1,191 @@
+{
+  "chapters": [
+    {
+      "id": 1,
+      "title": "Memahami Git",
+      "description": "Mulai dari alasan Git ada, lalu kenali keadaan pekerjaanmu.",
+      "group": "Fondasi"
+    },
+    {
+      "id": 2,
+      "title": "Siapkan tempat kerja",
+      "description": "Siapkan Git, identitas, dan cara mencari bantuan.",
+      "group": "Fondasi"
+    },
+    {
+      "id": 3,
+      "title": "Perubahan jadi commit",
+      "description": "Pilih perubahan dengan sengaja dan buat snapshot pertama.",
+      "group": "Fondasi"
+    },
+    {
+      "id": 4,
+      "title": "Membaca jejak perubahan",
+      "description": "Jelajahi riwayat dan bandingkan versi proyek.",
+      "group": "Fondasi"
+    },
+    {
+      "id": 5,
+      "title": "Bekerja dengan branch",
+      "description": "Beri pekerjaan baru jalurnya sendiri.",
+      "group": "Kerja sehari-hari"
+    },
+    {
+      "id": 6,
+      "title": "Merge tanpa panik",
+      "description": "Gabungkan pekerjaan dan pahami konflik.",
+      "group": "Kerja sehari-hari"
+    },
+    {
+      "id": 7,
+      "title": "Lokal bertemu remote",
+      "description": "Pahami arah perjalanan fetch, pull, dan push.",
+      "group": "Kerja sehari-hari"
+    },
+    {
+      "id": 8,
+      "title": "Git untuk kerja tim",
+      "description": "Berkontribusi, menerima review, dan memilih workflow.",
+      "group": "Kerja sehari-hari"
+    },
+    {
+      "id": 9,
+      "title": "Jeda dengan stash",
+      "description": "Simpan pekerjaan sementara, lalu lanjutkan saat siap.",
+      "group": "Lebih percaya diri"
+    },
+    {
+      "id": 10,
+      "title": "Undo & pemulihan",
+      "description": "Pilih cara membatalkan sesuai keadaan perubahanmu.",
+      "group": "Lebih percaya diri"
+    },
+    {
+      "id": 11,
+      "title": "Rapikan riwayat",
+      "description": "Susun cerita perubahan yang mudah ditinjau.",
+      "group": "Lebih percaya diri"
+    },
+    {
+      "id": 12,
+      "title": "Menelusuri sumber bug",
+      "description": "Biarkan riwayat membantumu menyelidiki masalah.",
+      "group": "Lebih percaya diri"
+    },
+    {
+      "id": 13,
+      "title": "Tag, hotfix & rilis",
+      "description": "Tandai versi dan rawat perubahan yang sudah dirilis.",
+      "group": "Menyelam lebih dalam"
+    },
+    {
+      "id": 14,
+      "title": "Alat yang bikin efisien",
+      "description": "Kerjakan lebih banyak dengan staging parsial dan worktree.",
+      "group": "Menyelam lebih dalam"
+    },
+    {
+      "id": 15,
+      "title": "Kebiasaan tim yang sehat",
+      "description": "Jaga konsistensi file, otomasi, dan kredensial.",
+      "group": "Menyelam lebih dalam"
+    },
+    {
+      "id": 16,
+      "title": "Di balik layar Git",
+      "description": "Hubungkan object, snapshot, dan referensi.",
+      "group": "Menyelam lebih dalam"
+    }
+  ],
+  "glossary": [
+    [
+      "Repository",
+      "Penyimpanan riwayat, object, dan referensi Git. Repo lokal biasanya mempunyai direktori .git."
+    ],
+    ["Working tree", "File proyek yang sedang tersedia untuk dibaca dan diedit di folder kerja."],
+    [
+      "Index / staging area",
+      "Keadaan usulan snapshot untuk commit berikutnya. File bisa sekaligus punya perubahan staged dan unstaged."
+    ],
+    [
+      "Commit",
+      "Object yang merekam root tree, metadata, dan hubungan ke parent. Menjadi satu titik dalam riwayat."
+    ],
+    [
+      "HEAD",
+      "Biasanya symbolic reference ke branch aktif. Dalam detached HEAD, menunjuk commit secara langsung."
+    ],
+    [
+      "Branch",
+      "Referensi bernama yang menunjuk commit dan bergerak ketika ada commit baru di branch itu."
+    ],
+    [
+      "Remote",
+      "Nama dan konfigurasi untuk repository lain, seperti origin. Tidak harus berada di internet."
+    ],
+    [
+      "Remote-tracking branch",
+      "Catatan lokal, seperti origin/main, tentang posisi branch remote saat sinkronisasi terakhir."
+    ],
+    [
+      "Upstream",
+      "Hubungan branch lokal ke branch lain yang dipakai sebagai acuan oleh command dan konfigurasi tertentu."
+    ],
+    [
+      "Stash",
+      "Simpanan perubahan sementara di repository lokal. Isi yang disertakan bergantung opsi yang digunakan."
+    ],
+    [
+      "Merge conflict",
+      "Keadaan saat Git tidak dapat menyelesaikan integrasi otomatis dan membutuhkan keputusan isi."
+    ],
+    [
+      "Reflog",
+      "Log lokal perpindahan referensi. Berguna untuk menelusuri posisi lama, dengan retensi yang terbatas."
+    ],
+    [
+      "Tag",
+      "Referensi bernama ke object, biasanya untuk menandai commit rilis. Tidak otomatis bergerak saat ada commit baru."
+    ],
+    [
+      "Tracked / untracked",
+      "Tracked berarti path diketahui index; untracked adalah file working tree yang belum ada di index."
+    ],
+    [
+      "Fast-forward",
+      "Pembaruan referensi ke keturunan commit saat ini tanpa membutuhkan merge commit baru."
+    ],
+    [
+      "Object ID",
+      "Identitas object yang dihitung dari representasi object. Bentuk dan panjang penuh bergantung format object repository."
+    ],
+    [
+      "Refspec",
+      "Pemetaan sumber dan tujuan referensi untuk pertukaran Git, misalnya heads server ke remote-tracking refs lokal."
+    ],
+    [
+      "Reachability",
+      "Hubungan keterjangkauan object dari referensi melalui hubungan commit, parent, tree, dan blob."
+    ],
+    ["Gitlink", "Entri tree superproject yang mencatat object ID commit submodule."],
+    ["Dry-run", "Pratinjau tindakan tanpa melaksanakannya, seperti clean -n."]
+  ],
+  "problems": [
+    ["Kerjaan belum selesai, harus pindah tugas", "stash"],
+    ["Sudah add, tapi belum mau commit", "restore"],
+    ["Push ditolak server", "push"],
+    ["Commit salah sudah dipakai tim", "reset-revert"],
+    ["File yang sama diedit dua orang", "konflik"],
+    ["Terlanjur masuk detached HEAD", "detached-head"],
+    ["Butuh satu commit dari branch lain", "cherry-pick"],
+    ["Bug muncul, tidak tahu commit penyebabnya", "bisect"],
+    ["File .env tetap muncul meski di-ignore", "ignore"],
+    ["Butuh dua branch terbuka bersamaan", "worktree"],
+    ["File baru tertinggal setelah stash", "stash-untracked"],
+    ["Mau undo tanpa membuang edit", "reset-modes"],
+    ["Commit hilang sesudah branch dihapus", "reflog-rescue"],
+    ["Perlu membatalkan merge yang masih konflik", "abort-merge"],
+    ["Ingin membersihkan file sementara", "clean-preview"],
+    ["Hanya perlu satu folder monorepo", "sparse-partial"]
+  ]
+}

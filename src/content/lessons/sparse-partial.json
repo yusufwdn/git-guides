@@ -1,0 +1,57 @@
+{
+  "chapter": 14,
+  "id": "sparse-partial",
+  "title": "Ambil bagian yang dibutuhkan dengan cara yang tepat.",
+  "summary": "Bedakan sparse checkout, partial clone, dan shallow clone.",
+  "scenario": "Repo Kopi Kita berkembang menjadi monorepo. Kamu hanya mengerjakan web dan tidak ingin semua folder tampil di working tree.",
+  "concept": "Sparse checkout memilih path yang dimaterialisasi di working tree, bukan menghapus file dari commit. Partial clone meminta sebagian object awal dengan filter bila server mendukung dan dapat mengambil object kemudian. Shallow clone membatasi riwayat. Ketiganya tidak saling menggantikan.",
+  "analogy": "Kamu dapat membuka hanya satu rak, meminjam bahan secara bertahap, atau membawa beberapa edisi terakhir. Itu tiga pilihan yang berbeda.",
+  "steps": [
+    {
+      "title": "Pilih direktori dengan cone mode",
+      "command": "git sparse-checkout set --cone web",
+      "explanation": "Pada latihan sparse, folder web tetap tampil. File tingkat root juga dapat tetap tersedia dalam cone mode."
+    },
+    {
+      "title": "Buktikan dokumen masih tersimpan",
+      "command": "git show HEAD:docs/panduan.md\ngit sparse-checkout list",
+      "explanation": "Path docs tidak tampil di working tree, tetapi masih dapat dibaca dari snapshot."
+    },
+    {
+      "title": "Kembali ke tampilan penuh",
+      "command": "git sparse-checkout disable",
+      "explanation": "Ini alternatif setelah kamu memeriksa hasil sparse. Untuk checker sparse, jalankan check sebelum disable."
+    }
+  ],
+  "result": "Pilihan tampilan working tree dapat diubah tanpa menghapus file dari riwayat.",
+  "pitfall": "Server lokal biasa belum tentu mendukung partial clone filter. Jangan menyimpulkan sparse checkout otomatis mengurangi seluruh download.",
+  "practice": "Selesaikan latihan sparse dan jelaskan perbedaan file yang tidak ditampilkan dengan file yang dihapus melalui commit.",
+  "quiz": {
+    "question": "Sparse checkout menghapus docs dari commit?",
+    "options": ["Tidak", "Ya, otomatis", "Hanya di main"],
+    "answer": 0,
+    "explanation": "Pemilihan path working tree tidak menulis ulang snapshot yang sudah direkam."
+  },
+  "commands": ["git sparse-checkout"],
+  "visual": "snapshot",
+  "minutes": 9,
+  "level": "Lanjutan",
+  "prerequisites": ["worktree"],
+  "initialState": "Latihan sparse mempunyai folder web dan docs yang keduanya sudah di-commit. Working tree bersih.",
+  "lab": "sparse",
+  "objectives": [
+    "Bedakan sparse checkout, partial clone, dan shallow clone.",
+    "Periksa hasilnya: Pilihan tampilan working tree dapat diubah tanpa menghapus file dari riwayat."
+  ],
+  "sources": [
+    {
+      "title": "Manual git sparse-checkout",
+      "url": "https://git-scm.com/docs/git-sparse-checkout"
+    }
+  ],
+  "verification": {
+    "command": "git sparse-checkout list\ngit show HEAD:docs/panduan.md",
+    "explanation": "Pilihan tampilan working tree dapat diubah tanpa menghapus file dari riwayat."
+  },
+  "order": 55
+}

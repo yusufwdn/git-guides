@@ -1,0 +1,60 @@
+{
+  "chapter": 3,
+  "id": "status-singkat",
+  "title": "Baca dua kolom status dengan tenang.",
+  "summary": "Pahami posisi perubahan pada output status --short.",
+  "scenario": "File diskon muncul sebagai MM. Kamu ingin tahu mengapa satu file bisa terlihat berubah dua kali.",
+  "concept": "Pada status singkat biasa, kolom pertama membandingkan index terhadap HEAD dan kolom kedua membandingkan working tree terhadap index. M berarti modified, A added, dan ?? untracked. Saat konflik, kombinasi huruf mempunyai makna khusus; lihat status panjang untuk penjelasan.",
+  "analogy": "Dua lampu menunjukkan dua tempat: nampan dan meja. Satu barang bisa berbeda di keduanya.",
+  "steps": [
+    {
+      "title": "Lihat bentuk ringkas",
+      "command": "git status --short",
+      "explanation": "Pada latihan stash-index, MM berarti versi staged dan edit berikutnya sama-sama ada."
+    },
+    {
+      "title": "Buktikan setiap kolom",
+      "command": "git diff --staged -- diskon.js\ngit diff -- diskon.js",
+      "explanation": "Bandingkan harga/diskon pada dua patch sebelum memilih versi yang akan direkam."
+    }
+  ],
+  "result": "Kamu bisa menjelaskan status MM tanpa menganggap Git menggandakan file.",
+  "pitfall": "Output porcelain dirancang untuk diproses alat, sedangkan --short nyaman dibaca manusia. Jangan menyimpulkan ?? sebagai file kosong.",
+  "practice": "Pada latihan stash-index, sebutkan nilai di HEAD, index, dan working tree sebelum menyimpan perubahan.",
+  "quiz": {
+    "question": "Apa arti MM pada file tracked tanpa konflik?",
+    "options": [
+      "Ada dua salinan repo rusak",
+      "Index berubah dan working tree juga berbeda dari index",
+      "File sudah masuk dua commit"
+    ],
+    "answer": 1,
+    "explanation": "Dua kolom mengukur dua perbandingan yang berbeda."
+  },
+  "commands": ["git status --short", "git diff"],
+  "visual": "staging",
+  "minutes": 7,
+  "level": "Dasar",
+  "prerequisites": ["mulai-repo"],
+  "initialState": "Branch fitur-diskon, HEAD diskon 0, index diskon 5, working tree diskon 10. Gunakan latihan stash-index.",
+  "lab": "stash-index",
+  "objectives": [
+    "Pahami posisi perubahan pada output status --short.",
+    "Periksa hasilnya: Kamu bisa menjelaskan status MM tanpa menganggap Git menggandakan file."
+  ],
+  "sources": [
+    {
+      "title": "Manual git status",
+      "url": "https://git-scm.com/docs/git-status"
+    },
+    {
+      "title": "Manual git diff",
+      "url": "https://git-scm.com/docs/git-diff"
+    }
+  ],
+  "verification": {
+    "command": "git status --short\ngit show :diskon.js",
+    "explanation": "Kamu bisa menjelaskan status MM tanpa menganggap Git menggandakan file."
+  },
+  "order": 9
+}

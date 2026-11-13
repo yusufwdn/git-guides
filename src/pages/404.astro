@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+import Routes from '../lib/routes.js';
+import Pages from '../renderers/index.js';
+import Content from '../data/content.js';
+const page = Routes.resolve('/404/');
+---
+
+<Base
+  page={page}
+  sidebar={Pages.sidebar(undefined)}
+  payload={{
+    kind: 'notFound',
+    lessons: Content.lessons.map((item: { id: string; chapter: number; title: string }) => ({
+      id: item.id,
+      chapter: item.chapter,
+      title: item.title,
+    })),
+    frames: {},
+  }}
+>
+  <Fragment set:html={Pages.notFound()} />
+</Base>

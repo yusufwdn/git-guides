@@ -1,0 +1,60 @@
+{
+  "chapter": 1,
+  "id": "snapshot",
+  "title": "Yang direkam adalah keadaan proyek.",
+  "summary": "Bedakan snapshot, patch, dan file yang belum direkam.",
+  "scenario": "Menu kembali ke harga lama setelah pindah branch. Kamu khawatir file terbaru hilang, padahal kedua versi sudah di-commit.",
+  "concept": "Snapshot menjelaskan keadaan file tracked pada commit. Patch menjelaskan perbedaannya terhadap keadaan lain. Git dapat berbagi object yang sama antarsnapshot, sehingga snapshot tidak berarti menyalin folder penuh secara fisik setiap kali commit.",
+  "analogy": "Dua daftar menu bisa memakai foto kopi yang sama. Edisinya berbeda, tetapi bahan yang tidak berubah tidak perlu dibuat ulang.",
+  "steps": [
+    {
+      "title": "Baca isi tanpa pindah branch",
+      "command": "git show HEAD:menu.json",
+      "explanation": "Bentuk COMMIT:path mengambil file dari snapshot. Editor dan working tree tidak berubah."
+    },
+    {
+      "title": "Bandingkan dengan index",
+      "command": "git diff --staged -- menu.json",
+      "explanation": "Patch ini menjelaskan beda index terhadap HEAD, bukan seluruh isi snapshot."
+    }
+  ],
+  "result": "Kamu dapat membaca versi tersimpan tanpa menimpa file yang sedang dikerjakan.",
+  "pitfall": "File baru yang untracked belum ada pada HEAD. git show HEAD:file-baru akan gagal sampai file masuk commit.",
+  "practice": "Di latihan staging, bandingkan show HEAD:menu.json, file editor, dan diff. Jelaskan tiga bentuk informasi itu.",
+  "quiz": {
+    "question": "git show HEAD:menu.json mengubah working tree?",
+    "options": [
+      "Tidak, hanya membaca snapshot",
+      "Ya, selalu menimpa editor",
+      "Hanya jika memakai Windows"
+    ],
+    "answer": 0,
+    "explanation": "Membaca object berbeda dari checkout atau restore yang memperbarui file."
+  },
+  "commands": ["git show", "git diff"],
+  "visual": "snapshot",
+  "minutes": 7,
+  "level": "Dasar",
+  "prerequisites": ["kenalan-git"],
+  "initialState": "Repo punya commit HEAD yang melacak menu.json. Working tree boleh berbeda; perintah contoh hanya membaca.",
+  "lab": "basics",
+  "objectives": [
+    "Bedakan snapshot, patch, dan file yang belum direkam.",
+    "Periksa hasilnya: Kamu dapat membaca versi tersimpan tanpa menimpa file yang sedang dikerjakan."
+  ],
+  "sources": [
+    {
+      "title": "Manual git show",
+      "url": "https://git-scm.com/docs/git-show"
+    },
+    {
+      "title": "Manual git diff",
+      "url": "https://git-scm.com/docs/git-diff"
+    }
+  ],
+  "verification": {
+    "command": "git show HEAD:menu.json",
+    "explanation": "Kamu dapat membaca versi tersimpan tanpa menimpa file yang sedang dikerjakan."
+  },
+  "order": 1
+}

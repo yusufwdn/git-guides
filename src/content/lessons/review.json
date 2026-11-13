@@ -1,0 +1,65 @@
+{
+  "chapter": 8,
+  "id": "review",
+  "title": "Bikin perubahan mudah ditinjau.",
+  "summary": "Hubungkan branch, commit, dan pull request dalam satu alur kontribusi.",
+  "scenario": "Fitur keranjang sudah selesai. Rekanmu perlu memahami tujuan perubahan dan mengusulkan koreksi sebelum digabung.",
+  "concept": "Pull request atau merge request adalah fitur layanan hosting, bukan command Git inti. Alur umum adalah membuat branch, commit terarah, push branch, lalu membuka permintaan review di layanan tim. Pada model fork, origin biasanya fork milikmu dan upstream dapat menunjuk repo sumber; nama ini hanyalah kebiasaan.",
+  "analogy": "Sebelum menu baru dicetak, kamu mengirim usulan beserta alasan dan cara mencobanya. Reviewer mengomentari usulan, lalu kamu memperbaruinya.",
+  "steps": [
+    {
+      "title": "Siapkan perubahan terarah",
+      "command": "git switch -c fitur-keranjang\ngit status",
+      "explanation": "Kerjakan satu tujuan dan buat commit yang menjelaskannya."
+    },
+    {
+      "title": "Kirim untuk ditinjau",
+      "command": "git push -u origin fitur-keranjang",
+      "explanation": "Buka PR/MR melalui layanan hosting. Sertakan masalah, hasil perubahan, dan cara pengujian."
+    },
+    {
+      "title": "Tindak lanjuti review",
+      "command": "git add keranjang.js\ngit commit -m \"Validasi jumlah item keranjang\"\ngit push",
+      "explanation": "Commit baru pada branch yang sama umumnya memperbarui permintaan review yang terkait."
+    }
+  ],
+  "result": "Tim bisa mendiskusikan dan menguji perubahan sebelum mengintegrasikannya.",
+  "pitfall": "Perubahan lintas tujuan membuat review lebih sulit. Pisahkan refactor besar dari perbaikan kecil bila memungkinkan.",
+  "practice": "Tulis deskripsi review untuk koreksi harga: masalah awal, perilaku baru, dan langkah verifikasi.",
+  "quiz": {
+    "question": "Pull request merupakan fitur apa?",
+    "options": [
+      "Layanan kolaborasi seperti GitHub/GitLab",
+      "Command git pull dengan tampilan baru",
+      "Folder wajib di .git"
+    ],
+    "answer": 0,
+    "explanation": "Git menyediakan riwayat dan transport; layanan hosting menambahkan alur review."
+  },
+  "commands": ["git push", "git switch -c"],
+  "visual": "graph",
+  "minutes": 8,
+  "level": "Menengah",
+  "prerequisites": ["commit-atomik"],
+  "initialState": "Untuk alur nyata, tersedia repo hosting dengan izin membuat branch/PR. Perintah lokal tidak otomatis membuat pull request.",
+  "lab": "branch",
+  "objectives": [
+    "Hubungkan branch, commit, dan pull request dalam satu alur kontribusi.",
+    "Periksa hasilnya: Tim bisa mendiskusikan dan menguji perubahan sebelum mengintegrasikannya."
+  ],
+  "sources": [
+    {
+      "title": "Manual git push",
+      "url": "https://git-scm.com/docs/git-push"
+    },
+    {
+      "title": "Manual git switch",
+      "url": "https://git-scm.com/docs/git-switch"
+    }
+  ],
+  "verification": {
+    "command": "git log --oneline -3",
+    "explanation": "Tim bisa mendiskusikan dan menguji perubahan sebelum mengintegrasikannya."
+  },
+  "order": 29
+}

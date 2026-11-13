@@ -1,0 +1,65 @@
+{
+  "chapter": 7,
+  "id": "push",
+  "title": "Kirim perubahan yang sudah direkam.",
+  "summary": "Atur upstream dan tangani penolakan push dengan memahami riwayat.",
+  "scenario": "Branch fitur sudah punya commit lokal. Kamu ingin membagikannya agar rekan dapat melakukan review.",
+  "concept": "Push mengirim object yang dibutuhkan dan meminta server memperbarui referensi tujuan. Upstream menghubungkan branch lokal dengan branch remote untuk operasi tertentu. Push non-fast-forward bisa ditolak ketika perubahan tujuan tidak tercakup dalam jalur yang kamu kirim.",
+  "analogy": "Kamu mengirim halaman baru ke album bersama. Jika versi bersama sudah maju dengan halaman lain, jangan langsung menimpanya; pelajari kedua jalurnya.",
+  "steps": [
+    {
+      "title": "Periksa tujuan",
+      "command": "git remote -v\ngit branch -vv",
+      "explanation": "Pastikan remote dan branch aktif sesuai. Autentikasi remote terpisah dari user.name dan user.email."
+    },
+    {
+      "title": "Bagikan branch fitur",
+      "command": "git push -u origin fitur-diskon",
+      "explanation": "Opsi -u menetapkan upstream setelah push berhasil. Remote harus ada dan kamu harus memiliki akses."
+    },
+    {
+      "title": "Jika push ditolak",
+      "command": "git fetch origin\ngit log --oneline --graph --all -12",
+      "explanation": "Periksa perbedaan, lalu integrasikan menurut workflow tim sebelum mencoba push lagi."
+    }
+  ],
+  "result": "Commit fitur tersedia di remote dan branch mempunyai upstream.",
+  "pitfall": "Jangan memakai --force sebagai obat setiap push rejected. Penolakan juga bisa berasal dari izin, autentikasi, atau protected branch.",
+  "practice": "Bagikan branch latihan ke bare repository lokal dan lihat upstream melalui branch -vv.",
+  "quiz": {
+    "question": "Push biasa mengirim perubahan yang belum di-commit?",
+    "options": [
+      "Ya, semua yang terlihat di editor",
+      "Tidak, push bekerja dengan object dan refs yang direkam",
+      "Hanya jika file berakhiran .js"
+    ],
+    "answer": 1,
+    "explanation": "Simpan perubahan ke commit terlebih dahulu jika ingin membagikannya sebagai riwayat branch."
+  },
+  "commands": ["git push", "git branch -vv"],
+  "visual": "remote",
+  "minutes": 8,
+  "level": "Menengah",
+  "prerequisites": ["upstream"],
+  "initialState": "Branch fitur-diskon punya commit yang ingin dibagikan. Remote origin sudah diatur dan tersedia sesuai hak akses pengguna.",
+  "lab": "remote",
+  "objectives": [
+    "Atur upstream dan tangani penolakan push dengan memahami riwayat.",
+    "Periksa hasilnya: Commit fitur tersedia di remote dan branch mempunyai upstream."
+  ],
+  "sources": [
+    {
+      "title": "Manual git push",
+      "url": "https://git-scm.com/docs/git-push"
+    },
+    {
+      "title": "Manual git branch",
+      "url": "https://git-scm.com/docs/git-branch"
+    }
+  ],
+  "verification": {
+    "command": "git branch -vv",
+    "explanation": "Commit fitur tersedia di remote dan branch mempunyai upstream."
+  },
+  "order": 26
+}

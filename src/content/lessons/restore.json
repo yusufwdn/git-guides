@@ -1,0 +1,57 @@
+{
+  "chapter": 10,
+  "id": "restore",
+  "title": "Batalkan perubahan di tempat yang tepat.",
+  "summary": "Pisahkan membatalkan staging dari membuang edit di working tree.",
+  "scenario": "menu.json tidak sengaja masuk staging. Isinya masih diperlukan, tetapi belum siap menjadi commit.",
+  "concept": "git restore --staged mengembalikan path pada index dari HEAD secara default, tanpa membuang edit working tree. git restore tanpa --staged menyalin dari index ke working tree secara default dan bisa membuang edit lokal pada file tracked. Keduanya tersedia sejak Git 2.23.",
+  "analogy": "Mengeluarkan barang dari nampan persiapan berbeda dengan membuang barang dari meja kerja. Pastikan kamu memilih tempat yang benar.",
+  "steps": [
+    {
+      "title": "Periksa calon commit",
+      "command": "git status\ngit diff --staged",
+      "explanation": "Kenali isi yang akan dikeluarkan dari staging."
+    },
+    {
+      "title": "Unstage tanpa kehilangan edit",
+      "command": "git restore --staged menu.json",
+      "explanation": "Pada repo yang sudah mempunyai HEAD, file kembali belum staged dan edit working tree tetap ada."
+    },
+    {
+      "title": "Hanya jika edit memang ingin dibuang",
+      "command": "git restore menu.json",
+      "explanation": "Ini alternatif untuk membuang edit unstaged pada path itu. Lihat diff dulu; edit yang belum direkam mungkin tidak bisa dipulihkan."
+    }
+  ],
+  "result": "Kamu tahu kapan memakai --staged dan kapan restore berisiko membuang pekerjaan.",
+  "pitfall": "git restore bukan undo serbaguna. Sumber dan tujuan berubah mengikuti opsi yang dipakai.",
+  "practice": "Stage perubahan README, unstage dengan restore --staged, lalu pastikan teks edit masih ada.",
+  "quiz": {
+    "question": "Bagaimana unstage tanpa membuang edit working tree?",
+    "options": ["git restore --staged file", "git restore file", "git clean -fd"],
+    "answer": 0,
+    "explanation": "--staged menargetkan index; working tree tetap."
+  },
+  "commands": ["git restore", "git restore --staged"],
+  "visual": "snapshot",
+  "minutes": 8,
+  "level": "Menengah",
+  "prerequisites": ["stash"],
+  "initialState": "Repo sudah punya HEAD dan menu.json tracked. Untuk unstage, ada perubahan menu pada index dan salinan edit di working tree.",
+  "lab": "staging",
+  "objectives": [
+    "Pisahkan membatalkan staging dari membuang edit di working tree.",
+    "Periksa hasilnya: Kamu tahu kapan memakai --staged dan kapan restore berisiko membuang pekerjaan."
+  ],
+  "sources": [
+    {
+      "title": "Manual git restore",
+      "url": "https://git-scm.com/docs/git-restore"
+    }
+  ],
+  "verification": {
+    "command": "git diff --staged\ngit diff",
+    "explanation": "Kamu tahu kapan memakai --staged dan kapan restore berisiko membuang pekerjaan."
+  },
+  "order": 36
+}

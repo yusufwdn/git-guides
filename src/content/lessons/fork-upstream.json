@@ -1,0 +1,69 @@
+{
+  "chapter": 8,
+  "id": "fork-upstream",
+  "title": "Berkontribusi lewat salinan milikmu.",
+  "summary": "Susun remote origin dan upstream pada model fork.",
+  "scenario": "Kamu tidak punya akses menulis ke repo komunitas Kopi Kita, tetapi ingin mengirim perbaikan dokumentasi.",
+  "concept": "Fork adalah fitur layanan hosting untuk salinan repo pada akun lain. Secara konvensi origin menunjuk fork milikmu dan upstream menunjuk repo sumber. Perubahan dikirim ke branch fork, lalu diajukan lewat PR/MR. Nama remote bebas dipilih dan tidak memberikan izin khusus.",
+  "analogy": "Kamu mengerjakan salinan naskah sendiri, lalu mengirim usulan koreksi kepada pemilik naskah utama.",
+  "steps": [
+    {
+      "title": "Tinjau remote",
+      "command": "git remote -v",
+      "explanation": "Pastikan origin benar-benar fork milikmu. URL contoh pada penjelasan harus diganti alamat layanan yang sah."
+    },
+    {
+      "title": "Ambil kabar sumber setelah dikonfigurasi",
+      "command": "git fetch upstream",
+      "explanation": "Sebelum langkah ini, tambahkan remote upstream dengan URL repo sumber melalui git remote add upstream URL_SUMBER."
+    },
+    {
+      "title": "Bagikan usulan di fork",
+      "command": "git push -u origin perbaikan-dokumen",
+      "explanation": "Buat PR/MR menuju branch sumber yang disepakati. Push ini bukan merge ke upstream."
+    }
+  ],
+  "result": "Kamu tahu tujuan setiap remote dan dapat mengajukan kontribusi tanpa akses push ke sumber.",
+  "pitfall": "Nama upstream pada remote berbeda dari istilah upstream branch. Satu nama adalah alamat repo, satunya hubungan konfigurasi branch.",
+  "practice": "Gambarkan alur repo sumber → fork → branch usulan → PR. Tandai operasi yang berasal dari Git dan fitur hosting.",
+  "quiz": {
+    "question": "Apakah remote bernama upstream otomatis punya izin menulis?",
+    "options": [
+      "Tidak, nama tidak memberi izin",
+      "Ya, karena namanya khusus",
+      "Hanya setelah clone"
+    ],
+    "answer": 0,
+    "explanation": "Hak akses ditentukan server dan akun, bukan nama remote."
+  },
+  "commands": ["git remote", "git fetch", "git push"],
+  "visual": "remote",
+  "minutes": 9,
+  "level": "Menengah",
+  "prerequisites": ["review"],
+  "initialState": "Fork sudah dibuat melalui layanan hosting. origin mengarah ke fork, remote upstream perlu ditambahkan memakai URL sumber yang sah.",
+  "lab": "remote",
+  "objectives": [
+    "Susun remote origin dan upstream pada model fork.",
+    "Periksa hasilnya: Kamu tahu tujuan setiap remote dan dapat mengajukan kontribusi tanpa akses push ke sumber."
+  ],
+  "sources": [
+    {
+      "title": "Manual git remote",
+      "url": "https://git-scm.com/docs/git-remote"
+    },
+    {
+      "title": "Manual git fetch",
+      "url": "https://git-scm.com/docs/git-fetch"
+    },
+    {
+      "title": "Manual git push",
+      "url": "https://git-scm.com/docs/git-push"
+    }
+  ],
+  "verification": {
+    "command": "git remote -v",
+    "explanation": "Kamu tahu tujuan setiap remote dan dapat mengajukan kontribusi tanpa akses push ke sumber."
+  },
+  "order": 30
+}

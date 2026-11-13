@@ -1,0 +1,56 @@
+{
+  "chapter": 5,
+  "id": "branch-tracking",
+  "title": "main dan origin/main bukan kembaran live.",
+  "summary": "Bedakan branch lokal, remote-tracking ref, dan upstream.",
+  "scenario": "Kamu melihat main dan origin/main pada grafik, tetapi keduanya menunjuk commit berbeda setelah Rani bekerja.",
+  "concept": "main adalah branch lokal. origin/main adalah referensi lokal yang biasanya diperbarui fetch dari remote origin. Upstream adalah hubungan konfigurasi branch lokal ke referensi pelacakan tertentu; nama branch lokal dan remote tidak harus sama. Informasi ahead/behind menggunakan pengetahuan lokal terakhir.",
+  "analogy": "Papan kerja sendiri berbeda dari foto papan tim yang terakhir kamu ambil. Foto itu baru diperbarui ketika kamu mengambil kabar lagi.",
+  "steps": [
+    {
+      "title": "Lihat hubungan branch",
+      "command": "git branch -vv",
+      "explanation": "Perhatikan label upstream dan angka ahead/behind bila ada."
+    },
+    {
+      "title": "Perbarui lalu periksa lagi",
+      "command": "git fetch origin\ngit branch -vv",
+      "explanation": "Pada latihan remote, origin/main maju sementara main lokal tetap pada commit sebelumnya."
+    }
+  ],
+  "result": "Perbedaan posisi dapat dijelaskan tanpa menganggap fetch melakukan merge.",
+  "pitfall": "Angka behind bisa kedaluwarsa sebelum fetch. Jangan menyamakan nama remote origin dengan branch origin/main.",
+  "practice": "Bandingkan tiga posisi pada latihan remote sebelum dan sesudah fetch: server main, origin/main, dan main lokal.",
+  "quiz": {
+    "question": "Apa yang biasanya menggerakkan origin/main saat mengambil kabar?",
+    "options": ["git fetch origin", "Mengedit file menu", "git add ."],
+    "answer": 0,
+    "explanation": "Fetch memperbarui referensi remote-tracking sesuai refspec yang dikonfigurasi."
+  },
+  "commands": ["git branch -vv", "git fetch"],
+  "visual": "remote",
+  "minutes": 7,
+  "level": "Menengah",
+  "prerequisites": ["kelola-branch"],
+  "initialState": "Latihan remote: main dan origin/main lokal masih di A, sedangkan server sudah punya commit B dari Rani.",
+  "lab": "remote",
+  "objectives": [
+    "Bedakan branch lokal, remote-tracking ref, dan upstream.",
+    "Periksa hasilnya: Perbedaan posisi dapat dijelaskan tanpa menganggap fetch melakukan merge."
+  ],
+  "sources": [
+    {
+      "title": "Manual git branch",
+      "url": "https://git-scm.com/docs/git-branch"
+    },
+    {
+      "title": "Manual git fetch",
+      "url": "https://git-scm.com/docs/git-fetch"
+    }
+  ],
+  "verification": {
+    "command": "git branch -vv",
+    "explanation": "Perbedaan posisi dapat dijelaskan tanpa menganggap fetch melakukan merge."
+  },
+  "order": 19
+}

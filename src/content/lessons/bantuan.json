@@ -1,0 +1,60 @@
+{
+  "chapter": 2,
+  "id": "bantuan",
+  "title": "Saat lupa, tahu tempat bertanya.",
+  "summary": "Gunakan bantuan bawaan Git dan pahami terminal sebelum menyalin command.",
+  "scenario": "Tutorial memakai opsi yang belum kamu kenal. Kamu ingin memeriksanya sebelum menjalankan command pada pekerjaan asli.",
+  "concept": "git <command> -h menampilkan bantuan singkat. git help <command> membuka manual yang lebih lengkap. Placeholder seperti <file> harus diganti dan tanda kurung sudutnya tidak ikut diketik. Teks output bukan command yang perlu dijalankan.",
+  "analogy": "Bantuan singkat seperti label pada alat; manual lengkap seperti buku petunjuk. Baca bagian yang sesuai pekerjaanmu.",
+  "steps": [
+    {
+      "title": "Baca ringkasan",
+      "command": "git stash -h",
+      "explanation": "Perhatikan opsi -u dan -m. Bantuan singkat bisa keluar dengan exit code nonzero walau informasinya berhasil ditampilkan."
+    },
+    {
+      "title": "Buka manual",
+      "command": "git help stash",
+      "explanation": "Di pager tekan / untuk mencari dan q untuk keluar. Jika manual lokal tidak tersedia, buka manual resmi online."
+    }
+  ],
+  "result": "Kamu bisa memeriksa sintaks tanpa mengubah repository.",
+  "pitfall": "Command dari shell POSIX belum tentu bekerja di PowerShell, terutama kutip, variabel, dan perintah membuat file. Command Git dasar pada panduan ini dipilih agar bisa digunakan di keduanya.",
+  "practice": "Cari arti --staged pada bantuan git diff. Jelaskan apa yang dibandingkan tanpa mencoba menghafal semua opsi.",
+  "quiz": {
+    "question": "Dalam git add <file>, apa yang kamu ketik?",
+    "options": [
+      "git add <file> secara literal",
+      "git add menu.json untuk file menu.json",
+      "Hanya nama file"
+    ],
+    "answer": 1,
+    "explanation": "Tanda <...> menandai nilai yang perlu kamu ganti."
+  },
+  "commands": ["git help", "git stash -h"],
+  "visual": "snapshot",
+  "minutes": 6,
+  "level": "Dasar",
+  "prerequisites": ["terminal-folder"],
+  "initialState": "Git terpasang. Bantuan command tidak memerlukan file proyek berubah; manual lokal mungkin tidak tersedia pada semua instalasi.",
+  "lab": "basics",
+  "objectives": [
+    "Gunakan bantuan bawaan Git dan pahami terminal sebelum menyalin command.",
+    "Periksa hasilnya: Kamu bisa memeriksa sintaks tanpa mengubah repository."
+  ],
+  "sources": [
+    {
+      "title": "Manual git help",
+      "url": "https://git-scm.com/docs/git-help"
+    },
+    {
+      "title": "Manual git stash",
+      "url": "https://git-scm.com/docs/git-stash"
+    }
+  ],
+  "verification": {
+    "command": "git stash -h",
+    "explanation": "Kamu bisa memeriksa sintaks tanpa mengubah repository."
+  },
+  "order": 6
+}

@@ -1,0 +1,56 @@
+{
+  "chapter": 1,
+  "id": "kenalan-git",
+  "title": "Versi berubah. Jejaknya tetap ada.",
+  "summary": "Kenali Git sebagai pencatat snapshot proyek, supaya perubahan bisa dipahami dan ditinjau kembali.",
+  "scenario": "Kamu punya menu-final.html, menu-final-baru.html, dan menu-final-beneran.html. Rekanmu mengedit salinan yang berbeda. Versi mana yang sebenarnya dipakai?",
+  "concept": "Git adalah version control terdistribusi. Commit merekam snapshot file yang dilacak beserta metadata dan hubungan ke riwayat sebelumnya. Repository lokal bisa dipakai tanpa koneksi internet. GitHub dan GitLab adalah layanan yang bisa menyimpan repository remote dan menambahkan fitur kolaborasi.",
+  "analogy": "Bayangkan album foto perkembangan tokomu. Foto menyimpan keadaan pada suatu waktu, sementara keterangan menjelaskan alasan perubahan. Git menyimpan snapshot proyek, bukan foto layar dan bukan hanya daftar baris yang diedit.",
+  "steps": [
+    {
+      "title": "Kenali Git yang terpasang",
+      "command": "git --version",
+      "explanation": "Perintah ini menampilkan versi Git di komputermu. Jika belum tersedia, lanjutkan ke bab persiapan."
+    },
+    {
+      "title": "Baca pengantar lokal",
+      "command": "git help git",
+      "explanation": "Buka manual utama. Sebagian sistem menampilkan manual di browser atau pager; tekan q untuk keluar dari pager."
+    }
+  ],
+  "result": "Kamu bisa membedakan Git, repository, commit, dan layanan hosting. Tidak ada file proyek yang berubah dalam demonstrasi ini.",
+  "pitfall": "Git bukan backup otomatis seluruh komputer. Perubahan yang belum direkam dan file yang tidak dilacak tidak otomatis tersimpan dalam riwayat.",
+  "practice": "Bayangkan perubahan harga menu minggu ini. Tuliskan keadaan yang perlu direkam dan alasan yang akan kamu sertakan pada commit.",
+  "quiz": {
+    "question": "Mana yang bisa dilakukan tanpa internet?",
+    "options": [
+      "Membuat commit di repository lokal",
+      "Mengirim push ke server internet",
+      "Membuka pull request di GitHub"
+    ],
+    "answer": 0,
+    "explanation": "Commit adalah operasi lokal. Komunikasi dengan server memerlukan akses ke remote tersebut."
+  },
+  "commands": ["git --version", "git help"],
+  "visual": "snapshot",
+  "minutes": 6,
+  "level": "Dasar",
+  "prerequisites": [],
+  "initialState": "Tidak memerlukan repo. Git sudah terpasang untuk contoh --version; instalasi dijelaskan pada bab 02.",
+  "lab": "basics",
+  "objectives": [
+    "Kenali Git sebagai pencatat snapshot proyek, supaya perubahan bisa dipahami dan ditinjau kembali.",
+    "Periksa hasilnya: Kamu bisa membedakan Git, repository, commit, dan layanan hosting. Tidak ada file proyek yang berubah dalam demonstrasi ini."
+  ],
+  "sources": [
+    {
+      "title": "Manual git help",
+      "url": "https://git-scm.com/docs/git-help"
+    }
+  ],
+  "verification": {
+    "command": "git --version",
+    "explanation": "Kamu bisa membedakan Git, repository, commit, dan layanan hosting. Tidak ada file proyek yang berubah dalam demonstrasi ini."
+  },
+  "order": 0
+}

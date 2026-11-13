@@ -1,0 +1,69 @@
+{
+  "chapter": 3,
+  "id": "mulai-repo",
+  "title": "Mulai dari satu repository.",
+  "summary": "Pilih init untuk proyek baru atau clone untuk meneruskan proyek yang sudah ada.",
+  "scenario": "Folder website kopi sudah ada di laptopmu. Rekan lain justru akan mulai dari repository yang sudah tersimpan di server.",
+  "concept": "git init membuat metadata Git pada folder proyek. git clone membuat salinan repository beserta riwayat dan biasanya mengatur remote bernama origin. Keduanya adalah pintu masuk alternatif; kamu tidak perlu init di dalam folder hasil clone.",
+  "analogy": "init berarti menyiapkan buku catatan baru. clone berarti memperoleh salinan buku beserta catatan yang sudah dibuat orang lain.",
+  "steps": [
+    {
+      "title": "Buat repo di folder proyek",
+      "command": "git init -b main",
+      "explanation": "Jalankan dari folder yang memang ingin dilacak. Opsi -b tersedia sejak Git 2.28."
+    },
+    {
+      "title": "Periksa keadaan awal",
+      "command": "git status",
+      "explanation": "File yang belum ditambahkan akan terlihat sebagai untracked. Branch pertama belum memiliki commit sampai kamu membuatnya."
+    },
+    {
+      "title": "Alternatif untuk proyek tim",
+      "command": "git clone https://example.com/tim/kopi-kita.git",
+      "explanation": "URL ini contoh. Ganti dengan URL repository yang benar dan bisa kamu akses; jalankan dari folder induk."
+    }
+  ],
+  "result": "Proyek baru memiliki folder .git, atau proyek tim sudah tersedia sebagai hasil clone.",
+  "pitfall": "Hindari init pada folder induk yang memuat banyak proyek berbeda. Periksa lokasi terminal sebelum memulai.",
+  "practice": "Buat folder latihan kosong, init main, lalu buat README.md melalui editor. Periksa apakah status menunjukkan README sebagai untracked.",
+  "quiz": {
+    "question": "Proyek sudah ada di server. Mulai dengan apa?",
+    "options": [
+      "git clone URL-repo",
+      "git init di setiap subfolder",
+      "git push sebelum punya repository"
+    ],
+    "answer": 0,
+    "explanation": "Clone mengambil repository yang sudah ada, termasuk riwayatnya."
+  },
+  "commands": ["git init", "git clone", "git status"],
+  "visual": "snapshot",
+  "minutes": 8,
+  "level": "Dasar",
+  "prerequisites": ["setup"],
+  "initialState": "Pilih salah satu: folder proyek baru tanpa .git, atau URL repo yang benar-benar dapat diakses untuk clone.",
+  "lab": "basics",
+  "objectives": [
+    "Pilih init untuk proyek baru atau clone untuk meneruskan proyek yang sudah ada.",
+    "Periksa hasilnya: Proyek baru memiliki folder .git, atau proyek tim sudah tersedia sebagai hasil clone."
+  ],
+  "sources": [
+    {
+      "title": "Manual git init",
+      "url": "https://git-scm.com/docs/git-init"
+    },
+    {
+      "title": "Manual git clone",
+      "url": "https://git-scm.com/docs/git-clone"
+    },
+    {
+      "title": "Manual git status",
+      "url": "https://git-scm.com/docs/git-status"
+    }
+  ],
+  "verification": {
+    "command": "git status --short",
+    "explanation": "Proyek baru memiliki folder .git, atau proyek tim sudah tersedia sebagai hasil clone."
+  },
+  "order": 8
+}

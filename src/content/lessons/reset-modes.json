@@ -1,0 +1,57 @@
+{
+  "chapter": 10,
+  "id": "reset-modes",
+  "title": "Satu target, tiga dampak berbeda.",
+  "summary": "Bandingkan reset soft, mixed, dan hard dari keadaan awal yang sama.",
+  "scenario": "HEAD berisi harga 20000, index 22000, dan editor 24000. Kamu ingin kembali ke commit harga 18000 dengan dampak yang diketahui.",
+  "concept": "Untuk reset dengan target commit, soft memindahkan branch aktif tanpa mengganti index dan working tree. Mixed juga mengisi ulang index dari target. Hard mengisi ulang keduanya dan dapat menimpa pekerjaan lokal, termasuk untracked yang menghalangi penulisan path tracked. Ini berbeda dari reset per path yang tidak memindahkan HEAD.",
+  "analogy": "Kamu bisa memundurkan penanda saja, mengatur ulang nampan juga, atau mengatur ulang seluruh meja sesuai foto lama.",
+  "steps": [
+    {
+      "title": "Catat tiga versi",
+      "command": "git show HEAD:menu.json\ngit show :menu.json\ngit diff -- menu.json",
+      "explanation": "Mulai salah satu latihan reset. Jangan mencoba tiga mode berurutan lalu membandingkannya sebagai keadaan awal yang sama."
+    },
+    {
+      "title": "Pilih satu mode di folder latihan",
+      "command": "git reset --soft awal",
+      "explanation": "Ganti --soft dengan --mixed atau --hard hanya pada folder latihan mode yang sesuai. Tag awal menunjuk snapshot 18000."
+    },
+    {
+      "title": "Buktikan hasil",
+      "command": "git show HEAD:menu.json\ngit show :menu.json\ngit status --short",
+      "explanation": "Periksa isi editor juga. Checker menilai ketiga tempat tersebut."
+    }
+  ],
+  "result": "Soft: index 22000/working 24000; mixed: index 18000/working 24000; hard: keduanya 18000.",
+  "pitfall": "Gunakan hard hanya bila perubahan contoh memang boleh dibuang. Reflog mencatat perpindahan commit, bukan seluruh edit yang belum direkam.",
+  "practice": "Jalankan start reset-soft, reset-mixed, dan reset-hard pada folder berbeda. Tuliskan tabel hasil sebelum dan sesudah.",
+  "quiz": {
+    "question": "Mode mana yang mengganti index tetapi mempertahankan working tree?",
+    "options": ["soft", "mixed", "hard"],
+    "answer": 1,
+    "explanation": "Mixed mengisi ulang index dari target dan mempertahankan working tree."
+  },
+  "commands": ["git reset"],
+  "visual": "reset",
+  "minutes": 9,
+  "level": "Menengah",
+  "prerequisites": ["reset-revert"],
+  "initialState": "Pilih salah satu latihan reset: tag awal harga 18000, HEAD 20000, index 22000, working tree 24000.",
+  "lab": "reset-soft",
+  "objectives": [
+    "Bandingkan reset soft, mixed, dan hard dari keadaan awal yang sama.",
+    "Periksa hasilnya: Soft: index 22000/working 24000; mixed: index 18000/working 24000; hard: keduanya 18000."
+  ],
+  "sources": [
+    {
+      "title": "Manual git reset",
+      "url": "https://git-scm.com/docs/git-reset"
+    }
+  ],
+  "verification": {
+    "command": "git show HEAD:menu.json\ngit show :menu.json\ngit diff -- menu.json",
+    "explanation": "Soft: index 22000/working 24000; mixed: index 18000/working 24000; hard: keduanya 18000."
+  },
+  "order": 38
+}

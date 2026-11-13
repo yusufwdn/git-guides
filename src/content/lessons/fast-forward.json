@@ -1,0 +1,56 @@
+{
+  "chapter": 6,
+  "id": "fast-forward",
+  "title": "Kadang merge cukup memajukan label.",
+  "summary": "Kenali syarat fast-forward dan kegunaan --ff-only.",
+  "scenario": "Main belum berubah sejak fitur diskon bercabang. Kamu ingin menerima fitur tanpa membuat commit pertemuan tambahan.",
+  "concept": "Fast-forward dapat dilakukan ketika ujung branch penerima merupakan ancestor ujung sumber. --ff-only membatasi operasi pada keadaan ini dan berhenti bila riwayat divergen. --no-ff justru meminta merge commit ketika integrasi membutuhkan merge dan fast-forward memungkinkan; gunakan berdasarkan aturan tim.",
+  "analogy": "Penanda main tertinggal beberapa halaman di jalur yang sama. Kamu cukup memajukannya ke halaman fitur.",
+  "steps": [
+    {
+      "title": "Pastikan penerima main",
+      "command": "git switch main\ngit log --oneline --graph --all",
+      "explanation": "Pada latihan merge-ff, main berada tepat sebelum commit fitur."
+    },
+    {
+      "title": "Majukan tanpa commit baru",
+      "command": "git merge --ff-only fitur-diskon",
+      "explanation": "Sesudah berhasil, kedua nama branch menunjuk commit yang sama."
+    }
+  ],
+  "result": "Jumlah commit tetap sama dan referensi main bergerak ke commit fitur.",
+  "pitfall": "Jika --ff-only gagal, itu bukan alasan langsung memakai force. Riwayat mungkin telah bercabang dan memerlukan keputusan integrasi.",
+  "practice": "Selesaikan latihan merge-ff. Bandingkan hash main dan fitur-diskon menggunakan rev-parse.",
+  "quiz": {
+    "question": "Apa yang baru pada fast-forward?",
+    "options": [
+      "Selalu satu object merge commit",
+      "Posisi referensi penerima",
+      "Semua hash commit lama"
+    ],
+    "answer": 1,
+    "explanation": "Tidak perlu commit baru untuk menghubungkan jalur yang sudah linear."
+  },
+  "commands": ["git merge --ff-only"],
+  "visual": "merge",
+  "minutes": 7,
+  "level": "Menengah",
+  "prerequisites": ["merge"],
+  "initialState": "Latihan merge-ff: main pada A; fitur-diskon pada B dengan parent A. Tidak ada commit tambahan di main.",
+  "lab": "merge-ff",
+  "objectives": [
+    "Kenali syarat fast-forward dan kegunaan --ff-only.",
+    "Periksa hasilnya: Jumlah commit tetap sama dan referensi main bergerak ke commit fitur."
+  ],
+  "sources": [
+    {
+      "title": "Manual git merge",
+      "url": "https://git-scm.com/docs/git-merge"
+    }
+  ],
+  "verification": {
+    "command": "git rev-parse main fitur-diskon",
+    "explanation": "Jumlah commit tetap sama dan referensi main bergerak ke commit fitur."
+  },
+  "order": 21
+}

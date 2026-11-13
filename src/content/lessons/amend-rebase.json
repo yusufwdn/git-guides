@@ -1,0 +1,65 @@
+{
+  "chapter": 11,
+  "id": "amend-rebase",
+  "title": "Rapikan cerita sebelum dibagikan.",
+  "summary": "Perbaiki commit terakhir atau susun beberapa commit dengan sadar.",
+  "scenario": "Branch fitur berisi commit coba, typo, fix-lagi, dan akhirnya hasil yang benar. Kamu ingin reviewer membaca cerita yang lebih jelas.",
+  "concept": "Amend membuat pengganti commit terakhir. Interactive rebase memutar ulang commit dan memungkinkan reword, squash, fixup, atau mengubah urutannya. Identitas commit berubah karena isi, metadata, atau parent berubah. Hindari menulis ulang riwayat yang sudah menjadi dasar kerja orang lain tanpa koordinasi.",
+  "analogy": "Kamu menyunting draf sebelum menyerahkannya. Sesudah orang lain memakai draf itu, pergantian versi harus dibicarakan.",
+  "steps": [
+    {
+      "title": "Perbaiki pesan terakhir",
+      "command": "git commit --amend",
+      "explanation": "Jika index berisi perubahan, perubahan itu ikut dalam commit pengganti. Periksa staged diff dulu."
+    },
+    {
+      "title": "Susun tiga commit lokal",
+      "command": "git rebase -i HEAD~3",
+      "explanation": "Perlu tiga commit dalam rentang yang dimaksud. Editor menampilkan instruksi; pilih reword/squash/fixup sesuai tujuan."
+    },
+    {
+      "title": "Jika rebase berhenti",
+      "command": "git status",
+      "explanation": "Selesaikan konflik, add file, lalu git rebase --continue. Gunakan git rebase --abort bila ingin kembali ke keadaan sebelum proses."
+    }
+  ],
+  "result": "Riwayat branch pribadi lebih mudah dibaca dan kamu tahu bahwa hash commit bisa berubah.",
+  "pitfall": "--force-with-lease tetap menulis ulang remote. Ia menambahkan pemeriksaan lease, bukan izin untuk menimpa pekerjaan tanpa koordinasi.",
+  "practice": "Di branch latihan, buat tiga commit kecil lalu gabungkan dua yang memiliki tujuan sama. Bandingkan hash sebelum dan sesudah.",
+  "quiz": {
+    "question": "Apakah amend mempertahankan identitas commit yang diganti?",
+    "options": [
+      "Ya, selalu",
+      "Umumnya menghasilkan commit pengganti dengan hash berbeda",
+      "Hanya mengubah working tree"
+    ],
+    "answer": 1,
+    "explanation": "Commit bersifat immutable. Amend membuat object commit pengganti."
+  },
+  "commands": ["git commit --amend", "git rebase -i"],
+  "visual": "graph",
+  "minutes": 8,
+  "level": "Menengah",
+  "prerequisites": ["restore"],
+  "initialState": "Branch pribadi punya setidaknya tiga commit dalam rentang yang ingin dirapikan. Periksa index sebelum amend; jangan ubah jalur bersama tanpa koordinasi.",
+  "lab": "rebase",
+  "objectives": [
+    "Perbaiki commit terakhir atau susun beberapa commit dengan sadar.",
+    "Periksa hasilnya: Riwayat branch pribadi lebih mudah dibaca dan kamu tahu bahwa hash commit bisa berubah."
+  ],
+  "sources": [
+    {
+      "title": "Manual git commit",
+      "url": "https://git-scm.com/docs/git-commit"
+    },
+    {
+      "title": "Manual git rebase",
+      "url": "https://git-scm.com/docs/git-rebase"
+    }
+  ],
+  "verification": {
+    "command": "git log --oneline --graph -6",
+    "explanation": "Riwayat branch pribadi lebih mudah dibaca dan kamu tahu bahwa hash commit bisa berubah."
+  },
+  "order": 41
+}

@@ -1,0 +1,56 @@
+{
+  "chapter": 2,
+  "id": "terminal-folder",
+  "title": "Pastikan sedang bekerja di folder yang benar.",
+  "summary": "Kenali lokasi terminal, root repository, dan path relatif.",
+  "scenario": "Kamu menjalankan add di folder proyek lain dan bingung mengapa file menu tidak ditemukan.",
+  "concept": "Command Git memakai direktori kerja terminal sebagai konteks. Path relatif dimulai dari lokasi itu. git -C PATH menjalankan operasi dari path tertentu tanpa memindahkan terminal. Kutip path yang mengandung spasi.",
+  "analogy": "Alamat pengiriman yang tepat sama pentingnya dengan isi paket. Perintah yang benar di alamat berbeda tetap bisa memberi hasil yang keliru.",
+  "steps": [
+    {
+      "title": "Temukan root repository",
+      "command": "git rev-parse --show-toplevel",
+      "explanation": "Hasilnya path absolut root repo. Di luar repo, Git akan memberi pesan bukan repository."
+    },
+    {
+      "title": "Periksa folder melalui -C",
+      "command": "git -C \"kopi-kita\" status",
+      "explanation": "Contoh ini dijalankan dari folder induk yang memiliki subfolder kopi-kita. Sesuaikan dengan lokasi sebenarnya."
+    }
+  ],
+  "result": "Kamu dapat menyebut repo yang akan terkena operasi sebelum menjalankan command yang mengubah keadaan.",
+  "pitfall": "Prompt terminal dan folder editor tidak selalu menunjuk lokasi yang sama. Periksa root sebelum restore, reset, atau clean.",
+  "practice": "Buka terminal pada repo latihan, lalu satu tingkat di atasnya. Bandingkan status biasa dengan git -C \"kopi-kita\" status.",
+  "quiz": {
+    "question": "Apa fungsi git -C PATH?",
+    "options": [
+      "Menjalankan Git dengan konteks folder PATH",
+      "Membuat commit otomatis",
+      "Mengubah seluruh konfigurasi global"
+    ],
+    "answer": 0,
+    "explanation": "-C memilih konteks direktori untuk proses tersebut."
+  },
+  "commands": ["git rev-parse", "git -C"],
+  "visual": "snapshot",
+  "minutes": 7,
+  "level": "Dasar",
+  "prerequisites": ["setup"],
+  "initialState": "Tersedia folder repo kopi-kita dan folder induknya. Perhatikan dari folder mana setiap command dijalankan.",
+  "lab": "basics",
+  "objectives": [
+    "Kenali lokasi terminal, root repository, dan path relatif.",
+    "Periksa hasilnya: Kamu dapat menyebut repo yang akan terkena operasi sebelum menjalankan command yang mengubah keadaan."
+  ],
+  "sources": [
+    {
+      "title": "Manual git rev-parse",
+      "url": "https://git-scm.com/docs/git-rev-parse"
+    }
+  ],
+  "verification": {
+    "command": "git rev-parse --show-toplevel",
+    "explanation": "Kamu dapat menyebut repo yang akan terkena operasi sebelum menjalankan command yang mengubah keadaan."
+  },
+  "order": 5
+}

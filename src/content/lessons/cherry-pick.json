@@ -1,0 +1,61 @@
+{
+  "chapter": 11,
+  "id": "cherry-pick",
+  "title": "Ambil satu perubahan yang dibutuhkan.",
+  "summary": "Pindahkan perubahan tertentu tanpa menggabungkan seluruh branch sumber.",
+  "scenario": "Perbaikan checkout ada di branch eksperimen bersama fitur yang belum siap. Branch rilis hanya memerlukan perbaikan checkout.",
+  "concept": "Cherry-pick menerapkan perubahan dari commit terpilih pada branch aktif dan biasanya membuat commit baru. Ini tidak memindahkan object sumber dari branch asal. Perubahan bisa memerlukan dependensi commit sebelumnya dan dapat mengalami konflik.",
+  "analogy": "Kamu mengambil satu resep dari buku percobaan untuk buku menu utama. Periksa apakah resep itu membutuhkan bahan yang baru dijelaskan di halaman sebelumnya.",
+  "steps": [
+    {
+      "title": "Pilih commit dengan konteks",
+      "command": "git log --oneline fitur-eksperimen\ngit show HASH",
+      "explanation": "Ganti HASH dengan commit perbaikan yang benar. Periksa apakah ia bergantung pada perubahan lain."
+    },
+    {
+      "title": "Terapkan di penerima",
+      "command": "git switch rilis\ngit cherry-pick HASH",
+      "explanation": "Branch rilis harus sudah ada. Uji hasilnya setelah penerapan."
+    },
+    {
+      "title": "Kelola konflik bila ada",
+      "command": "git status",
+      "explanation": "Setelah resolve dan add, gunakan git cherry-pick --continue. Untuk membatalkan proses, gunakan git cherry-pick --abort."
+    }
+  ],
+  "result": "Branch rilis mendapatkan perubahan yang dipilih tanpa seluruh pekerjaan eksperimen.",
+  "pitfall": "Perubahan yang sama pada dua branch bisa menimbulkan kebingungan saat integrasi berikutnya. Catat asal perubahan dan periksa riwayat.",
+  "practice": "Buat dua commit pada branch fitur. Cherry-pick hanya commit kedua ke branch latihan dan cek apakah hasilnya tetap berfungsi.",
+  "quiz": {
+    "question": "Cherry-pick biasanya menghasilkan apa?",
+    "options": [
+      "Commit baru yang menerapkan perubahan terpilih",
+      "Pemindahan semua branch",
+      "Penghapusan commit sumber"
+    ],
+    "answer": 0,
+    "explanation": "Commit sumber tetap; perubahan diterapkan pada jalur penerima."
+  },
+  "commands": ["git cherry-pick"],
+  "visual": "graph",
+  "minutes": 8,
+  "level": "Menengah",
+  "prerequisites": ["rebase-dasar"],
+  "initialState": "Latihan cherry-pick: branch rilis pada dasar awal; fitur-eksperimen punya eksperimen menu lalu commit perbaikan checkout yang independen.",
+  "lab": "cherry-pick",
+  "objectives": [
+    "Pindahkan perubahan tertentu tanpa menggabungkan seluruh branch sumber.",
+    "Periksa hasilnya: Branch rilis mendapatkan perubahan yang dipilih tanpa seluruh pekerjaan eksperimen."
+  ],
+  "sources": [
+    {
+      "title": "Manual git cherry-pick",
+      "url": "https://git-scm.com/docs/git-cherry-pick"
+    }
+  ],
+  "verification": {
+    "command": "git show HEAD:menu.json\ngit show HEAD:checkout.js",
+    "explanation": "Branch rilis mendapatkan perubahan yang dipilih tanpa seluruh pekerjaan eksperimen."
+  },
+  "order": 43
+}

@@ -1,0 +1,61 @@
+{
+  "chapter": 4,
+  "id": "riwayat",
+  "title": "Baca cerita di balik commit.",
+  "summary": "Gunakan log dan show untuk menemukan perubahan tanpa menebak-nebak.",
+  "scenario": "Harga kopi di website berbeda dari daftar kasir. Kamu ingin tahu commit mana yang mengubahnya dan apa alasan penulisnya.",
+  "concept": "git log menelusuri commit yang dapat dicapai dari titik awal. --oneline meringkas tampilan, --graph menggambar hubungan parent, dan --all menyertakan referensi lain. git show menampilkan detail satu commit, termasuk patch secara default untuk commit biasa.",
+  "analogy": "Log adalah daftar isi album; show membuka satu halaman lengkap dengan keterangannya.",
+  "steps": [
+    {
+      "title": "Lihat peta riwayat",
+      "command": "git log --oneline --graph --all --decorate",
+      "explanation": "Cari hubungan branch dan pesan perubahan. Hash pendek adalah identitas yang cukup unik dalam repo itu."
+    },
+    {
+      "title": "Fokus pada satu file",
+      "command": "git log --oneline -- menu.json",
+      "explanation": "Pemisah -- menyatakan bagian berikutnya adalah path."
+    },
+    {
+      "title": "Periksa snapshot terbaru",
+      "command": "git show HEAD -- menu.json",
+      "explanation": "Lihat perubahan menu pada commit yang ditunjuk HEAD. Gunakan hash untuk commit lain."
+    }
+  ],
+  "result": "Kamu menemukan perubahan yang relevan dan bisa membaca patch-nya sebelum mengambil tindakan.",
+  "pitfall": "Urutan baris log tidak selalu menggambarkan satu jalur lurus. Merge bisa mempunyai lebih dari satu parent; gunakan grafik untuk konteks.",
+  "practice": "Cari dua commit terakhir yang mengubah README.md dan jelaskan perbedaan tujuan keduanya.",
+  "quiz": {
+    "question": "Perintah mana yang cocok untuk memeriksa satu commit?",
+    "options": ["git show HASH", "git add HASH", "git init HASH"],
+    "answer": 0,
+    "explanation": "Show membuka detail object atau commit yang kamu pilih."
+  },
+  "commands": ["git log", "git show"],
+  "visual": "graph",
+  "minutes": 8,
+  "level": "Dasar",
+  "prerequisites": ["mulai-repo"],
+  "initialState": "Repo punya beberapa commit dan menu.json tracked. Jika pencarian kosong, periksa apakah file pernah berubah pada riwayat itu.",
+  "lab": "tags",
+  "objectives": [
+    "Gunakan log dan show untuk menemukan perubahan tanpa menebak-nebak.",
+    "Periksa hasilnya: Kamu menemukan perubahan yang relevan dan bisa membaca patch-nya sebelum mengambil tindakan."
+  ],
+  "sources": [
+    {
+      "title": "Manual git log",
+      "url": "https://git-scm.com/docs/git-log"
+    },
+    {
+      "title": "Manual git show",
+      "url": "https://git-scm.com/docs/git-show"
+    }
+  ],
+  "verification": {
+    "command": "git log --oneline -- menu.json",
+    "explanation": "Kamu menemukan perubahan yang relevan dan bisa membaca patch-nya sebelum mengambil tindakan."
+  },
+  "order": 12
+}

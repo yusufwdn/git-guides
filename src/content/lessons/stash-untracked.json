@@ -1,0 +1,57 @@
+{
+  "chapter": 9,
+  "id": "stash-untracked",
+  "title": "File baru perlu diajak secara eksplisit.",
+  "summary": "Pilih perubahan tracked, untracked, dan staged yang perlu disimpan.",
+  "scenario": "diskon.js sudah dilacak, sedangkan catatan.txt baru dibuat. Setelah stash biasa, catatan masih terlihat di working tree.",
+  "concept": "Stash biasa menyimpan perubahan tracked dan index. -u juga menyertakan untracked; -a juga ignored. --index pada penerapan mencoba memulihkan pemisahan staged/unstaged. Pilihan ini berbeda: -u menentukan apa yang disimpan, --index menentukan keadaan index yang dicoba dipulihkan.",
+  "analogy": "Kamu memberi daftar bahan yang masuk laci, lalu nanti memilih apakah susunan nampannya ikut dipasang kembali.",
+  "steps": [
+    {
+      "title": "Simpan file baru juga",
+      "command": "git stash push -u -m \"Diskon dan catatan\"",
+      "explanation": "Gunakan latihan stash. Periksa status untuk membuktikan file baru tidak tertinggal."
+    },
+    {
+      "title": "Pulihkan dan periksa",
+      "command": "git stash pop\ngit status --short",
+      "explanation": "catatan.txt kembali sebagai untracked bila memang awalnya belum ditambahkan."
+    },
+    {
+      "title": "Variasi staging pada latihan terpisah",
+      "command": "git stash push -m \"Pisahkan index\"\ngit stash apply --index",
+      "explanation": "Jalankan variasi ini pada start stash-index, bukan lanjutan wajib dari latihan -u."
+    }
+  ],
+  "result": "Cakupan simpanan dan pemulihan staging dapat dijelaskan secara terpisah.",
+  "pitfall": "-a dapat memasukkan file ignored besar atau sensitif. Jangan menggunakannya sebagai kebiasaan tanpa meninjau isi.",
+  "practice": "Selesaikan stash dan stash-index pada dua folder latihan berbeda. Periksa diff biasa dan staged setelah apply --index.",
+  "quiz": {
+    "question": "Opsi untuk ikut menyimpan untracked adalah?",
+    "options": ["-u saat stash push", "--index saat status", "--force saat push remote"],
+    "answer": 0,
+    "explanation": "-u atau --include-untracked menambah cakupan file yang disimpan."
+  },
+  "commands": ["git stash push -u", "git stash apply --index"],
+  "visual": "stash",
+  "minutes": 9,
+  "level": "Menengah",
+  "prerequisites": ["stash"],
+  "initialState": "Latihan stash untuk -u; latihan stash-index terpisah untuk --index. Mulai folder baru saat membandingkan dua skenario.",
+  "lab": "stash",
+  "objectives": [
+    "Pilih perubahan tracked, untracked, dan staged yang perlu disimpan.",
+    "Periksa hasilnya: Cakupan simpanan dan pemulihan staging dapat dijelaskan secara terpisah."
+  ],
+  "sources": [
+    {
+      "title": "Manual git stash",
+      "url": "https://git-scm.com/docs/git-stash"
+    }
+  ],
+  "verification": {
+    "command": "git diff --staged\ngit diff\ngit stash list",
+    "explanation": "Cakupan simpanan dan pemulihan staging dapat dijelaskan secara terpisah."
+  },
+  "order": 33
+}

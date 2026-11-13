@@ -1,0 +1,65 @@
+{
+  "chapter": 7,
+  "id": "fetch-pull",
+  "title": "Ambil kabar dulu. Baru gabungkan.",
+  "summary": "Pisahkan fetch dari integrasi supaya arah perubahan lebih mudah dipahami.",
+  "scenario": "Rani sudah menambah menu di remote. Kamu ingin memeriksa perubahannya tanpa langsung mengubah file kerja.",
+  "concept": "git fetch mengambil object dan memperbarui remote-tracking refs sesuai konfigurasi, misalnya origin/main. Ia tidak otomatis menggabungkannya ke branch lokal. git pull menjalankan fetch lalu integrasi; hasilnya dipengaruhi opsi dan konfigurasi merge, rebase, atau fast-forward.",
+  "analogy": "Fetch seperti menerima surat ke kotak masuk. Merge atau rebase adalah keputusan untuk memasukkan kabar itu ke pekerjaanmu.",
+  "steps": [
+    {
+      "title": "Ambil pembaruan",
+      "command": "git fetch origin",
+      "explanation": "origin adalah nama remote, bukan branch. Kamu dapat melihat URL-nya melalui git remote -v."
+    },
+    {
+      "title": "Bandingkan lokal dan catatan remote",
+      "command": "git log --oneline main..origin/main\ngit diff main origin/main",
+      "explanation": "Ini memeriksa perbedaan terhadap keadaan remote yang terakhir diambil."
+    },
+    {
+      "title": "Integrasi yang hanya boleh maju",
+      "command": "git switch main\ngit merge --ff-only origin/main",
+      "explanation": "Jika jalurnya sudah bercabang, perintah berhenti. Tentukan strategi integrasi sesuai kesepakatan tim."
+    }
+  ],
+  "result": "Kamu mengetahui perubahan remote sebelum memutuskan integrasi.",
+  "pitfall": "origin/main adalah catatan lokal tentang branch remote pada saat fetch terakhir, bukan tampilan live server.",
+  "practice": "Gunakan dua clone repo latihan. Push dari clone pertama, fetch dari clone kedua, dan amati bahwa file kerja clone kedua belum berubah.",
+  "quiz": {
+    "question": "Apakah fetch otomatis mengubah file di branch aktif?",
+    "options": ["Ya, selalu", "Tidak, fetch bukan integrasi", "Ya, jika namanya origin"],
+    "answer": 1,
+    "explanation": "Fetch memperbarui data dan referensi remote-tracking; integrasi adalah langkah lain."
+  },
+  "commands": ["git fetch", "git pull", "git remote"],
+  "visual": "remote",
+  "minutes": 8,
+  "level": "Menengah",
+  "prerequisites": ["merge"],
+  "initialState": "Latihan remote: server dan clone Rani sudah punya harga baru, tetapi main serta origin/main lokal masih lama.",
+  "lab": "remote",
+  "objectives": [
+    "Pisahkan fetch dari integrasi supaya arah perubahan lebih mudah dipahami.",
+    "Periksa hasilnya: Kamu mengetahui perubahan remote sebelum memutuskan integrasi."
+  ],
+  "sources": [
+    {
+      "title": "Manual git fetch",
+      "url": "https://git-scm.com/docs/git-fetch"
+    },
+    {
+      "title": "Manual git pull",
+      "url": "https://git-scm.com/docs/git-pull"
+    },
+    {
+      "title": "Manual git remote",
+      "url": "https://git-scm.com/docs/git-remote"
+    }
+  ],
+  "verification": {
+    "command": "git log --oneline --graph --all\ngit branch -vv",
+    "explanation": "Kamu mengetahui perubahan remote sebelum memutuskan integrasi."
+  },
+  "order": 24
+}

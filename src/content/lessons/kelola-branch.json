@@ -1,0 +1,57 @@
+{
+  "chapter": 5,
+  "id": "kelola-branch",
+  "title": "Nama branch boleh berubah, pekerjaannya tetap.",
+  "summary": "Rename dan hapus referensi branch dengan memahami syaratnya.",
+  "scenario": "Branch typo bernama fitur-dikson sudah selesai. Kamu ingin membetulkan nama atau merapikan branch yang sudah digabung.",
+  "concept": "git branch -m mengganti nama branch. git branch -d menghapus referensi dengan pemeriksaan merged terhadap upstream bila dikonfigurasi, atau HEAD bila tidak. -D melewati pemeriksaan tersebut. Penghapusan nama branch tidak otomatis menghapus branch server ataupun memastikan object hilang.",
+  "analogy": "Mengganti label folder tidak menulis ulang isi buku. Membuang label juga bukan tindakan yang sama dengan menghancurkan seluruh halaman.",
+  "steps": [
+    {
+      "title": "Rename branch aktif",
+      "command": "git branch -m fitur-diskon-baru",
+      "explanation": "Gunakan nama baru yang belum ada. Commit yang ditunjuk tidak berubah."
+    },
+    {
+      "title": "Periksa sebelum menghapus",
+      "command": "git branch --merged main",
+      "explanation": "Pindah dari branch yang ingin dihapus. Periksa pula upstream melalui branch -vv."
+    },
+    {
+      "title": "Hapus branch yang sudah dipahami",
+      "command": "git branch -d fitur-diskon-baru",
+      "explanation": "Jika ditolak, pelajari alasannya; jangan otomatis menggantinya dengan -D."
+    }
+  ],
+  "result": "Nama branch rapi dan kamu tahu apakah operasi hanya berlaku lokal.",
+  "pitfall": "Branch yang aktif di linked worktree lain tidak dapat dihapus begitu saja. Pahami keberadaan worktree sebelum merapikan referensi.",
+  "practice": "Gunakan latihan merge-ff, gabungkan fitur dahulu, lalu hapus branch fitur dari main. Buktikan perubahan diskon tetap ada.",
+  "quiz": {
+    "question": "Menghapus branch lokal otomatis menghapus branch server?",
+    "options": ["Tidak", "Ya, selalu", "Ya, jika bernama fitur"],
+    "answer": 0,
+    "explanation": "Penghapusan lokal dan remote adalah operasi yang berbeda."
+  },
+  "commands": ["git branch -m", "git branch -d"],
+  "visual": "graph",
+  "minutes": 9,
+  "level": "Menengah",
+  "prerequisites": ["detached-head"],
+  "initialState": "Branch fitur aktif dan nama tujuan belum dipakai. Untuk langkah delete, branch harus sudah ditinjau dan kamu sudah pindah darinya.",
+  "lab": "merge-ff",
+  "objectives": [
+    "Rename dan hapus referensi branch dengan memahami syaratnya.",
+    "Periksa hasilnya: Nama branch rapi dan kamu tahu apakah operasi hanya berlaku lokal."
+  ],
+  "sources": [
+    {
+      "title": "Manual git branch",
+      "url": "https://git-scm.com/docs/git-branch"
+    }
+  ],
+  "verification": {
+    "command": "git branch -vv",
+    "explanation": "Nama branch rapi dan kamu tahu apakah operasi hanya berlaku lokal."
+  },
+  "order": 18
+}

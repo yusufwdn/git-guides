@@ -1,0 +1,65 @@
+{
+  "chapter": 3,
+  "id": "ignore",
+  "title": "Ada file yang tak perlu ikut.",
+  "summary": "Gunakan .gitignore untuk file hasil build, dependency, dan konfigurasi lokal.",
+  "scenario": "Folder node_modules dan file .env muncul di status. Keduanya tidak ingin kamu masukkan ke riwayat proyek.",
+  "concept": ".gitignore berisi pola untuk file yang belum dilacak. Contoh pola adalah node_modules/, dist/, dan .env. Jika suatu file sudah tracked, menambahkan polanya tidak menghentikan pelacakannya. git rm --cached menghapusnya dari index sambil mempertahankan salinan lokal.",
+  "analogy": "Daftar barang yang tidak perlu dicatat membantu memilih bahan baru. Daftar itu tidak menghapus catatan yang terlanjur masuk buku.",
+  "steps": [
+    {
+      "title": "Buat daftar melalui editor",
+      "command": "git status",
+      "explanation": "Buat .gitignore dan isi pola yang relevan, lalu periksa daftar untracked."
+    },
+    {
+      "title": "Telusuri aturan ignore",
+      "command": "git check-ignore -v .env",
+      "explanation": "Pada file untracked yang diabaikan, perintah ini menunjukkan pola yang cocok."
+    },
+    {
+      "title": "Berhenti melacak file lokal",
+      "command": "git rm --cached .env\ngit add .gitignore\ngit commit -m \"Abaikan konfigurasi lokal\"",
+      "explanation": "Jalankan rm --cached hanya jika .env sudah tracked dan memang harus dikeluarkan dari index."
+    }
+  ],
+  "result": "File lokal diabaikan untuk penambahan berikutnya, dan aturan ignore bisa dibagikan melalui commit.",
+  "pitfall": "Mengeluarkan secret dari commit terbaru tidak menghapusnya dari riwayat lama. Cabut atau rotasi kredensial yang terpapar terlebih dahulu.",
+  "practice": "Buat notes-local.txt, abaikan dengan .gitignore, lalu periksa aturan yang cocok menggunakan check-ignore.",
+  "quiz": {
+    "question": "Apakah .gitignore menghentikan pelacakan file yang sudah tracked?",
+    "options": [
+      "Ya, otomatis",
+      "Tidak, index harus diperbarui juga",
+      "Ya, setelah membuka ulang editor"
+    ],
+    "answer": 1,
+    "explanation": "Ignore terutama berlaku pada file yang belum tracked."
+  },
+  "commands": ["git check-ignore", "git rm --cached"],
+  "visual": "snapshot",
+  "minutes": 8,
+  "level": "Dasar",
+  "prerequisites": ["staging"],
+  "initialState": "Repo sudah punya HEAD. Contoh .env harus file dummy; langkah rm --cached hanya untuk path yang memang sudah tracked.",
+  "lab": "clean",
+  "objectives": [
+    "Gunakan .gitignore untuk file hasil build, dependency, dan konfigurasi lokal.",
+    "Periksa hasilnya: File lokal diabaikan untuk penambahan berikutnya, dan aturan ignore bisa dibagikan melalui commit."
+  ],
+  "sources": [
+    {
+      "title": "Manual git check-ignore",
+      "url": "https://git-scm.com/docs/git-check-ignore"
+    },
+    {
+      "title": "Manual git rm",
+      "url": "https://git-scm.com/docs/git-rm"
+    }
+  ],
+  "verification": {
+    "command": "git ls-files -- .env\ngit status --short --ignored",
+    "explanation": "File lokal diabaikan untuk penambahan berikutnya, dan aturan ignore bisa dibagikan melalui commit."
+  },
+  "order": 11
+}

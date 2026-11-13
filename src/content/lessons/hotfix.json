@@ -1,0 +1,65 @@
+{
+  "chapter": 13,
+  "id": "hotfix",
+  "title": "Perbaiki versi yang sedang dipakai.",
+  "summary": "Mulai hotfix dari titik rilis dan pastikan perbaikannya kembali ke jalur pengembangan.",
+  "scenario": "Main sudah berisi fitur minggu depan. Versi v1.0.0 yang dipakai toko punya bug checkout dan harus diperbaiki lebih dahulu.",
+  "concept": "Branch hotfix dapat dibuat dari tag rilis agar fitur yang belum siap tidak ikut. Setelah perbaikan diuji, buat tag rilis perbaikan dan integrasikan perbaikannya ke jalur lain yang masih membutuhkan. Penomoran versi dan otomasi rilis mengikuti kebijakan proyek.",
+  "analogy": "Perbaiki edisi yang sedang beredar tanpa menyisipkan bab percobaan dari naskah berikutnya.",
+  "steps": [
+    {
+      "title": "Mulai dari versi yang dipakai",
+      "command": "git switch -c hotfix-v1.0.1 v1.0.0",
+      "explanation": "Tag v1.0.0 harus tersedia. Kerjakan perbaikan dan uji pada lingkungan yang sesuai."
+    },
+    {
+      "title": "Rekam dan tandai",
+      "command": "git add checkout.js\ngit commit -m \"Perbaiki validasi checkout\"\ngit tag -a v1.0.1 -m \"Perbaikan checkout\"",
+      "explanation": "Pastikan hanya perubahan yang diperlukan masuk rilis."
+    },
+    {
+      "title": "Integrasikan ke pengembangan",
+      "command": "git switch main\ngit merge hotfix-v1.0.1",
+      "explanation": "Jika tim memakai strategi lain, cherry-pick atau PR dapat dipilih dengan konteks yang sesuai."
+    }
+  ],
+  "result": "Versi perbaikan tidak membawa fitur yang belum siap, dan bug yang sama tidak tertinggal di main.",
+  "pitfall": "Tag bukan bukti deployment berhasil. Periksa proses rilis, konfigurasi lingkungan, dan hasil pengujian.",
+  "practice": "Buat tag lama, tambahkan fitur baru di main, lalu buat hotfix dari tag. Buktikan fitur baru tidak ada pada hotfix.",
+  "quiz": {
+    "question": "Dari mana memulai perbaikan versi lama?",
+    "options": [
+      "Titik versi yang benar-benar dirilis",
+      "Selalu commit main terbaru tanpa pemeriksaan",
+      "Branch acak yang paling panjang"
+    ],
+    "answer": 0,
+    "explanation": "Mulai dari snapshot yang perlu diperbaiki agar fitur lain tidak ikut tanpa sengaja."
+  },
+  "commands": ["git tag", "git switch -c"],
+  "visual": "graph",
+  "minutes": 8,
+  "level": "Lanjutan",
+  "prerequisites": ["catatan-rilis"],
+  "initialState": "Tag v1.0.0 tersedia dan main sudah maju dengan fitur yang belum masuk versi rilis. Working tree bersih sebelum membuat hotfix.",
+  "lab": "tags",
+  "objectives": [
+    "Mulai hotfix dari titik rilis dan pastikan perbaikannya kembali ke jalur pengembangan.",
+    "Periksa hasilnya: Versi perbaikan tidak membawa fitur yang belum siap, dan bug yang sama tidak tertinggal di main."
+  ],
+  "sources": [
+    {
+      "title": "Manual git tag",
+      "url": "https://git-scm.com/docs/git-tag"
+    },
+    {
+      "title": "Manual git switch",
+      "url": "https://git-scm.com/docs/git-switch"
+    }
+  ],
+  "verification": {
+    "command": "git show v1.0.1\ngit log --graph --oneline --all",
+    "explanation": "Versi perbaikan tidak membawa fitur yang belum siap, dan bug yang sama tidak tertinggal di main."
+  },
+  "order": 51
+}

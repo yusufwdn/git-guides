@@ -1,0 +1,69 @@
+{
+  "chapter": 10,
+  "id": "reset-revert",
+  "title": "Riwayat bersama butuh cara undo yang pas.",
+  "summary": "Bandingkan reset, revert, dan batas bantuan reflog.",
+  "scenario": "Commit harga salah sudah dipakai tim. Di branch pribadi, kamu juga punya commit percobaan yang ingin disusun ulang.",
+  "concept": "Revert membuat commit baru yang membalik perubahan commit terpilih. Reset dengan target commit memindahkan branch aktif: --soft mempertahankan index dan working tree, --mixed mereset index, --hard juga mereset working tree dan dapat membuang perubahan. Reflog mencatat perpindahan refs secara lokal dan dapat membantu menemukan commit yang belum dipangkas.",
+  "analogy": "Revert menulis koreksi baru dalam buku bersama. Reset memindahkan penanda buku milikmu; dampaknya pada meja dan nampan bergantung mode.",
+  "steps": [
+    {
+      "title": "Undo commit biasa yang dibagikan",
+      "command": "git revert HEAD",
+      "explanation": "Untuk commit non-merge, ini membuat perubahan kebalikan. Konflik masih mungkin terjadi. Merge commit memerlukan pemilihan mainline dan pemahaman tambahan."
+    },
+    {
+      "title": "Rapikan commit lokal yang belum dibagikan",
+      "command": "git reset --soft HEAD~1",
+      "explanation": "Ini skenario alternatif: parent harus ada dan commit memang aman ditulis ulang. Isi tetap staged."
+    },
+    {
+      "title": "Cari posisi sebelum perpindahan",
+      "command": "git reflog",
+      "explanation": "Jika menemukan commit yang dimaksud, buat branch dengan git branch pulih HASH untuk mempertahankannya tanpa reset tergesa-gesa."
+    }
+  ],
+  "result": "Koreksi riwayat bersama punya jejak baru, sedangkan pekerjaan lokal bisa dirapikan dengan dampak yang diketahui.",
+  "pitfall": "Reflog bukan jaminan backup: entrinya dapat kedaluwarsa dan object bisa dipangkas. git clean menargetkan untracked; selalu mulai dengan git clean -nd untuk preview, bukan langsung menghapus.",
+  "practice": "Pada repo latihan, bandingkan reset --soft dan --mixed pada keadaan awal identik. Amati status dan kedua jenis diff.",
+  "quiz": {
+    "question": "Mode reset mana yang mempertahankan index dan working tree?",
+    "options": ["--hard", "--mixed", "--soft"],
+    "answer": 2,
+    "explanation": "Soft memindahkan referensi tanpa mereset index atau working tree."
+  },
+  "commands": ["git reset", "git revert", "git reflog", "git clean"],
+  "visual": "graph",
+  "minutes": 8,
+  "level": "Menengah",
+  "prerequisites": ["restore"],
+  "initialState": "Contoh revert berlaku untuk commit biasa yang sudah direkam. Contoh soft adalah skenario lokal terpisah dengan parent yang tersedia.",
+  "lab": "revert",
+  "objectives": [
+    "Bandingkan reset, revert, dan batas bantuan reflog.",
+    "Periksa hasilnya: Koreksi riwayat bersama punya jejak baru, sedangkan pekerjaan lokal bisa dirapikan dengan dampak yang diketahui."
+  ],
+  "sources": [
+    {
+      "title": "Manual git reset",
+      "url": "https://git-scm.com/docs/git-reset"
+    },
+    {
+      "title": "Manual git revert",
+      "url": "https://git-scm.com/docs/git-revert"
+    },
+    {
+      "title": "Manual git reflog",
+      "url": "https://git-scm.com/docs/git-reflog"
+    },
+    {
+      "title": "Manual git clean",
+      "url": "https://git-scm.com/docs/git-clean"
+    }
+  ],
+  "verification": {
+    "command": "git log --oneline -3\ngit show HEAD:menu.json",
+    "explanation": "Koreksi riwayat bersama punya jejak baru, sedangkan pekerjaan lokal bisa dirapikan dengan dampak yang diketahui."
+  },
+  "order": 37
+}

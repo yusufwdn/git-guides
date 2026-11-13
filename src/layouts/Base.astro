@@ -1,0 +1,189 @@
+---
+interface Props {
+  page: any;
+  sidebar: string;
+  payload: any;
+}
+const { page, sidebar, payload } = Astro.props;
+const canonical = Astro.site && page.status !== 404 ? new URL(page.path, Astro.site).href : null;
+---
+
+<!doctype html>
+<html lang="id" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ff6200" />
+    <meta name="description" content={page.description} />
+    <title>{page.title}</title>
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      href="/assets/fonts/Poppins-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="/assets/styles.css" />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:title" content={page.title} />
+    <meta property="og:description" content={page.description} />
+    <meta property="og:type" content={page.kind === 'lesson' ? 'article' : 'website'} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    {page.status === 404 && <meta name="robots" content="noindex, follow" />}
+    <script is:inline>
+      try {
+        const theme = JSON.parse(localStorage.getItem('gitguides:theme'));
+        if (theme === 'dark') document.documentElement.dataset.theme = 'dark';
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">
+      Langsung ke materi
+    </a>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Git Guides, halaman utama">
+        <svg viewBox="0 0 40 40" aria-hidden="true">
+          <rect
+            x="5"
+            y="5"
+            width="30"
+            height="30"
+            rx="7"
+            transform="rotate(-12 20 20)"
+            fill="currentColor"
+          />
+          <path d="M15 11v15m0-11 10 9v5" fill="none" stroke="#fff8ee" stroke-width="2.5" />
+          <circle cx="15" cy="12" r="3" fill="#fff8ee" />
+          <circle cx="15" cy="27" r="3" fill="#fff8ee" />
+          <circle cx="25" cy="26" r="3" fill="#fff8ee" />
+        </svg>
+        <span>
+          git<span class="brand-light">guides</span>
+          <span class="brand-period">.</span>
+        </span>
+      </a>
+      <nav class="topnav" aria-label="Navigasi utama">
+        <a href="/belajar/kenalan-git/" data-nav="belajar">
+          Belajar Git
+        </a>
+        <a href="/playground/" data-nav="playground">
+          Playground <span class="tiny-arrow">↗</span>
+        </a>
+        <a href="/latihan/" data-nav="latihan">
+          Latihan
+        </a>
+        <a href="/referensi/" data-nav="referensi">
+          Referensi
+        </a>
+      </nav>
+      <div class="header-actions">
+        <button
+          class="search-trigger"
+          id="open-search"
+          aria-label="Cari materi, Control K"
+          disabled
+          data-prerender-disabled
+        >
+          <span class="search-icon" aria-hidden="true"></span>
+          <span>Cari sesuatu…</span>
+          <kbd>Ctrl K</kbd>
+        </button>
+        <button
+          class="icon-button theme-button"
+          id="theme-toggle"
+          disabled
+          data-prerender-disabled
+          aria-label="Aktifkan tema gelap"
+          title="Ganti tema"
+        >
+          ☼
+        </button>
+        <button
+          class="icon-button mobile-menu"
+          id="menu-toggle"
+          disabled
+          data-prerender-disabled
+          aria-label="Buka daftar bab"
+          aria-expanded="false"
+        >
+          ☰
+        </button>
+      </div>
+    </header>
+    <aside class="sidebar" id="sidebar" aria-label="Kurikulum">
+      <div class="sidebar-heading">
+        <span>PETA PERJALANAN</span>
+        <span class="sidebar-count">16 BAB</span>
+      </div>
+      <div id="chapter-nav" set:html={sidebar} />
+      <div class="sidebar-bottom">
+        <div class="progress-label">
+          <span>Perjalanan belajarmu</span>
+          <strong id="progress-percent">0%</strong>
+        </div>
+        <div class="progress-track">
+          <span id="progress-bar"></span>
+        </div>
+        <p id="progress-detail">Satu langkah kecil setiap hari.</p>
+        <a href="/roadmap/" class="roadmap-link">
+          Lihat seluruh perjalanan <span>↗</span>
+        </a>
+      </div>
+    </aside>
+    <div class="sidebar-scrim" id="sidebar-scrim"></div>
+    <main id="main" tabindex="-1" data-page-path={page.path}>
+      <noscript>
+        <div class="javascript-note">
+          <p>
+            Materi, diagram awal, dan latihan terminal tetap bisa dibaca. Aktifkan JavaScript untuk
+            simulator, pencarian, dan progres.
+          </p>
+          <nav aria-label="Navigasi tanpa JavaScript">
+            <a href="/persiapan/">Persiapan</a>
+            <a href="/roadmap/">Peta belajar</a>
+            <a href="/referensi/">Referensi</a>
+            <a href="/latihan/">Latihan terminal</a>
+          </nav>
+        </div>
+      </noscript>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <span>Dirangkai untuk yang ingin benar-benar paham.</span>
+      <a href="https://git-scm.com/docs" target="_blank" rel="noopener noreferrer">
+        Berlandaskan dokumentasi Git <span>↗</span>
+      </a>
+    </footer>
+    <dialog id="search-dialog" aria-labelledby="search-title">
+      <div class="search-dialog-top">
+        <label id="search-title" for="search-input">
+          Mau belajar apa hari ini?
+        </label>
+        <button class="icon-button" id="close-search" aria-label="Tutup pencarian">
+          ×
+        </button>
+      </div>
+      <input
+        id="search-input"
+        type="search"
+        placeholder="Coba: stash, salah commit, pindah branch…"
+        autocomplete="off"
+      />
+      <div id="search-results" class="search-results"></div>
+      <div class="search-hint">
+        <kbd>Esc</kbd> untuk menutup <span>Command, konsep, atau masalah sehari-hari</span>
+      </div>
+    </dialog>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script
+      id="page-data"
+      type="application/json"
+      set:html={JSON.stringify(payload).replace(/</g, '\u003c')}
+    />
+    <script>
+      import '../scripts/client';
+    </script>
+  </body>
+</html>

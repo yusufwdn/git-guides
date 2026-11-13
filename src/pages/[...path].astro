@@ -1,0 +1,53 @@
+---
+import { getSiteContent } from '../lib/site-content';
+import Base from '../layouts/Base.astro';
+import GettingStarted from '../components/GettingStarted.astro';
+import Routes from '../lib/routes.js';
+import Pages from '../renderers/index.js';
+import Visuals from '../lib/visuals.js';
+
+export async function getStaticPaths() {
+  const content = await getSiteContent();
+  return Routes.create(content)
+    .entries()
+    .map((page) => ({
+      params: { path: page.path === '/' ? undefined : page.path.slice(1, -1) },
+      props: { page, content },
+    }));
+}
+const { page, content: Content } = Astro.props;
+const renderer = Pages.create(Content);
+const lesson =
+  page.kind === 'lesson'
+    ? Content.lessons.find((item: { id: string }) => item.id === page.id)
+    : undefined;
+const frames: Record<string, string> = {};
+if (lesson) {
+  const flow = Visuals.forLesson(lesson);
+  if (flow)
+    (Visuals.scenarios as Record<string, { frames: unknown[] }>)[flow].frames.forEach(
+      (_: unknown, index: number) => {
+        frames[String(index)] = renderer.flow(flow, index);
+      },
+    );
+  else if (['stash', 'staging'].includes(lesson.visual))
+    for (const mode of ['pop', 'apply'])
+      for (let step = 0; step < 3; step++)
+        frames[mode + ':' + step] = renderer.visual(lesson, step, mode);
+}
+const payload = {
+  kind: page.kind,
+  lessons: Content.lessons.map((item: { id: string; chapter: number; title: string }) => ({
+    id: item.id,
+    chapter: item.chapter,
+    title: item.title,
+  })),
+  lesson: lesson ? { id: lesson.id, quiz: lesson.quiz, checkpoint: lesson.checkpoint } : null,
+  frames,
+};
+const markup = page.kind === 'preparation' ? '' : renderer.render(page);
+---
+
+<Base page={page} sidebar={renderer.sidebar(lesson)} payload={payload}>
+  {page.kind === 'preparation' ? <GettingStarted /> : <Fragment set:html={markup} />}
+</Base>

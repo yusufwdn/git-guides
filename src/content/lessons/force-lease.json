@@ -1,0 +1,56 @@
+{
+  "chapter": 11,
+  "id": "force-lease",
+  "title": "Menulis ulang remote perlu ekspektasi jelas.",
+  "summary": "Pahami lease, koordinasi, dan keterbatasan pemeriksaannya.",
+  "scenario": "Tim menyetujui rebase branch pribadi yang sudah di-push. Sementara itu rekan mungkin menambah commit di branch server tersebut.",
+  "concept": "--force-with-lease mengizinkan pembaruan non-fast-forward hanya bila referensi tujuan memenuhi nilai yang diharapkan. Bentuk tanpa nilai eksplisit biasanya memakai remote-tracking ref; fetch otomatis dapat memperbarui acuan itu. Bentuk ref:expected menyatakan ekspektasi lebih jelas, tetapi tetap tidak menilai apakah perubahan yang kamu buang layak dipertahankan.",
+  "analogy": "Kamu meminta penggantian dokumen hanya bila edisi di lemari masih sama dengan edisi yang sudah disepakati. Pemeriksaan edisi tidak menggantikan persetujuan orang yang memakai dokumen.",
+  "steps": [
+    {
+      "title": "Periksa dan sepakati jalur",
+      "command": "git fetch origin\ngit log --graph --oneline --all -12",
+      "explanation": "Bahas commit mana yang diganti dan apakah ada pekerjaan orang lain. Catat object ID tujuan yang benar-benar diperiksa."
+    },
+    {
+      "title": "Pelajari bentuk eksplisit",
+      "command": "git push --force-with-lease=refs/heads/fitur-diskon:OID_YANG_DITINJAU origin fitur-diskon",
+      "explanation": "Ini template, bukan command siap salin. Ganti OID dengan nilai tujuan yang sudah ditinjau dan jalankan hanya pada jalur yang memang disetujui untuk ditulis ulang."
+    }
+  ],
+  "result": "Kamu bisa menjelaskan apa yang diperiksa lease dan apa yang tetap memerlukan keputusan tim.",
+  "pitfall": "Jangan menambahkan force setelah push rejected tanpa diagnosis. Protected branch juga bisa melarang operasi ini.",
+  "practice": "Gambarkan server pada hash X yang telah ditinjau, lalu berubah ke Y. Prediksi hasil lease yang masih mengharapkan X sebelum mencoba pada repo latihan pribadi.",
+  "quiz": {
+    "question": "Lease memeriksa apa?",
+    "options": [
+      "Kesesuaian referensi tujuan dengan ekspektasi",
+      "Kebenaran seluruh logika program",
+      "Izin moral untuk membuang perubahan tim"
+    ],
+    "answer": 0,
+    "explanation": "Lease menambah pemeriksaan posisi referensi, bukan audit seluruh perubahan."
+  },
+  "commands": ["git push --force-with-lease"],
+  "visual": "remote",
+  "minutes": 7,
+  "level": "Menengah",
+  "prerequisites": ["cherry-pick"],
+  "initialState": "Penulisan ulang branch remote sudah disepakati. Referensi tujuan dan object ID ekspektasi telah diperiksa. Command memuat placeholder.",
+  "lab": "remote",
+  "objectives": [
+    "Pahami lease, koordinasi, dan keterbatasan pemeriksaannya.",
+    "Periksa hasilnya: Kamu bisa menjelaskan apa yang diperiksa lease dan apa yang tetap memerlukan keputusan tim."
+  ],
+  "sources": [
+    {
+      "title": "Manual git push",
+      "url": "https://git-scm.com/docs/git-push"
+    }
+  ],
+  "verification": {
+    "command": "git branch -vv",
+    "explanation": "Kamu bisa menjelaskan apa yang diperiksa lease dan apa yang tetap memerlukan keputusan tim."
+  },
+  "order": 44
+}

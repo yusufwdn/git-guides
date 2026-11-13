@@ -1,0 +1,56 @@
+{
+  "chapter": 6,
+  "id": "abort-merge",
+  "title": "Berhenti sebelum keputusan disimpan.",
+  "summary": "Batalkan merge yang masih berlangsung dan periksa pemulihannya.",
+  "scenario": "Harga yang benar belum disepakati, sementara merge menu sudah berhenti dengan konflik. Kamu ingin kembali dulu ke keadaan sebelumnya.",
+  "concept": "git merge --abort mencoba mengembalikan keadaan sebelum merge yang masih berlangsung. Memulai dari working tree bersih membuat batas pemulihan lebih jelas. Bila perubahan lokal sudah ada sebelum merge atau ikut diedit saat konflik, rekonstruksi seluruh perubahan awal tidak selalu terjamin.",
+  "analogy": "Kamu membatalkan sesi penyuntingan yang belum disahkan. Lebih mudah kembali jika meja sudah rapi saat sesi dimulai.",
+  "steps": [
+    {
+      "title": "Mulai dari kondisi latihan bersih",
+      "command": "git merge fitur-menu",
+      "explanation": "Pada latihan merge-abort, konflik memang diharapkan. Jangan commit hasilnya."
+    },
+    {
+      "title": "Periksa lalu batalkan",
+      "command": "git status\ngit merge --abort",
+      "explanation": "Setelah abort, periksa status dan isi menu. Tidak ada proses merge yang perlu diteruskan."
+    }
+  ],
+  "result": "HEAD main, index, dan working tree kembali ke keadaan awal latihan.",
+  "pitfall": "--abort bukan cara membalik merge yang sudah di-commit. Untuk riwayat yang sudah dibagikan, pelajari revert dengan pemilihan mainline.",
+  "practice": "Jalankan start merge-abort. Catat hash HEAD, buat konflik, abort, lalu bandingkan hash dan status.",
+  "quiz": {
+    "question": "Kapan merge --abort digunakan?",
+    "options": [
+      "Saat merge masih berlangsung",
+      "Setelah semua rilis untuk menghapus riwayat",
+      "Untuk membatalkan stash pop"
+    ],
+    "answer": 0,
+    "explanation": "Perintah ini menangani proses merge yang belum selesai."
+  },
+  "commands": ["git merge --abort"],
+  "visual": "conflict",
+  "minutes": 7,
+  "level": "Menengah",
+  "prerequisites": ["konflik"],
+  "initialState": "Latihan merge-abort dimulai bersih di main. Kedua branch mengubah satu baris menu sehingga merge akan berkonflik.",
+  "lab": "merge-abort",
+  "objectives": [
+    "Batalkan merge yang masih berlangsung dan periksa pemulihannya.",
+    "Periksa hasilnya: HEAD main, index, dan working tree kembali ke keadaan awal latihan."
+  ],
+  "sources": [
+    {
+      "title": "Manual git merge",
+      "url": "https://git-scm.com/docs/git-merge"
+    }
+  ],
+  "verification": {
+    "command": "git status\ngit rev-parse HEAD",
+    "explanation": "HEAD main, index, dan working tree kembali ke keadaan awal latihan."
+  },
+  "order": 23
+}

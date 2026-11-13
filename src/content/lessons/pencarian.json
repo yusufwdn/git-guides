@@ -1,0 +1,65 @@
+{
+  "chapter": 12,
+  "id": "pencarian",
+  "title": "Cari alasan, bukan kambing hitam.",
+  "summary": "Gabungkan blame, grep, dan pencarian riwayat untuk memahami perubahan.",
+  "scenario": "Aturan diskon yang aneh muncul pada checkout. Kamu ingin tahu kapan dan mengapa aturan itu ditambahkan.",
+  "concept": "git blame mengaitkan baris dengan commit terakhir yang memengaruhinya sesuai penelusuran. git grep mencari teks pada file tracked. git log -S mencari perubahan jumlah kemunculan string; -G mencari patch dengan baris yang cocok regex. Setelah menemukan commit, baca konteks dan diskusi terkait.",
+  "analogy": "Asal catatan membantu menemukan konteks keputusan. Nama terakhir yang menyentuh baris belum tentu pencipta masalah.",
+  "steps": [
+    {
+      "title": "Temukan lokasinya",
+      "command": "git grep -n \"diskon\"",
+      "explanation": "Cari pada file yang dilacak. Untuk konteks lebih luas, buka file di editor."
+    },
+    {
+      "title": "Telusuri perubahan baris",
+      "command": "git blame -L 1,30 -- checkout.js",
+      "explanation": "Rentang baris disesuaikan dengan file. Gunakan hash yang ditemukan untuk git show."
+    },
+    {
+      "title": "Cari asal aturan",
+      "command": "git log -p -S \"MINIMUM_BELANJA\" -- checkout.js",
+      "explanation": "Periksa perubahan jumlah kemunculan string tersebut dalam riwayat file."
+    }
+  ],
+  "result": "Kamu menemukan konteks keputusan yang membantu membuat perbaikan tepat.",
+  "pitfall": "Blame bukan penilaian kesalahan orang. Refactor dan pemindahan kode bisa memengaruhi hasil atribusi.",
+  "practice": "Tambahkan string unik ke file latihan, ubah pada commit berikutnya, lalu temukan kedua perubahan melalui log -S.",
+  "quiz": {
+    "question": "Untuk mencari string pada file tracked saat ini, pakai apa?",
+    "options": ["git grep", "git reset", "git stash drop"],
+    "answer": 0,
+    "explanation": "Git grep mencari isi file; log -S mencari perubahan kemunculan string dalam riwayat."
+  },
+  "commands": ["git blame", "git grep", "git log -S"],
+  "visual": "snapshot",
+  "minutes": 8,
+  "level": "Menengah",
+  "prerequisites": ["amend-rebase"],
+  "initialState": "checkout.js atau diskon.js tracked dan mempunyai riwayat. Sesuaikan rentang baris blame jika panjang file berbeda.",
+  "lab": "cherry-pick",
+  "objectives": [
+    "Gabungkan blame, grep, dan pencarian riwayat untuk memahami perubahan.",
+    "Periksa hasilnya: Kamu menemukan konteks keputusan yang membantu membuat perbaikan tepat."
+  ],
+  "sources": [
+    {
+      "title": "Manual git blame",
+      "url": "https://git-scm.com/docs/git-blame"
+    },
+    {
+      "title": "Manual git grep",
+      "url": "https://git-scm.com/docs/git-grep"
+    },
+    {
+      "title": "Manual git log",
+      "url": "https://git-scm.com/docs/git-log"
+    }
+  ],
+  "verification": {
+    "command": "git log --oneline -- checkout.js",
+    "explanation": "Kamu menemukan konteks keputusan yang membantu membuat perbaikan tepat."
+  },
+  "order": 45
+}

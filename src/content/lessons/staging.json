@@ -1,0 +1,69 @@
+{
+  "chapter": 3,
+  "id": "staging",
+  "title": "Pilih perubahan. Baru rekam.",
+  "summary": "Pahami git add dan commit dengan melihat isi yang benar-benar masuk snapshot.",
+  "scenario": "Kamu memperbaiki harga pada menu.json dan masih bereksperimen pada diskon.js. Hanya koreksi menu yang sudah siap.",
+  "concept": "git add menyalin isi file saat itu ke index. git commit merekam snapshot index. Gunakan path yang spesifik untuk memisahkan pekerjaan, lalu periksa diff --staged sebelum commit. File lain yang masih berubah tetap berada di working tree.",
+  "analogy": "Sebelum mengirim paket, pilih barang yang memang siap, periksa isinya, lalu segel. Barang di meja yang belum dipilih tidak ikut terkirim.",
+  "steps": [
+    {
+      "title": "Lihat pekerjaanmu",
+      "command": "git status\ngit diff",
+      "explanation": "Pastikan kamu tahu file mana yang sudah siap dan perubahan mana yang masih percobaan."
+    },
+    {
+      "title": "Siapkan hanya menu",
+      "command": "git add menu.json\ngit diff --staged",
+      "explanation": "Yang disiapkan adalah versi menu saat add dijalankan. Perubahan checkout belum ikut."
+    },
+    {
+      "title": "Rekam satu tujuan",
+      "command": "git commit -m \"Perbaiki harga kopi susu\"",
+      "explanation": "Pesan menjelaskan tujuan perubahan. Gunakan status lagi untuk melihat pekerjaan yang masih tersisa."
+    }
+  ],
+  "result": "Ada satu commit baru untuk koreksi menu. Eksperimen diskon tetap belum di-commit.",
+  "pitfall": "git add . dapat memasukkan perubahan yang belum kamu maksudkan. Periksa status dan staged diff, terutama saat banyak file berubah.",
+  "practice": "Ubah dua file di repo latihan. Commit hanya satu, lalu buktikan file kedua masih berubah melalui status.",
+  "quiz": {
+    "question": "Apa yang direkam oleh git commit?",
+    "options": [
+      "Seluruh file di komputer",
+      "Snapshot pada index",
+      "Hanya file yang sedang dibuka di editor"
+    ],
+    "answer": 1,
+    "explanation": "Index menentukan isi snapshot commit berikutnya."
+  },
+  "commands": ["git add", "git commit", "git diff --staged"],
+  "visual": "staging",
+  "minutes": 8,
+  "level": "Dasar",
+  "prerequisites": ["status-singkat"],
+  "initialState": "Branch fitur-diskon. menu.json berubah 18000→20000, diskon.js berubah 0→10; belum ada perubahan staged.",
+  "lab": "staging",
+  "objectives": [
+    "Pahami git add dan commit dengan melihat isi yang benar-benar masuk snapshot.",
+    "Periksa hasilnya: Ada satu commit baru untuk koreksi menu. Eksperimen checkout tetap belum di-commit."
+  ],
+  "sources": [
+    {
+      "title": "Manual git add",
+      "url": "https://git-scm.com/docs/git-add"
+    },
+    {
+      "title": "Manual git commit",
+      "url": "https://git-scm.com/docs/git-commit"
+    },
+    {
+      "title": "Manual git diff",
+      "url": "https://git-scm.com/docs/git-diff"
+    }
+  ],
+  "verification": {
+    "command": "git show HEAD:menu.json\ngit diff -- diskon.js",
+    "explanation": "Ada satu commit baru untuk koreksi menu. Eksperimen checkout tetap belum di-commit."
+  },
+  "order": 10
+}

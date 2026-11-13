@@ -1,0 +1,60 @@
+{
+  "chapter": 8,
+  "id": "commit-atomik",
+  "title": "Biar satu commit menjawab satu alasan.",
+  "summary": "Pisahkan perubahan yang bisa ditinjau dan dibatalkan secara masuk akal.",
+  "scenario": "Perbaikan harga masuk satu commit bersama refactor checkout. Saat harga perlu dibatalkan, refactor ikut terkena.",
+  "concept": "Commit atomik berfokus pada satu tujuan yang dapat dipahami dan diuji. Ukurannya tidak harus satu baris atau satu file. Pesan menjelaskan maksud, sementara diff menjelaskan implementasi. Perubahan yang saling bergantung sebaiknya tetap membentuk snapshot yang valid.",
+  "analogy": "Satu kuitansi untuk satu transaksi membuat pemeriksaan dan koreksi lebih jelas. Memecah transaksi sampai tidak lengkap juga merepotkan.",
+  "steps": [
+    {
+      "title": "Tinjau perubahan per tujuan",
+      "command": "git diff\ngit status --short",
+      "explanation": "Pada latihan staging, pilih koreksi menu dan sisakan diskon."
+    },
+    {
+      "title": "Periksa calon cerita",
+      "command": "git add menu.json\ngit diff --staged\ngit commit -m \"Sesuaikan harga kopi susu\"",
+      "explanation": "Pastikan commit dapat berdiri sendiri dan pesan mencerminkan isi yang staged."
+    }
+  ],
+  "result": "Reviewer bisa menjelaskan tujuan commit tanpa menebak hubungan perubahan yang tidak relevan.",
+  "pitfall": "Commit kecil bukan jaminan berkualitas. Jangan memisahkan perubahan yang membuat proyek gagal dibangun di tengah riwayat bila bisa dihindari.",
+  "practice": "Tulis dua pesan untuk perubahan menu dan fitur diskon pada latihan staging. Sebutkan cara menguji masing-masing.",
+  "quiz": {
+    "question": "Commit atomik harus selalu satu file?",
+    "options": [
+      "Tidak, ukurannya mengikuti satu tujuan yang utuh",
+      "Ya, tanpa pengecualian",
+      "Harus selalu satu baris"
+    ],
+    "answer": 0,
+    "explanation": "Satu tujuan bisa membutuhkan beberapa file yang saling mendukung."
+  },
+  "commands": ["git diff --staged", "git commit"],
+  "visual": "staging",
+  "minutes": 7,
+  "level": "Menengah",
+  "prerequisites": ["fetch-pull"],
+  "initialState": "Latihan staging: menu dan diskon sama-sama berubah, belum staged. Hanya koreksi menu siap menjadi commit.",
+  "lab": "staging",
+  "objectives": [
+    "Pisahkan perubahan yang bisa ditinjau dan dibatalkan secara masuk akal.",
+    "Periksa hasilnya: Reviewer bisa menjelaskan tujuan commit tanpa menebak hubungan perubahan yang tidak relevan."
+  ],
+  "sources": [
+    {
+      "title": "Manual git diff",
+      "url": "https://git-scm.com/docs/git-diff"
+    },
+    {
+      "title": "Manual git commit",
+      "url": "https://git-scm.com/docs/git-commit"
+    }
+  ],
+  "verification": {
+    "command": "git show --stat HEAD\ngit status --short",
+    "explanation": "Reviewer bisa menjelaskan tujuan commit tanpa menebak hubungan perubahan yang tidak relevan."
+  },
+  "order": 28
+}

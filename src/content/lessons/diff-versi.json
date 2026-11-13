@@ -1,0 +1,56 @@
+{
+  "chapter": 4,
+  "id": "diff-versi",
+  "title": "Jelaskan dua sisi perbandingan.",
+  "summary": "Pilih diff working tree, staged, atau snapshot secara sengaja.",
+  "scenario": "Reviewer bertanya apa yang berubah antara main dan fitur. Kamu tidak ingin mencampurnya dengan edit lokal yang belum di-commit.",
+  "concept": "git diff tanpa revision membandingkan working tree tracked dengan index. --staged membandingkan index terhadap HEAD. git diff A B membandingkan snapshot A dan B; git diff A...B membandingkan merge base A/B dengan B. Tiga titik berguna untuk melihat perubahan sisi fitur sejak titik bersama, dan berbeda dari tiga titik pada log.",
+  "analogy": "Sebutkan dua edisi yang dibandingkan sebelum membahas halaman yang berubah. “Ada perbedaan” belum menjawab perbedaan dari mana.",
+  "steps": [
+    {
+      "title": "Periksa snapshot dua branch",
+      "command": "git diff main fitur-diskon",
+      "explanation": "Tidak memasukkan edit working tree yang belum direkam."
+    },
+    {
+      "title": "Periksa sejak dasar bersama",
+      "command": "git diff main...fitur-diskon",
+      "explanation": "Pada latihan rebase sebelum proses, ini menampilkan perubahan fitur sejak branch berpisah."
+    }
+  ],
+  "result": "Kamu tahu sumber setiap patch dan tidak mengira diff kosong selalu berarti repo bersih.",
+  "pitfall": "Rentang A..B pada log memilih kumpulan commit; pada diff dua titik setara perbandingan dua endpoint. Konteks command penting.",
+  "practice": "Pada latihan rebase, bandingkan diff main fitur-diskon dan diff main...fitur-diskon. Jelaskan mengapa perubahan main dapat muncul pada bentuk pertama.",
+  "quiz": {
+    "question": "Diff A...B membandingkan apa?",
+    "options": [
+      "A dengan B secara langsung selalu",
+      "Merge base A/B dengan B",
+      "Working tree dengan semua tag"
+    ],
+    "answer": 1,
+    "explanation": "Tiga titik pada diff memilih dasar bersama menuju sisi B."
+  },
+  "commands": ["git diff"],
+  "visual": "graph",
+  "minutes": 7,
+  "level": "Dasar",
+  "prerequisites": ["log-filter"],
+  "initialState": "main dan fitur-diskon sama-sama ada dan sudah divergen. Latihan rebase menyediakan keadaan ini sebelum proses dimulai.",
+  "lab": "rebase",
+  "objectives": [
+    "Pilih diff working tree, staged, atau snapshot secara sengaja.",
+    "Periksa hasilnya: Kamu tahu sumber setiap patch dan tidak mengira diff kosong selalu berarti repo bersih."
+  ],
+  "sources": [
+    {
+      "title": "Manual git diff",
+      "url": "https://git-scm.com/docs/git-diff"
+    }
+  ],
+  "verification": {
+    "command": "git diff main...fitur-diskon",
+    "explanation": "Kamu tahu sumber setiap patch dan tidak mengira diff kosong selalu berarti repo bersih."
+  },
+  "order": 14
+}

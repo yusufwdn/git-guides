@@ -1,0 +1,60 @@
+{
+  "chapter": 13,
+  "id": "catatan-rilis",
+  "title": "Hubungkan versi dengan perubahan yang dipakai.",
+  "summary": "Susun catatan rilis dari rentang commit dan perilaku yang berubah.",
+  "scenario": "Kasir bertanya apa yang baru pada v1.0.1. Daftar hash saja tidak menjelaskan manfaat atau perubahan perilakunya.",
+  "concept": "Tag membantu menentukan batas versi. Log memberi kandidat perubahan, tetapi catatan rilis perlu disunting menjadi perubahan perilaku, perbaikan, dan kebutuhan migrasi bila ada. Tidak semua commit internal perlu menjadi butir untuk pengguna.",
+  "analogy": "Daftar bahan dapur tidak sama dengan penjelasan menu baru. Gunakan riwayat sebagai bahan untuk menulis informasi yang berguna.",
+  "steps": [
+    {
+      "title": "Baca perubahan antarversi",
+      "command": "git log --oneline v1.0.0..HEAD",
+      "explanation": "Pada latihan tags, buat tag awal dan commit baru lebih dahulu."
+    },
+    {
+      "title": "Periksa lingkup file",
+      "command": "git diff --stat v1.0.0 HEAD",
+      "explanation": "Stat membantu melihat lingkup, lalu buka patch yang perlu dijelaskan."
+    }
+  ],
+  "result": "Catatan rilis menghubungkan versi dan perilaku, bukan sekadar menyalin semua pesan commit.",
+  "pitfall": "Rentang log pada riwayat bercabang mengikuti reachability. Jangan mengandalkan tanggal saja untuk menentukan isi versi.",
+  "practice": "Selesaikan latihan tags, lalu tulis satu butir rilis untuk perubahan README dan sebutkan cara memverifikasinya.",
+  "quiz": {
+    "question": "Sumber awal yang tepat untuk catatan antarversi?",
+    "options": [
+      "Rentang commit beserta patch yang ditinjau",
+      "Hanya nama file paling besar",
+      "Semua issue tanpa pemeriksaan"
+    ],
+    "answer": 0,
+    "explanation": "Riwayat adalah bahan; penjelasan rilis tetap perlu konteks produk."
+  },
+  "commands": ["git log", "git diff --stat"],
+  "visual": "graph",
+  "minutes": 7,
+  "level": "Lanjutan",
+  "prerequisites": ["tag"],
+  "initialState": "Tag v1.0.0 sudah ada dan main punya commit sesudahnya. Gunakan latihan tags setelah membuat commit README tambahan.",
+  "lab": "tags",
+  "objectives": [
+    "Susun catatan rilis dari rentang commit dan perilaku yang berubah.",
+    "Periksa hasilnya: Catatan rilis menghubungkan versi dan perilaku, bukan sekadar menyalin semua pesan commit."
+  ],
+  "sources": [
+    {
+      "title": "Manual git log",
+      "url": "https://git-scm.com/docs/git-log"
+    },
+    {
+      "title": "Manual git diff",
+      "url": "https://git-scm.com/docs/git-diff"
+    }
+  ],
+  "verification": {
+    "command": "git log --oneline v1.0.0..HEAD",
+    "explanation": "Catatan rilis menghubungkan versi dan perilaku, bukan sekadar menyalin semua pesan commit."
+  },
+  "order": 50
+}

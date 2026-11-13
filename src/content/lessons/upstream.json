@@ -1,0 +1,56 @@
+{
+  "chapter": 7,
+  "id": "upstream",
+  "title": "Tentukan branch pembandingmu.",
+  "summary": "Atur upstream dan baca dampaknya pada pull serta push.",
+  "scenario": "Branch baru sudah ada di server, tetapi pull lokal tidak tahu branch mana yang perlu diikuti.",
+  "concept": "Upstream disimpan melalui konfigurasi branch. push -u dapat menetapkannya setelah push berhasil. --set-upstream-to menghubungkan ke remote-tracking ref yang sudah tersedia. Tujuan push juga dipengaruhi push.default dan opsi eksplisit; upstream tidak berarti semua command selalu memilih tujuan yang sama.",
+  "analogy": "Kamu menuliskan alamat korespondensi pada buku kerja. Alamat itu membantu kebiasaan operasi, tetapi instruksi alamat eksplisit tetap perlu dibaca.",
+  "steps": [
+    {
+      "title": "Periksa upstream saat ini",
+      "command": "git branch -vv",
+      "explanation": "Latihan remote sudah memiliki main yang mengikuti origin/main."
+    },
+    {
+      "title": "Atur hubungan yang sudah tersedia",
+      "command": "git branch --set-upstream-to=origin/main main",
+      "explanation": "Jalankan setelah origin/main tersedia dari fetch. Tidak menggabungkan commit atau mengubah file."
+    }
+  ],
+  "result": "Hubungan main ke origin/main terlihat pada branch -vv.",
+  "pitfall": "Menetapkan upstream tidak memperbaiki riwayat divergen, menambah izin, atau mengirim commit.",
+  "practice": "Pada latihan remote, catat posisi main, atur upstream, lalu buktikan posisi commit tidak bergerak.",
+  "quiz": {
+    "question": "Menetapkan upstream otomatis melakukan merge?",
+    "options": ["Tidak", "Ya, selalu", "Hanya bila repo bare"],
+    "answer": 0,
+    "explanation": "Ini mengubah konfigurasi hubungan branch, bukan snapshot."
+  },
+  "commands": ["git branch --set-upstream-to", "git push -u"],
+  "visual": "remote",
+  "minutes": 7,
+  "level": "Menengah",
+  "prerequisites": ["fetch-pull"],
+  "initialState": "Remote origin dan referensi origin/main sudah tersedia. Pengaturan upstream tidak memindahkan commit.",
+  "lab": "remote",
+  "objectives": [
+    "Atur upstream dan baca dampaknya pada pull serta push.",
+    "Periksa hasilnya: Hubungan main ke origin/main terlihat pada branch -vv."
+  ],
+  "sources": [
+    {
+      "title": "Manual git branch",
+      "url": "https://git-scm.com/docs/git-branch"
+    },
+    {
+      "title": "Manual git push",
+      "url": "https://git-scm.com/docs/git-push"
+    }
+  ],
+  "verification": {
+    "command": "git branch -vv",
+    "explanation": "Hubungan main ke origin/main terlihat pada branch -vv."
+  },
+  "order": 25
+}

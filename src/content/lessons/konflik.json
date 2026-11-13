@@ -1,0 +1,61 @@
+{
+  "chapter": 6,
+  "id": "konflik",
+  "title": "Konflik itu keputusan yang tertunda.",
+  "summary": "Baca kedua perubahan, putuskan hasil yang benar, lalu lanjutkan merge.",
+  "scenario": "Kamu dan Rani mengubah harga kopi pada baris yang sama. Git tidak tahu harga mana yang disepakati tim.",
+  "concept": "Konflik berarti Git membutuhkan keputusanmu. Marker <<<<<<<, =======, dan >>>>>>> memisahkan versi yang bentrok. Dalam merge biasa, ours merujuk branch aktif dan theirs ke sisi yang digabung. Maknanya bisa membingungkan pada rebase, jadi baca konteks dan isi file.",
+  "analogy": "Dua orang memberi koreksi berbeda pada satu kalimat. Penyunting harus memilih atau merangkai kalimat akhir berdasarkan maksud kedua perubahan.",
+  "steps": [
+    {
+      "title": "Baca keadaan konflik",
+      "command": "git merge fitur-menu\ngit status\ngit diff",
+      "explanation": "Buka file yang konflik dan pahami maksud kedua sisi. Edit hasil akhirnya, lalu hapus semua marker."
+    },
+    {
+      "title": "Tandai sudah diselesaikan",
+      "command": "git add menu.json\ngit diff --staged",
+      "explanation": "Add berarti kamu menyatakan file ini sudah diselesaikan. Periksa dan uji hasilnya."
+    },
+    {
+      "title": "Selesaikan atau batalkan",
+      "command": "git merge --continue",
+      "explanation": "Jika belum ingin melanjutkan, alternatifnya adalah git merge --abort selama merge masih berlangsung."
+    }
+  ],
+  "result": "Merge selesai dengan hasil yang kamu pilih, atau proses dibatalkan sebelum diselesaikan.",
+  "pitfall": "Jangan hanya menghapus marker dan menganggap hasil sudah benar. Perubahan yang tidak bentrok secara teks pun bisa bermasalah secara logika.",
+  "practice": "Di repo latihan, ubah baris menu yang sama di dua branch. Gabungkan, pilih harga yang disepakati, dan periksa tidak ada marker tersisa.",
+  "quiz": {
+    "question": "Setelah mengedit file konflik, langkah berikutnya?",
+    "options": [
+      "git add file yang diselesaikan",
+      "Menghapus seluruh repository",
+      "Langsung force push"
+    ],
+    "answer": 0,
+    "explanation": "Add memperbarui index dengan hasil penyelesaian sebelum merge dilanjutkan."
+  },
+  "commands": ["git merge --continue", "git merge --abort"],
+  "visual": "conflict",
+  "minutes": 8,
+  "level": "Menengah",
+  "prerequisites": ["fast-forward"],
+  "initialState": "Latihan merge-conflict: main harga 20000 dan fitur-menu harga 22000 mengubah baris yang sama dari dasar 18000.",
+  "lab": "merge-conflict",
+  "objectives": [
+    "Baca kedua perubahan, putuskan hasil yang benar, lalu lanjutkan merge.",
+    "Periksa hasilnya: Merge selesai dengan hasil yang kamu pilih, atau proses dibatalkan sebelum diselesaikan."
+  ],
+  "sources": [
+    {
+      "title": "Manual git merge",
+      "url": "https://git-scm.com/docs/git-merge"
+    }
+  ],
+  "verification": {
+    "command": "git status\ngit log --parents -1",
+    "explanation": "Merge selesai dengan hasil yang kamu pilih, atau proses dibatalkan sebelum diselesaikan."
+  },
+  "order": 22
+}

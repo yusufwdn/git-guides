@@ -1,0 +1,65 @@
+{
+  "chapter": 10,
+  "id": "reflog-rescue",
+  "title": "Cari jejak sebelum memindahkan lagi.",
+  "summary": "Pulihkan referensi menuju commit yang masih tersedia.",
+  "scenario": "Branch fitur terhapus sebelum digabung. Kamu ingin menemukan commit pekerjaan dan memasang nama baru padanya.",
+  "concept": "Reflog adalah catatan lokal pembaruan referensi, termasuk perpindahan HEAD. Temukan kandidat berdasarkan pesan/waktu, baca isinya, lalu buat branch baru pada hash yang benar. Jangan berasumsi HEAD@{1} selalu posisi yang dicari. Retensi dan pemangkasan object membatasi pemulihan.",
+  "analogy": "Buku kunjungan menunjukkan halaman yang sempat kamu buka. Temukan halaman yang benar, lalu pasang penanda lagi sebelum lanjut.",
+  "steps": [
+    {
+      "title": "Cari kandidat",
+      "command": "git reflog --all --date=iso",
+      "explanation": "Pada latihan reflog, cari commit berpesan Diskon yang ingin dipulihkan. Hash berbeda setiap latihan."
+    },
+    {
+      "title": "Periksa kandidat pilihan",
+      "command": "git show HASH_KANDIDAT",
+      "explanation": "Ganti placeholder dengan hash nyata. Pastikan diskon 10 ada pada commit tersebut."
+    },
+    {
+      "title": "Pasang nama yang baru",
+      "command": "git branch pulih-diskon HASH_KANDIDAT\ngit show pulih-diskon:diskon.js",
+      "explanation": "Ini mempertahankan referensi tanpa menimpa working tree."
+    }
+  ],
+  "result": "Branch pulih-diskon menunjuk commit yang tadi kehilangan nama branch.",
+  "pitfall": "File untracked yang tidak pernah ditambahkan atau disimpan tidak otomatis memiliki jejak object yang bisa dipulihkan dari reflog.",
+  "practice": "Selesaikan latihan reflog tanpa menggunakan reset. Jelaskan mengapa branch baru cukup untuk mempertahankan commit.",
+  "quiz": {
+    "question": "Apa langkah setelah menemukan hash kandidat?",
+    "options": [
+      "Periksa isinya sebelum membuat referensi",
+      "Langsung prune semua object",
+      "Hapus folder .git"
+    ],
+    "answer": 0,
+    "explanation": "Buktikan kandidat benar agar tidak memulihkan titik yang salah."
+  },
+  "commands": ["git reflog", "git branch"],
+  "visual": "recovery",
+  "minutes": 9,
+  "level": "Menengah",
+  "prerequisites": ["reset-modes"],
+  "initialState": "Latihan reflog: branch fitur dihapus; commit diskon masih tersedia melalui jejak HEAD. Main dan working tree bersih.",
+  "lab": "reflog",
+  "objectives": [
+    "Pulihkan referensi menuju commit yang masih tersedia.",
+    "Periksa hasilnya: Branch pulih-diskon menunjuk commit yang tadi kehilangan nama branch."
+  ],
+  "sources": [
+    {
+      "title": "Manual git reflog",
+      "url": "https://git-scm.com/docs/git-reflog"
+    },
+    {
+      "title": "Manual git branch",
+      "url": "https://git-scm.com/docs/git-branch"
+    }
+  ],
+  "verification": {
+    "command": "git show pulih-diskon:diskon.js",
+    "explanation": "Branch pulih-diskon menunjuk commit yang tadi kehilangan nama branch."
+  },
+  "order": 39
+}

@@ -1,0 +1,57 @@
+{
+  "chapter": 12,
+  "id": "bisect-run",
+  "title": "Biarkan pengujian menjawab good atau bad.",
+  "summary": "Kenali kontrak exit code sebelum mengotomatiskan bisect.",
+  "scenario": "Bug bisa diuji lewat script yang stabil. Kamu ingin mengurangi penilaian manual pada setiap kandidat commit.",
+  "concept": "bisect run menjalankan command berulang pada kandidat. Exit 0 berarti good, 1–127 selain 125 berarti bad, dan 125 berarti skip. Kesalahan setup yang kebetulan menghasilkan exit 1 dapat dianggap bug, sehingga script harus membedakan build gagal, versi tidak dapat diuji, dan perilaku yang memang salah.",
+  "analogy": "Petugas pemeriksa boleh membantu membelah tumpukan, tetapi kode hasil pemeriksaannya harus konsisten.",
+  "steps": [
+    {
+      "title": "Tetapkan batas yang sudah diuji",
+      "command": "git bisect start\ngit bisect bad\ngit bisect good awal",
+      "explanation": "Pada latihan bisect, tag awal adalah titik baik. Pastikan working tree bersih."
+    },
+    {
+      "title": "Gunakan script pengujian milikmu",
+      "command": "git bisect run node ../uji-diskon.cjs",
+      "explanation": "Siapkan script di luar working tree yang berpindah commit. Script harus mengikuti kontrak exit code; ini template bila script belum dibuat."
+    },
+    {
+      "title": "Tutup proses setelah hasil dicatat",
+      "command": "git bisect reset",
+      "explanation": "Verifikasi kandidat buruk dengan membaca patch dan mengulang pengujian yang relevan."
+    }
+  ],
+  "result": "Kamu memahami kapan otomasi bisect dapat dipercaya dan kapan kandidat harus di-skip.",
+  "pitfall": "Jangan memakai test yang bergantung internet, waktu, atau layanan tidak stabil sebagai penentu tanpa kontrol yang memadai.",
+  "practice": "Selesaikan bisect manual dahulu. Tulis rancangan script yang mengembalikan 0 untuk diskon >= 0 dan 1 untuk diskon negatif.",
+  "quiz": {
+    "question": "Exit code 125 berarti apa bagi bisect run?",
+    "options": ["Skip kandidat", "Good", "Bad selalu"],
+    "answer": 0,
+    "explanation": "125 menandai bahwa versi ini tidak dapat dinilai."
+  },
+  "commands": ["git bisect run"],
+  "visual": "graph",
+  "minutes": 9,
+  "level": "Menengah",
+  "prerequisites": ["bisect"],
+  "initialState": "Gunakan latihan bisect yang baru. Script ../uji-diskon.cjs harus dibuat lebih dahulu dan stabil untuk seluruh kandidat yang diuji.",
+  "lab": "bisect",
+  "objectives": [
+    "Kenali kontrak exit code sebelum mengotomatiskan bisect.",
+    "Periksa hasilnya: Kamu memahami kapan otomasi bisect dapat dipercaya dan kapan kandidat harus di-skip."
+  ],
+  "sources": [
+    {
+      "title": "Manual git bisect",
+      "url": "https://git-scm.com/docs/git-bisect"
+    }
+  ],
+  "verification": {
+    "command": "git status\ngit log --oneline -3",
+    "explanation": "Kamu memahami kapan otomasi bisect dapat dipercaya dan kapan kandidat harus di-skip."
+  },
+  "order": 48
+}

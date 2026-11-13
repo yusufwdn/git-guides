@@ -1,0 +1,56 @@
+{
+  "chapter": 14,
+  "id": "git-lfs",
+  "title": "File besar punya alur penyimpanan tambahan.",
+  "summary": "Kenali Git LFS sebagai ekstensi dengan object server terpisah.",
+  "scenario": "Foto menu beresolusi tinggi berganti berkali-kali. Tim ingin mengelolanya tanpa menganggap file biner seperti kode teks kecil.",
+  "concept": "Git LFS menggunakan pointer pada riwayat Git dan menyimpan isi besar melalui layanan LFS. git lfs track menambahkan aturan ke .gitattributes; aturan tersebut perlu di-commit. Mengaktifkan tracking baru tidak otomatis memigrasikan seluruh file besar di riwayat lama. Dukungan, kuota, dan akses server perlu diperiksa pada penyedia.",
+  "analogy": "Katalog mencatat nomor penyimpanan barang besar. Memiliki kartu katalog belum berarti barang fisiknya sudah tersedia di tempatmu.",
+  "steps": [
+    {
+      "title": "Periksa ekstensi",
+      "command": "git lfs version",
+      "explanation": "Ini memerlukan Git LFS terpasang terpisah; command tidak tersedia pada Git inti saja."
+    },
+    {
+      "title": "Atur pola pada repo yang siap LFS",
+      "command": "git lfs track \"*.psd\"\ngit diff -- .gitattributes",
+      "explanation": "Contoh pola adalah pilihan tim. Commit .gitattributes dan file yang relevan setelah memeriksa hasil."
+    }
+  ],
+  "result": "Kamu dapat membedakan riwayat pointer dan ketersediaan data besar pada layanan LFS.",
+  "pitfall": "Clone atau bundle Git tidak otomatis menjadi backup semua object LFS. Jangan memigrasikan riwayat bersama tanpa rencana serta verifikasi data.",
+  "practice": "Jelaskan data apa yang dibutuhkan rekan agar bisa membuka file LFS dari snapshot tertentu. Latihan ini tidak meminta akun atau upload file besar.",
+  "quiz": {
+    "question": "Git LFS termasuk command bawaan Git inti?",
+    "options": [
+      "Tidak, ekstensi terpisah",
+      "Ya, selalu sudah tersedia",
+      "Hanya built-in pada repo public"
+    ],
+    "answer": 0,
+    "explanation": "LFS adalah alat dan alur object tambahan yang perlu dipasang serta didukung server."
+  },
+  "commands": ["git lfs track", "git lfs version"],
+  "visual": "objects",
+  "minutes": 7,
+  "level": "Lanjutan",
+  "prerequisites": ["submodule"],
+  "initialState": "Git LFS harus dipasang terpisah untuk praktik. Gunakan file contoh, dukungan server yang diketahui, dan repository yang boleh menerima aturan baru.",
+  "lab": "objects",
+  "objectives": [
+    "Kenali Git LFS sebagai ekstensi dengan object server terpisah.",
+    "Periksa hasilnya: Kamu dapat membedakan riwayat pointer dan ketersediaan data besar pada layanan LFS."
+  ],
+  "sources": [
+    {
+      "title": "Dokumentasi Git LFS",
+      "url": "https://git-lfs.com/"
+    }
+  ],
+  "verification": {
+    "command": "git lfs ls-files",
+    "explanation": "Kamu dapat membedakan riwayat pointer dan ketersediaan data besar pada layanan LFS."
+  },
+  "order": 57
+}

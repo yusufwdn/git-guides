@@ -1,0 +1,61 @@
+{
+  "chapter": 14,
+  "id": "partial-staging",
+  "title": "Satu file, dua tujuan perubahan.",
+  "summary": "Pilih bagian perubahan melalui git add -p.",
+  "scenario": "Dalam checkout.js, kamu memperbaiki bug sekaligus bereksperimen dengan tampilan pesan. Kamu ingin bug fix menjadi commit terpisah.",
+  "concept": "Patch staging menampilkan hunk perubahan dan meminta keputusan. y menyiapkan hunk, n melewatkan, s mencoba membelah, dan ? menampilkan bantuan. Hunk tidak selalu bisa dipisah otomatis. Periksa staged diff dan uji snapshot yang akan direkam; working tree bisa berisi gabungan pekerjaan yang berbeda.",
+  "analogy": "Kamu memilih kalimat yang siap diterbitkan dari satu halaman, sementara paragraf percobaan tetap ada di draf.",
+  "steps": [
+    {
+      "title": "Pilih hunk",
+      "command": "git add -p checkout.js",
+      "explanation": "Baca konteks setiap hunk. Gunakan ? untuk daftar pilihan di versi Git-mu."
+    },
+    {
+      "title": "Periksa kedua sisi",
+      "command": "git diff --staged\ngit diff",
+      "explanation": "Pastikan calon commit hanya berisi bug fix, sedangkan perubahan percobaan masih unstaged."
+    },
+    {
+      "title": "Rekam tujuan pertama",
+      "command": "git commit -m \"Perbaiki perhitungan total\"",
+      "explanation": "Pesan menjelaskan perubahan yang benar-benar staged."
+    }
+  ],
+  "result": "Dua tujuan pada satu file bisa direkam secara terpisah.",
+  "pitfall": "Memilih sebagian baris dapat menghasilkan snapshot yang tidak valid jika perubahan saling bergantung. Jangan hanya menguji gabungan working tree.",
+  "practice": "Ubah dua bagian README yang berjauhan. Stage satu hunk, lalu buktikan diff --staged hanya memuat bagian tersebut.",
+  "quiz": {
+    "question": "Apa kegunaan git add -p?",
+    "options": [
+      "Memilih bagian perubahan untuk index",
+      "Menjalankan push otomatis",
+      "Menghapus file besar"
+    ],
+    "answer": 0,
+    "explanation": "Patch mode memungkinkan staging per hunk."
+  },
+  "commands": ["git add -p"],
+  "visual": "staging",
+  "minutes": 8,
+  "level": "Lanjutan",
+  "prerequisites": ["tag"],
+  "initialState": "Satu file tracked memiliki dua hunk terpisah yang mengerjakan tujuan berbeda. Pilih sendiri edit melalui editor sebelum add -p.",
+  "lab": "partial-staging",
+  "objectives": [
+    "Pilih bagian perubahan melalui git add -p.",
+    "Periksa hasilnya: Dua tujuan pada satu file bisa direkam secara terpisah."
+  ],
+  "sources": [
+    {
+      "title": "Manual git add",
+      "url": "https://git-scm.com/docs/git-add"
+    }
+  ],
+  "verification": {
+    "command": "git show HEAD:checkout.js\ngit diff -- checkout.js",
+    "explanation": "Dua tujuan pada satu file bisa direkam secara terpisah."
+  },
+  "order": 53
+}

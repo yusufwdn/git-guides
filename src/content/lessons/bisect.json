@@ -1,0 +1,57 @@
+{
+  "chapter": 12,
+  "id": "bisect",
+  "title": "Cari bug dengan membelah riwayat.",
+  "summary": "Gunakan bisect untuk mempersempit commit yang memperkenalkan masalah.",
+  "scenario": "Checkout masih bekerja minggu lalu, tetapi sekarang gagal. Ada puluhan commit di antara dua keadaan itu.",
+  "concept": "Bisect melakukan pencarian biner pada riwayat berdasarkan penilaian good dan bad. Kamu perlu kondisi pengujian yang cukup stabil dan commit baik yang diketahui. Jika suatu versi tidak dapat diuji, skip lebih tepat daripada menebak hasilnya.",
+  "analogy": "Mencari halaman yang mulai salah tidak perlu satu per satu: periksa bagian tengah, lalu lanjutkan pada separuh yang masih mungkin mengandung masalah.",
+  "steps": [
+    {
+      "title": "Tandai batas awal",
+      "command": "git bisect start\ngit bisect bad\ngit bisect good HASH_BAIK",
+      "explanation": "Ganti HASH_BAIK dengan commit yang sudah kamu verifikasi benar. Simpan pekerjaan lokal sebelum berpindah snapshot."
+    },
+    {
+      "title": "Uji commit pilihan",
+      "command": "git bisect good",
+      "explanation": "Jalankan jika versi yang sedang diuji baik. Jika buruk, gunakan git bisect bad; jika tidak bisa diuji, gunakan git bisect skip."
+    },
+    {
+      "title": "Kembali setelah selesai",
+      "command": "git bisect reset",
+      "explanation": "Catat commit pertama yang dianggap buruk, lalu periksa penyebab dan buat perbaikan di branch yang sesuai."
+    }
+  ],
+  "result": "Rentang kandidat menyempit sampai Git menemukan kandidat commit yang memperkenalkan perubahan perilaku.",
+  "pitfall": "Hasil bergantung pada definisi good/bad. Test yang tidak stabil atau perubahan dependency di luar repo bisa membuat diagnosis menyesatkan.",
+  "practice": "Buat enam commit di repo latihan dengan satu perubahan yang merusak teks keluaran. Cari commit penyebab menggunakan bisect.",
+  "quiz": {
+    "question": "Commit pilihan bisect tidak bisa dibangun. Apa yang tepat?",
+    "options": ["Tebak good", "git bisect skip", "Hapus commit itu dari semua branch"],
+    "answer": 1,
+    "explanation": "Skip menandai bahwa commit tidak dapat dinilai dengan pengujian yang tersedia."
+  },
+  "commands": ["git bisect"],
+  "visual": "graph",
+  "minutes": 8,
+  "level": "Menengah",
+  "prerequisites": ["log-pickaxe"],
+  "initialState": "Latihan bisect: tag awal baik, HEAD buruk, working tree bersih. Bug yang dicari adalah diskon negatif.",
+  "lab": "bisect",
+  "objectives": [
+    "Gunakan bisect untuk mempersempit commit yang memperkenalkan masalah.",
+    "Periksa hasilnya: Rentang kandidat menyempit sampai Git menemukan kandidat commit yang memperkenalkan perubahan perilaku."
+  ],
+  "sources": [
+    {
+      "title": "Manual git bisect",
+      "url": "https://git-scm.com/docs/git-bisect"
+    }
+  ],
+  "verification": {
+    "command": "git show bug-ditemukan:diskon.js",
+    "explanation": "Setelah latihan pendamping, bug-ditemukan menunjuk commit pertama diskon negatif. Bila hanya mencatat hash tanpa membuat branch, gunakan hash temuan pada git show."
+  },
+  "order": 47
+}

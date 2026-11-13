@@ -1,0 +1,65 @@
+{
+  "chapter": 14,
+  "id": "submodule",
+  "title": "Repo di dalam repo punya posisi versinya sendiri.",
+  "summary": "Pahami gitlink, .gitmodules, dan pembaruan submodule.",
+  "scenario": "Tim memakai pustaka tema dari repository terpisah dan ingin versi tema terikat pada satu commit yang sudah diuji.",
+  "concept": "Superproject menyimpan gitlink yang menunjuk commit submodule dan .gitmodules berisi konfigurasi seperti path/URL. Clone biasa tidak selalu mengisi isi submodule; update --init --recursive dapat menyiapkannya. Commit di submodule dan commit pembaruan gitlink pada superproject adalah dua pekerjaan berbeda.",
+  "analogy": "Daftar resep utama menyebut edisi tertentu dari buku lain. Mengubah buku kedua belum otomatis mengganti edisi yang dicatat daftar utama.",
+  "steps": [
+    {
+      "title": "Periksa submodule bila ada",
+      "command": "git submodule status",
+      "explanation": "Pada repo tanpa submodule, output kosong adalah keadaan yang wajar."
+    },
+    {
+      "title": "Isi versi yang direkam superproject",
+      "command": "git submodule update --init --recursive",
+      "explanation": "Jalankan pada repo contoh yang memang punya .gitmodules dan URL yang dapat diakses. Ini dapat menghubungi remote."
+    },
+    {
+      "title": "Tinjau perubahan penunjuk",
+      "command": "git diff --submodule",
+      "explanation": "Setelah memilih commit baru di submodule, tinjau dan commit perubahan gitlink pada superproject."
+    }
+  ],
+  "result": "Kamu tahu repo mana yang menyimpan perubahan dan repo mana yang menyimpan pilihan versi.",
+  "pitfall": "Jangan menghapus folder submodule untuk “memperbaiki” keadaan tanpa memeriksa perubahan lokal di dalamnya. Detached HEAD di submodule bisa merupakan keadaan checkout versi yang diharapkan.",
+  "practice": "Gambarkan superproject yang menunjuk tema commit T1, lalu tema berkembang ke T2. Jelaskan dua commit yang perlu dibagikan agar tim memakai T2.",
+  "quiz": {
+    "question": "Apa yang dicatat gitlink?",
+    "options": [
+      "Commit tertentu pada submodule",
+      "Semua branch submodule secara live",
+      "Password repo tema"
+    ],
+    "answer": 0,
+    "explanation": "Superproject merekam pilihan commit, bukan mengikuti setiap perubahan otomatis."
+  },
+  "commands": ["git submodule", "git diff --submodule"],
+  "visual": "objects",
+  "minutes": 9,
+  "level": "Lanjutan",
+  "prerequisites": ["sparse-partial"],
+  "initialState": "Repo contoh memang mempunyai .gitmodules dan URL submodule yang dapat diakses. Command update dapat menghubungi remote.",
+  "lab": "objects",
+  "objectives": [
+    "Pahami gitlink, .gitmodules, dan pembaruan submodule.",
+    "Periksa hasilnya: Kamu tahu repo mana yang menyimpan perubahan dan repo mana yang menyimpan pilihan versi."
+  ],
+  "sources": [
+    {
+      "title": "Manual git submodule",
+      "url": "https://git-scm.com/docs/git-submodule"
+    },
+    {
+      "title": "Manual git diff",
+      "url": "https://git-scm.com/docs/git-diff"
+    }
+  ],
+  "verification": {
+    "command": "git submodule status",
+    "explanation": "Kamu tahu repo mana yang menyimpan perubahan dan repo mana yang menyimpan pilihan versi."
+  },
+  "order": 56
+}

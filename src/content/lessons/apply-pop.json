@@ -1,0 +1,61 @@
+{
+  "chapter": 9,
+  "id": "apply-pop",
+  "title": "Ambil salinan, atau keluarkan sekalian?",
+  "summary": "Bedakan apply, pop, dan drop berdasarkan nasib entri stash.",
+  "scenario": "Kamu ingin mencoba perubahan diskon pada branch lain, tetapi masih ingin menyimpan cadangannya di daftar stash.",
+  "concept": "git stash apply menerapkan perubahan tanpa menghapus entri. pop menerapkan lalu menghapus entri hanya jika berhasil; saat konflik entrinya tetap ada. drop hanya menghapus entri yang dipilih. Gunakan show -p untuk membaca perubahan dan kutip stash@{0} agar aman pada PowerShell.",
+  "analogy": "Apply seperti menyalin bahan dari laci ke meja. Pop mengeluarkannya dari laci setelah berhasil diletakkan. Drop membuang catatan simpanannya tanpa mengembalikan bahan ke meja.",
+  "steps": [
+    {
+      "title": "Periksa simpanan yang dipilih",
+      "command": "git stash list\ngit stash show -p \"stash@{0}\"",
+      "explanation": "Indeks nol adalah entri terbaru. Nomor bisa bergeser setelah ada push, pop, atau drop."
+    },
+    {
+      "title": "Terapkan sambil mempertahankan",
+      "command": "git stash apply \"stash@{0}\"",
+      "explanation": "Periksa perubahan dan uji hasil. Gunakan --index jika kamu juga perlu mencoba memulihkan staged state."
+    },
+    {
+      "title": "Hapus setelah yakin",
+      "command": "git stash drop \"stash@{0}\"",
+      "explanation": "Jalankan hanya setelah simpanan yang dimaksud sudah tidak diperlukan. Jangan gunakan clear untuk membersihkan satu entri."
+    }
+  ],
+  "result": "Kamu dapat memulihkan pekerjaan sambil memilih kapan simpanannya dihapus.",
+  "pitfall": "Menjalankan apply berulang pada keadaan yang sudah berubah dapat gagal atau berkonflik. Selalu baca status dan diff sebelum mengulang.",
+  "practice": "Buat satu stash, apply, lalu periksa bahwa stash list masih berisi entri tersebut. Bandingkan dengan pop pada skenario baru yang bersih.",
+  "quiz": {
+    "question": "Apa yang terjadi jika stash pop berkonflik?",
+    "options": [
+      "Entri tetap ada di daftar stash",
+      "Entri selalu langsung hilang",
+      "Git otomatis memilih isi yang benar"
+    ],
+    "answer": 0,
+    "explanation": "Pop mempertahankan entri ketika penerapannya menghasilkan konflik."
+  },
+  "commands": ["git stash apply", "git stash pop", "git stash drop"],
+  "visual": "stash",
+  "minutes": 8,
+  "level": "Menengah",
+  "prerequisites": ["stash-untracked"],
+  "initialState": "Ada entri stash yang sudah ditinjau. Untuk apply/pop pada contoh sederhana, index dan tracked working tree bersih.",
+  "lab": "stash",
+  "objectives": [
+    "Bedakan apply, pop, dan drop berdasarkan nasib entri stash.",
+    "Periksa hasilnya: Kamu dapat memulihkan pekerjaan sambil memilih kapan simpanannya dihapus."
+  ],
+  "sources": [
+    {
+      "title": "Manual git stash",
+      "url": "https://git-scm.com/docs/git-stash"
+    }
+  ],
+  "verification": {
+    "command": "git stash list\ngit status --short",
+    "explanation": "Kamu dapat memulihkan pekerjaan sambil memilih kapan simpanannya dihapus."
+  },
+  "order": 34
+}

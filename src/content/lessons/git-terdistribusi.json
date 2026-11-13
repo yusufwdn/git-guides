@@ -1,0 +1,60 @@
+{
+  "chapter": 1,
+  "id": "git-terdistribusi",
+  "title": "Riwayat ada di laptopmu juga.",
+  "summary": "Pahami kemampuan lokal dan batas salinan repository.",
+  "scenario": "Wi-Fi toko mati, tetapi kamu masih harus membuat branch dan merekam perbaikan sebelum pulang.",
+  "concept": "Commit, branch, log, dan sebagian besar diff berjalan lokal. Clone biasa membawa riwayat yang dapat dijangkau melalui referensi yang diambil. Shallow clone dan partial clone dapat membatasi data awal; jangan menyamakan setiap clone dengan backup lengkap semua data server.",
+  "analogy": "Setiap penulis punya salinan buku kerja. Pertukaran halaman membutuhkan koneksi, tetapi menulis di salinan sendiri tidak.",
+  "steps": [
+    {
+      "title": "Lihat branch lokal",
+      "command": "git branch --list",
+      "explanation": "Tanda bintang menunjukkan branch aktif. Belum ada komunikasi jaringan."
+    },
+    {
+      "title": "Baca riwayat lokal",
+      "command": "git log --oneline -5",
+      "explanation": "Commit yang sudah tersedia dapat dibaca tanpa server."
+    }
+  ],
+  "result": "Kamu tahu operasi mana yang tetap bisa dilakukan offline dan mana yang perlu menghubungi remote.",
+  "pitfall": "PR, issue, secrets server, dan aturan akses layanan hosting bukan bagian dari riwayat Git yang otomatis ikut clone.",
+  "practice": "Matikan koneksi bila nyaman, lalu jalankan status, log, dan buat branch latihan. Jelaskan mengapa push ke server internet berbeda.",
+  "quiz": {
+    "question": "Apa yang biasanya tidak ikut dalam clone Git?",
+    "options": [
+      "Riwayat commit yang diambil",
+      "Issue dan pengaturan akun layanan hosting",
+      "Object file yang dibutuhkan snapshot"
+    ],
+    "answer": 1,
+    "explanation": "Layanan hosting menyimpan data tambahan di luar object dan refs Git."
+  },
+  "commands": ["git branch", "git log"],
+  "visual": "graph",
+  "minutes": 7,
+  "level": "Dasar",
+  "prerequisites": ["snapshot"],
+  "initialState": "Repo lokal sudah punya setidaknya satu commit dan sebuah branch. Tidak memerlukan remote internet.",
+  "lab": "basics",
+  "objectives": [
+    "Pahami kemampuan lokal dan batas salinan repository.",
+    "Periksa hasilnya: Kamu tahu operasi mana yang tetap bisa dilakukan offline dan mana yang perlu menghubungi remote."
+  ],
+  "sources": [
+    {
+      "title": "Manual git branch",
+      "url": "https://git-scm.com/docs/git-branch"
+    },
+    {
+      "title": "Manual git log",
+      "url": "https://git-scm.com/docs/git-log"
+    }
+  ],
+  "verification": {
+    "command": "git log --oneline -5",
+    "explanation": "Kamu tahu operasi mana yang tetap bisa dilakukan offline dan mana yang perlu menghubungi remote."
+  },
+  "order": 2
+}

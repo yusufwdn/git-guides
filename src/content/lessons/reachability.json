@@ -1,0 +1,56 @@
+{
+  "chapter": 16,
+  "id": "reachability",
+  "title": "Ada di penyimpanan belum tentu punya nama.",
+  "summary": "Bedakan object yang tersedia dengan commit yang dapat dicapai dari branch.",
+  "scenario": "Setelah branch dihapus, commit fitur tidak tampak pada log main. Namun reflog masih bisa menunjukkannya.",
+  "concept": "Reachability mengikuti referensi menuju object dan hubungan parent/tree/blob. Menghapus satu referensi bisa membuat commit tidak terjangkau dari branch, tetapi object dapat tetap tersedia untuk sementara melalui reflog atau sampai pemangkasan. Rebase juga tidak langsung memusnahkan object versi lama.",
+  "analogy": "Halaman bisa masih ada di gudang meski penanda katalog dilepas. Tanpa aturan penyimpanan, ketersediaannya tidak boleh dianggap selamanya.",
+  "steps": [
+    {
+      "title": "Amati jalur yang bernama",
+      "command": "git log --oneline --all",
+      "explanation": "Pada latihan reflog, jalur fitur yang referensinya dihapus tidak otomatis terlihat dari main."
+    },
+    {
+      "title": "Cari posisi lama",
+      "command": "git reflog --all",
+      "explanation": "Setelah mendapat hash, cat-file -t HASH dapat memeriksa object selama masih tersedia."
+    }
+  ],
+  "result": "Kamu tahu mengapa pemulihan mungkin berhasil hari ini tetapi tidak dijamin setelah retensi dan maintenance.",
+  "pitfall": "Jangan menjalankan prune agresif saat investigasi pemulihan. Menyalin log hash saja bukan salinan object yang dirujuknya.",
+  "practice": "Pulihkan branch pada latihan reflog. Bandingkan log --all sebelum dan setelah branch pulih-diskon dibuat.",
+  "quiz": {
+    "question": "Hapus nama branch berarti object commit langsung hilang?",
+    "options": ["Tidak selalu", "Ya, seketika selalu", "Hanya jika branch berawalan fitur"],
+    "answer": 0,
+    "explanation": "Penghapusan referensi dan pemangkasan object adalah hal yang berbeda."
+  },
+  "commands": ["git reflog", "git cat-file"],
+  "visual": "recovery",
+  "minutes": 7,
+  "level": "Lanjutan",
+  "prerequisites": ["refs-refspec"],
+  "initialState": "Latihan reflog: branch dihapus tetapi commit masih tersimpan. Jangan jalankan prune selama investigasi.",
+  "lab": "reflog",
+  "objectives": [
+    "Bedakan object yang tersedia dengan commit yang dapat dicapai dari branch.",
+    "Periksa hasilnya: Kamu tahu mengapa pemulihan mungkin berhasil hari ini tetapi tidak dijamin setelah retensi dan maintenance."
+  ],
+  "sources": [
+    {
+      "title": "Manual git reflog",
+      "url": "https://git-scm.com/docs/git-reflog"
+    },
+    {
+      "title": "Manual git cat-file",
+      "url": "https://git-scm.com/docs/git-cat-file"
+    }
+  ],
+  "verification": {
+    "command": "git log --oneline --all",
+    "explanation": "Kamu tahu mengapa pemulihan mungkin berhasil hari ini tetapi tidak dijamin setelah retensi dan maintenance."
+  },
+  "order": 64
+}

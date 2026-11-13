@@ -1,0 +1,61 @@
+{
+  "chapter": 14,
+  "id": "worktree",
+  "title": "Dua pekerjaan, dua meja.",
+  "summary": "Gunakan worktree saat dua branch perlu terbuka bersamaan.",
+  "scenario": "Kamu sedang menjalankan fitur diskon, tetapi perlu menguji hotfix pada jendela editor lain tanpa menutup pekerjaan sekarang.",
+  "concept": "git worktree menambahkan working tree lain yang berbagi database object dan referensi repository. Masing-masing memiliki working tree dan index sendiri. Secara normal satu branch tidak boleh aktif di dua worktree sekaligus. Ini berbeda dari clone yang merupakan repository tersendiri.",
+  "analogy": "Kamu menambah meja kerja kedua untuk buku catatan yang sama. Bahan di kedua meja terpisah, tetapi riwayat proyeknya dibagikan.",
+  "steps": [
+    {
+      "title": "Tambahkan ruang hotfix",
+      "command": "git worktree add -b hotfix-checkout ../kopi-hotfix main",
+      "explanation": "Jalankan dari repo Kopi Kita. Folder baru dibuat di lokasi saudara; pilih lokasi yang memang kamu miliki."
+    },
+    {
+      "title": "Lihat daftar meja",
+      "command": "git worktree list",
+      "explanation": "Buka folder hotfix di editor lain dan kerjakan sesuai kebutuhan."
+    },
+    {
+      "title": "Rapikan sesudah selesai",
+      "command": "git worktree remove ../kopi-hotfix",
+      "explanation": "Pastikan perubahan sudah disimpan. Remove worktree tidak otomatis menghapus nama branch-nya."
+    }
+  ],
+  "result": "Fitur dan hotfix bisa diuji pada folder berbeda tanpa mengganti branch pada meja pertama.",
+  "pitfall": "Submodule melacak commit repo lain; sparse checkout membatasi path working tree; partial clone mengurangi object awal; shallow clone membatasi riwayat. Semuanya memecahkan masalah berbeda. Git LFS adalah ekstensi untuk pengelolaan file besar.",
+  "practice": "Bandingkan status pada dua worktree setelah mengedit file hanya di salah satunya. Amati perubahan mana yang lokal pada meja itu.",
+  "quiz": {
+    "question": "Apa yang dibagikan antar linked worktree?",
+    "options": [
+      "Database object dan referensi repository",
+      "Semua edit working tree seketika",
+      "Satu index untuk semua pekerjaan"
+    ],
+    "answer": 0,
+    "explanation": "Linked worktree memiliki working tree dan index masing-masing, dengan penyimpanan repository yang dibagikan."
+  },
+  "commands": ["git worktree"],
+  "visual": "graph",
+  "minutes": 8,
+  "level": "Lanjutan",
+  "prerequisites": ["partial-staging"],
+  "initialState": "Repo memiliki main; branch hotfix-checkout dan folder ../kopi-hotfix belum ada. Pilih folder saudara milikmu yang boleh dibuat.",
+  "lab": "branch",
+  "objectives": [
+    "Gunakan worktree saat dua branch perlu terbuka bersamaan.",
+    "Periksa hasilnya: Fitur dan hotfix bisa diuji pada folder berbeda tanpa mengganti branch pada meja pertama."
+  ],
+  "sources": [
+    {
+      "title": "Manual git worktree",
+      "url": "https://git-scm.com/docs/git-worktree"
+    }
+  ],
+  "verification": {
+    "command": "git worktree list",
+    "explanation": "Fitur dan hotfix bisa diuji pada folder berbeda tanpa mengganti branch pada meja pertama."
+  },
+  "order": 54
+}

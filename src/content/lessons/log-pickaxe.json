@@ -1,0 +1,52 @@
+{
+  "chapter": 12,
+  "id": "log-pickaxe",
+  "title": "Cari kapan sebuah aturan mulai ada.",
+  "summary": "Bedakan pencarian string -S dari pencarian patch -G.",
+  "scenario": "Aturan MINIMUM_BELANJA diganti namanya beberapa kali. Kamu perlu menemukan commit yang memperkenalkan atau mengubah penggunaannya.",
+  "concept": "-S memilih perubahan yang mengubah jumlah kemunculan string. -G memilih commit dengan baris patch yang cocok regex. Pemindahan string tanpa perubahan jumlah bisa luput dari -S. Setelah kandidat ditemukan, lihat seluruh konteks karena satu baris jarang menceritakan semua alasan.",
+  "analogy": "Menghitung jumlah kata berbeda dari mencari kalimat yang direvisi. Pilih metode sesuai pertanyaan.",
+  "steps": [
+    {
+      "title": "Cari perubahan jumlah string",
+      "command": "git log -p -S \"diskon\" -- diskon.js",
+      "explanation": "Pada latihan rebase, perubahan nilai tetap memakai jumlah kata diskon yang sama sehingga tidak semua perubahan terpilih."
+    },
+    {
+      "title": "Cari baris patch yang cocok",
+      "command": "git log -p -G \"diskon.*10\" -- diskon.js",
+      "explanation": "Regex ini menelusuri baris perubahan yang menyebut nilai 10."
+    }
+  ],
+  "result": "Hasil dua pencarian dapat berbeda dan kamu tahu alasannya.",
+  "pitfall": "Quote dan regex diproses sesuai shell sebelum diterima Git. Gunakan contoh sederhana dan periksa bantuan untuk pola kompleks.",
+  "practice": "Gunakan latihan rebase sebelum proses. Bandingkan commit yang dipilih -S diskon dan -G diskon.",
+  "quiz": {
+    "question": "String dipindah tanpa perubahan jumlah. -S pasti memilihnya?",
+    "options": ["Tidak selalu", "Ya, selalu", "Tidak ada hubungan dengan jumlah"],
+    "answer": 0,
+    "explanation": "-S berfokus pada perubahan jumlah kemunculan string."
+  },
+  "commands": ["git log -S", "git log -G"],
+  "visual": "snapshot",
+  "minutes": 7,
+  "level": "Menengah",
+  "prerequisites": ["pencarian"],
+  "initialState": "Latihan rebase mempunyai beberapa perubahan nilai diskon dengan jumlah kata diskon yang tetap. Tidak perlu menjalankan rebase dahulu.",
+  "lab": "rebase",
+  "objectives": [
+    "Bedakan pencarian string -S dari pencarian patch -G.",
+    "Periksa hasilnya: Hasil dua pencarian dapat berbeda dan kamu tahu alasannya."
+  ],
+  "sources": [
+    {
+      "title": "Manual git log",
+      "url": "https://git-scm.com/docs/git-log"
+    }
+  ],
+  "verification": {
+    "command": "git log --oneline -G \"diskon\" -- diskon.js",
+    "explanation": "Hasil dua pencarian dapat berbeda dan kamu tahu alasannya."
+  },
+  "order": 46
+}

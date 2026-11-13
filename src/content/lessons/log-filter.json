@@ -1,0 +1,56 @@
+{
+  "chapter": 4,
+  "id": "log-filter",
+  "title": "Persempit riwayat ke pertanyaanmu.",
+  "summary": "Cari berdasarkan pesan, penulis, dan path tanpa kehilangan konteks.",
+  "scenario": "Repo berisi ratusan commit, tetapi kamu hanya ingin meninjau perbaikan checkout yang pernah dibuat Rani.",
+  "concept": "Filter log membantu memperkecil kandidat. --grep mencari pesan commit, --author metadata penulis, dan -- PATH membatasi riwayat path. Nama penulis bukan bukti identitas terverifikasi. Setelah menemukan kandidat, buka commit dan baca konteksnya.",
+  "analogy": "Indeks buku membawamu ke halaman yang mungkin relevan. Kamu tetap perlu membaca halamannya.",
+  "steps": [
+    {
+      "title": "Cari pesan perbaikan",
+      "command": "git log --oneline --grep=\"checkout\"",
+      "explanation": "Pencarian ini membaca pesan, bukan isi file atau patch."
+    },
+    {
+      "title": "Batasi path dan jumlah",
+      "command": "git log -5 --oneline -- checkout.js",
+      "explanation": "Periksa commit kandidat dengan show; hasil bergantung pada riwayat yang tersedia."
+    }
+  ],
+  "result": "Pencarian menghasilkan kandidat yang bisa ditinjau satu per satu.",
+  "pitfall": "Filter yang terlalu banyak bisa menyembunyikan hasil. Mulai dari pertanyaan sederhana, lalu persempit.",
+  "practice": "Cari pesan perbaikan checkout pada latihan cherry-pick, lalu baca patch dan pastikan file yang berubah memang checkout.js.",
+  "quiz": {
+    "question": "--grep pada log mencari apa?",
+    "options": ["Isi semua file saat ini", "Pesan commit", "Nama remote"],
+    "answer": 1,
+    "explanation": "Untuk isi file gunakan grep; untuk patch atau sejarah string gunakan opsi lain."
+  },
+  "commands": ["git log --grep", "git show"],
+  "visual": "graph",
+  "minutes": 7,
+  "level": "Dasar",
+  "prerequisites": ["riwayat"],
+  "initialState": "Repo punya commit dengan pesan checkout dan file checkout.js. Latihan cherry-pick menyediakan riwayat tersebut.",
+  "lab": "cherry-pick",
+  "objectives": [
+    "Cari berdasarkan pesan, penulis, dan path tanpa kehilangan konteks.",
+    "Periksa hasilnya: Pencarian menghasilkan kandidat yang bisa ditinjau satu per satu."
+  ],
+  "sources": [
+    {
+      "title": "Manual git log",
+      "url": "https://git-scm.com/docs/git-log"
+    },
+    {
+      "title": "Manual git show",
+      "url": "https://git-scm.com/docs/git-show"
+    }
+  ],
+  "verification": {
+    "command": "git log --oneline -- checkout.js",
+    "explanation": "Pencarian menghasilkan kandidat yang bisa ditinjau satu per satu."
+  },
+  "order": 13
+}

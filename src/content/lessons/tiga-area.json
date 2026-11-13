@@ -1,0 +1,65 @@
+{
+  "chapter": 1,
+  "id": "tiga-area",
+  "title": "Kenali tiga tempat perubahanmu.",
+  "summary": "Working tree, staging area, dan snapshot HEAD menjawab tiga pertanyaan yang berbeda.",
+  "scenario": "Harga kopi dan teks tombol berubah bersamaan. Kamu ingin menyimpan harga sekarang, tetapi teks tombol masih perlu dibahas.",
+  "concept": "Working tree adalah file yang kamu edit. Index atau staging area menyusun snapshot untuk commit berikutnya. HEAD biasanya merujuk branch aktif, yang menunjuk commit terakhirnya. Setelah git add, edit tambahan pada file yang sama belum otomatis ikut staged.",
+  "analogy": "Meja kerja berisi semua bahan. Nampan persiapan memuat pilihan yang akan disajikan. Album menyimpan hasil yang sudah direkam. Nampan di sini adalah snapshot usulan, bukan sekadar daftar nama file.",
+  "steps": [
+    {
+      "title": "Periksa semua keadaan",
+      "command": "git status",
+      "explanation": "Lihat bagian staged, unstaged, dan untracked. Untracked berarti file belum ada dalam index."
+    },
+    {
+      "title": "Lihat perubahan di meja kerja",
+      "command": "git diff",
+      "explanation": "Bandingkan perubahan pada file tracked di working tree terhadap index."
+    },
+    {
+      "title": "Periksa isi calon commit",
+      "command": "git diff --staged",
+      "explanation": "Bandingkan index terhadap HEAD. Inilah perubahan yang akan direkam saat commit."
+    }
+  ],
+  "result": "Kamu tahu apakah suatu perubahan masih di working tree, sudah staged, atau sudah menjadi bagian commit.",
+  "pitfall": "git diff kosong tidak selalu berarti semua bersih. Perubahan mungkin sudah staged, atau ada file untracked yang tidak ditampilkan oleh diff biasa.",
+  "practice": "Di repo latihan, edit sebuah file, jalankan add, lalu edit lagi. Bandingkan diff dan diff --staged untuk file yang sama.",
+  "quiz": {
+    "question": "Setelah add, kamu mengedit file lagi. Apa isi commit berikutnya?",
+    "options": [
+      "Selalu versi terbaru di editor",
+      "Versi yang terakhir dimasukkan ke index",
+      "Semua file di folder"
+    ],
+    "answer": 1,
+    "explanation": "Commit merekam index. Jalankan add lagi jika edit terbaru juga ingin disertakan."
+  },
+  "commands": ["git status", "git diff", "git diff --staged"],
+  "visual": "snapshot",
+  "minutes": 8,
+  "level": "Dasar",
+  "prerequisites": ["git-terdistribusi"],
+  "initialState": "Repo sudah mempunyai HEAD. Satu file tracked diedit, di-add, lalu diedit lagi agar staged dan unstaged dapat dibandingkan.",
+  "lab": "basics",
+  "objectives": [
+    "Working tree, staging area, dan snapshot HEAD menjawab tiga pertanyaan yang berbeda.",
+    "Periksa hasilnya: Kamu tahu apakah suatu perubahan masih di working tree, sudah staged, atau sudah menjadi bagian commit."
+  ],
+  "sources": [
+    {
+      "title": "Manual git status",
+      "url": "https://git-scm.com/docs/git-status"
+    },
+    {
+      "title": "Manual git diff",
+      "url": "https://git-scm.com/docs/git-diff"
+    }
+  ],
+  "verification": {
+    "command": "git diff\ngit diff --staged",
+    "explanation": "Kamu tahu apakah suatu perubahan masih di working tree, sudah staged, atau sudah menjadi bagian commit."
+  },
+  "order": 3
+}

@@ -4,16 +4,14 @@ import assert from 'node:assert/strict';
 const require = createRequire(import.meta.url);
 for (const file of [
   'assets/content.js',
-  'assets/curriculum.js',
   'assets/visuals.js',
-  'assets/learning.js',
   'assets/simulator.js',
-  'assets/app.js',
   'assets/pages.js',
   'assets/routes.js',
-  'scripts/render-page.mjs',
-  'scripts/build.mjs',
-  'scripts/serve.mjs',
+  'src/lib/progress.js',
+  'src/lib/simulator.js',
+  'src/renderers/index.js',
+  'scripts/prepare-assets.mjs',
   'labs/git-lab.cjs',
 ])
   execFileSync(process.execPath, ['--check', file], { stdio: 'inherit' });

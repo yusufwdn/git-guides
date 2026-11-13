@@ -1,0 +1,62 @@
+{
+  "chapter": 9,
+  "id": "stash",
+  "title": "Simpan sebentar. Lanjutkan nanti.",
+  "summary": "Kerjaan belum siap di-commit, tapi ada hal lain yang harus dikerjakan? Kenalan dengan git stash, laci sementara untuk perubahanmu.",
+  "scenario": "Kamu lagi bikin fitur diskon di Kopi Kita. Belum selesai, tiba-tiba checkout error dan perlu diperbaiki sekarang. Kamu ingin menyimpan pekerjaan tanpa mencampurnya dengan hotfix.",
+  "concept": "git stash push menyimpan perubahan tracked pada working tree dan index, lalu mengembalikannya ke keadaan HEAD. Simpanan ini berada di repository lokal. Default-nya, file untracked dan ignored tidak ikut; gunakan -u untuk untracked atau -a untuk juga menyertakan ignored bila memang diperlukan.",
+  "analogy": "Lagi menggambar di meja, lalu perlu mengerjakan tugas lain? Masukkan bahan yang belum selesai ke laci berlabel. Mejamu siap dipakai, dan bahan tadi bisa diambil kembali. Laci ini ada di laptopmu, bukan otomatis di server.",
+  "steps": [
+    {
+      "title": "Kenali yang akan disimpan",
+      "command": "git status\ngit diff\ngit diff --staged",
+      "explanation": "Periksa perubahan tracked dan staged. Jika ada file baru yang harus ikut, gunakan variasi -u."
+    },
+    {
+      "title": "Simpan dengan label yang jelas",
+      "command": "git stash push -u -m \"WIP diskon\"",
+      "explanation": "Tracked changes tersimpan dan working tree kembali ke HEAD. Beri nama supaya mudah dikenali saat simpanan bertambah. Pada latihan yang juga mempunyai catatan.txt, -u menyertakan file baru tersebut."
+    },
+    {
+      "title": "Periksa lalu kerjakan hotfix",
+      "command": "git stash list\ngit switch main\ngit switch -c hotfix-checkout",
+      "explanation": "Pada skenario ini, pastikan file baru yang perlu disimpan sudah ditangani. Perbaiki checkout dan commit di branch hotfix."
+    },
+    {
+      "title": "Kembali dan lanjutkan",
+      "command": "git switch fitur-diskon\ngit stash pop",
+      "explanation": "Di kondisi tanpa konflik, perubahan kembali ke working tree dan entri stash dihapus. Periksa git status sebelum meneruskan."
+    }
+  ],
+  "result": "Pekerjaan diskon kembali, sementara commit hotfix tetap terpisah pada branch hotfix. Integrasi hotfix ke main adalah langkah berikutnya dalam workflow tim.",
+  "pitfall": "Stash bukan backup permanen. File untracked tidak ikut secara default. Jika pop mengalami konflik, entri stash tetap ada; selesaikan konflik dan periksa hasil sebelum drop manual.",
+  "practice": "Di repo latihan, ubah file tracked dan buat file baru. Bandingkan stash push biasa dengan stash push -u. Kembalikan perubahan dan pastikan kedua file sesuai harapan.",
+  "quiz": {
+    "question": "Kamu ingin mengembalikan pekerjaan dan tetap menyimpan entri stash. Pilih apa?",
+    "options": ["git stash pop", "git stash apply", "git stash drop"],
+    "answer": 1,
+    "explanation": "apply mengembalikan perubahan tanpa menghapus entri. pop menghapus entri setelah penerapan berhasil; jika konflik, entrinya tetap ada."
+  },
+  "commands": ["git stash push", "git stash list", "git stash pop", "git stash apply"],
+  "visual": "stash",
+  "minutes": 10,
+  "level": "Menengah",
+  "prerequisites": ["commit-atomik"],
+  "initialState": "Latihan stash: branch fitur-diskon, diskon.js tracked berubah, catatan.txt untracked. Gunakan -u bila ingin keduanya tersimpan.",
+  "lab": "stash",
+  "objectives": [
+    "Kerjaan belum siap di-commit, tapi ada hal lain yang harus dikerjakan? Kenalan dengan git stash, laci sementara untuk perubahanmu.",
+    "Periksa hasilnya: Pekerjaan diskon kembali, sementara commit hotfix tetap terpisah pada branch hotfix. Integrasi hotfix ke main adalah langkah berikutnya dalam workflow tim."
+  ],
+  "sources": [
+    {
+      "title": "Manual git stash",
+      "url": "https://git-scm.com/docs/git-stash"
+    }
+  ],
+  "verification": {
+    "command": "git status --short\ngit stash list",
+    "explanation": "Pekerjaan diskon kembali, sementara commit hotfix tetap terpisah pada branch hotfix. Integrasi hotfix ke main adalah langkah berikutnya dalam workflow tim."
+  },
+  "order": 32
+}

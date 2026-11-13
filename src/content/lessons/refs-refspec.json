@@ -1,0 +1,56 @@
+{
+  "chapter": 16,
+  "id": "refs-refspec",
+  "title": "Nama dan jalur pertukaran punya pemetaan.",
+  "summary": "Hubungkan refs/heads, refs/remotes, dan refspec fetch.",
+  "scenario": "Remote memiliki branch main. Kamu ingin memahami mengapa fetch menyimpannya sebagai origin/main di laptop.",
+  "concept": "Refs memberi nama pada object ID. Branch lokal biasanya di refs/heads, tag di refs/tags, dan referensi pelacakan remote di refs/remotes. Refspec memetakan sisi sumber ke tujuan saat fetch/push; konfigurasi fetch default clone biasanya memetakan heads remote ke refs/remotes/origin.",
+  "analogy": "Alamat di daftar pengiriman mempunyai nama asal dan rak tujuan. Nama di kedua sisi bisa berbeda meski mengacu pada isi yang sama.",
+  "steps": [
+    {
+      "title": "Lihat referensi yang tersedia",
+      "command": "git show-ref",
+      "explanation": "Ini membaca nama dan object ID tanpa mengubah posisi branch."
+    },
+    {
+      "title": "Lihat aturan pemetaan",
+      "command": "git config --get-all remote.origin.fetch",
+      "explanation": "Pada latihan remote, amati wildcard yang memetakan branch sumber ke origin."
+    }
+  ],
+  "result": "Kamu dapat menghubungkan nama singkat main/origin/main dengan namespace referensinya.",
+  "pitfall": "Jangan mengedit file refs secara manual; penyimpanan referensi dapat berbentuk packed atau backend lain. Gunakan command Git resmi.",
+  "practice": "Pada latihan remote, temukan refs/heads/main dan refs/remotes/origin/main sebelum dan sesudah fetch.",
+  "quiz": {
+    "question": "Namespace branch lokal yang umum?",
+    "options": ["refs/heads", "refs/passwords", "refs/issues"],
+    "answer": 0,
+    "explanation": "Nama branch lokal berada pada namespace heads."
+  },
+  "commands": ["git show-ref", "git config"],
+  "visual": "objects",
+  "minutes": 7,
+  "level": "Lanjutan",
+  "prerequisites": ["objects"],
+  "initialState": "Latihan remote mempunyai origin dengan konfigurasi fetch serta refs main dan origin/main.",
+  "lab": "remote",
+  "objectives": [
+    "Hubungkan refs/heads, refs/remotes, dan refspec fetch.",
+    "Periksa hasilnya: Kamu dapat menghubungkan nama singkat main/origin/main dengan namespace referensinya."
+  ],
+  "sources": [
+    {
+      "title": "Manual git show-ref",
+      "url": "https://git-scm.com/docs/git-show-ref"
+    },
+    {
+      "title": "Manual git config",
+      "url": "https://git-scm.com/docs/git-config"
+    }
+  ],
+  "verification": {
+    "command": "git show-ref",
+    "explanation": "Kamu dapat menghubungkan nama singkat main/origin/main dengan namespace referensinya."
+  },
+  "order": 63
+}

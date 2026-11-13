@@ -1,0 +1,57 @@
+{
+  "chapter": 6,
+  "id": "merge",
+  "title": "Dua jalur, satu hasil bersama.",
+  "summary": "Pahami fast-forward dan merge commit sebelum menggabungkan branch.",
+  "scenario": "Fitur diskon selesai. Kamu ingin memasukkannya ke main tanpa kehilangan perubahan yang sudah masuk di main.",
+  "concept": "Merge memasukkan riwayat branch lain ke branch aktif. Jika main adalah ancestor fitur, fast-forward cukup menggeser referensi main. Jika keduanya berkembang sendiri, merge biasanya membuat commit dengan dua parent. Jalankan merge dari branch yang ingin menerima hasil.",
+  "analogy": "Dua jalur perjalanan bertemu. Jika satu jalur hanya meneruskan yang lain, cukup majukan penanda. Jika keduanya punya langkah sendiri, catat titik pertemuannya.",
+  "steps": [
+    {
+      "title": "Pilih penerima",
+      "command": "git switch main\ngit status",
+      "explanation": "Pastikan pekerjaan lokal sudah ditangani sebelum integrasi."
+    },
+    {
+      "title": "Gabungkan fitur",
+      "command": "git merge fitur-diskon",
+      "explanation": "Git dapat melakukan fast-forward, membuat merge commit, atau berhenti karena konflik."
+    },
+    {
+      "title": "Periksa hasil",
+      "command": "git log --oneline --graph --decorate -8",
+      "explanation": "Uji aplikasinya juga; merge tanpa konflik belum menjamin perilaku program benar."
+    }
+  ],
+  "result": "main mencakup perubahan fitur, dengan bentuk riwayat sesuai hubungan kedua branch.",
+  "pitfall": "Menggabungkan main saat sedang di branch fitur tidak otomatis memperbarui referensi main. Arah merge mengikuti branch aktif.",
+  "practice": "Buat satu commit fitur saat main belum berubah, lalu merge. Ulangi dengan main yang juga berubah dan bandingkan grafiknya.",
+  "quiz": {
+    "question": "git merge fitur saat branch aktif main memperbarui apa?",
+    "options": ["main", "Hanya fitur", "Semua remote"],
+    "answer": 0,
+    "explanation": "Branch aktif menerima hasil integrasi."
+  },
+  "commands": ["git merge"],
+  "visual": "graph",
+  "minutes": 8,
+  "level": "Menengah",
+  "prerequisites": ["branch"],
+  "initialState": "Branch main aktif dan bersih; branch fitur-diskon sudah mempunyai perubahan commit. Jangan merge dari branch penerima yang salah.",
+  "lab": "merge-ff",
+  "objectives": [
+    "Pahami fast-forward dan merge commit sebelum menggabungkan branch.",
+    "Periksa hasilnya: main mencakup perubahan fitur, dengan bentuk riwayat sesuai hubungan kedua branch."
+  ],
+  "sources": [
+    {
+      "title": "Manual git merge",
+      "url": "https://git-scm.com/docs/git-merge"
+    }
+  ],
+  "verification": {
+    "command": "git log --graph --oneline --all",
+    "explanation": "main mencakup perubahan fitur, dengan bentuk riwayat sesuai hubungan kedua branch."
+  },
+  "order": 20
+}

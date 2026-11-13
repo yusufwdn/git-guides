@@ -1,0 +1,65 @@
+{
+  "chapter": 13,
+  "id": "tag",
+  "title": "Kasih nama pada versi yang dirilis.",
+  "summary": "Gunakan tag untuk menandai commit yang mewakili rilis tertentu.",
+  "scenario": "Kopi Kita versi 1.0 sudah berjalan di toko. Dua minggu kemudian, tim perlu memeriksa persis kode yang dirilis saat itu.",
+  "concept": "Tag menamai object, biasanya commit. Lightweight tag langsung menyimpan referensi; annotated tag mempunyai object dengan pesan dan metadata tagger. Tag tidak ikut berpindah setiap ada commit baru seperti branch. Push branch biasa tidak otomatis mengirim semua tag.",
+  "analogy": "Pasang label pada edisi buku yang sudah dicetak. Penulisan edisi berikutnya tidak otomatis memindahkan label edisi lama.",
+  "steps": [
+    {
+      "title": "Buat tag rilis",
+      "command": "git tag -a v1.0.0 -m \"Rilis awal Kopi Kita\"",
+      "explanation": "Jalankan pada commit yang sudah diuji dan memang akan dirilis."
+    },
+    {
+      "title": "Periksa tag",
+      "command": "git show v1.0.0",
+      "explanation": "Annotated tag menampilkan metadata tag dan commit yang ditunjuk."
+    },
+    {
+      "title": "Bagikan tag tertentu",
+      "command": "git push origin v1.0.0",
+      "explanation": "Periksa remote yang dituju. Tag hanyalah penanda; proses deployment merupakan langkah lain."
+    }
+  ],
+  "result": "Tim punya nama stabil untuk snapshot rilis.",
+  "pitfall": "Memindahkan tag rilis yang sudah dibagikan bisa membingungkan pengguna. Buat versi baru sesuai kebijakan tim.",
+  "practice": "Buat annotated tag pada commit latihan, tambahkan commit baru, lalu pastikan tag tetap menunjuk versi lama.",
+  "quiz": {
+    "question": "Tag rilis biasanya bergerak saat commit baru dibuat?",
+    "options": [
+      "Tidak, tetap menunjuk targetnya",
+      "Ya, seperti branch aktif",
+      "Hanya jika namanya v1"
+    ],
+    "answer": 0,
+    "explanation": "Branch bergerak saat commit dibuat di jalurnya; tag tidak otomatis bergerak."
+  },
+  "commands": ["git tag", "git push"],
+  "visual": "graph",
+  "minutes": 8,
+  "level": "Lanjutan",
+  "prerequisites": ["pencarian"],
+  "initialState": "Latihan tags dimulai pada commit awal yang akan diberi v1.0.0. Nama tag belum dipakai; tidak memerlukan server.",
+  "lab": "tags",
+  "objectives": [
+    "Gunakan tag untuk menandai commit yang mewakili rilis tertentu.",
+    "Periksa hasilnya: Tim punya nama stabil untuk snapshot rilis."
+  ],
+  "sources": [
+    {
+      "title": "Manual git tag",
+      "url": "https://git-scm.com/docs/git-tag"
+    },
+    {
+      "title": "Manual git push",
+      "url": "https://git-scm.com/docs/git-push"
+    }
+  ],
+  "verification": {
+    "command": "git cat-file -t v1.0.0\ngit show v1.0.0",
+    "explanation": "Tim punya nama stabil untuk snapshot rilis."
+  },
+  "order": 49
+}

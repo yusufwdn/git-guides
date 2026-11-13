@@ -1,0 +1,228 @@
+{
+  "basics": {
+    "title": "Tiga area",
+    "lesson": "tiga-area",
+    "goal": "Baca diskon 0 di HEAD/index dan diskon 10 di working tree.",
+    "hints": [
+      "Bandingkan show HEAD:diskon.js dan show :diskon.js.",
+      "Diff biasa membandingkan working tree terhadap index."
+    ],
+    "solution": "git status --short\ngit show HEAD:diskon.js\ngit show :diskon.js\ngit diff -- diskon.js",
+    "explanation": "Latihan ini observasional. Checker mengonfirmasi data awal masih tersedia; ia tidak membuktikan bahwa kamu membaca output."
+  },
+  "staging": {
+    "title": "Commit satu tujuan",
+    "lesson": "staging",
+    "goal": "Commit menu 20000, sisakan diskon 10 sebagai edit unstaged.",
+    "hints": ["Jangan add . bila hanya menu yang siap.", "Periksa diff --staged sebelum commit."],
+    "solution": "git add menu.json\ngit diff --staged\ngit commit -m \"Sesuaikan harga menu\"\ngit status --short",
+    "explanation": "HEAD menu menjadi 20000. HEAD diskon tetap 0, sedangkan working tree diskon 10."
+  },
+  "branch": {
+    "title": "Branch fitur",
+    "lesson": "branch",
+    "goal": "Buat fitur-diskon, edit diskon.js menjadi const diskon = 10; dan commit. Main tetap di versi awal.",
+    "hints": ["Buat branch dari main yang bersih.", "Edit file lewat editor sebelum add."],
+    "solution": "git switch -c fitur-diskon\n# Edit diskon.js menjadi: const diskon = 10;\ngit add diskon.js\ngit commit -m \"Tambah diskon\"\ngit show main:diskon.js",
+    "explanation": "Commit baru menggerakkan fitur-diskon. Referensi main dan isi snapshot main tetap pada diskon 0."
+  },
+  "merge-ff": {
+    "title": "Fast-forward",
+    "lesson": "fast-forward",
+    "goal": "Gabungkan fitur-diskon ke main tanpa membuat commit baru.",
+    "hints": ["Main masih ancestor fitur.", "Bandingkan dua hash setelah merge."],
+    "solution": "git switch main\ngit merge --ff-only fitur-diskon\ngit rev-parse main fitur-diskon",
+    "explanation": "Kedua referensi menunjuk commit fitur yang sama. Tidak ada commit pertemuan tambahan."
+  },
+  "merge-conflict": {
+    "title": "Konflik merge",
+    "lesson": "konflik",
+    "goal": "Gabungkan fitur-menu, pilih menu {\"kopiSusu\":22000}, lalu selesaikan merge.",
+    "hints": [
+      "Konflik memang diharapkan pada command pertama.",
+      "Edit file dan hapus semua marker sebelum add."
+    ],
+    "solution": "git merge fitur-menu\n# Edit menu.json menjadi: {\"kopiSusu\":22000}\ngit add menu.json\ngit -c core.editor=true merge --continue\ngit log --graph --oneline --all",
+    "explanation": "core.editor=true pada latihan ini menerima pesan merge yang sudah disiapkan tanpa membuka editor. Commit main memiliki dua parent."
+  },
+  "merge-abort": {
+    "title": "Batalkan merge",
+    "lesson": "abort-merge",
+    "goal": "Mulai merge yang konflik, amati, lalu batalkan dan buktikan main bersih kembali.",
+    "hints": ["Catat HEAD dahulu.", "Abort digunakan selama proses masih berlangsung."],
+    "solution": "git rev-parse HEAD\ngit merge fitur-menu\ngit status\ngit merge --abort\ngit status\ngit rev-parse HEAD",
+    "explanation": "Keadaan akhir sama dengan keadaan sebelum merge. Checker tidak bisa membuktikan kamu sempat menjalankan merge; bandingkan pengamatanmu sendiri."
+  },
+  "stash": {
+    "title": "Stash dan file baru",
+    "lesson": "stash-untracked",
+    "goal": "Simpan diskon dan catatan baru, pastikan bersih, lalu pop dan periksa keduanya.",
+    "hints": ["File catatan masih untracked.", "Gunakan -u pada push."],
+    "solution": "git status --short\ngit stash push -u -m \"WIP diskon\"\ngit status\ngit stash list\ngit stash pop\ngit status --short",
+    "explanation": "Sesudah pop berhasil, entri kosong dan kedua perubahan kembali. Karena keadaan akhir bisa sama dengan awal, amati juga keadaan bersih di tengah latihan."
+  },
+  "stash-index": {
+    "title": "Index tetap terpisah",
+    "lesson": "status-singkat",
+    "goal": "Pulihkan index diskon 5 dan working tree diskon 10 tanpa menghapus entri stash.",
+    "hints": [
+      "Perhatikan dua kolom MM sebelum push.",
+      "Pakai apply --index untuk memulihkan staged state."
+    ],
+    "solution": "git stash push -m \"Diskon bertahap\"\ngit stash apply --index\ngit show :diskon.js\ngit diff --staged\ngit diff",
+    "explanation": "HEAD tetap 0, index kembali 5, working tree 10. Apply mempertahankan entri sehingga checker bisa membedakan dari keadaan awal."
+  },
+  "stash-conflict": {
+    "title": "Konflik pop",
+    "lesson": "stash-konflik",
+    "goal": "Pop, pilih diskon 10, commit hasil, dan biarkan entri stash konflik tetap tersimpan.",
+    "hints": [
+      "Index awal bersih, tetapi dasar stash berbeda dari HEAD.",
+      "Tidak ada stash --continue."
+    ],
+    "solution": "git stash pop\n# Edit diskon.js menjadi: const diskon = 10;\ngit add diskon.js\ngit commit -m \"Selesaikan konflik diskon\"\ngit stash list",
+    "explanation": "Pop yang konflik tidak menghapus entri. Kamu membuat commit hasil yang dipilih dan dapat menilai kapan simpanan aman untuk dihapus."
+  },
+  "reset-soft": {
+    "title": "Reset soft",
+    "lesson": "reset-modes",
+    "goal": "HEAD ke awal; index 22000 dan working tree 24000 tetap.",
+    "hints": [
+      "Jalankan hanya pada folder reset-soft yang baru.",
+      "Target awal adalah tag yang disediakan generator."
+    ],
+    "solution": "git reset --soft awal\ngit show HEAD:menu.json\ngit show :menu.json\ngit diff -- menu.json",
+    "explanation": "Soft hanya menggerakkan branch. Data index dan working tree tetap seperti sebelum reset."
+  },
+  "reset-mixed": {
+    "title": "Reset mixed",
+    "lesson": "reset-modes",
+    "goal": "HEAD dan index ke 18000; working tree tetap 24000.",
+    "hints": ["Mulai dari folder reset-mixed tersendiri.", "Mixed mereset index dari target."],
+    "solution": "git reset --mixed awal\ngit show HEAD:menu.json\ngit show :menu.json\ngit diff -- menu.json",
+    "explanation": "Perubahan working tree dipertahankan dan terlihat sebagai unstaged terhadap index yang kembali ke awal."
+  },
+  "reset-hard": {
+    "title": "Reset hard",
+    "lesson": "reset-modes",
+    "goal": "Pada repo latihan sekali pakai ini, kembalikan HEAD, index, dan working tree ke 18000.",
+    "hints": [
+      "Periksa root dengan rev-parse --show-toplevel.",
+      "Perubahan contoh 22000 dan 24000 memang akan dibuang."
+    ],
+    "solution": "git rev-parse --show-toplevel\ngit diff\ngit diff --staged\ngit reset --hard awal\ngit status",
+    "explanation": "Hard mengganti ketiga keadaan. Jalankan hanya di folder latihan yang memang boleh kehilangan perubahan contoh."
+  },
+  "reflog": {
+    "title": "Pulihkan branch",
+    "lesson": "reflog-rescue",
+    "goal": "Buat pulih-diskon pada commit berpesan Diskon yang ingin dipulihkan.",
+    "hints": ["Cari melalui reflog, jangan menebak HEAD@{1}.", "Baca show sebelum membuat branch."],
+    "solution": "git reflog --all\ngit show HASH_KANDIDAT\ngit branch pulih-diskon HASH_KANDIDAT\ngit show pulih-diskon:diskon.js",
+    "explanation": "Ganti kedua placeholder dengan hash hasil pengamatanmu. Branch mempertahankan commit tanpa menimpa working tree."
+  },
+  "remote": {
+    "title": "Remote tanpa internet",
+    "lesson": "fetch-pull",
+    "goal": "Fetch perubahan Rani, integrasikan, lalu buat satu commit README dan push. Server dan main lokal harus sama.",
+    "hints": [
+      "Server sudah maju, origin/main lokal belum tahu.",
+      "Sesudah fetch, file lokal belum otomatis berubah."
+    ],
+    "solution": "git fetch origin\ngit log --oneline main..origin/main\ngit merge --ff-only origin/main\n# Tambahkan satu kalimat di README.md melalui editor.\ngit add README.md\ngit commit -m \"Perbarui panduan toko\"\ngit push origin main",
+    "explanation": "Path server.git adalah remote lokal. Fetch memperbarui catatan, merge memperbarui main, dan push mengirim commit README."
+  },
+  "rebase": {
+    "title": "Dasar baru untuk fitur",
+    "lesson": "rebase-dasar",
+    "goal": "Putar ulang dua commit fitur di atas main; menu baru dan diskon tetap ada.",
+    "hints": [
+      "Catat hash fitur sebelum proses.",
+      "Main mengubah menu dan fitur mengubah diskon, jadi contoh ini tidak bentrok."
+    ],
+    "solution": "git log --graph --oneline --all\ngit rebase main\ngit log --graph --oneline --all\ngit show HEAD:menu.json\ngit show HEAD:diskon.js",
+    "explanation": "Main menjadi ancestor fitur. Dua commit fitur mempunyai parent baru dan object ID pengganti."
+  },
+  "cherry-pick": {
+    "title": "Satu perbaikan ke rilis",
+    "lesson": "cherry-pick",
+    "goal": "Ambil commit Validasi jumlah checkout saja. Harga eksperimen 25000 tidak boleh masuk rilis.",
+    "hints": [
+      "Cari hash melalui log fitur-eksperimen.",
+      "Periksa checkout saja yang berubah pada commit kandidat."
+    ],
+    "solution": "git log --oneline fitur-eksperimen\ngit show HASH_PERBAIKAN\ngit cherry-pick HASH_PERBAIKAN\ngit show HEAD:menu.json",
+    "explanation": "Ganti placeholder dengan hash commit perbaikan. Perubahan checkout independen dari menu eksperimen sehingga dapat diterapkan terpisah."
+  },
+  "clean": {
+    "title": "Bersihkan satu file",
+    "lesson": "clean-preview",
+    "goal": "Hapus hanya catatan-sementara.txt; cache ignored dan edit menu tetap ada.",
+    "hints": ["Awali dengan -n.", "Pilih path spesifik dan hindari -x."],
+    "solution": "git clean -nd\ngit clean -f -- catatan-sementara.txt\ngit status --short --ignored",
+    "explanation": "Clean membuang file yang belum tracked. Cache diabaikan secara default dan edit tracked tidak menjadi sasaran clean."
+  },
+  "bisect": {
+    "title": "Pencarian biner bug",
+    "lesson": "bisect",
+    "goal": "Temukan commit pertama diskon negatif, buat bug-ditemukan di sana, lalu tutup bisect.",
+    "hints": [
+      "Tag awal baik dan HEAD buruk.",
+      "Pada setiap kandidat, baca diskon.js lalu pilih good atau bad."
+    ],
+    "solution": "git bisect start\ngit bisect bad\ngit bisect good awal\n# Ulangi membaca diskon.js dan beri good/bad sesuai nilainya.\n# Sesudah Git mengumumkan commit buruk pertama:\ngit branch bug-ditemukan HASH_BURUK_PERTAMA\ngit bisect reset",
+    "explanation": "Jumlah langkah bisa berbeda menurut pemilihan kandidat. Jangan menyalin urutan jawaban tanpa membaca versi yang sedang diuji. Ganti HASH_BURUK_PERTAMA dengan hash yang diumumkan Git; HEAD pada saat pengumuman belum tentu commit itu."
+  },
+  "tags": {
+    "title": "Tag tidak ikut bergerak",
+    "lesson": "tag",
+    "goal": "Tag annotated v1.0.0 di awal, lalu commit perubahan README. Tag harus tetap di awal.",
+    "hints": ["Buat tag sebelum commit berikutnya.", "Bandingkan tag yang di-peel dengan main."],
+    "solution": "git tag -a v1.0.0 -m \"Rilis awal\"\n# Tambahkan satu kalimat di README.md melalui editor.\ngit add README.md\ngit commit -m \"Lanjutkan dokumentasi\"\ngit show v1.0.0\ngit log --decorate --oneline",
+    "explanation": "Tag menunjuk edisi yang dipilih; commit baru hanya memajukan branch main."
+  },
+  "sparse": {
+    "title": "Working tree terpilih",
+    "lesson": "sparse-partial",
+    "goal": "Tampilkan web tanpa docs, tetapi docs harus tetap tersedia di HEAD.",
+    "hints": [
+      "Cone mode memilih direktori.",
+      "Jangan menghapus docs dengan rm atau commit penghapusan."
+    ],
+    "solution": "git sparse-checkout set --cone web\ngit sparse-checkout list\ngit show HEAD:docs/panduan.md",
+    "explanation": "Pembatasan tampilan bukan penghapusan file dari snapshot. Jalankan check sebelum sparse-checkout disable."
+  },
+  "objects": {
+    "title": "Baca penyimpanan snapshot",
+    "lesson": "objects",
+    "goal": "Temukan commit, root tree, dan blob menu tanpa mengedit repository.",
+    "hints": [
+      "cat-file -t menunjukkan jenis object.",
+      "HEAD:path dapat dipakai untuk menunjuk blob sebuah file."
+    ],
+    "solution": "git cat-file -p HEAD\ngit cat-file -t HEAD^{tree}\ngit ls-tree HEAD\ngit cat-file -p HEAD:menu.json",
+    "explanation": "Ini latihan observasi. Di PowerShell, kutip \"HEAD^{tree}\" bila shell memperlakukan ekspresi revision secara khusus."
+  },
+  "partial-staging": {
+    "title": "Satu hunk untuk satu tujuan",
+    "lesson": "partial-staging",
+    "goal": "Commit hanya perbaikan Math.max pada checkout.js; pesan Pesanan diterima tetap unstaged.",
+    "hints": [
+      "Ada dua hunk yang berjauhan.",
+      "Jawab y untuk perhitungan dan n untuk pesan; baca patch sebelum menjawab."
+    ],
+    "solution": "git add -p checkout.js\n# Pilih y pada perhitungan, n pada pesan.\ngit diff --staged\ngit commit -m \"Validasi jumlah checkout\"\ngit diff",
+    "explanation": "Hasil commit tetap memakai pesan Terima kasih. Working tree masih punya pesan percobaan yang belum disertakan."
+  },
+  "revert": {
+    "title": "Undo lewat commit koreksi",
+    "lesson": "reset-revert",
+    "goal": "Kembalikan harga ke 18000 melalui revert, sambil mempertahankan commit salah sebagai ancestor.",
+    "hints": [
+      "HEAD adalah commit harga yang ingin dibatalkan.",
+      "Jangan memakai reset bila tujuannya menjaga riwayat commit lama."
+    ],
+    "solution": "git show HEAD\ngit revert --no-edit HEAD\ngit log --oneline -3\ngit show HEAD:menu.json",
+    "explanation": "Revert membuat satu commit koreksi setelah commit salah. Tidak ada penulisan ulang atau pemindahan branch ke commit awal."
+  }
+}

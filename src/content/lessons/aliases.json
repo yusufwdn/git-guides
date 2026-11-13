@@ -1,0 +1,57 @@
+{
+  "chapter": 15,
+  "id": "aliases",
+  "title": "Singkat boleh, asal maksudnya tetap jelas.",
+  "summary": "Buat alias Git lokal dan hindari menyembunyikan efek berisiko.",
+  "scenario": "Kamu sering mengetik log dengan grafik dan ingin shortcut tanpa mengubah kebiasaan semua proyek di laptop.",
+  "concept": "Alias Git menyimpan perluasan command melalui konfigurasi. Tanpa --global, pengaturan berlaku pada repo saat ini. Alias yang diawali ! menjalankan shell dan memiliki konsekuensi berbeda; contoh panduan cukup memakai alias command Git biasa.",
+  "analogy": "Singkatan pada catatan membantu menulis cepat, selama semua orang masih tahu kalimat lengkapnya.",
+  "steps": [
+    {
+      "title": "Buat alias hanya untuk latihan",
+      "command": "git config alias.lg \"log --oneline --graph --decorate\"",
+      "explanation": "Pengaturan ini tidak mengubah konfigurasi global."
+    },
+    {
+      "title": "Pakai dan periksa definisinya",
+      "command": "git lg\ngit config --get alias.lg",
+      "explanation": "Pastikan shortcut menghasilkan informasi yang kamu harapkan."
+    },
+    {
+      "title": "Hapus bila tidak diperlukan",
+      "command": "git config --unset alias.lg",
+      "explanation": "Yang dihapus adalah nilai konfigurasi alias, bukan commit atau file proyek."
+    }
+  ],
+  "result": "Kamu punya shortcut yang bisa diperiksa dan dibatalkan dengan jelas.",
+  "pitfall": "Jangan membungkus reset --hard, clean, atau force push dengan nama samar. Shortcut tidak mengurangi dampak operasinya.",
+  "practice": "Buat lg pada salah satu repo latihan, pakai, lalu hapus. Buktikan log dan isi proyek tidak berubah karena pengaturan itu.",
+  "quiz": {
+    "question": "Tanpa --global, alias disimpan di mana?",
+    "options": ["Konfigurasi repo saat ini", "Semua komputer tim otomatis", "Server GitHub"],
+    "answer": 0,
+    "explanation": "Scope lokal sesuai untuk mencoba preferensi di satu repo."
+  },
+  "commands": ["git config alias.lg", "git config"],
+  "visual": "snapshot",
+  "minutes": 9,
+  "level": "Lanjutan",
+  "prerequisites": ["hooks"],
+  "initialState": "Berada di repo latihan. Contoh memakai konfigurasi lokal dan nama alias lg yang boleh dibuat/dihapus.",
+  "lab": "basics",
+  "objectives": [
+    "Buat alias Git lokal dan hindari menyembunyikan efek berisiko.",
+    "Periksa hasilnya: Kamu punya shortcut yang bisa diperiksa dan dibatalkan dengan jelas."
+  ],
+  "sources": [
+    {
+      "title": "Manual git config",
+      "url": "https://git-scm.com/docs/git-config"
+    }
+  ],
+  "verification": {
+    "command": "git config --get alias.lg",
+    "explanation": "Kamu punya shortcut yang bisa diperiksa dan dibatalkan dengan jelas."
+  },
+  "order": 61
+}

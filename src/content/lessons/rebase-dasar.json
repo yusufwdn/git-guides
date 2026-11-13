@@ -1,0 +1,57 @@
+{
+  "chapter": 11,
+  "id": "rebase-dasar",
+  "title": "Pindahkan dasar, simpan maksud perubahannya.",
+  "summary": "Lihat commit fitur diputar ulang di atas main yang lebih baru.",
+  "scenario": "Main mendapat harga terbaru, sedangkan fitur-diskon punya dua commit lokal yang belum dipakai orang lain.",
+  "concept": "Rebase memilih perubahan commit fitur dan menerapkannya di dasar baru. Jika parent berubah, identitas commit berubah. Branch main tidak otomatis bergerak. Commit yang sudah setara dengan perubahan di upstream dapat dilewati; contoh ini memakai dua perubahan fitur yang memang unik.",
+  "analogy": "Kamu menyalin dua koreksi draf ke edisi naskah terbaru. Maksudnya dipertahankan, tetapi halaman dan hubungan riwayatnya baru.",
+  "steps": [
+    {
+      "title": "Lihat dua jalur",
+      "command": "git log --oneline --graph --all",
+      "explanation": "Pada latihan rebase, menu berubah di main dan diskon berubah di fitur-diskon."
+    },
+    {
+      "title": "Putar ulang fitur",
+      "command": "git switch fitur-diskon\ngit rebase main",
+      "explanation": "Contoh tidak bentrok karena file berbeda. Konflik nyata membutuhkan resolve, add, dan rebase --continue."
+    },
+    {
+      "title": "Periksa garis hasil",
+      "command": "git log --oneline --graph --all\ngit diff main...fitur-diskon",
+      "explanation": "Main tetap pada harga baru; dua commit fitur sekarang berada setelahnya."
+    }
+  ],
+  "result": "Fitur memuat harga terbaru dan diskon 10, dengan dua commit baru di atas main.",
+  "pitfall": "Rebase dapat mengubah banyak hash meski pesan mirip. Koordinasikan penulisan ulang jalur yang sudah dibagikan.",
+  "practice": "Selesaikan latihan rebase. Catat hash dua commit fitur sebelum dan sesudah, lalu jelaskan perubahan parent.",
+  "quiz": {
+    "question": "Apakah git rebase main pada branch fitur memajukan main?",
+    "options": ["Tidak, yang disusun ulang adalah jalur fitur", "Ya, selalu", "Menghapus main"],
+    "answer": 0,
+    "explanation": "Main berperan sebagai dasar, bukan branch penerima yang otomatis berubah."
+  },
+  "commands": ["git rebase"],
+  "visual": "rebase",
+  "minutes": 9,
+  "level": "Menengah",
+  "prerequisites": ["amend-rebase"],
+  "initialState": "Latihan rebase: main punya harga baru; fitur-diskon punya dua commit diskon yang belum digabung, index dan working tree bersih.",
+  "lab": "rebase",
+  "objectives": [
+    "Lihat commit fitur diputar ulang di atas main yang lebih baru.",
+    "Periksa hasilnya: Fitur memuat harga terbaru dan diskon 10, dengan dua commit baru di atas main."
+  ],
+  "sources": [
+    {
+      "title": "Manual git rebase",
+      "url": "https://git-scm.com/docs/git-rebase"
+    }
+  ],
+  "verification": {
+    "command": "git log --oneline --graph --all\ngit diff main...fitur-diskon",
+    "explanation": "Fitur memuat harga terbaru dan diskon 10, dengan dua commit baru di atas main."
+  },
+  "order": 42
+}

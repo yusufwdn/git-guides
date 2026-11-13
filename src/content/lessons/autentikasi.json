@@ -1,0 +1,60 @@
+{
+  "chapter": 2,
+  "id": "autentikasi",
+  "title": "Identitas commit berbeda dari izin server.",
+  "summary": "Bedakan user.name, credential helper, HTTPS, dan SSH.",
+  "scenario": "Nama author sudah benar, tetapi push ke server kantor tetap ditolak. Kamu mengira mengganti user.email akan memberi akses.",
+  "concept": "Identitas author adalah metadata commit. Autentikasi membuktikan akun yang mengakses server; otorisasi menentukan izin akun itu. HTTPS dapat memakai credential helper dan mekanisme login/token layanan. SSH memakai pasangan kunci dan kebijakan server. Ikuti petunjuk penyedia tanpa memasukkan token ke URL yang dibagikan.",
+  "analogy": "Nama di dokumen tidak sama dengan kartu akses gedung. Mengganti nama penulis tidak membuka pintu server.",
+  "steps": [
+    {
+      "title": "Periksa alamat remote",
+      "command": "git remote get-url origin",
+      "explanation": "Kenali apakah protokolnya HTTPS, SSH, atau path lokal. Jangan membagikan URL jika telanjur berisi kredensial."
+    },
+    {
+      "title": "Lihat helper yang dikonfigurasi",
+      "command": "git config --get-all credential.helper",
+      "explanation": "Output dapat kosong. Pengaturan helper berbeda antar sistem; jangan menyalin konfigurasi acak tanpa mengetahui alat yang tersedia."
+    }
+  ],
+  "result": "Kamu dapat membedakan error identitas, koneksi, autentikasi, dan izin branch.",
+  "pitfall": "Jangan pernah mengunggah private key atau menaruh token dalam commit. Latihan remote pada panduan ini memakai path lokal sehingga tidak memerlukan token.",
+  "practice": "Pada latihan remote, temukan URL origin. Jelaskan mengapa server lokal dapat diakses tanpa login GitHub.",
+  "quiz": {
+    "question": "Mengubah user.name memperbaiki izin push?",
+    "options": [
+      "Tidak, izin server adalah urusan terpisah",
+      "Ya, asal memakai nama admin",
+      "Ya, setelah commit baru"
+    ],
+    "answer": 0,
+    "explanation": "Author commit tidak memberikan hak akses ke remote."
+  },
+  "commands": ["git remote get-url", "git config"],
+  "visual": "remote",
+  "minutes": 7,
+  "level": "Dasar",
+  "prerequisites": ["bantuan"],
+  "initialState": "Repo mempunyai origin. Latihan remote menggunakan path lokal; contoh HTTPS/SSH membutuhkan konfigurasi penyedia bila dipakai nyata.",
+  "lab": "remote",
+  "objectives": [
+    "Bedakan user.name, credential helper, HTTPS, dan SSH.",
+    "Periksa hasilnya: Kamu dapat membedakan error identitas, koneksi, autentikasi, dan izin branch."
+  ],
+  "sources": [
+    {
+      "title": "Manual git remote",
+      "url": "https://git-scm.com/docs/git-remote"
+    },
+    {
+      "title": "Manual git config",
+      "url": "https://git-scm.com/docs/git-config"
+    }
+  ],
+  "verification": {
+    "command": "git remote get-url origin",
+    "explanation": "Kamu dapat membedakan error identitas, koneksi, autentikasi, dan izin branch."
+  },
+  "order": 7
+}

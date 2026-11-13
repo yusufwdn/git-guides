@@ -1,0 +1,60 @@
+{
+  "chapter": 4,
+  "id": "revision",
+  "title": "Bandingkan titik dalam riwayat.",
+  "summary": "Pahami HEAD, parent, dan dua versi yang sedang dibandingkan.",
+  "scenario": "Sebuah perubahan layout muncul pada commit terakhir. Kamu ingin membandingkan keadaan proyek tepat sebelum perubahan itu.",
+  "concept": "HEAD biasanya merupakan symbolic reference ke branch aktif. HEAD~1 mengikuti first parent satu langkah; HEAD^2 memilih parent kedua pada merge commit. git diff A B membandingkan keadaan dua commit. A..B pada log berarti commit yang dapat dicapai dari B tetapi tidak dari A.",
+  "analogy": "HEAD seperti penanda posisi bacaan. Branch adalah label yang bergerak saat ada commit baru; tag biasanya dipakai untuk menunjuk versi tertentu.",
+  "steps": [
+    {
+      "title": "Bandingkan dengan parent pertama",
+      "command": "git diff HEAD~1 HEAD",
+      "explanation": "Perlu ada parent pada commit saat ini. Ini menampilkan beda snapshot, bukan memindahkan HEAD."
+    },
+    {
+      "title": "Lihat bagian riwayat terakhir",
+      "command": "git log --oneline HEAD~3..HEAD",
+      "explanation": "Contoh memerlukan setidaknya tiga langkah parent pertama. Untuk riwayat pendek, pilih hash yang tersedia."
+    }
+  ],
+  "result": "Kamu bisa menyebut dua titik yang dibandingkan dan membedakan rentang log dari perbandingan snapshot.",
+  "pitfall": "HEAD~2 dan HEAD^2 berbeda. Yang pertama dua langkah first parent; yang kedua parent kedua dari commit saat ini.",
+  "practice": "Pada repo dengan tiga commit atau lebih, bandingkan HEAD~1 dengan HEAD dan periksa apakah patch sesuai perubahan terakhir.",
+  "quiz": {
+    "question": "HEAD~1 menunjuk ke mana?",
+    "options": [
+      "Branch alfabet pertama",
+      "Parent pertama satu langkah dari HEAD",
+      "Parent kedua selalu"
+    ],
+    "answer": 1,
+    "explanation": "Tanda ~ mengikuti jalur first parent sebanyak angka yang diberikan."
+  },
+  "commands": ["git diff", "git rev-parse"],
+  "visual": "graph",
+  "minutes": 6,
+  "level": "Dasar",
+  "prerequisites": ["diff-versi"],
+  "initialState": "HEAD mempunyai parent. HEAD~3 memerlukan tiga langkah first-parent; gunakan hash yang tersedia bila riwayat lebih pendek.",
+  "lab": "bisect",
+  "objectives": [
+    "Pahami HEAD, parent, dan dua versi yang sedang dibandingkan.",
+    "Periksa hasilnya: Kamu bisa menyebut dua titik yang dibandingkan dan membedakan rentang log dari perbandingan snapshot."
+  ],
+  "sources": [
+    {
+      "title": "Manual git diff",
+      "url": "https://git-scm.com/docs/git-diff"
+    },
+    {
+      "title": "Manual git rev-parse",
+      "url": "https://git-scm.com/docs/git-rev-parse"
+    }
+  ],
+  "verification": {
+    "command": "git log --oneline -5",
+    "explanation": "Kamu bisa menyebut dua titik yang dibandingkan dan membedakan rentang log dari perbandingan snapshot."
+  },
+  "order": 15
+}

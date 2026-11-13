@@ -1,0 +1,60 @@
+{
+  "chapter": 8,
+  "id": "workflow",
+  "title": "Sepakati cara jalur bertemu.",
+  "summary": "Pilih merge, squash, dan kebijakan branch berdasarkan kebutuhan tim.",
+  "scenario": "Tim ingin main selalu siap dirilis. Beberapa fitur mempunyai banyak commit percobaan yang belum layak menjadi cerita akhir.",
+  "concept": "Feature branch memisahkan pekerjaan sampai siap diintegrasikan. Merge commit mempertahankan titik percabangan; squash merge membuat satu commit hasil pada branch tujuan; rebase menyalin perubahan menjadi commit baru pada dasar baru. Protected branch adalah kebijakan layanan hosting yang dapat membatasi push dan mewajibkan review atau checks.",
+  "analogy": "Tim menyepakati cara menyunting buku bersama: mempertahankan catatan percobaan, meringkas satu usulan, atau menyusun ulang urutan ceritanya.",
+  "steps": [
+    {
+      "title": "Perbarui pengetahuan remote",
+      "command": "git fetch origin",
+      "explanation": "Sebelum integrasi, ketahui keadaan branch tujuan."
+    },
+    {
+      "title": "Lihat bentuk riwayat",
+      "command": "git log --graph --oneline --all --decorate",
+      "explanation": "Bahas bersama tim apakah bentuk ini cocok untuk penelusuran masalah dan proses rilis."
+    }
+  ],
+  "result": "Tim memiliki aturan integrasi yang jelas, termasuk siapa yang boleh menulis ke branch utama.",
+  "pitfall": "Jangan menganggap satu workflow cocok untuk semua tim. Rebase pada riwayat yang sudah dipakai bersama perlu koordinasi karena identitas commit berubah.",
+  "practice": "Tentukan aturan untuk tim tiga orang: tujuan branch, syarat review, checks, dan cara menggabungkan fitur.",
+  "quiz": {
+    "question": "Apa dampak utama squash merge ke branch tujuan?",
+    "options": [
+      "Satu commit hasil merangkum perubahan fitur",
+      "Selalu mempertahankan semua commit fitur sebagai ancestor",
+      "Menghapus semua tag"
+    ],
+    "answer": 0,
+    "explanation": "Squash merangkum perubahan menjadi commit baru; hubungan riwayatnya berbeda dari merge commit biasa."
+  },
+  "commands": ["git merge --squash", "git log"],
+  "visual": "graph",
+  "minutes": 6,
+  "level": "Menengah",
+  "prerequisites": ["fork-upstream"],
+  "initialState": "Tim mempunyai branch utama dan kesepakatan integrasi. Materi ini membandingkan pilihan, bukan meminta semua strategi dijalankan berurutan.",
+  "lab": "merge-ff",
+  "objectives": [
+    "Pilih merge, squash, dan kebijakan branch berdasarkan kebutuhan tim.",
+    "Periksa hasilnya: Tim memiliki aturan integrasi yang jelas, termasuk siapa yang boleh menulis ke branch utama."
+  ],
+  "sources": [
+    {
+      "title": "Manual git merge",
+      "url": "https://git-scm.com/docs/git-merge"
+    },
+    {
+      "title": "Manual git log",
+      "url": "https://git-scm.com/docs/git-log"
+    }
+  ],
+  "verification": {
+    "command": "git log --graph --oneline --all",
+    "explanation": "Tim memiliki aturan integrasi yang jelas, termasuk siapa yang boleh menulis ke branch utama."
+  },
+  "order": 31
+}

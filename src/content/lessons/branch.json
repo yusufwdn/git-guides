@@ -1,0 +1,61 @@
+{
+  "chapter": 5,
+  "id": "branch",
+  "title": "Kasih ide baru jalurnya sendiri.",
+  "summary": "Buat branch fitur dan lihat labelnya bergerak saat commit bertambah.",
+  "scenario": "Kamu mau mencoba diskon akhir pekan. Sementara itu, main harus tetap mewakili keadaan yang siap dipakai tim.",
+  "concept": "Branch adalah referensi ringan ke commit. git switch -c membuat branch dan berpindah ke sana. Commit baru menggerakkan branch aktif. Membuat branch tidak menyalin seluruh proyek menjadi folder terpisah.",
+  "analogy": "Bayangkan beberapa penanda buku pada album yang sama. Saat kamu menambahkan halaman di jalur fitur, penanda fitur maju, sedangkan penanda main tetap.",
+  "steps": [
+    {
+      "title": "Periksa keadaan awal",
+      "command": "git status\ngit branch",
+      "explanation": "Pastikan perubahan lokal diketahui. Switch bisa ditolak jika perubahan akan tertimpa; perubahan yang kompatibel bisa terbawa."
+    },
+    {
+      "title": "Buat jalur fitur",
+      "command": "git switch -c fitur-diskon",
+      "explanation": "Nama branch baru dimulai dari commit saat ini. switch tersedia sejak Git 2.23."
+    },
+    {
+      "title": "Kembali ke jalur utama",
+      "command": "git switch main",
+      "explanation": "Setelah pekerjaan sudah disimpan dengan tepat, pindah kembali ke main."
+    }
+  ],
+  "result": "main dan fitur-diskon dapat menunjuk titik yang berbeda tanpa kehilangan riwayat yang sama.",
+  "pitfall": "Branch bukan tempat penyimpanan otomatis perubahan yang belum di-commit. Perubahan lokal bisa ikut berpindah branch bila tidak akan tertimpa.",
+  "practice": "Buat branch fitur, ubah README, commit, lalu switch main. Periksa apakah isi README kembali ke snapshot main.",
+  "quiz": {
+    "question": "Apa yang bergeser setelah commit di branch fitur?",
+    "options": ["Semua branch", "Referensi branch yang aktif", "Semua tag"],
+    "answer": 1,
+    "explanation": "Commit memperbarui branch aktif, sementara referensi lain tetap."
+  },
+  "commands": ["git branch", "git switch"],
+  "visual": "graph",
+  "minutes": 8,
+  "level": "Menengah",
+  "prerequisites": ["riwayat"],
+  "initialState": "main mempunyai satu commit dan working tree bersih. Buat fitur-diskon baru melalui latihan branch.",
+  "lab": "branch",
+  "objectives": [
+    "Buat branch fitur dan lihat labelnya bergerak saat commit bertambah.",
+    "Periksa hasilnya: main dan fitur-diskon dapat menunjuk titik yang berbeda tanpa kehilangan riwayat yang sama."
+  ],
+  "sources": [
+    {
+      "title": "Manual git branch",
+      "url": "https://git-scm.com/docs/git-branch"
+    },
+    {
+      "title": "Manual git switch",
+      "url": "https://git-scm.com/docs/git-switch"
+    }
+  ],
+  "verification": {
+    "command": "git log --graph --oneline --all --decorate",
+    "explanation": "main dan fitur-diskon dapat menunjuk titik yang berbeda tanpa kehilangan riwayat yang sama."
+  },
+  "order": 16
+}

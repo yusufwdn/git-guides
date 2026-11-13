@@ -237,15 +237,15 @@ const scenarios = {
     description: 'Contoh pemulihan commit yang masih tersedia. Bukan jaminan pemulihan semua data.',
     frames: [
       {
-        title: 'Referensi fitur sudah dihapus',
-        command: 'git log --oneline --all',
+        title: 'Commit tertinggal setelah reset',
+        command: 'git reset --hard HEAD~1\ngit log --oneline -2',
         explanation:
-          'Main masih A. B tidak punya branch pada contoh ini, tetapi object-nya masih ada dan jejak HEAD dapat membantu menemukannya.',
+          'Main mundur ke A. Commit B (teh tarik) tidak punya branch lagi, tetapi object-nya masih ada dan jejak HEAD dapat membantu menemukannya.',
         graph: graph([n('A', 140, 110), n('B', 460, 110, ['A'], true)], [ref('main / HEAD', 'A')]),
       },
       {
         title: 'Periksa jejak dan isi',
-        command: 'git reflog --all\ngit show HASH_KANDIDAT',
+        command: 'git reflog -3\ngit show HASH',
         explanation:
           'Temukan hash B dari jejak lokal lalu baca isinya. Jangan menganggap entri nomor tertentu selalu benar.',
         graph: graph(
@@ -255,12 +255,12 @@ const scenarios = {
       },
       {
         title: 'Pertahankan melalui branch',
-        command: 'git branch pulih-diskon HASH_KANDIDAT',
+        command: 'git branch pulih-teh-tarik HASH',
         explanation:
-          'Branch baru menunjuk B. Working tree main tidak perlu ditimpa untuk mempertahankan jalur itu.',
+          'Branch baru menunjuk B, jadi commit itu aman. Setelah itu main bisa dimajukan ke B dengan merge --ff-only.',
         graph: graph(
           [n('A', 140, 110), n('B', 460, 110, ['A'])],
-          [ref('main / HEAD', 'A'), ref('pulih-diskon', 'B')],
+          [ref('main / HEAD', 'A'), ref('pulih-teh-tarik', 'B')],
         ),
       },
     ],
@@ -604,7 +604,7 @@ function forLesson(lesson) {
   if (lesson.id === 'merge') return 'merge';
   if (['branch', 'kelola-branch'].includes(lesson.id)) return 'branch';
   if (['amend-rebase', 'rebase-dasar'].includes(lesson.id)) return 'rebase';
-  if (['reset-revert', 'reset-modes'].includes(lesson.id)) return 'reset';
+  if (lesson.id === 'reset-modes') return 'reset';
   if (lesson.visual === 'remote') return 'remote';
   if (lesson.visual === 'recovery') return 'recovery';
   return null;

@@ -79,6 +79,21 @@ export default (context) => {
       ['Fork', ['salinan di akunmu,', 'bebas push'], 'ORIGIN'],
       ['Laptopmu', ['branch usulan,', 'lalu pull request'], 'KONTRIBUSI'],
     ],
+    restore: [
+      ['Commit terakhir', ['isi resmi', 'menu.json'], 'HEAD'],
+      ['Staging area', ['restore --staged', 'mengembalikan ke HEAD'], 'NAMPAN'],
+      ['Working tree', ['restore mengembalikan', 'ke staging area'], 'MEJA RACIK'],
+    ],
+    revert: [
+      ['Commit salah', ['harga kue 20000,', 'sudah di-push'], 'TETAP DI RIWAYAT'],
+      ['git revert', ['commit baru yang', 'membalik perubahan'], 'TAMBAH, BUKAN HAPUS'],
+      ['Hasil', ['harga kue', 'kembali 18000'], 'AMAN UNTUK TIM'],
+    ],
+    clean: [
+      ['Dilacak', ['nggak disentuh', 'git clean'], 'AMAN'],
+      ['Untracked ??', ['dihapus', 'dengan -f'], 'TARGET CLEAN'],
+      ['Diabaikan !!', ['aman kecuali', 'memakai -x'], 'DILINDUNGI .GITIGNORE'],
+    ],
     squash: [
       ['Merge commit', ['semua commit fitur', 'plus commit pertemuan'], 'RIWAYAT LENGKAP'],
       ['Squash', ['satu commit baru', 'berisi semua perubahan'], 'RIWAYAT RINGKAS'],
@@ -385,10 +400,11 @@ export default (context) => {
 
   // Diagram konflik interaktif: dasar bersama, versi branch aktif, dan versi yang digabung.
   // Untuk materi merge, angkanya mengikuti cerita bab 6: harga 20000 dinaikkan jadi 22000
-  // di main, sementara branch harga-promo menurunkannya jadi 18000.
+  // di main, sementara branch harga-promo menurunkannya jadi 18000. Untuk stash-konflik,
+  // angkanya mengikuti bab 9: diskon 20 di-commit jadi 15, sementara stash berisi 25.
   function conflict(lesson) {
     const stash = lesson.id === 'stash-konflik',
-      values = stash ? [0, 15, 10] : [20000, 22000, 18000];
+      values = stash ? [20, 15, 25] : [20000, 22000, 18000];
     const line = (value) => (stash ? `const diskon = ${value};` : `{"kopiSusu":${value}}`);
     return /* HTML */ `<div class="visual-card">
       <div class="visual-header">

@@ -29,6 +29,11 @@ export default (context) => {
       ['Cocok .gitignore', ['disembunyikan dari', 'status dan add'], 'DIABAIKAN'],
       ['Sudah dilacak', ['tetap dilacak walau', 'ada di .gitignore'], 'PERLU RM --CACHED'],
     ],
+    detached: [
+      ['main', ['tetap menunjuk', 'commit terbaru'], 'BRANCH'],
+      ['HEAD', ['langsung menunjuk', 'commit lama'], 'DETACHED'],
+      ['git switch -c', ['memberi nama', 'pada posisi itu'], 'SUPAYA AMAN'],
+    ],
     history: [
       ['HEAD~2', ['Abaikan catatan', 'pribadi'], 'LEBIH LAMA'],
       ['HEAD~1', ['Tambah es kopi', 'ke menu'], 'SEBELUMNYA'],
@@ -333,9 +338,12 @@ export default (context) => {
     }
   }
 
+  // Diagram konflik interaktif: dasar bersama, versi branch aktif, dan versi yang digabung.
+  // Untuk materi merge, angkanya mengikuti cerita bab 6: harga 20000 dinaikkan jadi 22000
+  // di main, sementara branch harga-promo menurunkannya jadi 18000.
   function conflict(lesson) {
     const stash = lesson.id === 'stash-konflik',
-      values = stash ? [0, 15, 10] : [18000, 20000, 22000];
+      values = stash ? [0, 15, 10] : [20000, 22000, 18000];
     const line = (value) => (stash ? `const diskon = ${value};` : `{"kopiSusu":${value}}`);
     return /* HTML */ `<div class="visual-card">
       <div class="visual-header">
@@ -346,7 +354,7 @@ export default (context) => {
         <span class="interactive-badge">INTERAKTIF</span>
       </div>
       <div class="conflict-versions">
-        ${['Dasar bersama', 'HEAD saat ini', stash ? 'Simpanan stash' : 'Usulan fitur']
+        ${['Dasar bersama', 'HEAD saat ini', stash ? 'Simpanan stash' : 'Branch yang digabung']
           .map(
             (label, index) =>
               /* HTML */ `<section>
@@ -358,7 +366,7 @@ export default (context) => {
       <div class="conflict-editor">
         <pre id="conflict-preview">
 ${esc(
-            `<<<<<<< ${stash ? 'Updated upstream' : 'HEAD'}\n${line(values[1])}\n=======\n${line(values[2])}\n>>>>>>> ${stash ? 'Stashed changes' : 'fitur-menu'}`,
+            `<<<<<<< ${stash ? 'Updated upstream' : 'HEAD'}\n${line(values[1])}\n=======\n${line(values[2])}\n>>>>>>> ${stash ? 'Stashed changes' : 'harga-promo'}`,
           )}</pre>
         <div class="sim-controls">
           ${values

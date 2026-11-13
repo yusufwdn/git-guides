@@ -63,7 +63,7 @@
   },
   "stash-index": {
     "title": "Index tetap terpisah",
-    "lesson": "status-singkat",
+    "lesson": "stash-untracked",
     "goal": "Pulihkan index diskon 5 dan working tree diskon 10 tanpa menghapus entri stash.",
     "hints": [
       "Perhatikan dua kolom MM sebelum push.",

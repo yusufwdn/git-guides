@@ -1,46 +1,52 @@
 {
   "chapter": 3,
   "id": "commit-atomik",
-  "title": "Biar satu commit menjawab satu alasan.",
-  "summary": "Pisahkan perubahan yang bisa ditinjau dan dibatalkan secara masuk akal.",
-  "scenario": "Perbaikan harga masuk satu commit bersama refactor checkout. Saat harga perlu dibatalkan, refactor ikut terkena.",
-  "concept": "Commit atomik berfokus pada satu tujuan yang dapat dipahami dan diuji. Ukurannya tidak harus satu baris atau satu file. Pesan menjelaskan maksud, sementara diff menjelaskan implementasi. Perubahan yang saling bergantung sebaiknya tetap membentuk snapshot yang valid.",
-  "analogy": "Satu kuitansi untuk satu transaksi membuat pemeriksaan dan koreksi lebih jelas. Memecah transaksi sampai tidak lengkap juga merepotkan.",
+  "title": "Commit atomik: satu commit, satu tujuan",
+  "summary": "Commit yang berisi satu tujuan lebih mudah dibaca, ditinjau, dan dibatalkan. Kalau dalam satu sesi kamu mengerjakan dua hal, pecah jadi dua commit.",
+  "scenario": "Dalam satu sesi kerja, kamu menambahkan es kopi ke menu dan sekaligus membatasi diskon supaya nggak lebih dari 50 persen. Dua perubahan itu nggak saling berhubungan. Kalau suatu saat batas diskon perlu dibatalkan, menu es kopi seharusnya nggak ikut hilang.",
+  "concept": "Commit atomik berarti satu commit berisi satu tujuan yang utuh. Ukurannya nggak harus satu file atau satu baris: perubahan yang saling membutuhkan, misalnya fitur baru beserta pengaturannya, tetap masuk satu commit. Yang dipisah adalah perubahan yang tujuannya berbeda. Caranya memakai yang sudah kamu pelajari: add per file, cek dengan git diff --staged, lalu commit dengan pesan yang menjelaskan tujuannya. Pesan commit menjawab kenapa perubahan dibuat, sedangkan diff sudah menunjukkan apa yang berubah.",
+  "analogy": "Mirip satu struk untuk satu transaksi. Kalau satu pembelian perlu dibatalkan, kasir cukup membatalkan struk itu tanpa mengganggu transaksi lain. Tapi satu transaksi juga jangan dipecah ke banyak struk sampai isinya nggak lengkap.",
   "steps": [
     {
-      "title": "Tinjau perubahan per tujuan",
-      "command": "git diff\ngit status --short",
-      "explanation": "Pada latihan staging, pilih koreksi menu dan sisakan diskon."
+      "title": "Buat dua perubahan yang berbeda tujuan",
+      "command": "git status --short",
+      "explanation": "Ubah menu.json menjadi {\"kopiSusu\":20000,\"esKopi\":22000} untuk menambah es kopi. Lalu tambahkan baris kedua di diskon.js: const maksDiskon = 50; dan simpan keduanya. git status --short menampilkan dua baris dengan M di kolom kanan: dua file berubah dan belum di-add."
     },
     {
-      "title": "Periksa calon cerita",
-      "command": "git add menu.json\ngit diff --staged\ngit commit -m \"Sesuaikan harga kopi susu\"",
-      "explanation": "Pastikan commit dapat berdiri sendiri dan pesan mencerminkan isi yang staged."
+      "title": "Commit perubahan menu",
+      "command": "git add menu.json\ngit diff --staged\ngit commit -m \"Tambah es kopi ke menu\"",
+      "explanation": "Sebelum commit, pastikan git diff --staged cuma berisi perubahan menu.json. Pesannya menjelaskan satu tujuan: menambah menu baru."
+    },
+    {
+      "title": "Commit perubahan diskon",
+      "command": "git add diskon.js\ngit commit -m \"Batasi diskon maksimal 50 persen\"\ngit status --short",
+      "explanation": "Sekarang diskon.js punya commit-nya sendiri. git status --short kosong karena semua perubahan sudah tersimpan, dan catatan.txt nggak muncul karena sudah diabaikan."
     }
   ],
-  "result": "Reviewer bisa menjelaskan tujuan commit tanpa menebak hubungan perubahan yang tidak relevan.",
-  "pitfall": "Commit kecil bukan jaminan berkualitas. Jangan memisahkan perubahan yang membuat proyek gagal dibangun di tengah riwayat bila bisa dihindari.",
-  "practice": "Tulis dua pesan untuk perubahan menu dan fitur diskon pada latihan staging. Sebutkan cara menguji masing-masing.",
+  "result": "Dua perubahan tersimpan di dua commit terpisah. Riwayat kopi-kita sekarang berisi enam commit, dan masing-masing menjelaskan satu tujuan.",
+  "pitfall": "Jangan memecah commit sampai proyek jadi rusak di tengah riwayat. Kalau sebuah fitur butuh perubahan di dua file sekaligus supaya bisa jalan, kedua file itu masuk commit yang sama. Ukurannya adalah tujuan yang utuh, bukan jumlah file.",
+  "practice": "Lihat kembali keenam commit di repo-mu dengan git log --oneline. Untuk setiap commit, jelaskan tujuannya dalam satu kalimat, lalu bayangkan apa yang hilang kalau commit itu dibatalkan.",
   "quiz": {
-    "question": "Commit atomik harus selalu satu file?",
+    "question": "Apakah commit atomik harus selalu berisi satu file?",
     "options": [
       "Ya, tanpa pengecualian",
       "Tidak, ukurannya mengikuti satu tujuan yang utuh",
       "Harus selalu satu baris"
     ],
     "answer": 1,
-    "explanation": "Satu tujuan bisa membutuhkan beberapa file yang saling mendukung."
+    "explanation": "Satu tujuan bisa membutuhkan beberapa file yang saling mendukung. Yang dipisah adalah perubahan dengan tujuan yang berbeda."
   },
   "commands": ["git diff --staged", "git commit"],
   "visual": "staging",
   "minutes": 7,
   "level": "Menengah",
-  "prerequisites": ["staging", "status-singkat"],
-  "initialState": "Latihan staging: menu dan diskon sama-sama berubah, belum staged. Hanya koreksi menu siap menjadi commit.",
+  "prerequisites": ["staging", "ignore"],
+  "initialState": "Lanjutan dari materi ignore: repo kopi-kita punya empat commit dan working tree bersih.",
   "lab": "staging",
   "objectives": [
-    "Pisahkan perubahan yang bisa ditinjau dan dibatalkan secara masuk akal.",
-    "Periksa hasilnya: Reviewer bisa menjelaskan tujuan commit tanpa menebak hubungan perubahan yang tidak relevan."
+    "Bisa menilai kapan perubahan perlu dipisah jadi beberapa commit",
+    "Bisa memecah perubahan dua file jadi dua commit",
+    "Bisa menulis pesan commit yang menjelaskan tujuan"
   ],
   "sources": [
     {
@@ -53,18 +59,18 @@
     }
   ],
   "verification": {
-    "command": "git show --stat HEAD\ngit status --short",
-    "explanation": "Reviewer bisa menjelaskan tujuan commit tanpa menebak hubungan perubahan yang tidak relevan."
+    "command": "git log --oneline -2",
+    "explanation": "Dua baris teratas adalah Batasi diskon maksimal 50 persen dan Tambah es kopi ke menu. Kalau cuma ada satu commit yang berisi keduanya, berarti dua file ter-add bersamaan."
   },
   "order": 10,
   "checkpoint": {
-    "question": "menu.json sudah tracked sebelum masuk .gitignore. Apa dampak aturan ignore baru?",
+    "question": "menu.json sudah dilacak sejak commit pertama, lalu kamu menambahkan menu.json ke .gitignore. Apa yang terjadi saat menu.json diedit lagi?",
     "options": [
-      "File langsung keluar dari riwayat",
-      "Perubahan tracked tetap dapat muncul pada status",
-      "Semua commit menu.json dihapus"
+      "Perubahannya nggak muncul lagi di git status",
+      "Perubahannya tetap muncul di git status karena file itu sudah dilacak",
+      "menu.json langsung terhapus dari semua commit lama"
     ],
     "answer": 1,
-    "explanation": "Ignore tidak melepaskan file yang sudah tracked. Menentukan file yang keluar dari tracking adalah tindakan terpisah."
+    "explanation": ".gitignore cuma berlaku untuk file yang belum dilacak. Untuk berhenti melacak menu.json, jalankan git rm --cached menu.json lalu commit."
   }
 }

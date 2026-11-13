@@ -1,60 +1,61 @@
 {
   "chapter": 3,
   "id": "status-singkat",
-  "title": "Baca dua kolom status dengan tenang.",
-  "summary": "Pahami posisi perubahan pada output status --short.",
-  "scenario": "File diskon muncul sebagai MM. Kamu ingin tahu mengapa satu file bisa terlihat berubah dua kali.",
-  "concept": "Pada status singkat biasa, kolom pertama membandingkan index terhadap HEAD dan kolom kedua membandingkan working tree terhadap index. M berarti modified, A added, dan ?? untracked. Saat konflik, kombinasi huruf mempunyai makna khusus; lihat status panjang untuk penjelasan.",
-  "analogy": "Dua lampu menunjukkan dua tempat: nampan dan meja. Satu barang bisa berbeda di keduanya.",
+  "title": "Status singkat: baca dua kolom kode",
+  "summary": "git status --short meringkas kondisi repo jadi satu baris per file. Dua kolom di depannya memberi tahu apakah perubahan sudah di-add, belum, atau dua-duanya.",
+  "scenario": "Sejak materi snapshot, diskon.js punya tiga versi: 0 di commit terakhir, 5 di staging area, dan 10 di working tree. Kamu juga mau menulis catatan ide di file baru. Output git status yang panjang mulai repot dibaca, jadi kamu ingin versi ringkasnya.",
+  "concept": "git status --short menampilkan satu baris per file, diawali dua kolom kode. Kolom kiri membandingkan staging area dengan commit terakhir, jadi terisi kalau ada perubahan yang sudah di-add. Kolom kanan membandingkan working tree dengan staging area, jadi terisi kalau ada perubahan yang belum di-add. M berarti modified (berubah), A berarti added (file baru yang sudah di-add), dan ?? berarti untracked (file baru yang belum dilacak). Jadi MM artinya file itu punya perubahan yang sudah di-add, lalu diubah lagi sesudahnya. Kolom yang kosong berarti di sisi itu nggak ada perubahan.",
+  "analogy": "Bayangkan dua lampu indikator di samping setiap file. Lampu kiri menyala kalau ada perubahan di kardus (staging area), lampu kanan menyala kalau masih ada perubahan di meja (working tree). Dua lampu menyala sekaligus bukan berarti filenya ganda, cuma ada perubahan di dua tempat.",
   "steps": [
     {
-      "title": "Lihat bentuk ringkas",
+      "title": "Lihat versi ringkas",
       "command": "git status --short",
-      "explanation": "Pada latihan stash-index, MM berarti versi staged dan edit berikutnya sama-sama ada."
+      "explanation": "Hasilnya MM diskon.js. M di kolom kiri berasal dari perubahan 0 menjadi 5 yang sudah di-add. M di kolom kanan berasal dari perubahan 5 menjadi 10 yang belum di-add."
     },
     {
-      "title": "Buktikan setiap kolom",
-      "command": "git diff --staged -- diskon.js\ngit diff -- diskon.js",
-      "explanation": "Bandingkan harga/diskon pada dua patch sebelum memilih versi yang akan direkam."
+      "title": "Tambah file baru, lalu cek lagi",
+      "command": "git status --short",
+      "explanation": "Buat file catatan.txt lewat editor dan tulis satu ide, misalnya ide: menu musiman, lalu simpan. Jalankan git status --short lagi: muncul baris ?? catatan.txt. Tanda ?? berarti file ini ada di working tree tapi belum pernah di-add."
+    },
+    {
+      "title": "Commit diskon, lalu perhatikan kolomnya",
+      "command": "git add diskon.js\ngit status --short\ngit commit -m \"Atur diskon 10 persen\"\ngit status --short",
+      "explanation": "Setelah add, baris diskon.js berubah jadi M diikuti spasi: semua perubahannya sudah di staging area. Setelah commit, diskon.js hilang dari daftar karena isinya sudah sama dengan commit terakhir. Yang tersisa cuma ?? catatan.txt."
     }
   ],
-  "result": "Kamu bisa menjelaskan status MM tanpa menganggap Git menggandakan file.",
-  "pitfall": "Output porcelain dirancang untuk diproses alat, sedangkan --short nyaman dibaca manusia. Jangan menyimpulkan ?? sebagai file kosong.",
-  "practice": "Pada latihan stash-index, sebutkan nilai di HEAD, index, dan working tree sebelum menyimpan perubahan.",
+  "result": "Repo kopi-kita punya commit ketiga, Atur diskon 10 persen. Satu-satunya file yang belum dilacak adalah catatan.txt.",
+  "pitfall": "Kolom kosong ditampilkan sebagai spasi, jadi M diikuti spasi dan spasi diikuti M punya arti berbeda. Yang pertama artinya semua perubahan sudah di-add, yang kedua artinya belum ada yang di-add. Perhatikan posisi hurufnya, bukan cuma hurufnya. Kalau ragu, jalankan git status biasa yang menjelaskannya dengan kalimat.",
+  "practice": "Ubah menu.json, jalankan git status --short, dan catat kodenya. Lalu add file itu dan cek lagi; tebak dulu kode yang akan muncul sebelum menjalankan command-nya. Terakhir, kembalikan isi menu.json seperti semula lewat editor, lalu add lagi supaya statusnya bersih.",
   "quiz": {
-    "question": "Apa arti MM pada file tracked tanpa konflik?",
+    "question": "git status --short menampilkan spasi di kolom kiri dan M di kolom kanan untuk menu.json. Apa artinya?",
     "options": [
-      "Index berubah dan working tree juga berbeda dari index",
-      "Ada dua salinan repo rusak",
-      "File sudah masuk dua commit"
+      "menu.json berubah dan perubahannya belum di-add",
+      "menu.json sudah di-add dan siap di-commit",
+      "menu.json adalah file baru yang belum dilacak"
     ],
     "answer": 0,
-    "explanation": "Dua kolom mengukur dua perbandingan yang berbeda."
+    "explanation": "Kolom kanan membandingkan working tree dengan staging area. Kolom kiri yang kosong berarti belum ada perubahan menu.json yang di-add."
   },
-  "commands": ["git status --short", "git diff"],
-  "visual": "staging",
+  "commands": ["git status --short"],
+  "visual": "status",
   "minutes": 7,
   "level": "Dasar",
-  "prerequisites": ["staging"],
-  "initialState": "Branch fitur-diskon, HEAD diskon 0, index diskon 5, working tree diskon 10. Gunakan latihan stash-index.",
-  "lab": "stash-index",
+  "prerequisites": ["snapshot"],
+  "initialState": "Lanjutan dari materi snapshot: diskon.js berisi 0 di commit terakhir, 5 di staging area, dan 10 di working tree.",
   "objectives": [
-    "Pahami posisi perubahan pada output status --short.",
-    "Periksa hasilnya: Kamu bisa menjelaskan status MM tanpa menganggap Git menggandakan file."
+    "Bisa membaca dua kolom kode di git status --short",
+    "Tahu arti kode M, A, dan ??",
+    "Bisa menebak perubahan kode status setelah add dan commit"
   ],
   "sources": [
     {
       "title": "Manual git status",
       "url": "https://git-scm.com/docs/git-status"
-    },
-    {
-      "title": "Manual git diff",
-      "url": "https://git-scm.com/docs/git-diff"
     }
   ],
   "verification": {
-    "command": "git status --short\ngit show :diskon.js",
-    "explanation": "Kamu bisa menjelaskan status MM tanpa menganggap Git menggandakan file."
+    "command": "git status --short\ngit log --oneline",
+    "explanation": "git status --short cuma menampilkan ?? catatan.txt, dan git log --oneline menampilkan tiga commit dengan Atur diskon 10 persen di baris paling atas."
   },
   "order": 8
 }

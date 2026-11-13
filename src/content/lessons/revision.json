@@ -1,46 +1,47 @@
 {
   "chapter": 4,
   "id": "revision",
-  "title": "Bandingkan titik dalam riwayat.",
-  "summary": "Pahami HEAD, parent, dan dua versi yang sedang dibandingkan.",
-  "scenario": "Sebuah perubahan layout muncul pada commit terakhir. Kamu ingin membandingkan keadaan proyek tepat sebelum perubahan itu.",
-  "concept": "HEAD biasanya merupakan symbolic reference ke branch aktif. HEAD~1 mengikuti first parent satu langkah; HEAD^2 memilih parent kedua pada merge commit. git diff A B membandingkan keadaan dua commit. A..B pada log berarti commit yang dapat dicapai dari B tetapi tidak dari A.",
-  "analogy": "HEAD seperti penanda posisi bacaan. Branch adalah label yang bergerak saat ada commit baru; tag biasanya dipakai untuk menunjuk versi tertentu.",
+  "title": "Revision: sebut commit tanpa menyalin hash",
+  "summary": "HEAD~1 artinya satu commit sebelum HEAD, HEAD~2 dua commit sebelumnya, dan seterusnya. Dengan cara ini kamu bisa membandingkan dan membaca versi lama tanpa menyalin hash.",
+  "scenario": "Kamu ingin melihat apa yang berubah di commit terakhir dan membaca menu.json seperti sebelum es kopi ditambahkan. Menyalin hash dari git log setiap kali mulai terasa repot.",
+  "concept": "Revision adalah cara menyebut sebuah commit. Hash adalah salah satunya, dan HEAD juga. Tanda ~ diikuti angka berarti mundur sejumlah commit dari titik itu: HEAD~1 adalah commit tepat sebelum HEAD, dan HEAD~2 dua commit sebelumnya. Revision bisa dipakai di banyak command. git diff HEAD~1 HEAD membandingkan dua commit, git show HEAD~1:menu.json membaca isi file di commit itu, dan git log HEAD~3..HEAD menampilkan commit yang bisa dicapai dari HEAD tapi nggak dari HEAD~3, yaitu tiga commit terakhir. Semua command ini cuma membaca; working tree-mu nggak berubah.",
+  "analogy": "Mirip menyebut halaman buku dengan \"dua halaman sebelum ini\" alih-alih nomor halamannya. Selama kamu tahu sedang berada di halaman mana, sebutan itu selalu jelas.",
   "steps": [
     {
-      "title": "Bandingkan dengan parent pertama",
-      "command": "git diff HEAD~1 HEAD",
-      "explanation": "Perlu ada parent pada commit saat ini. Ini menampilkan beda snapshot, bukan memindahkan HEAD."
+      "title": "Terjemahkan sebutan jadi hash",
+      "command": "git log --oneline -3\ngit rev-parse --short HEAD~1",
+      "explanation": "git rev-parse --short menerjemahkan revision menjadi potongan hash. Hasilnya sama dengan hash di baris kedua log, yaitu commit Tambah es kopi ke menu."
     },
     {
-      "title": "Lihat bagian riwayat terakhir",
-      "command": "git log --oneline HEAD~3..HEAD",
-      "explanation": "Contoh memerlukan setidaknya tiga langkah parent pertama. Untuk riwayat pendek, pilih hash yang tersedia."
+      "title": "Lihat perubahan di commit terakhir",
+      "command": "git diff HEAD~1 HEAD",
+      "explanation": "git diff dengan dua revision membandingkan isi kedua commit. Hasilnya tambahan baris const maksDiskon = 50; di diskon.js, persis perubahan di commit terakhir."
+    },
+    {
+      "title": "Baca versi lama dan rentang commit",
+      "command": "git show HEAD~2:menu.json\ngit log --oneline HEAD~3..HEAD",
+      "explanation": "HEAD~2 adalah commit Abaikan catatan pribadi, saat menu belum punya es kopi, jadi isinya {\"kopiSusu\":20000}. Rentang HEAD~3..HEAD menampilkan tiga commit terakhir."
     }
   ],
-  "result": "Kamu bisa menyebut dua titik yang dibandingkan dan membedakan rentang log dari perbandingan snapshot.",
-  "pitfall": "HEAD~2 dan HEAD^2 berbeda. Yang pertama dua langkah first parent; yang kedua parent kedua dari commit saat ini.",
-  "practice": "Pada repo dengan tiga commit atau lebih, bandingkan HEAD~1 dengan HEAD dan periksa apakah patch sesuai perubahan terakhir.",
+  "result": "Kamu bisa menyebut commit lama dengan HEAD~n, membandingkan dua commit, dan membaca isi file di commit lama tanpa mengubah working tree.",
+  "pitfall": "Revision yang mundur terlalu jauh, misalnya HEAD~9 di repo yang cuma punya enam commit, membuat Git menolak dengan pesan error. Hitung dulu jumlah commit dengan git log --oneline. Di bab merge nanti kamu juga akan bertemu tanda ^, yang artinya berbeda dari ~ untuk commit hasil merge.",
+  "practice": "Bandingkan HEAD~5 dengan HEAD memakai git diff. Hasilnya adalah semua perubahan sejak commit pertama. Coba jelaskan setiap bagian diff itu berasal dari commit yang mana.",
   "quiz": {
     "question": "HEAD~1 menunjuk ke mana?",
-    "options": [
-      "Parent pertama satu langkah dari HEAD",
-      "Branch alfabet pertama",
-      "Parent kedua selalu"
-    ],
+    "options": ["Commit tepat sebelum HEAD", "Commit pertama di repo", "Commit sesudah HEAD"],
     "answer": 0,
-    "explanation": "Tanda ~ mengikuti jalur first parent sebanyak angka yang diberikan."
+    "explanation": "Tanda ~1 berarti mundur satu commit dari HEAD."
   },
   "commands": ["git diff", "git rev-parse"],
-  "visual": "graph",
+  "visual": "history",
   "minutes": 6,
   "level": "Dasar",
   "prerequisites": ["riwayat"],
-  "initialState": "HEAD mempunyai parent. HEAD~3 memerlukan tiga langkah first-parent; gunakan hash yang tersedia bila riwayat lebih pendek.",
-  "lab": "bisect",
+  "initialState": "Lanjutan dari materi filter log: repo kopi-kita berisi enam commit.",
   "objectives": [
-    "Pahami HEAD, parent, dan dua versi yang sedang dibandingkan.",
-    "Periksa hasilnya: Kamu bisa menyebut dua titik yang dibandingkan dan membedakan rentang log dari perbandingan snapshot."
+    "Bisa menyebut commit dengan HEAD~n",
+    "Bisa membandingkan dua commit dengan git diff",
+    "Bisa membaca file dari commit lama dengan git show"
   ],
   "sources": [
     {
@@ -53,14 +54,14 @@
     }
   ],
   "verification": {
-    "command": "git log --oneline -5",
-    "explanation": "Kamu bisa menyebut dua titik yang dibandingkan dan membedakan rentang log dari perbandingan snapshot."
+    "command": "git log --oneline HEAD~3..HEAD",
+    "explanation": "Harus ada tiga baris: Batasi diskon maksimal 50 persen, Tambah es kopi ke menu, dan Abaikan catatan pribadi. Commit Atur diskon 10 persen, yaitu HEAD~3, nggak ikut tampil."
   },
   "order": 13,
   "checkpoint": {
-    "question": "Kamu ingin membaca menu.json dari commit sebelumnya tanpa mengubah file kerja. Pilih tindakan.",
-    "options": ["git show HEAD~1:menu.json", "git reset --hard HEAD~1", "git clean -fd"],
+    "question": "Kamu ingin membaca isi menu.json di commit sebelumnya tanpa mengubah file di working tree. Command mana yang tepat?",
+    "options": ["git show HEAD~1:menu.json", "git diff HEAD~1 HEAD", "git log HEAD~1"],
     "answer": 0,
-    "explanation": "Show membaca isi object tanpa memindahkan branch atau mengganti file kerja."
+    "explanation": "git diff menampilkan perbedaan, bukan isi file utuh, dan git log menampilkan daftar commit. Untuk membaca isi file di commit tertentu, pakai git show diikuti revision, titik dua, dan nama file."
   }
 }

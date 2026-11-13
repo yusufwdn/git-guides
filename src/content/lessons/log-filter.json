@@ -1,56 +1,57 @@
 {
   "chapter": 4,
   "id": "log-filter",
-  "title": "Persempit riwayat ke pertanyaanmu.",
-  "summary": "Cari berdasarkan pesan, penulis, dan path tanpa kehilangan konteks.",
-  "scenario": "Repo berisi ratusan commit, tetapi kamu hanya ingin meninjau perbaikan checkout yang pernah dibuat Rani.",
-  "concept": "Filter log membantu memperkecil kandidat. --grep mencari pesan commit, --author metadata penulis, dan -- PATH membatasi riwayat path. Nama penulis bukan bukti identitas terverifikasi. Setelah menemukan kandidat, buka commit dan baca konteksnya.",
-  "analogy": "Indeks buku membawamu ke halaman yang mungkin relevan. Kamu tetap perlu membaca halamannya.",
+  "title": "Filter log: persempit hasil pencarian",
+  "summary": "Saat riwayat makin panjang, kamu bisa menyaring git log berdasarkan pesan, penulis, atau file, supaya cuma commit yang relevan yang tampil.",
+  "scenario": "Pemilik kedai bertanya, kapan saja pengaturan diskon pernah diubah? Riwayat kopi-kita masih pendek, tapi di proyek sungguhan bisa ada ratusan commit. Kamu ingin membiasakan diri menyaring riwayat dari sekarang.",
+  "concept": "git log punya beberapa filter. --grep mencari kata di pesan commit, dan pencariannya membedakan huruf besar dan kecil kecuali kamu tambahkan -i. --author mencari nama atau email penulis. -- diikuti nama file membatasi hasil ke commit yang mengubah file itu, dan angka seperti -3 membatasi jumlah hasil. Filter bisa digabung, dan hasilnya adalah commit yang memenuhi semuanya. Ingat, filter cuma memberi daftar kandidat; buka commit-nya dengan git show untuk memastikan isinya memang yang kamu cari. Nama penulis juga bisa diisi siapa saja lewat git config, jadi jangan menganggapnya bukti identitas.",
+  "analogy": "Mirip fitur pencarian di aplikasi chat. Kamu bisa mencari kata tertentu, pesan dari orang tertentu, atau pesan di grup tertentu, tapi tetap harus membuka pesannya untuk membaca konteksnya.",
   "steps": [
     {
-      "title": "Cari pesan perbaikan",
-      "command": "git log --oneline --grep=\"checkout\"",
-      "explanation": "Pencarian ini membaca pesan, bukan isi file atau patch."
+      "title": "Cari berdasarkan pesan",
+      "command": "git log --oneline --grep=\"diskon\"",
+      "explanation": "Hasilnya dua commit: Batasi diskon maksimal 50 persen dan Atur diskon 10 persen. Coba ganti dengan --grep=\"Diskon\" yang memakai D besar: hasilnya kosong. Tambahkan -i kalau kamu ingin pencarian mengabaikan huruf besar dan kecil."
     },
     {
-      "title": "Batasi path dan jumlah",
-      "command": "git log -5 --oneline -- checkout.js",
-      "explanation": "Periksa commit kandidat dengan show; hasil bergantung pada riwayat yang tersedia."
+      "title": "Cari berdasarkan penulis",
+      "command": "git log --oneline --author=\"Nama Kamu\"",
+      "explanation": "Ganti Nama Kamu dengan nama yang kamu atur di materi setup. Karena semua commit di repo ini kamu yang buat, hasilnya keenam commit. Di repo tim, filter ini menyaring commit milik satu orang."
+    },
+    {
+      "title": "Gabungkan filter",
+      "command": "git log --oneline --grep=\"harga\" -- menu.json",
+      "explanation": "Hasilnya cuma Perbaiki harga kopi susu: satu-satunya commit yang pesannya mengandung kata harga dan sekaligus mengubah menu.json."
     }
   ],
-  "result": "Pencarian menghasilkan kandidat yang bisa ditinjau satu per satu.",
-  "pitfall": "Filter yang terlalu banyak bisa menyembunyikan hasil. Mulai dari pertanyaan sederhana, lalu persempit.",
-  "practice": "Cari pesan perbaikan checkout pada latihan cherry-pick, lalu baca patch dan pastikan file yang berubah memang checkout.js.",
+  "result": "Kamu bisa menyaring riwayat berdasarkan pesan, penulis, dan file, lalu memeriksa kandidatnya satu per satu.",
+  "pitfall": "Filter yang terlalu banyak bisa menyembunyikan commit yang kamu cari, misalnya karena pesannya memakai kata lain. Mulai dari satu filter, lalu tambahkan sedikit demi sedikit. --grep juga cuma membaca pesan commit, bukan isi file; cara mencari perubahan isi file dibahas di bab 12.",
+  "practice": "Cari semua commit yang mengubah diskon.js, lalu batasi supaya cuma yang terbaru yang tampil dengan -1. Buka commit itu dengan git show dan pastikan isinya memang perubahan diskon.",
   "quiz": {
-    "question": "--grep pada log mencari apa?",
-    "options": ["Isi semua file saat ini", "Pesan commit", "Nama remote"],
+    "question": "Apa yang dicari oleh git log --grep?",
+    "options": ["Isi semua file saat ini", "Kata di pesan commit", "Nama branch"],
     "answer": 1,
-    "explanation": "Untuk isi file gunakan grep; untuk patch atau sejarah string gunakan opsi lain."
+    "explanation": "--grep membaca pesan commit. Untuk menyaring berdasarkan file, tambahkan -- diikuti nama file."
   },
-  "commands": ["git log --grep", "git show"],
-  "visual": "graph",
+  "commands": ["git log --grep", "git log --author"],
+  "visual": "none",
   "minutes": 7,
   "level": "Dasar",
   "prerequisites": ["riwayat"],
-  "initialState": "Repo punya commit dengan pesan checkout dan file checkout.js. Latihan cherry-pick menyediakan riwayat tersebut.",
-  "lab": "cherry-pick",
+  "initialState": "Lanjutan dari materi riwayat: repo kopi-kita berisi enam commit.",
   "objectives": [
-    "Cari berdasarkan pesan, penulis, dan path tanpa kehilangan konteks.",
-    "Periksa hasilnya: Pencarian menghasilkan kandidat yang bisa ditinjau satu per satu."
+    "Bisa mencari commit berdasarkan kata di pesannya",
+    "Bisa menyaring commit berdasarkan penulis dan file",
+    "Tahu bahwa hasil filter perlu dicek lagi dengan git show"
   ],
   "sources": [
     {
       "title": "Manual git log",
       "url": "https://git-scm.com/docs/git-log"
-    },
-    {
-      "title": "Manual git show",
-      "url": "https://git-scm.com/docs/git-show"
     }
   ],
   "verification": {
-    "command": "git log --oneline -- checkout.js",
-    "explanation": "Pencarian menghasilkan kandidat yang bisa ditinjau satu per satu."
+    "command": "git log --oneline -i --grep=\"DISKON\"",
+    "explanation": "Walaupun ditulis dengan huruf besar, -i membuat pencarian mengabaikan besar kecilnya huruf. Hasilnya harus dua commit yang sama dengan langkah pertama."
   },
   "order": 12
 }

@@ -1,47 +1,52 @@
 {
   "chapter": 4,
   "id": "riwayat",
-  "title": "Baca cerita di balik commit.",
-  "summary": "Gunakan log dan show untuk menemukan perubahan tanpa menebak-nebak.",
-  "scenario": "Harga kopi di website berbeda dari daftar kasir. Kamu ingin tahu commit mana yang mengubahnya dan apa alasan penulisnya.",
-  "concept": "git log menelusuri commit yang dapat dicapai dari titik awal. --oneline meringkas tampilan, --graph menggambar hubungan parent, dan --all menyertakan referensi lain. git show menampilkan detail satu commit, termasuk patch secara default untuk commit biasa.",
-  "analogy": "Log adalah daftar isi album; show membuka satu halaman lengkap dengan keterangannya.",
+  "title": "Riwayat: baca daftar commit",
+  "summary": "git log menampilkan daftar commit dari yang terbaru, dan git show membuka isi satu commit. Dengan keduanya, kamu bisa tahu apa yang berubah, kapan, dan oleh siapa.",
+  "scenario": "Riwayat kopi-kita sudah berisi enam commit. Rekanmu bertanya kapan harga kopi susu diganti dan perubahan apa saja yang pernah terjadi di menu.json. Daripada mengandalkan ingatan, kamu ingin membacanya langsung dari riwayat.",
+  "concept": "git log menampilkan commit mulai dari yang terbaru, mundur sampai yang paling lama. Tampilan lengkapnya berisi hash, penulis (Author), tanggal (Date), dan pesan. Opsi --oneline meringkasnya jadi satu baris per commit: potongan hash dan pesan. Kalau di belakangnya kamu tambahkan -- diikuti nama file, Git cuma menampilkan commit yang mengubah file itu. Untuk melihat isi satu commit, pakai git show diikuti hash atau HEAD. Hasilnya berisi informasi commit dan diff perubahannya. Hash nggak perlu ditulis lengkap; beberapa karakter awal seperti di --oneline sudah cukup.",
+  "analogy": "git log seperti daftar isi buku catatan toko: judul setiap catatan beserta tanggalnya. git show seperti membuka satu halaman untuk membaca isinya secara lengkap.",
   "steps": [
     {
-      "title": "Lihat peta riwayat",
-      "command": "git log --oneline --graph --all --decorate",
-      "explanation": "Cari hubungan branch dan pesan perubahan. Hash pendek adalah identitas yang cukup unik dalam repo itu."
+      "title": "Lihat daftar commit",
+      "command": "git log --oneline",
+      "explanation": "Kamu akan melihat enam baris, dari Batasi diskon maksimal 50 persen di paling atas sampai Menu awal Kopi Kita di paling bawah. Kode di depan setiap baris adalah potongan hash commit tersebut."
     },
     {
-      "title": "Fokus pada satu file",
+      "title": "Lihat detail lengkap",
+      "command": "git log -2",
+      "explanation": "Tanpa --oneline, setiap commit tampil dengan hash lengkap, nama dan email penulis, tanggal, dan pesannya. Opsi -2 membatasi tampilan ke dua commit terbaru. Kalau output yang panjang membuka tampilan per halaman, tekan q untuk keluar."
+    },
+    {
+      "title": "Cari commit yang mengubah menu.json",
       "command": "git log --oneline -- menu.json",
-      "explanation": "Pemisah -- menyatakan bagian berikutnya adalah path."
+      "explanation": "Tanda -- memisahkan opsi dari nama file. Hasilnya tiga commit: Tambah es kopi ke menu, Perbaiki harga kopi susu, dan Menu awal Kopi Kita."
     },
     {
-      "title": "Periksa snapshot terbaru",
-      "command": "git show HEAD -- menu.json",
-      "explanation": "Lihat perubahan menu pada commit yang ditunjuk HEAD. Gunakan hash untuk commit lain."
+      "title": "Buka isi satu commit",
+      "command": "git show HEAD",
+      "explanation": "git show HEAD menampilkan commit terbaru: penulis, tanggal, pesan, lalu diff-nya, yaitu tambahan baris const maksDiskon = 50;. Untuk commit lain, ganti HEAD dengan potongan hash dari git log --oneline milikmu."
     }
   ],
-  "result": "Kamu menemukan perubahan yang relevan dan bisa membaca patch-nya sebelum mengambil tindakan.",
-  "pitfall": "Urutan baris log tidak selalu menggambarkan satu jalur lurus. Merge bisa mempunyai lebih dari satu parent; gunakan grafik untuk konteks.",
-  "practice": "Cari dua commit terakhir yang mengubah README.md dan jelaskan perbedaan tujuan keduanya.",
+  "result": "Kamu bisa menemukan commit yang mengubah file tertentu dan membaca isi perubahannya tanpa menebak.",
+  "pitfall": "Hash di contoh materi ini nggak akan sama dengan hash di komputermu, karena hash dihitung dari isi commit, termasuk nama penulis dan waktunya. Selalu ambil hash dari output git log milikmu sendiri.",
+  "practice": "Cari commit yang menambahkan .gitignore dengan git log --oneline -- .gitignore, lalu buka dengan git show diikuti potongan hash-nya. Jelaskan apa saja yang berubah di commit itu.",
   "quiz": {
-    "question": "Perintah mana yang cocok untuk memeriksa satu commit?",
+    "question": "Command mana yang cocok untuk membaca isi lengkap satu commit?",
     "options": ["git show HASH", "git add HASH", "git init HASH"],
     "answer": 0,
-    "explanation": "Show membuka detail object atau commit yang kamu pilih."
+    "explanation": "git show membuka detail commit yang kamu pilih, termasuk diff-nya. add dan init punya tugas yang sama sekali berbeda."
   },
   "commands": ["git log", "git show"],
-  "visual": "graph",
+  "visual": "history",
   "minutes": 8,
   "level": "Dasar",
-  "prerequisites": ["snapshot"],
-  "initialState": "Repo punya beberapa commit dan menu.json tracked. Jika pencarian kosong, periksa apakah file pernah berubah pada riwayat itu.",
-  "lab": "tags",
+  "prerequisites": ["snapshot", "commit-atomik"],
+  "initialState": "Lanjutan dari materi commit atomik: repo kopi-kita berisi enam commit.",
   "objectives": [
-    "Gunakan log dan show untuk menemukan perubahan tanpa menebak-nebak.",
-    "Periksa hasilnya: Kamu menemukan perubahan yang relevan dan bisa membaca patch-nya sebelum mengambil tindakan."
+    "Bisa membaca daftar commit dengan git log",
+    "Bisa mencari commit yang mengubah file tertentu",
+    "Bisa membuka isi satu commit dengan git show"
   ],
   "sources": [
     {
@@ -55,7 +60,7 @@
   ],
   "verification": {
     "command": "git log --oneline -- menu.json",
-    "explanation": "Kamu menemukan perubahan yang relevan dan bisa membaca patch-nya sebelum mengambil tindakan."
+    "explanation": "Harus ada tiga commit. Buka yang di tengah dengan git show diikuti potongan hash-nya, lalu pastikan diff-nya mengubah harga dari 18000 menjadi 20000."
   },
   "order": 11
 }

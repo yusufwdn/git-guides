@@ -1,53 +1,57 @@
 {
   "chapter": 3,
   "id": "ignore",
-  "title": "Ada file yang tak perlu ikut.",
-  "summary": "Gunakan .gitignore untuk file hasil build, dependency, dan konfigurasi lokal.",
-  "scenario": "Folder node_modules dan file .env muncul di status. Keduanya tidak ingin kamu masukkan ke riwayat proyek.",
-  "concept": ".gitignore berisi pola untuk file yang belum dilacak. Contoh pola adalah node_modules/, dist/, dan .env. Jika suatu file sudah tracked, menambahkan polanya tidak menghentikan pelacakannya. git rm --cached menghapusnya dari index sambil mempertahankan salinan lokal.",
-  "analogy": "Daftar barang yang tidak perlu dicatat membantu memilih bahan baru. Daftar itu tidak menghapus catatan yang terlanjur masuk buku.",
+  "title": "Ignore: file yang nggak perlu dilacak",
+  "summary": "Lewat .gitignore, kamu memberi tahu Git file mana yang sengaja nggak dilacak, misalnya catatan pribadi, hasil build, atau file berisi rahasia.",
+  "scenario": "catatan.txt berisi ide pribadimu dan nggak perlu masuk ke riwayat proyek. Tapi selama file itu ada, git status terus menampilkannya, dan ada risiko file itu ikut ter-add tanpa sengaja.",
+  "concept": ".gitignore adalah file teks berisi daftar pola nama file yang harus diabaikan Git. File yang cocok dengan pola itu nggak muncul lagi di git status dan nggak ikut ter-add saat kamu menambahkan banyak file sekaligus. Polanya bisa berupa nama file seperti catatan.txt, folder seperti node_modules/, atau pola seperti *.log. File .gitignore sendiri di-commit, supaya aturan yang sama berlaku untuk semua orang di tim. Yang penting diingat: .gitignore cuma berlaku untuk file yang belum dilacak. File yang sudah pernah di-commit tetap dilacak walaupun namanya ditambahkan ke .gitignore. Untuk berhenti melacaknya tanpa menghapus file di komputermu, jalankan git rm --cached diikuti nama file, lalu commit.",
+  "analogy": "Mirip daftar barang yang nggak perlu dicatat di buku inventaris toko, misalnya tisu dan kantong plastik. Daftar itu mencegah barang-barang tadi masuk ke catatan baru, tapi nggak menghapus catatan lama yang telanjur ditulis.",
   "steps": [
     {
-      "title": "Buat daftar melalui editor",
-      "command": "git status",
-      "explanation": "Buat .gitignore dan isi pola yang relevan, lalu periksa daftar untracked."
+      "title": "Buat .gitignore",
+      "command": "git status --short",
+      "explanation": "Buat file bernama .gitignore di folder kopi-kita lewat editor, isi dengan satu baris catatan.txt, lalu simpan. Pastikan namanya persis .gitignore: diawali titik dan tanpa akhiran .txt. Sekarang git status --short nggak lagi menampilkan catatan.txt. Yang muncul justru ?? .gitignore, karena file aturannya sendiri belum di-add."
     },
     {
-      "title": "Telusuri aturan ignore",
-      "command": "git check-ignore -v .env",
-      "explanation": "Pada file untracked yang diabaikan, perintah ini menunjukkan pola yang cocok."
+      "title": "Cek aturan mana yang berlaku",
+      "command": "git check-ignore -v catatan.txt",
+      "explanation": "Hasilnya .gitignore:1:catatan.txt diikuti nama file. Artinya catatan.txt diabaikan karena aturan di baris 1 file .gitignore. Kalau command ini nggak menampilkan apa-apa, berarti file itu nggak diabaikan."
     },
     {
-      "title": "Berhenti melacak file lokal",
-      "command": "git rm --cached .env\ngit add .gitignore\ngit commit -m \"Abaikan konfigurasi lokal\"",
-      "explanation": "Jalankan rm --cached hanya jika .env sudah tracked dan memang harus dikeluarkan dari index."
+      "title": "Commit aturannya",
+      "command": "git add .gitignore\ngit commit -m \"Abaikan catatan pribadi\"",
+      "explanation": "Commit .gitignore supaya aturan ini tersimpan di riwayat dan ikut terbawa ke siapa pun yang memakai repo ini. catatan.txt tetap ada di foldermu, cuma nggak dilacak."
     }
   ],
-  "result": "File lokal diabaikan untuk penambahan berikutnya, dan aturan ignore bisa dibagikan melalui commit.",
-  "pitfall": "Mengeluarkan secret dari commit terbaru tidak menghapusnya dari riwayat lama. Cabut atau rotasi kredensial yang terpapar terlebih dahulu.",
-  "practice": "Buat notes-local.txt, abaikan dengan .gitignore, lalu periksa aturan yang cocok menggunakan check-ignore.",
+  "result": "Repo kopi-kita punya commit keempat berisi .gitignore. catatan.txt tetap ada di komputermu, tapi Git mengabaikannya.",
+  "pitfall": "Kalau file berisi password atau token telanjur di-commit, menambahkannya ke .gitignore atau menjalankan git rm --cached nggak menghapusnya dari commit lama. Siapa pun yang punya salinan repo masih bisa membacanya. Anggap rahasia itu sudah bocor dan segera ganti password atau token-nya. Penanganan lengkapnya dibahas di bab 15.",
+  "practice": "Buat file coba.log, lalu tambahkan pola *.log sebagai baris baru di .gitignore. Pastikan dengan git check-ignore -v coba.log bahwa pola baru itu yang cocok. Commit perubahan .gitignore, lalu hapus coba.log.",
   "quiz": {
-    "question": "Apakah .gitignore menghentikan pelacakan file yang sudah tracked?",
+    "question": "Kenapa file .gitignore sebaiknya ikut di-commit?",
     "options": [
-      "Ya, otomatis",
-      "Ya, setelah membuka ulang editor",
-      "Tidak, index harus diperbarui juga"
+      "Supaya aturan yang sama berlaku untuk semua orang yang memakai repo",
+      "Supaya file yang diabaikan ikut tersimpan di riwayat",
+      "Karena Git menolak bekerja tanpa .gitignore"
     ],
-    "answer": 2,
-    "explanation": "Ignore terutama berlaku pada file yang belum tracked."
+    "answer": 0,
+    "explanation": "Aturan di .gitignore cuma berlaku di repo yang punya file itu. Dengan meng-commit-nya, semua orang di tim mengabaikan file yang sama. File yang diabaikan sendiri tetap nggak masuk riwayat."
   },
   "commands": ["git check-ignore", "git rm --cached"],
-  "visual": "snapshot",
+  "visual": "ignore",
   "minutes": 8,
   "level": "Dasar",
-  "prerequisites": ["staging"],
-  "initialState": "Repo sudah punya HEAD. Contoh .env harus file dummy; langkah rm --cached hanya untuk path yang memang sudah tracked.",
-  "lab": "clean",
+  "prerequisites": ["status-singkat"],
+  "initialState": "Lanjutan dari materi status singkat: working tree bersih kecuali catatan.txt yang belum dilacak.",
   "objectives": [
-    "Gunakan .gitignore untuk file hasil build, dependency, dan konfigurasi lokal.",
-    "Periksa hasilnya: File lokal diabaikan untuk penambahan berikutnya, dan aturan ignore bisa dibagikan melalui commit."
+    "Bisa membuat .gitignore untuk mengabaikan file",
+    "Bisa mengecek aturan mana yang membuat sebuah file diabaikan",
+    "Tahu bahwa .gitignore nggak berlaku untuk file yang sudah dilacak"
   ],
   "sources": [
+    {
+      "title": "Manual gitignore",
+      "url": "https://git-scm.com/docs/gitignore"
+    },
     {
       "title": "Manual git check-ignore",
       "url": "https://git-scm.com/docs/git-check-ignore"
@@ -58,8 +62,8 @@
     }
   ],
   "verification": {
-    "command": "git ls-files -- .env\ngit status --short --ignored",
-    "explanation": "File lokal diabaikan untuk penambahan berikutnya, dan aturan ignore bisa dibagikan melalui commit."
+    "command": "git status --short --ignored",
+    "explanation": "Opsi --ignored ikut menampilkan file yang diabaikan, ditandai !!. Hasilnya harus cuma !! catatan.txt. Tanpa --ignored, git status --short sekarang kosong."
   },
   "order": 9
 }

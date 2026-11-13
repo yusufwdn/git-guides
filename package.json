@@ -12,7 +12,8 @@
     "build": "astro build",
     "check": "node scripts/check.mjs && astro check",
     "test": "node --test --test-concurrency=1 tests/*.test.cjs",
-    "format": "prettier --plugin prettier-plugin-astro --write \"src/**/*.{ts,js,cjs,json,astro}\" \"scripts/*.mjs\" \"tests/**/*.{cjs,ts}\" astro.config.mjs"
+    "test:browser": "playwright test",
+    "format": "prettier --plugin prettier-plugin-astro --write \"src/**/*.{ts,js,cjs,json,astro}\" \"scripts/*.mjs\" \"tests/**/*.{cjs,ts}\" astro.config.mjs playwright.config.ts"
   },
   "engines": {
     "node": ">=22.12.0"

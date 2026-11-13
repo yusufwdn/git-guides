@@ -108,6 +108,23 @@ Jalankan pemeriksaan lokal yang relevan sebelum push agar masalah sederhana bisa
 
 [vercel.json](../vercel.json) memakai preset Astro, build `npm run build`, output `dist`, dan trailing slash. Pilih Node.js 24 pada pengaturan proyek Vercel.
 
+`engines.node` pada `package.json` dikunci ke `24.x`, sama dengan versi CI. Vercel membaca pengaturan ini untuk memilih versi Node saat build; rentang terbuka seperti `>=22.12.0` dapat memilih versi mayor yang lebih baru meskipun dashboard memilih 24. Lihat [dokumentasi pemilihan versi Node Vercel](https://vercel.com/docs/functions/runtimes/node-js/node-js-versions).
+
+Pastikan pengaturan proyek berikut sebelum push pertama setelah migrasi:
+
+| Pengaturan        | Nilai                                                                                        |
+| ----------------- | -------------------------------------------------------------------------------------------- |
+| Git Repository    | Repository GitHub proyek ini.                                                                |
+| Production Branch | `main`                                                                                       |
+| Root Directory    | Root repository yang memuat `package.json`.                                                  |
+| Framework Preset  | Astro                                                                                        |
+| Node.js Version   | 24.x                                                                                         |
+| Install Command   | `npm ci` atau default Vercel; dependency build dalam `devDependencies` harus ikut terpasang. |
+| Build Command     | `npm run build`                                                                              |
+| Output Directory  | `dist`                                                                                       |
+
+Framework, build command, dan output directory sudah dinyatakan dalam `vercel.json`. Koneksi Git, branch produksi, root directory, dan environment variable tetap perlu diperiksa di dashboard. Jika integrasi Git Vercel aktif, push ke branch produksi memicu deployment. Workflow GitHub Actions memeriksa kualitas kode secara terpisah; workflow tersebut tidak menjalankan deployment Vercel.
+
 Tambahkan environment variable `SITE_URL` di Vercel dengan origin domain produksi, misalnya `https://nama-proyek.vercel.app`. Ganti contoh tersebut dengan domain asli; jangan sertakan path halaman, query, hash, atau kredensial. Pengaturan dibaca saat build.
 
 Untuk menguji build dengan origin tertentu melalui PowerShell:

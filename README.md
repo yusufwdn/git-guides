@@ -8,7 +8,7 @@ Baru memakai Astro? Mulai dari [dokumentasi pengembang](docs/README.md). Di sana
 
 ## Menjalankan proyek
 
-Gunakan Node.js 22.12+; pengembangan dan CI diverifikasi dengan Node.js 24. Dependency dikunci dalam `package-lock.json`.
+Gunakan Node.js 24; versi ini dikunci melalui `engines.node` dan dipakai untuk pengembangan, CI, serta deployment. Dependency dikunci dalam `package-lock.json`.
 
 ```powershell
 npm ci

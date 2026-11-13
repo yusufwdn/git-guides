@@ -69,7 +69,7 @@
     {
       "id": 12,
       "title": "Menelusuri sumber bug",
-      "description": "Biarkan riwayat membantumu menyelidiki masalah.",
+      "description": "Cari asal sebuah perubahan dengan grep, blame, log, dan bisect.",
       "group": "Lebih percaya diri"
     },
     {
@@ -81,19 +81,19 @@
     {
       "id": 14,
       "title": "Alat yang bikin efisien",
-      "description": "Kerjakan lebih banyak dengan staging parsial dan worktree.",
+      "description": "Staging parsial, worktree, sparse checkout, submodule, dan Git LFS.",
       "group": "Menyelam lebih dalam"
     },
     {
       "id": 15,
       "title": "Kebiasaan tim yang sehat",
-      "description": "Jaga konsistensi file, otomasi, dan kredensial.",
+      "description": "Samakan akhir baris, jaga rahasia, pasang hook, dan pakai alias.",
       "group": "Menyelam lebih dalam"
     },
     {
       "id": 16,
       "title": "Di balik layar Git",
-      "description": "Hubungkan object, snapshot, dan referensi.",
+      "description": "Lihat cara Git menyimpan object dan ref, lalu rawat dan cadangkan repo.",
       "group": "Menyelam lebih dalam"
     }
   ],

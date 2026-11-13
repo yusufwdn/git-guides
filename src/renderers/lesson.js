@@ -157,7 +157,7 @@ export default (context) => {
             <h2>
               ${
                 lesson.id === 'stash'
-                  ? 'Lagi asyik bikin fitur. Tiba-tiba, ada bug.'
+                  ? 'Lagi asyik bikin fitur, tiba-tiba ada tugas mendesak.'
                   : lesson.id === 'kenalan-git'
                     ? 'Menu berubah. Salinannya makin banyak.'
                     : 'Satu masalah dari proyek latihan Kopi Kita.'
@@ -221,17 +221,17 @@ export default (context) => {
                   <tbody>
                     <tr>
                       <td><code>stash apply</code></td>
-                      <td>Ya, bila berhasil</td>
+                      <td>Ya, kalau berhasil</td>
                       <td>Tetap ada</td>
                     </tr>
                     <tr>
                       <td><code>stash pop</code></td>
-                      <td>Ya, bila berhasil</td>
-                      <td>Dihapus setelah berhasil; tetap ada saat konflik</td>
+                      <td>Ya, kalau berhasil</td>
+                      <td>Dihapus kalau berhasil; tetap ada saat konflik</td>
                     </tr>
                     <tr>
                       <td><code>stash drop</code></td>
-                      <td>Tidak diterapkan</td>
+                      <td>Nggak diterapkan</td>
                       <td>Dihapus</td>
                     </tr>
                   </tbody>

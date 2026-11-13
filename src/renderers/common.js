@@ -311,8 +311,8 @@ export default (context) => {
   }
 
   // Panel latihan pendamping dari paket ZIP. Dipanggil dari lessonPage().
-  // Materi awal (bab 1 dan git init) dipraktikkan langsung di repo pembaca dan belum
-  // memakai paket latihan, jadi field lab boleh kosong dan panelnya tidak dirender.
+  // Langkah setiap materi dijalankan di repo kopi-kita milik pembaca. Paket latihan cuma
+  // dipasang di materi yang isinya cocok, jadi field lab boleh kosong dan panelnya tidak dirender.
   function terminalLab(lesson) {
     if (!lesson.lab) return '';
     const lab = data.labs[lesson.lab];
@@ -326,8 +326,8 @@ export default (context) => {
       <h3>${esc(lab.title)}</h3>
       <p>${esc(lab.goal)}</p>
       <p class="lab-context">
-        Latihan ini punya kondisi awal sendiri. Mulai folder baru lewat generator; jangan
-        menganggapnya lanjutan otomatis dari seluruh contoh pada halaman.
+        Latihan ini terpisah dari repo kopi-kita milikmu dan punya kondisi awalnya sendiri. Buat
+        folder latihannya dengan command di bawah, lalu kerjakan di sana.
       </p>
       ${commandBlock(`node git-lab.cjs start ${lesson.lab}`)}<a
         class="text-button"

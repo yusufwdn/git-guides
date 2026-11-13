@@ -79,15 +79,15 @@ export default (context) => {
       <section class="home-feature">
         <div>
           <div class="eyebrow">SATU KASUS, SATU PEMAHAMAN BARU</div>
-          <h2>Kerjaan belum selesai.<br />Ada bug yang harus dibereskan.</h2>
+          <h2>Kerjaan belum selesai,<br />tapi ada tugas yang lebih mendesak.</h2>
           <p>
-            Kenali stash lewat situasi yang pasti akan kamu temui. Simpan pekerjaan, tangani yang
-            mendesak, lalu lanjutkan lagi.
+            Situasi ini hampir pasti kamu temui. Dengan stash, pekerjaan yang belum selesai bisa
+            disimpan dulu, tugas mendesak dikerjakan, lalu pekerjaan tadi dilanjutkan lagi.
           </p>
           <a class="text-button" href="${href('stash')}">Buka pelajaran stash <span>→</span></a>
         </div>
         ${commandBlock(
-          'git stash push -m "WIP diskon"\n\n# Simpan sebentar. Lanjutkan nanti.\ngit stash pop',
+          'git stash push -m "WIP diskon member"\n\n# Kerjakan tugas mendesak, lalu ambil lagi:\ngit stash pop',
         )}
       </section>
       <div class="section-heading">

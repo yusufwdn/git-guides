@@ -186,11 +186,8 @@ export default (context) => {
           <div class="section-kicker">${kicker(3, 'SEKARANG, COBA SENDIRI')}</div>
           <h2>Satu langkah pada satu waktu.</h2>
           <p>
-            ${
-              lesson.lab
-                ? 'Gunakan repository latihan. Nama file dan branch mengikuti skenario; sesuaikan dengan keadaan awalmu. Baris output dan hash di komputermu dapat berbeda.'
-                : 'Jalankan langkah berikut di terminalmu sendiri, berurutan dari atas. Baris output dan hash di komputermu dapat berbeda dari contoh.'
-            }
+            Jalankan langkah berikut di terminalmu sendiri, berurutan dari atas. Baris output dan
+            hash di komputermu dapat berbeda dari contoh.
           </p>
           <ol class="step-list">
             ${lesson.steps

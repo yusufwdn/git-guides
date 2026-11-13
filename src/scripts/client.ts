@@ -211,11 +211,10 @@ document.addEventListener('click', async (event) => {
   if (target.hasAttribute('data-sim-reset')) showFrame(0, mode, '[data-sim-reset]');
   if (target.hasAttribute('data-sim-mode'))
     showFrame(step, mode === 'pop' ? 'apply' : 'pop', '[data-sim-mode]');
-  if (target.hasAttribute('data-resolve-value') || target.hasAttribute('data-conflict-choice')) {
-    $('#conflict-preview')!.textContent =
-      target.dataset.resolveValue || `const harga = ${target.dataset.conflictChoice};`;
+  if (target.hasAttribute('data-resolve-value')) {
+    $('#conflict-preview')!.textContent = target.dataset.resolveValue!;
     $('#conflict-note')!.textContent =
-      'Marker konflik sudah diganti. Uji hasil, add file yang selesai, lalu lanjutkan proses Git yang sesuai. Stash tidak mempunyai --continue.';
+      'Penanda konflik sudah diganti. Simpan file dan jalankan git add, lalu selesaikan prosesnya: git commit untuk merge, atau git stash drop untuk konflik stash.';
   }
   if (target.hasAttribute('data-scroll')) {
     event.preventDefault();

@@ -332,66 +332,6 @@ export default (context) => {
             →
           </button>
         </div>`;
-    } else if (kind === 'conflict') {
-      return /* HTML */ `<div class="visual-card">
-        <div class="visual-header">
-          <div>
-            <h3>Dua usulan. Satu keputusan akhir.</h3>
-            <p>Contoh konflik isi; pilihan benar bergantung kesepakatan tim.</p>
-          </div>
-          <span class="interactive-badge">COBA SENDIRI</span>
-        </div>
-        <div style="padding:0 22px 20px">
-          <div class="output-block" id="conflict-preview">
-            <code
-              >&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD<br />const harga = 20000;<br />=======<br />const
-              harga = 22000;<br />&gt;&gt;&gt;&gt;&gt;&gt;&gt; fitur-menu</code
-            >
-          </div>
-          <div class="sim-controls">
-            <button class="button secondary small" data-conflict-choice="20000">
-              Pilih Rp20.000</button
-            ><button class="button secondary small" data-conflict-choice="22000">
-              Pilih Rp22.000
-            </button>
-          </div>
-          <p id="conflict-note" class="quiz-feedback" aria-live="polite">
-            Baca maksud perubahan sebelum memilih hasil.
-          </p>
-        </div>
-      </div>`;
-    } else if (kind === 'remote') {
-      return /* HTML */ `<div class="visual-card">
-        <div class="visual-header">
-          <div>
-            <h3>Ambil, pahami, lalu integrasikan.</h3>
-            <p>Contoh main lokal tertinggal satu commit dari server.</p>
-          </div>
-        </div>
-        <div class="snapshot-visual" style="margin:0 16px 20px">
-          <div class="snapshot-box">
-            <strong>Server</strong>
-            <p>main → B</p>
-            <div class="snapshot-label">REPO REMOTE</div>
-          </div>
-          <div class="snapshot-arrow">→</div>
-          <div class="snapshot-box">
-            <strong>Catatan lokal</strong>
-            <p>origin/main → B</p>
-            <div class="snapshot-label">SETELAH FETCH</div>
-          </div>
-          <div class="snapshot-arrow">→</div>
-          <div class="snapshot-box">
-            <strong>Branch lokal</strong>
-            <p>main: A → B</p>
-            <div class="snapshot-label">SETELAH INTEGRASI FF</div>
-          </div>
-        </div>
-        <div class="sim-caption">
-          Fetch memperbarui catatan remote. Integrasi memperbarui jalur kerja lokal. Push mengirim
-          perubahan menuju remote.
-        </div>
-      </div>`;
     } else if (kind === 'graph') {
       return /* HTML */ `<div class="visual-card">
         <div class="visual-header">

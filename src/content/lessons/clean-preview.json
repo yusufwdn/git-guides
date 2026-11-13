@@ -28,15 +28,15 @@
   "practice": "Selesaikan latihan clean dan jelaskan mengapa status biasa tidak menampilkan cache ignored.",
   "quiz": {
     "question": "Opsi mana yang hanya menampilkan rencana clean?",
-    "options": ["-n", "-f", "-x"],
-    "answer": 0,
+    "options": ["-f", "-n", "-x"],
+    "answer": 1,
     "explanation": "Dry-run tidak menghapus file."
   },
   "commands": ["git clean -n", "git clean"],
   "visual": "snapshot",
   "minutes": 9,
   "level": "Menengah",
-  "prerequisites": ["reflog-rescue"],
+  "prerequisites": ["ignore", "restore"],
   "initialState": "Latihan clean: catatan-sementara.txt untracked, cache/data.txt ignored, dan menu.json tracked berubah. Hanya catatan boleh dibuang.",
   "lab": "clean",
   "objectives": [
@@ -53,5 +53,15 @@
     "command": "git status --short --ignored\ngit diff -- menu.json",
     "explanation": "Hanya catatan-sementara.txt terhapus; cache dan perubahan tracked tetap ada."
   },
-  "order": 40
+  "order": 40,
+  "checkpoint": {
+    "question": "Perubahan buruk sudah dipakai rekan. Kamu ingin membuat koreksi sambil mempertahankan riwayat bersama. Mana yang sesuai?",
+    "options": [
+      "Revert commit terkait setelah meninjau dampaknya",
+      "Reset hard lalu force push tanpa koordinasi",
+      "Hapus seluruh reflog"
+    ],
+    "answer": 0,
+    "explanation": "Revert menambahkan commit koreksi, sehingga commit yang sudah dibagikan tetap ada dalam riwayat."
+  }
 }

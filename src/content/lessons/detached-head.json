@@ -25,10 +25,10 @@
     "question": "Bagaimana menyimpan jalur pekerjaan detached HEAD?",
     "options": [
       "Hapus folder .git",
-      "Buat branch pada commit pekerjaan itu",
-      "Jalankan push tanpa memeriksa apa pun"
+      "Jalankan push tanpa memeriksa apa pun",
+      "Buat branch pada commit pekerjaan itu"
     ],
-    "answer": 1,
+    "answer": 2,
     "explanation": "Branch memberi referensi bernama pada commit agar jalurnya mudah dipertahankan."
   },
   "commands": ["git switch --detach", "git switch -c"],

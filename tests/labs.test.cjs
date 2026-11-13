@@ -29,6 +29,20 @@ function fresh(t, id) {
 }
 
 const solutions = {
+  worktree(l) {
+    const linked = path.join(l.root, 'kopi-kita-hotfix');
+    l.g('worktree', 'add', '-b', 'hotfix', linked, 'awal');
+    Lab.write(linked, 'menu.json', '{"kopiSusu":22000}\n');
+    Lab.git(linked, 'add', 'menu.json');
+    Lab.git(linked, 'commit', '-m', 'Hotfix harga');
+  },
+  submodule(l) {
+    const theme = path.join(l.repo, 'tema');
+    Lab.git(theme, 'fetch', 'origin');
+    Lab.git(theme, 'switch', '--detach', 'origin/main');
+    l.g('add', 'tema');
+    l.g('commit', '-m', 'Pilih tema orange');
+  },
   basics() {},
   staging(l) {
     l.g('add', 'menu.json');

@@ -23,15 +23,15 @@
   "practice": "Pulihkan branch pada latihan reflog. Bandingkan log --all sebelum dan setelah branch pulih-diskon dibuat.",
   "quiz": {
     "question": "Hapus nama branch berarti object commit langsung hilang?",
-    "options": ["Tidak selalu", "Ya, seketika selalu", "Hanya jika branch berawalan fitur"],
-    "answer": 0,
+    "options": ["Ya, seketika selalu", "Tidak selalu", "Hanya jika branch berawalan fitur"],
+    "answer": 1,
     "explanation": "Penghapusan referensi dan pemangkasan object adalah hal yang berbeda."
   },
   "commands": ["git reflog", "git cat-file"],
   "visual": "recovery",
   "minutes": 7,
   "level": "Lanjutan",
-  "prerequisites": ["refs-refspec"],
+  "prerequisites": ["objects", "reflog-rescue"],
   "initialState": "Latihan reflog: branch dihapus tetapi commit masih tersimpan. Jangan jalankan prune selama investigasi.",
   "lab": "reflog",
   "objectives": [

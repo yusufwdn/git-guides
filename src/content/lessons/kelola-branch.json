@@ -36,7 +36,7 @@
   "visual": "graph",
   "minutes": 9,
   "level": "Menengah",
-  "prerequisites": ["detached-head"],
+  "prerequisites": ["branch"],
   "initialState": "Branch fitur aktif dan nama tujuan belum dipakai. Untuk langkah delete, branch harus sudah ditinjau dan kamu sudah pindah darinya.",
   "lab": "merge-ff",
   "objectives": [

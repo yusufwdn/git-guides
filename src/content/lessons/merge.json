@@ -28,8 +28,8 @@
   "practice": "Buat satu commit fitur saat main belum berubah, lalu merge. Ulangi dengan main yang juga berubah dan bandingkan grafiknya.",
   "quiz": {
     "question": "git merge fitur saat branch aktif main memperbarui apa?",
-    "options": ["main", "Hanya fitur", "Semua remote"],
-    "answer": 0,
+    "options": ["Hanya fitur", "Semua remote", "main"],
+    "answer": 2,
     "explanation": "Branch aktif menerima hasil integrasi."
   },
   "commands": ["git merge"],

@@ -29,18 +29,18 @@
   "quiz": {
     "question": "Pull request merupakan fitur apa?",
     "options": [
-      "Layanan kolaborasi seperti GitHub/GitLab",
       "Command git pull dengan tampilan baru",
-      "Folder wajib di .git"
+      "Folder wajib di .git",
+      "Layanan kolaborasi seperti GitHub/GitLab"
     ],
-    "answer": 0,
+    "answer": 2,
     "explanation": "Git menyediakan riwayat dan transport; layanan hosting menambahkan alur review."
   },
   "commands": ["git push", "git switch -c"],
   "visual": "graph",
   "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["commit-atomik"],
+  "prerequisites": ["branch", "commit-atomik"],
   "initialState": "Untuk alur nyata, tersedia repo hosting dengan izin membuat branch/PR. Perintah lokal tidak otomatis membuat pull request.",
   "lab": "branch",
   "objectives": [

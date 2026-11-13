@@ -25,17 +25,17 @@
     "question": "Diff A...B membandingkan apa?",
     "options": [
       "A dengan B secara langsung selalu",
-      "Merge base A/B dengan B",
-      "Working tree dengan semua tag"
+      "Working tree dengan semua tag",
+      "Merge base A/B dengan B"
     ],
-    "answer": 1,
+    "answer": 2,
     "explanation": "Tiga titik pada diff memilih dasar bersama menuju sisi B."
   },
   "commands": ["git diff"],
   "visual": "graph",
   "minutes": 7,
   "level": "Dasar",
-  "prerequisites": ["log-filter"],
+  "prerequisites": ["riwayat"],
   "initialState": "main dan fitur-diskon sama-sama ada dan sudah divergen. Latihan rebase menyediakan keadaan ini sebelum proses dimulai.",
   "lab": "rebase",
   "objectives": [

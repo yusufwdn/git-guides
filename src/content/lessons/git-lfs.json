@@ -35,7 +35,7 @@
   "visual": "objects",
   "minutes": 7,
   "level": "Lanjutan",
-  "prerequisites": ["submodule"],
+  "prerequisites": ["mulai-repo", "ignore"],
   "initialState": "Git LFS harus dipasang terpisah untuk praktik. Gunakan file contoh, dukungan server yang diketahui, dan repository yang boleh menerima aturan baru.",
   "lab": "objects",
   "objectives": [
@@ -52,5 +52,15 @@
     "command": "git lfs ls-files",
     "explanation": "Kamu dapat membedakan riwayat pointer dan ketersediaan data besar pada layanan LFS."
   },
-  "order": 57
+  "order": 57,
+  "checkpoint": {
+    "question": "Superproject menyimpan gitlink T1. Submodule mendapat commit T2. Apa yang dibagikan agar tim memakai T2?",
+    "options": [
+      "Commit submodule yang tersedia dan commit pembaruan gitlink di superproject",
+      "Hanya mengganti nama folder",
+      "Private key pembuat submodule"
+    ],
+    "answer": 0,
+    "explanation": "Repository submodule menyimpan commit, sedangkan superproject merekam pilihan commit yang dipakai."
+  }
 }

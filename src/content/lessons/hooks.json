@@ -31,7 +31,7 @@
   "visual": "snapshot",
   "minutes": 7,
   "level": "Lanjutan",
-  "prerequisites": ["hooks-secrets"],
+  "prerequisites": ["staging", "hooks-secrets"],
   "initialState": "Repo lokal tersedia dan jalur hooks dapat diperiksa. Paket latihan memakai direktori hook kosong khusus repo.",
   "lab": "basics",
   "objectives": [

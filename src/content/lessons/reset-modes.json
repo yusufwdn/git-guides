@@ -28,8 +28,8 @@
   "practice": "Jalankan start reset-soft, reset-mixed, dan reset-hard pada folder berbeda. Tuliskan tabel hasil sebelum dan sesudah.",
   "quiz": {
     "question": "Mode mana yang mengganti index tetapi mempertahankan working tree?",
-    "options": ["soft", "mixed", "hard"],
-    "answer": 1,
+    "options": ["soft", "hard", "mixed"],
+    "answer": 2,
     "explanation": "Mixed mengisi ulang index dari target dan mempertahankan working tree."
   },
   "commands": ["git reset"],

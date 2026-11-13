@@ -21,7 +21,7 @@ const htmlFor = (route) =>
   fs.readFileSync(path.join(__dirname, '..', 'dist', route.slice(1), 'index.html'), 'utf8');
 
 test('semua route dibangun Astro dengan konten, satu h1, ID unik, dan link internal valid', () => {
-  assert.equal(Routes.entries().length, 113);
+  assert.equal(Routes.entries().length, 115);
   for (const route of Routes.entries()) {
     const html = htmlFor(route.path);
     assert.equal((html.match(/<h1\b/g) || []).length, 1, route.path);

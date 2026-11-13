@@ -40,7 +40,7 @@
   "visual": "recovery",
   "minutes": 9,
   "level": "Menengah",
-  "prerequisites": ["reset-modes"],
+  "prerequisites": ["reset-modes", "detached-head"],
   "initialState": "Latihan reflog: branch fitur dihapus; commit diskon masih tersedia melalui jejak HEAD. Main dan working tree bersih.",
   "lab": "reflog",
   "objectives": [

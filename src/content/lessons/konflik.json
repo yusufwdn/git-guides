@@ -29,18 +29,18 @@
   "quiz": {
     "question": "Setelah mengedit file konflik, langkah berikutnya?",
     "options": [
-      "git add file yang diselesaikan",
       "Menghapus seluruh repository",
+      "git add file yang diselesaikan",
       "Langsung force push"
     ],
-    "answer": 0,
+    "answer": 1,
     "explanation": "Add memperbarui index dengan hasil penyelesaian sebelum merge dilanjutkan."
   },
   "commands": ["git merge --continue", "git merge --abort"],
   "visual": "conflict",
   "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["fast-forward"],
+  "prerequisites": ["merge", "staging"],
   "initialState": "Latihan merge-conflict: main harga 20000 dan fitur-menu harga 22000 mengubah baris yang sama dari dasar 18000.",
   "lab": "merge-conflict",
   "objectives": [

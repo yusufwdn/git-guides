@@ -36,7 +36,7 @@
   "visual": "graph",
   "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["riwayat"],
+  "prerequisites": ["staging", "riwayat"],
   "initialState": "main mempunyai satu commit dan working tree bersih. Buat fitur-diskon baru melalui latihan branch.",
   "lab": "branch",
   "objectives": [

@@ -23,8 +23,8 @@
   "practice": "Pada latihan remote, catat posisi main, atur upstream, lalu buktikan posisi commit tidak bergerak.",
   "quiz": {
     "question": "Menetapkan upstream otomatis melakukan merge?",
-    "options": ["Tidak", "Ya, selalu", "Hanya bila repo bare"],
-    "answer": 0,
+    "options": ["Ya, selalu", "Tidak", "Hanya bila repo bare"],
+    "answer": 1,
     "explanation": "Ini mengubah konfigurasi hubungan branch, bukan snapshot."
   },
   "commands": ["git branch --set-upstream-to", "git push -u"],

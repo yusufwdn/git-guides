@@ -23,15 +23,15 @@
   "practice": "Buat aturan eol=lf untuk file .sh pada repo latihan dan periksa hasil check-attr.",
   "quiz": {
     "question": "File mana yang tepat untuk atribut path bersama tim?",
-    "options": [".gitattributes", ".gitignore sebagai pengganti semua aturan", ".env"],
-    "answer": 0,
+    "options": [".gitignore sebagai pengganti semua aturan", ".gitattributes", ".env"],
+    "answer": 1,
     "explanation": "Attributes mengatur perlakuan file; ignore mengatur file untracked yang diabaikan."
   },
   "commands": ["git check-attr", "git add --renormalize"],
   "visual": "snapshot",
   "minutes": 6,
   "level": "Lanjutan",
-  "prerequisites": ["partial-staging"],
+  "prerequisites": ["ignore"],
   "initialState": "Repo latihan bersih sebelum normalisasi. Buat .gitattributes melalui editor; jangan gabungkan renormalisasi dengan edit logika yang belum ditinjau.",
   "lab": "basics",
   "objectives": [

@@ -36,7 +36,7 @@
   "visual": "stash",
   "minutes": 9,
   "level": "Menengah",
-  "prerequisites": ["stash"],
+  "prerequisites": ["stash", "ignore"],
   "initialState": "Latihan stash untuk -u; latihan stash-index terpisah untuk --index. Mulai folder baru saat membandingkan dua skenario.",
   "lab": "stash",
   "objectives": [

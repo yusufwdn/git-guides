@@ -28,15 +28,15 @@
   "practice": "Selesaikan latihan sparse dan jelaskan perbedaan file yang tidak ditampilkan dengan file yang dihapus melalui commit.",
   "quiz": {
     "question": "Sparse checkout menghapus docs dari commit?",
-    "options": ["Tidak", "Ya, otomatis", "Hanya di main"],
-    "answer": 0,
+    "options": ["Ya, otomatis", "Tidak", "Hanya di main"],
+    "answer": 1,
     "explanation": "Pemilihan path working tree tidak menulis ulang snapshot yang sudah direkam."
   },
   "commands": ["git sparse-checkout"],
   "visual": "snapshot",
   "minutes": 9,
   "level": "Lanjutan",
-  "prerequisites": ["worktree"],
+  "prerequisites": ["mulai-repo"],
   "initialState": "Latihan sparse mempunyai folder web dan docs yang keduanya sudah di-commit. Working tree bersih.",
   "lab": "sparse",
   "objectives": [

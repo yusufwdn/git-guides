@@ -24,11 +24,11 @@
   "quiz": {
     "question": "Dalam git add <file>, apa yang kamu ketik?",
     "options": [
-      "git add <file> secara literal",
       "git add menu.json untuk file menu.json",
+      "git add <file> secara literal",
       "Hanya nama file"
     ],
-    "answer": 1,
+    "answer": 0,
     "explanation": "Tanda <...> menandai nilai yang perlu kamu ganti."
   },
   "commands": ["git help", "git stash -h"],

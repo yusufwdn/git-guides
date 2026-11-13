@@ -29,11 +29,11 @@
   "quiz": {
     "question": "Konfigurasi mana yang menang untuk repo tertentu?",
     "options": [
-      "Nilai --local pada repo itu",
       "Nilai --global selalu menang",
+      "Nilai --local pada repo itu",
       "Yang namanya paling pendek"
     ],
-    "answer": 0,
+    "answer": 1,
     "explanation": "Konfigurasi repository menimpa nilai global yang sama."
   },
   "commands": ["git config", "git --version"],
@@ -41,7 +41,7 @@
   "minutes": 8,
   "level": "Dasar",
   "prerequisites": ["kenalan-git"],
-  "initialState": "Git terpasang. Contoh --global memang mengubah preferensi pengguna; gunakan nilai identitas sendiri. Scope --local memerlukan repo.",
+  "initialState": "Jika Git belum terpasang atau terminal belum dikenal, selesaikan halaman persiapan terlebih dahulu. Repository Kopi Kita dari persiapan sudah mempunyai commit pertama.",
   "lab": "basics",
   "objectives": [
     "Pasang Git dan atur identitas yang akan tercatat pada commit.",
@@ -51,11 +51,16 @@
     {
       "title": "Manual git config",
       "url": "https://git-scm.com/docs/git-config"
+    },
+    {
+      "title": "Instalasi Git untuk setiap sistem operasi",
+      "url": "https://git-scm.com/install/"
     }
   ],
   "verification": {
     "command": "git config --show-origin --get user.name\ngit config --show-origin --get user.email",
     "explanation": "Commit baru menggunakan identitas yang benar. Konfigurasi identitas tidak mengubah author pada commit lama."
   },
-  "order": 4
+  "order": 4,
+  "preparationURL": "/persiapan/"
 }

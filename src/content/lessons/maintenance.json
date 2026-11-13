@@ -28,8 +28,8 @@
   "practice": "Buat bundle repo latihan lalu verifikasi dengan git bundle verify kopi-kita.bundle. Catat data lokal apa yang tidak termasuk.",
   "quiz": {
     "question": "Apakah bundle --all menyimpan edit working tree yang belum di-commit?",
-    "options": ["Tidak", "Ya, seluruh folder otomatis", "Hanya file JavaScript"],
-    "answer": 0,
+    "options": ["Ya, seluruh folder otomatis", "Hanya file JavaScript", "Tidak"],
+    "answer": 2,
     "explanation": "Bundle berisi refs dan object yang dicakup, bukan seluruh keadaan folder kerja."
   },
   "commands": ["git count-objects", "git fsck", "git bundle"],
@@ -61,5 +61,15 @@
     "command": "git bundle verify kopi-kita.bundle",
     "explanation": "Kamu mengetahui fungsi penyimpanan object, pemeriksaan konsistensi, dan bundle tanpa menganggapnya menyimpan semua keadaan lokal."
   },
-  "order": 65
+  "order": 65,
+  "checkpoint": {
+    "question": "Kamu membuat git bundle --all saat ada edit yang belum di-commit. Apakah edit itu termasuk?",
+    "options": [
+      "Tidak; bundle mencakup refs dan object yang dipilih",
+      "Ya, semua file komputer",
+      "Ya, termasuk konfigurasi global dan kredensial"
+    ],
+    "answer": 0,
+    "explanation": "Bundle bukan salinan lengkap working tree, index, hook, dan konfigurasi pengguna."
+  }
 }

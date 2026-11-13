@@ -53,5 +53,11 @@
     "command": "git status\ngit log --oneline -3",
     "explanation": "Kamu memahami kapan otomasi bisect dapat dipercaya dan kapan kandidat harus di-skip."
   },
-  "order": 48
+  "order": 48,
+  "checkpoint": {
+    "question": "Bisect memilih commit yang tidak bisa dibangun karena masalah yang tidak terkait bug yang dicari. Pilih penilaian.",
+    "options": ["good agar cepat selesai", "skip", "bad tanpa pengujian"],
+    "answer": 1,
+    "explanation": "Skip menyatakan commit tersebut tidak bisa dinilai. Hasil tetap bergantung pada uji good/bad yang stabil."
+  }
 }

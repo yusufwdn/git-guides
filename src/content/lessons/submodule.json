@@ -29,20 +29,20 @@
   "quiz": {
     "question": "Apa yang dicatat gitlink?",
     "options": [
-      "Commit tertentu pada submodule",
       "Semua branch submodule secara live",
-      "Password repo tema"
+      "Password repo tema",
+      "Commit tertentu pada submodule"
     ],
-    "answer": 0,
+    "answer": 2,
     "explanation": "Superproject merekam pilihan commit, bukan mengikuti setiap perubahan otomatis."
   },
   "commands": ["git submodule", "git diff --submodule"],
   "visual": "objects",
   "minutes": 9,
   "level": "Lanjutan",
-  "prerequisites": ["sparse-partial"],
-  "initialState": "Repo contoh memang mempunyai .gitmodules dan URL submodule yang dapat diakses. Command update dapat menghubungi remote.",
-  "lab": "objects",
+  "prerequisites": ["mulai-repo", "revision"],
+  "initialState": "Latihan submodule: repo tema sudah ditambahkan pada T1. Sumber tema-source lokal mempunyai T2, sementara gitlink superproject masih memilih T1.",
+  "lab": "submodule",
   "objectives": [
     "Pahami gitlink, .gitmodules, dan pembaruan submodule.",
     "Periksa hasilnya: Kamu tahu repo mana yang menyimpan perubahan dan repo mana yang menyimpan pilihan versi."
@@ -58,8 +58,8 @@
     }
   ],
   "verification": {
-    "command": "git submodule status",
-    "explanation": "Kamu tahu repo mana yang menyimpan perubahan dan repo mana yang menyimpan pilihan versi."
+    "command": "git submodule status\ngit rev-parse HEAD:tema",
+    "explanation": "Repo tema menyimpan commit isi tema. Superproject menyimpan gitlink yang memilih commit tersebut. Remote latihan berupa folder lokal dan tidak membutuhkan akun internet."
   },
   "order": 56
 }

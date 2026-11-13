@@ -23,15 +23,15 @@
   "practice": "Baca metadata tag annotated pada latihan tags. Jelaskan informasi tambahan yang diperlukan sebelum dapat memverifikasi signed tag.",
   "quiz": {
     "question": "Signature valid menjamin kode tanpa bug?",
-    "options": ["Tidak", "Ya, selalu", "Hanya untuk tag versi 1"],
-    "answer": 0,
+    "options": ["Ya, selalu", "Tidak", "Hanya untuk tag versi 1"],
+    "answer": 1,
     "explanation": "Signature memverifikasi hubungan data dan kunci sesuai mekanismenya; kualitas kode dinilai terpisah."
   },
   "commands": ["git tag -v", "git commit -S"],
   "visual": "objects",
   "minutes": 7,
   "level": "Lanjutan",
-  "prerequisites": ["hotfix"],
+  "prerequisites": ["tag", "autentikasi"],
   "initialState": "Git dan mekanisme signing yang sesuai harus dikonfigurasi untuk praktik nyata. Contoh verifikasi memerlukan tag yang memang signed dan kunci publik tepercaya.",
   "lab": "tags",
   "objectives": [
@@ -52,5 +52,11 @@
     "command": "git config --get gpg.format",
     "explanation": "Kamu dapat membedakan author metadata, signature, kepercayaan kunci, dan hasil pengujian kode."
   },
-  "order": 52
+  "order": 52,
+  "checkpoint": {
+    "question": "Tag v1.0.0 menunjuk A. Main kemudian mendapat commit B. Di mana tag tersebut?",
+    "options": ["Tetap A", "Otomatis B", "Mengikuti branch aktif terakhir"],
+    "answer": 0,
+    "explanation": "Tag tidak otomatis berpindah ketika branch maju."
+  }
 }

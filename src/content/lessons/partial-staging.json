@@ -29,18 +29,18 @@
   "quiz": {
     "question": "Apa kegunaan git add -p?",
     "options": [
-      "Memilih bagian perubahan untuk index",
       "Menjalankan push otomatis",
-      "Menghapus file besar"
+      "Menghapus file besar",
+      "Memilih bagian perubahan untuk index"
     ],
-    "answer": 0,
+    "answer": 2,
     "explanation": "Patch mode memungkinkan staging per hunk."
   },
   "commands": ["git add -p"],
   "visual": "staging",
   "minutes": 8,
   "level": "Lanjutan",
-  "prerequisites": ["tag"],
+  "prerequisites": ["staging", "diff-versi"],
   "initialState": "Satu file tracked memiliki dua hunk terpisah yang mengerjakan tujuan berbeda. Pilih sendiri edit melalui editor sebelum add -p.",
   "lab": "partial-staging",
   "objectives": [

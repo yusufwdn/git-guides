@@ -12,6 +12,8 @@ const BASE = {
   'README.md': '# Kopi Kita\n\nMenu kopi untuk semua.\n',
 };
 const definitions = {
+  worktree: ['Dua folder, dua jalur', 'Buat linked worktree kopi-kita-hotfix pada branch hotfix, commit harga 22000 di sana, dan pertahankan main pada harga 18000.'],
+  submodule: ['Pilih versi submodule', 'Perbarui tema ke commit terbaru dari sumber lokal, lalu commit perubahan gitlink pada superproject.'],
   basics: ['Kenali tiga area', 'Amati perbedaan working tree, index, dan HEAD tanpa mengubah isi.'],
   staging: [
     'Commit satu tujuan',
@@ -272,6 +274,14 @@ function start(scenario, options = {}) {
       const id = commit(repo, `Perubahan ${i}`);
       if (i === 3) metadata.expected.bad = id;
     }
+  } else if (scenario === 'submodule') {
+    const theme = path.join(root, 'tema-source');
+    initialize(theme, { 'tema.css': 'body { color: black; }\n' });
+    metadata.expected.first = git(theme, 'rev-parse', 'HEAD');
+    git(repo, '-c', 'protocol.file.allow=always', 'submodule', 'add', theme, 'tema');
+    metadata.base = commit(repo, 'Pilih tema awal');
+    write(theme, 'tema.css', 'body { color: orange; }\n');
+    metadata.expected.latest = commit(theme, 'Tema orange');
   } else if (scenario === 'sparse') {
     update('web/index.html', '<h1>Kopi Kita</h1>\n');
     update('docs/panduan.md', '# Panduan tim\n');
@@ -500,6 +510,20 @@ function check(directory) {
     add('Tidak ada perubahan repository', q('status', '--porcelain') === '');
     add('Root tree dapat dibaca', q('cat-file', '-t', 'HEAD^{tree}') === 'tree');
     add('Blob menu dapat dibaca', q('cat-file', '-t', 'HEAD:menu.json') === 'blob');
+  }
+  if (scenario === 'worktree') {
+    const linked = path.join(root, 'kopi-kita-hotfix');
+    const registered = q('worktree', 'list', '--porcelain') || '';
+    add('Worktree hotfix terdaftar', registered.includes('refs/heads/hotfix') && fs.existsSync(linked));
+    add('Main tidak berubah', q('rev-parse', 'main') === m.base);
+    add('Hotfix merekam harga 22000', q('show', 'hotfix:menu.json') === '{"kopiSusu":22000}');
+    add('Working tree utama tetap harga awal', read('menu.json') === '{"kopiSusu":18000}');
+  }
+  if (scenario === 'submodule') {
+    add('Superproject merekam gitlink terbaru', q('rev-parse', 'HEAD:tema') === m.expected.latest);
+    add('Perubahan gitlink sudah di-commit', head !== m.base && q('status', '--porcelain') === '');
+    const config = q('show', 'HEAD:.gitmodules');
+    add('Konfigurasi submodule tetap tersedia', config?.includes('path = tema'));
   }
   return {
     scenario,

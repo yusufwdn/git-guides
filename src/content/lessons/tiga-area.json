@@ -29,19 +29,19 @@
   "quiz": {
     "question": "Setelah add, kamu mengedit file lagi. Apa isi commit berikutnya?",
     "options": [
-      "Selalu versi terbaru di editor",
       "Versi yang terakhir dimasukkan ke index",
+      "Selalu versi terbaru di editor",
       "Semua file di folder"
     ],
-    "answer": 1,
+    "answer": 0,
     "explanation": "Commit merekam index. Jalankan add lagi jika edit terbaru juga ingin disertakan."
   },
   "commands": ["git status", "git diff", "git diff --staged"],
   "visual": "snapshot",
   "minutes": 8,
   "level": "Dasar",
-  "prerequisites": ["git-terdistribusi"],
-  "initialState": "Repo sudah mempunyai HEAD. Satu file tracked diedit, di-add, lalu diedit lagi agar staged dan unstaged dapat dibandingkan.",
+  "prerequisites": ["snapshot"],
+  "initialState": "Repo sudah mempunyai HEAD. Satu file tracked diedit, di-add, lalu diedit lagi agar staged dan unstaged dapat dibandingkan. Siapkan keadaan ini melalui halaman Persiapan: repo pertama dan contoh tiga versi.",
   "lab": "basics",
   "objectives": [
     "Working tree, staging area, dan snapshot HEAD menjawab tiga pertanyaan yang berbeda.",
@@ -61,5 +61,12 @@
     "command": "git diff\ngit diff --staged",
     "explanation": "Kamu tahu apakah suatu perubahan masih di working tree, sudah staged, atau sudah menjadi bagian commit."
   },
-  "order": 3
+  "order": 3,
+  "preparationURL": "/persiapan/",
+  "checkpoint": {
+    "question": "HEAD berisi diskon 0, index 5, dan file kerja 10. Commit tanpa add lagi menyimpan nilai berapa?",
+    "options": ["0", "5", "10"],
+    "answer": 1,
+    "explanation": "Commit merekam index. Edit menjadi 10 belum disalin ke index."
+  }
 }

@@ -28,15 +28,15 @@
   "practice": "Temukan root tree dari satu commit, lalu lihat satu blob dengan cat-file -p OBJECT_ID. Bandingkan dengan isi file pada snapshot itu.",
   "quiz": {
     "question": "Object mana yang menyimpan isi file?",
-    "options": ["Blob", "Branch", "Remote"],
-    "answer": 0,
+    "options": ["Branch", "Remote", "Blob"],
+    "answer": 2,
     "explanation": "Blob menyimpan isi; nama dan hubungan path dicatat pada tree."
   },
   "commands": ["git cat-file", "git ls-tree", "git symbolic-ref"],
   "visual": "objects",
   "minutes": 8,
   "level": "Lanjutan",
-  "prerequisites": ["attributes"],
+  "prerequisites": ["snapshot", "revision"],
   "initialState": "Latihan objects mempunyai HEAD, menu.json tracked, dan branch main aktif. Semua command contoh bersifat membaca.",
   "lab": "objects",
   "objectives": [

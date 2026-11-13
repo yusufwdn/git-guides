@@ -224,5 +224,27 @@
     ],
     "solution": "git show HEAD\ngit revert --no-edit HEAD\ngit log --oneline -3\ngit show HEAD:menu.json",
     "explanation": "Revert membuat satu commit koreksi setelah commit salah. Tidak ada penulisan ulang atau pemindahan branch ke commit awal."
+  },
+  "worktree": {
+    "title": "Dua folder, dua jalur",
+    "lesson": "worktree",
+    "goal": "Buat worktree ../kopi-kita-hotfix pada branch hotfix, commit harga 22000 di sana, dan pertahankan main pada harga 18000.",
+    "hints": [
+      "Mulai di repo kopi-kita yang baru dibuat generator. Folder saudara kopi-kita-hotfix belum ada.",
+      "Gunakan worktree add dengan -b hotfix, lalu edit file pada folder linked worktree."
+    ],
+    "solution": "git worktree add -b hotfix ../kopi-kita-hotfix awal\n# Edit ../kopi-kita-hotfix/menu.json menjadi {\"kopiSusu\":22000}\ngit -C ../kopi-kita-hotfix add menu.json\ngit -C ../kopi-kita-hotfix commit -m \"Hotfix harga\"\ngit worktree list\ngit show main:menu.json",
+    "explanation": "Kedua folder memakai penyimpanan repository bersama, tetapi mempunyai branch aktif, index, dan file kerja masing-masing. Main dan file pada kopi-kita tetap 18000."
+  },
+  "submodule": {
+    "title": "Pilih versi tema",
+    "lesson": "submodule",
+    "goal": "Ambil commit terbaru dari repo tema lokal, checkout versi itu di submodule, lalu commit gitlink pada superproject.",
+    "hints": [
+      "Generator sudah menambahkan tema pada versi T1. Sumber lokal tema-source sudah memiliki T2.",
+      "Lakukan fetch pada repo tema, pindahkan HEAD tema, lalu add tema dari superproject."
+    ],
+    "solution": "git -C tema fetch origin\ngit -C tema switch --detach origin/main\ngit diff --submodule\ngit add tema\ngit commit -m \"Pilih tema orange\"\ngit submodule status\ngit rev-parse HEAD:tema",
+    "explanation": "Repo tema menyimpan commit isi tema. Superproject menyimpan gitlink yang memilih commit tersebut. Remote latihan berupa folder lokal dan tidak membutuhkan akun internet."
   }
 }

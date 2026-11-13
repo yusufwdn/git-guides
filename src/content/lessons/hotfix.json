@@ -40,7 +40,7 @@
   "visual": "graph",
   "minutes": 8,
   "level": "Lanjutan",
-  "prerequisites": ["catatan-rilis"],
+  "prerequisites": ["tag", "branch"],
   "initialState": "Tag v1.0.0 tersedia dan main sudah maju dengan fitur yang belum masuk versi rilis. Working tree bersih sebelum membuat hotfix.",
   "lab": "tags",
   "objectives": [

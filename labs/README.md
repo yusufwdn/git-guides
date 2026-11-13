@@ -15,6 +15,8 @@ Perintah Git pada materi bekerja pada lokasi terminal saat itu. Sebelum reset, r
 
 Untuk latihan remote, generator membuat server bare lokal, clone `rani`, dan repo `kopi-kita`. Tidak ada push ke internet. Untuk memulai ulang latihan, jalankan `start` lagi; simpan folder lama bila masih ingin memeriksanya.
 
+Latihan `submodule` menyiapkan repo `tema-source` lokal dan submodule `tema` pada versi lama. Ambil versi terbaru dari sumber itu lalu commit pembaruan gitlink pada superproject. Latihan `worktree` membuat linked worktree `../kopi-kita-hotfix` pada branch hotfix; bandingkan file dan branch di kedua folder. Keduanya tidak membutuhkan akun layanan hosting.
+
 Checker menilai keadaan akhir file, index, branch, commit, atau stash. Ia tidak merekam semua tindakanmu: misalnya, keadaan bersih setelah `merge --abort` bisa sama dengan keadaan sebelum kamu memulai merge. Tetap jalankan langkah observasi dan jelaskan hasilnya dengan kata-katamu sendiri.
 
 Hash dan timestamp akan berbeda pada setiap latihan. Gunakan log, branch, dan reflog untuk menemukan commit; jangan menyalin hash ilustrasi dari gambar.

@@ -24,11 +24,11 @@
   "quiz": {
     "question": "git show HEAD:menu.json mengubah working tree?",
     "options": [
-      "Tidak, hanya membaca snapshot",
       "Ya, selalu menimpa editor",
+      "Tidak, hanya membaca snapshot",
       "Hanya jika memakai Windows"
     ],
-    "answer": 0,
+    "answer": 1,
     "explanation": "Membaca object berbeda dari checkout atau restore yang memperbarui file."
   },
   "commands": ["git show", "git diff"],
@@ -36,7 +36,7 @@
   "minutes": 7,
   "level": "Dasar",
   "prerequisites": ["kenalan-git"],
-  "initialState": "Repo punya commit HEAD yang melacak menu.json. Working tree boleh berbeda; perintah contoh hanya membaca.",
+  "initialState": "Repo punya commit HEAD yang melacak menu.json. Working tree boleh berbeda; perintah contoh hanya membaca. Siapkan keadaan ini melalui halaman Persiapan: repo pertama dan contoh tiga versi.",
   "lab": "basics",
   "objectives": [
     "Bedakan snapshot, patch, dan file yang belum direkam.",
@@ -56,5 +56,6 @@
     "command": "git show HEAD:menu.json",
     "explanation": "Kamu dapat membaca versi tersimpan tanpa menimpa file yang sedang dikerjakan."
   },
-  "order": 1
+  "order": 1,
+  "preparationURL": "/persiapan/"
 }

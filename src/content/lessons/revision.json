@@ -24,18 +24,18 @@
   "quiz": {
     "question": "HEAD~1 menunjuk ke mana?",
     "options": [
-      "Branch alfabet pertama",
       "Parent pertama satu langkah dari HEAD",
+      "Branch alfabet pertama",
       "Parent kedua selalu"
     ],
-    "answer": 1,
+    "answer": 0,
     "explanation": "Tanda ~ mengikuti jalur first parent sebanyak angka yang diberikan."
   },
   "commands": ["git diff", "git rev-parse"],
   "visual": "graph",
   "minutes": 6,
   "level": "Dasar",
-  "prerequisites": ["diff-versi"],
+  "prerequisites": ["riwayat"],
   "initialState": "HEAD mempunyai parent. HEAD~3 memerlukan tiga langkah first-parent; gunakan hash yang tersedia bila riwayat lebih pendek.",
   "lab": "bisect",
   "objectives": [
@@ -56,5 +56,11 @@
     "command": "git log --oneline -5",
     "explanation": "Kamu bisa menyebut dua titik yang dibandingkan dan membedakan rentang log dari perbandingan snapshot."
   },
-  "order": 15
+  "order": 15,
+  "checkpoint": {
+    "question": "Kamu ingin membaca menu.json dari commit sebelumnya tanpa mengubah file kerja. Pilih tindakan.",
+    "options": ["git show HEAD~1:menu.json", "git reset --hard HEAD~1", "git clean -fd"],
+    "answer": 0,
+    "explanation": "Show membaca isi object tanpa memindahkan branch atau mengganti file kerja."
+  }
 }

@@ -24,18 +24,18 @@
   "quiz": {
     "question": "Mengubah user.name memperbaiki izin push?",
     "options": [
-      "Tidak, izin server adalah urusan terpisah",
       "Ya, asal memakai nama admin",
+      "Tidak, izin server adalah urusan terpisah",
       "Ya, setelah commit baru"
     ],
-    "answer": 0,
+    "answer": 1,
     "explanation": "Author commit tidak memberikan hak akses ke remote."
   },
   "commands": ["git remote get-url", "git config"],
   "visual": "remote",
   "minutes": 7,
   "level": "Dasar",
-  "prerequisites": ["bantuan"],
+  "prerequisites": ["setup"],
   "initialState": "Repo mempunyai origin. Latihan remote menggunakan path lokal; contoh HTTPS/SSH membutuhkan konfigurasi penyedia bila dipakai nyata.",
   "lab": "remote",
   "objectives": [
@@ -56,5 +56,15 @@
     "command": "git remote get-url origin",
     "explanation": "Kamu dapat membedakan error identitas, koneksi, autentikasi, dan izin branch."
   },
-  "order": 7
+  "order": 7,
+  "checkpoint": {
+    "question": "user.name sudah benar, tetapi server menolak push karena akun tidak punya izin. Apa yang diperiksa?",
+    "options": [
+      "Mengganti author menjadi nama admin",
+      "Metode login dan izin akun pada repository",
+      "Menghapus folder .git"
+    ],
+    "answer": 1,
+    "explanation": "Author commit dan hak akses server merupakan dua hal terpisah."
+  }
 }

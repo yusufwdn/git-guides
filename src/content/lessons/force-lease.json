@@ -24,18 +24,18 @@
   "quiz": {
     "question": "Lease memeriksa apa?",
     "options": [
-      "Kesesuaian referensi tujuan dengan ekspektasi",
       "Kebenaran seluruh logika program",
-      "Izin moral untuk membuang perubahan tim"
+      "Izin moral untuk membuang perubahan tim",
+      "Kesesuaian referensi tujuan dengan ekspektasi"
     ],
-    "answer": 0,
+    "answer": 2,
     "explanation": "Lease menambah pemeriksaan posisi referensi, bukan audit seluruh perubahan."
   },
   "commands": ["git push --force-with-lease"],
   "visual": "remote",
   "minutes": 7,
   "level": "Menengah",
-  "prerequisites": ["cherry-pick"],
+  "prerequisites": ["push", "rebase-dasar"],
   "initialState": "Penulisan ulang branch remote sudah disepakati. Referensi tujuan dan object ID ekspektasi telah diperiksa. Command memuat placeholder.",
   "lab": "remote",
   "objectives": [
@@ -52,5 +52,15 @@
     "command": "git branch -vv",
     "explanation": "Kamu bisa menjelaskan apa yang diperiksa lease dan apa yang tetap memerlukan keputusan tim."
   },
-  "order": 44
+  "order": 44,
+  "checkpoint": {
+    "question": "Rebase mengubah parent dua commit fitur. Apa yang perlu diantisipasi sebelum membagikannya?",
+    "options": [
+      "Identitas commit berubah dan riwayat bersama perlu dikoordinasikan",
+      "Main otomatis terhapus",
+      "Semua file untracked otomatis ikut commit"
+    ],
+    "answer": 0,
+    "explanation": "Parent merupakan bagian data commit. Penulisan ulang jalur yang dibagikan perlu koordinasi."
+  }
 }

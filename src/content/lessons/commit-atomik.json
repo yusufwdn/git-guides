@@ -24,18 +24,18 @@
   "quiz": {
     "question": "Commit atomik harus selalu satu file?",
     "options": [
-      "Tidak, ukurannya mengikuti satu tujuan yang utuh",
       "Ya, tanpa pengecualian",
+      "Tidak, ukurannya mengikuti satu tujuan yang utuh",
       "Harus selalu satu baris"
     ],
-    "answer": 0,
+    "answer": 1,
     "explanation": "Satu tujuan bisa membutuhkan beberapa file yang saling mendukung."
   },
   "commands": ["git diff --staged", "git commit"],
   "visual": "staging",
   "minutes": 7,
   "level": "Menengah",
-  "prerequisites": ["fetch-pull"],
+  "prerequisites": ["staging"],
   "initialState": "Latihan staging: menu dan diskon sama-sama berubah, belum staged. Hanya koreksi menu siap menjadi commit.",
   "lab": "staging",
   "objectives": [

@@ -24,11 +24,11 @@
   "quiz": {
     "question": "Apa fungsi git -C PATH?",
     "options": [
-      "Menjalankan Git dengan konteks folder PATH",
       "Membuat commit otomatis",
-      "Mengubah seluruh konfigurasi global"
+      "Mengubah seluruh konfigurasi global",
+      "Menjalankan Git dengan konteks folder PATH"
     ],
-    "answer": 0,
+    "answer": 2,
     "explanation": "-C memilih konteks direktori untuk proses tersebut."
   },
   "commands": ["git rev-parse", "git -C"],
@@ -52,5 +52,6 @@
     "command": "git rev-parse --show-toplevel",
     "explanation": "Kamu dapat menyebut repo yang akan terkena operasi sebelum menjalankan command yang mengubah keadaan."
   },
-  "order": 5
+  "order": 5,
+  "preparationURL": "/persiapan/"
 }

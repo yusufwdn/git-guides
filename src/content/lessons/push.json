@@ -30,17 +30,17 @@
     "question": "Push biasa mengirim perubahan yang belum di-commit?",
     "options": [
       "Ya, semua yang terlihat di editor",
-      "Tidak, push bekerja dengan object dan refs yang direkam",
-      "Hanya jika file berakhiran .js"
+      "Hanya jika file berakhiran .js",
+      "Tidak, push bekerja dengan object dan refs yang direkam"
     ],
-    "answer": 1,
+    "answer": 2,
     "explanation": "Simpan perubahan ke commit terlebih dahulu jika ingin membagikannya sebagai riwayat branch."
   },
   "commands": ["git push", "git branch -vv"],
   "visual": "remote",
   "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["upstream"],
+  "prerequisites": ["fetch-pull", "autentikasi"],
   "initialState": "Branch fitur-diskon punya commit yang ingin dibagikan. Remote origin sudah diatur dan tersedia sesuai hak akses pengguna.",
   "lab": "remote",
   "objectives": [

@@ -24,11 +24,11 @@
   "quiz": {
     "question": "Apa yang baru pada fast-forward?",
     "options": [
-      "Selalu satu object merge commit",
       "Posisi referensi penerima",
+      "Selalu satu object merge commit",
       "Semua hash commit lama"
     ],
-    "answer": 1,
+    "answer": 0,
     "explanation": "Tidak perlu commit baru untuk menghubungkan jalur yang sudah linear."
   },
   "commands": ["git merge --ff-only"],

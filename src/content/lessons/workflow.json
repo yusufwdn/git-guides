@@ -24,18 +24,18 @@
   "quiz": {
     "question": "Apa dampak utama squash merge ke branch tujuan?",
     "options": [
-      "Satu commit hasil merangkum perubahan fitur",
       "Selalu mempertahankan semua commit fitur sebagai ancestor",
+      "Satu commit hasil merangkum perubahan fitur",
       "Menghapus semua tag"
     ],
-    "answer": 0,
+    "answer": 1,
     "explanation": "Squash merangkum perubahan menjadi commit baru; hubungan riwayatnya berbeda dari merge commit biasa."
   },
   "commands": ["git merge --squash", "git log"],
   "visual": "graph",
   "minutes": 6,
   "level": "Menengah",
-  "prerequisites": ["fork-upstream"],
+  "prerequisites": ["review", "merge"],
   "initialState": "Tim mempunyai branch utama dan kesepakatan integrasi. Materi ini membandingkan pilihan, bukan meminta semua strategi dijalankan berurutan.",
   "lab": "merge-ff",
   "objectives": [
@@ -56,5 +56,15 @@
     "command": "git log --graph --oneline --all",
     "explanation": "Tim memiliki aturan integrasi yang jelas, termasuk siapa yang boleh menulis ke branch utama."
   },
-  "order": 31
+  "order": 31,
+  "checkpoint": {
+    "question": "Perbaikan checkout dan eksperimen harga tidak saling bergantung. Bagaimana menyusun commit agar mudah direview?",
+    "options": [
+      "Gabungkan semua perubahan agar hanya satu commit",
+      "Pisahkan berdasarkan tujuan dan periksa staged diff",
+      "Commit semua file lalu hilangkan pesan commit"
+    ],
+    "answer": 1,
+    "explanation": "Satu tujuan dapat mencakup beberapa file. Pembagiannya mengikuti maksud perubahan."
+  }
 }

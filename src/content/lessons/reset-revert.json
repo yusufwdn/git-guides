@@ -28,15 +28,15 @@
   "practice": "Pada repo latihan, bandingkan reset --soft dan --mixed pada keadaan awal identik. Amati status dan kedua jenis diff.",
   "quiz": {
     "question": "Mode reset mana yang mempertahankan index dan working tree?",
-    "options": ["--hard", "--mixed", "--soft"],
-    "answer": 2,
+    "options": ["--hard", "--soft", "--mixed"],
+    "answer": 1,
     "explanation": "Soft memindahkan referensi tanpa mereset index atau working tree."
   },
   "commands": ["git reset", "git revert", "git reflog", "git clean"],
   "visual": "graph",
   "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["restore"],
+  "prerequisites": ["restore", "riwayat"],
   "initialState": "Contoh revert berlaku untuk commit biasa yang sudah direkam. Contoh soft adalah skenario lokal terpisah dengan parent yang tersedia.",
   "lab": "revert",
   "objectives": [

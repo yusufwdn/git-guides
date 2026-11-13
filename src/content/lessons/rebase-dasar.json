@@ -36,7 +36,7 @@
   "visual": "rebase",
   "minutes": 9,
   "level": "Menengah",
-  "prerequisites": ["amend-rebase"],
+  "prerequisites": ["branch", "merge", "amend-rebase"],
   "initialState": "Latihan rebase: main punya harga baru; fitur-diskon punya dua commit diskon yang belum digabung, index dan working tree bersih.",
   "lab": "rebase",
   "objectives": [

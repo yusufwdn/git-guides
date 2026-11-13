@@ -24,18 +24,18 @@
   "quiz": {
     "question": "Sumber awal yang tepat untuk catatan antarversi?",
     "options": [
-      "Rentang commit beserta patch yang ditinjau",
       "Hanya nama file paling besar",
-      "Semua issue tanpa pemeriksaan"
+      "Semua issue tanpa pemeriksaan",
+      "Rentang commit beserta patch yang ditinjau"
     ],
-    "answer": 0,
+    "answer": 2,
     "explanation": "Riwayat adalah bahan; penjelasan rilis tetap perlu konteks produk."
   },
   "commands": ["git log", "git diff --stat"],
   "visual": "graph",
   "minutes": 7,
   "level": "Lanjutan",
-  "prerequisites": ["tag"],
+  "prerequisites": ["tag", "log-filter"],
   "initialState": "Tag v1.0.0 sudah ada dan main punya commit sesudahnya. Gunakan latihan tags setelah membuat commit README tambahan.",
   "lab": "tags",
   "objectives": [

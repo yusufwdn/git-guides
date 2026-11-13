@@ -29,18 +29,18 @@
   "quiz": {
     "question": "Cherry-pick biasanya menghasilkan apa?",
     "options": [
-      "Commit baru yang menerapkan perubahan terpilih",
       "Pemindahan semua branch",
+      "Commit baru yang menerapkan perubahan terpilih",
       "Penghapusan commit sumber"
     ],
-    "answer": 0,
+    "answer": 1,
     "explanation": "Commit sumber tetap; perubahan diterapkan pada jalur penerima."
   },
   "commands": ["git cherry-pick"],
   "visual": "graph",
   "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["rebase-dasar"],
+  "prerequisites": ["branch", "riwayat"],
   "initialState": "Latihan cherry-pick: branch rilis pada dasar awal; fitur-eksperimen punya eksperimen menu lalu commit perbaikan checkout yang independen.",
   "lab": "cherry-pick",
   "objectives": [

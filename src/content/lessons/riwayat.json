@@ -36,7 +36,7 @@
   "visual": "graph",
   "minutes": 8,
   "level": "Dasar",
-  "prerequisites": ["mulai-repo"],
+  "prerequisites": ["staging"],
   "initialState": "Repo punya beberapa commit dan menu.json tracked. Jika pencarian kosong, periksa apakah file pernah berubah pada riwayat itu.",
   "lab": "tags",
   "objectives": [

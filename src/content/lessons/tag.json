@@ -29,18 +29,18 @@
   "quiz": {
     "question": "Tag rilis biasanya bergerak saat commit baru dibuat?",
     "options": [
-      "Tidak, tetap menunjuk targetnya",
       "Ya, seperti branch aktif",
+      "Tidak, tetap menunjuk targetnya",
       "Hanya jika namanya v1"
     ],
-    "answer": 0,
+    "answer": 1,
     "explanation": "Branch bergerak saat commit dibuat di jalurnya; tag tidak otomatis bergerak."
   },
   "commands": ["git tag", "git push"],
   "visual": "graph",
   "minutes": 8,
   "level": "Lanjutan",
-  "prerequisites": ["pencarian"],
+  "prerequisites": ["riwayat"],
   "initialState": "Latihan tags dimulai pada commit awal yang akan diberi v1.0.0. Nama tag belum dipakai; tidak memerlukan server.",
   "lab": "tags",
   "objectives": [

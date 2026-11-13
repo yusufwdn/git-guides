@@ -52,5 +52,6 @@
     "command": "git --version",
     "explanation": "Kamu bisa membedakan Git, repository, commit, dan layanan hosting. Tidak ada file proyek yang berubah dalam demonstrasi ini."
   },
-  "order": 0
+  "order": 0,
+  "preparationURL": "/persiapan/"
 }

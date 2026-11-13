@@ -40,9 +40,9 @@
   "visual": "graph",
   "minutes": 8,
   "level": "Lanjutan",
-  "prerequisites": ["partial-staging"],
-  "initialState": "Repo memiliki main; branch hotfix-checkout dan folder ../kopi-hotfix belum ada. Pilih folder saudara milikmu yang boleh dibuat.",
-  "lab": "branch",
+  "prerequisites": ["branch"],
+  "initialState": "Latihan worktree: repo kopi-kita bersih pada main dengan harga 18000. Folder saudara kopi-kita-hotfix belum ada.",
+  "lab": "worktree",
   "objectives": [
     "Gunakan worktree saat dua branch perlu terbuka bersamaan.",
     "Periksa hasilnya: Fitur dan hotfix bisa diuji pada folder berbeda tanpa mengganti branch pada meja pertama."
@@ -54,8 +54,8 @@
     }
   ],
   "verification": {
-    "command": "git worktree list",
-    "explanation": "Fitur dan hotfix bisa diuji pada folder berbeda tanpa mengganti branch pada meja pertama."
+    "command": "git worktree list\ngit show main:menu.json\ngit show hotfix:menu.json",
+    "explanation": "Kedua folder memakai penyimpanan repository bersama, tetapi mempunyai branch aktif, index, dan file kerja masing-masing. Main dan file pada kopi-kita tetap 18000."
   },
   "order": 54
 }

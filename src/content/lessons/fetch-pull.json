@@ -28,15 +28,15 @@
   "practice": "Gunakan dua clone repo latihan. Push dari clone pertama, fetch dari clone kedua, dan amati bahwa file kerja clone kedua belum berubah.",
   "quiz": {
     "question": "Apakah fetch otomatis mengubah file di branch aktif?",
-    "options": ["Ya, selalu", "Tidak, fetch bukan integrasi", "Ya, jika namanya origin"],
-    "answer": 1,
+    "options": ["Tidak, fetch bukan integrasi", "Ya, selalu", "Ya, jika namanya origin"],
+    "answer": 0,
     "explanation": "Fetch memperbarui data dan referensi remote-tracking; integrasi adalah langkah lain."
   },
   "commands": ["git fetch", "git pull", "git remote"],
   "visual": "remote",
   "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["merge"],
+  "prerequisites": ["branch-tracking", "merge"],
   "initialState": "Latihan remote: server dan clone Rani sudah punya harga baru, tetapi main serta origin/main lokal masih lama.",
   "lab": "remote",
   "objectives": [

@@ -36,7 +36,7 @@
   "visual": "snapshot",
   "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["amend-rebase"],
+  "prerequisites": ["riwayat"],
   "initialState": "checkout.js atau diskon.js tracked dan mempunyai riwayat. Sesuaikan rentang baris blame jika panjang file berbeda.",
   "lab": "cherry-pick",
   "objectives": [

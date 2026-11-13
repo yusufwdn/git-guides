@@ -23,8 +23,8 @@
   "practice": "Gunakan latihan rebase sebelum proses. Bandingkan commit yang dipilih -S diskon dan -G diskon.",
   "quiz": {
     "question": "String dipindah tanpa perubahan jumlah. -S pasti memilihnya?",
-    "options": ["Tidak selalu", "Ya, selalu", "Tidak ada hubungan dengan jumlah"],
-    "answer": 0,
+    "options": ["Ya, selalu", "Tidak selalu", "Tidak ada hubungan dengan jumlah"],
+    "answer": 1,
     "explanation": "-S berfokus pada perubahan jumlah kemunculan string."
   },
   "commands": ["git log -S", "git log -G"],

@@ -31,7 +31,7 @@
   "visual": "objects",
   "minutes": 7,
   "level": "Lanjutan",
-  "prerequisites": ["objects"],
+  "prerequisites": ["branch-tracking", "objects"],
   "initialState": "Latihan remote mempunyai origin dengan konfigurasi fetch serta refs main dan origin/main.",
   "lab": "remote",
   "objectives": [

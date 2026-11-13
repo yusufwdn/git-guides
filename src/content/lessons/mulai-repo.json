@@ -29,18 +29,18 @@
   "quiz": {
     "question": "Proyek sudah ada di server. Mulai dengan apa?",
     "options": [
-      "git clone URL-repo",
       "git init di setiap subfolder",
-      "git push sebelum punya repository"
+      "git push sebelum punya repository",
+      "git clone URL-repo"
     ],
-    "answer": 0,
+    "answer": 2,
     "explanation": "Clone mengambil repository yang sudah ada, termasuk riwayatnya."
   },
   "commands": ["git init", "git clone", "git status"],
   "visual": "snapshot",
   "minutes": 8,
   "level": "Dasar",
-  "prerequisites": ["setup"],
+  "prerequisites": ["setup", "terminal-folder"],
   "initialState": "Pilih salah satu: folder proyek baru tanpa .git, atau URL repo yang benar-benar dapat diakses untuk clone.",
   "lab": "basics",
   "objectives": [
@@ -65,5 +65,6 @@
     "command": "git status --short",
     "explanation": "Proyek baru memiliki folder .git, atau proyek tim sudah tersedia sebagai hasil clone."
   },
-  "order": 8
+  "order": 8,
+  "preparationURL": "/persiapan/"
 }

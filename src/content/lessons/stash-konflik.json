@@ -30,17 +30,17 @@
     "question": "Adakah git stash --continue untuk konflik?",
     "options": [
       "Ya, selalu wajib",
-      "Tidak; selesaikan dan periksa file sesuai kebutuhan",
-      "Hanya pada branch main"
+      "Hanya pada branch main",
+      "Tidak; selesaikan dan periksa file sesuai kebutuhan"
     ],
-    "answer": 1,
+    "answer": 2,
     "explanation": "Stash tidak mempunyai alur continue seperti rebase."
   },
   "commands": ["git stash branch", "git stash show"],
   "visual": "conflict",
   "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["apply-pop"],
+  "prerequisites": ["apply-pop", "konflik"],
   "initialState": "Latihan stash-conflict: HEAD dan file diskon 15; stash menyimpan perubahan dari 0 ke 10. Index bersih sebelum pop.",
   "lab": "stash-conflict",
   "objectives": [
@@ -57,5 +57,15 @@
     "command": "git ls-files -u\ngit stash list",
     "explanation": "Perubahan dipulihkan dengan keputusan isi yang jelas atau dipindahkan ke branch berdasarkan dasar aslinya."
   },
-  "order": 35
+  "order": 35,
+  "checkpoint": {
+    "question": "Stash pop menghasilkan konflik. Setelah file selesai diedit dan di-add, apa yang dilakukan pada entri stash?",
+    "options": [
+      "Periksa dan hapus sendiri ketika sudah aman",
+      "Jalankan stash --continue",
+      "Anggap entri pasti sudah hilang"
+    ],
+    "answer": 0,
+    "explanation": "Pop yang konflik mempertahankan entri. Stash tidak memiliki alur --continue."
+  }
 }

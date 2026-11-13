@@ -33,15 +33,15 @@
   "practice": "Di repo latihan, ubah file tracked dan buat file baru. Bandingkan stash push biasa dengan stash push -u. Kembalikan perubahan dan pastikan kedua file sesuai harapan.",
   "quiz": {
     "question": "Kamu ingin mengembalikan pekerjaan dan tetap menyimpan entri stash. Pilih apa?",
-    "options": ["git stash pop", "git stash apply", "git stash drop"],
-    "answer": 1,
+    "options": ["git stash pop", "git stash drop", "git stash apply"],
+    "answer": 2,
     "explanation": "apply mengembalikan perubahan tanpa menghapus entri. pop menghapus entri setelah penerapan berhasil; jika konflik, entrinya tetap ada."
   },
   "commands": ["git stash push", "git stash list", "git stash pop", "git stash apply"],
   "visual": "stash",
   "minutes": 10,
   "level": "Menengah",
-  "prerequisites": ["commit-atomik"],
+  "prerequisites": ["staging", "branch"],
   "initialState": "Latihan stash: branch fitur-diskon, diskon.js tracked berubah, catatan.txt untracked. Gunakan -u bila ingin keduanya tersimpan.",
   "lab": "stash",
   "objectives": [

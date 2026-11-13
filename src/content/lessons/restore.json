@@ -36,7 +36,7 @@
   "visual": "snapshot",
   "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["stash"],
+  "prerequisites": ["tiga-area", "staging"],
   "initialState": "Repo sudah punya HEAD dan menu.json tracked. Untuk unstage, ada perubahan menu pada index dan salinan edit di working tree.",
   "lab": "staging",
   "objectives": [

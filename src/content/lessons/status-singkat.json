@@ -24,18 +24,18 @@
   "quiz": {
     "question": "Apa arti MM pada file tracked tanpa konflik?",
     "options": [
-      "Ada dua salinan repo rusak",
       "Index berubah dan working tree juga berbeda dari index",
+      "Ada dua salinan repo rusak",
       "File sudah masuk dua commit"
     ],
-    "answer": 1,
+    "answer": 0,
     "explanation": "Dua kolom mengukur dua perbandingan yang berbeda."
   },
   "commands": ["git status --short", "git diff"],
   "visual": "staging",
   "minutes": 7,
   "level": "Dasar",
-  "prerequisites": ["mulai-repo"],
+  "prerequisites": ["mulai-repo", "tiga-area"],
   "initialState": "Branch fitur-diskon, HEAD diskon 0, index diskon 5, working tree diskon 10. Gunakan latihan stash-index.",
   "lab": "stash-index",
   "objectives": [

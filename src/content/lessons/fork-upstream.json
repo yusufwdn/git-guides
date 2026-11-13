@@ -40,7 +40,7 @@
   "visual": "remote",
   "minutes": 9,
   "level": "Menengah",
-  "prerequisites": ["review"],
+  "prerequisites": ["fetch-pull", "review"],
   "initialState": "Fork sudah dibuat melalui layanan hosting. origin mengarah ke fork, remote upstream perlu ditambahkan memakai URL sumber yang sah.",
   "lab": "remote",
   "objectives": [

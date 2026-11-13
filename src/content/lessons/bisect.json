@@ -28,15 +28,15 @@
   "practice": "Buat enam commit di repo latihan dengan satu perubahan yang merusak teks keluaran. Cari commit penyebab menggunakan bisect.",
   "quiz": {
     "question": "Commit pilihan bisect tidak bisa dibangun. Apa yang tepat?",
-    "options": ["Tebak good", "git bisect skip", "Hapus commit itu dari semua branch"],
-    "answer": 1,
+    "options": ["Tebak good", "Hapus commit itu dari semua branch", "git bisect skip"],
+    "answer": 2,
     "explanation": "Skip menandai bahwa commit tidak dapat dinilai dengan pengujian yang tersedia."
   },
   "commands": ["git bisect"],
   "visual": "graph",
   "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["log-pickaxe"],
+  "prerequisites": ["riwayat"],
   "initialState": "Latihan bisect: tag awal baik, HEAD buruk, working tree bersih. Bug yang dicari adalah diskon negatif.",
   "lab": "bisect",
   "objectives": [

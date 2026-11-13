@@ -30,17 +30,17 @@
     "question": "Apakah amend mempertahankan identitas commit yang diganti?",
     "options": [
       "Ya, selalu",
-      "Umumnya menghasilkan commit pengganti dengan hash berbeda",
-      "Hanya mengubah working tree"
+      "Hanya mengubah working tree",
+      "Umumnya menghasilkan commit pengganti dengan hash berbeda"
     ],
-    "answer": 1,
+    "answer": 2,
     "explanation": "Commit bersifat immutable. Amend membuat object commit pengganti."
   },
   "commands": ["git commit --amend", "git rebase -i"],
   "visual": "graph",
   "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["restore"],
+  "prerequisites": ["commit-atomik", "reset-revert"],
   "initialState": "Branch pribadi punya setidaknya tiga commit dalam rentang yang ingin dirapikan. Periksa index sebelum amend; jangan ubah jalur bersama tanpa koordinasi.",
   "lab": "rebase",
   "objectives": [

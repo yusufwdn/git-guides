@@ -25,10 +25,10 @@
     "question": "Apa yang biasanya tidak ikut dalam clone Git?",
     "options": [
       "Riwayat commit yang diambil",
-      "Issue dan pengaturan akun layanan hosting",
-      "Object file yang dibutuhkan snapshot"
+      "Object file yang dibutuhkan snapshot",
+      "Issue dan pengaturan akun layanan hosting"
     ],
-    "answer": 1,
+    "answer": 2,
     "explanation": "Layanan hosting menyimpan data tambahan di luar object dan refs Git."
   },
   "commands": ["git branch", "git log"],
@@ -36,7 +36,7 @@
   "minutes": 7,
   "level": "Dasar",
   "prerequisites": ["snapshot"],
-  "initialState": "Repo lokal sudah punya setidaknya satu commit dan sebuah branch. Tidak memerlukan remote internet.",
+  "initialState": "Repo lokal sudah punya setidaknya satu commit dan sebuah branch. Tidak memerlukan remote internet. Siapkan keadaan ini melalui halaman Persiapan: repo pertama dan contoh tiga versi.",
   "lab": "basics",
   "objectives": [
     "Pahami kemampuan lokal dan batas salinan repository.",
@@ -56,5 +56,6 @@
     "command": "git log --oneline -5",
     "explanation": "Kamu tahu operasi mana yang tetap bisa dilakukan offline dan mana yang perlu menghubungi remote."
   },
-  "order": 2
+  "order": 2,
+  "preparationURL": "/persiapan/"
 }

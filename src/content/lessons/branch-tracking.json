@@ -23,15 +23,15 @@
   "practice": "Bandingkan tiga posisi pada latihan remote sebelum dan sesudah fetch: server main, origin/main, dan main lokal.",
   "quiz": {
     "question": "Apa yang biasanya menggerakkan origin/main saat mengambil kabar?",
-    "options": ["git fetch origin", "Mengedit file menu", "git add ."],
-    "answer": 0,
+    "options": ["Mengedit file menu", "git fetch origin", "git add ."],
+    "answer": 1,
     "explanation": "Fetch memperbarui referensi remote-tracking sesuai refspec yang dikonfigurasi."
   },
   "commands": ["git branch -vv", "git fetch"],
   "visual": "remote",
   "minutes": 7,
   "level": "Menengah",
-  "prerequisites": ["kelola-branch"],
+  "prerequisites": ["branch", "git-terdistribusi"],
   "initialState": "Latihan remote: main dan origin/main lokal masih di A, sedangkan server sudah punya commit B dari Rani.",
   "lab": "remote",
   "objectives": [
@@ -52,5 +52,11 @@
     "command": "git branch -vv",
     "explanation": "Perbedaan posisi dapat dijelaskan tanpa menganggap fetch melakukan merge."
   },
-  "order": 19
+  "order": 19,
+  "checkpoint": {
+    "question": "main dan fitur menunjuk A. Satu commit B dibuat ketika fitur aktif. Di mana main sekarang?",
+    "options": ["Di A", "Di B", "Terhapus"],
+    "answer": 0,
+    "explanation": "Commit memajukan branch aktif fitur. Referensi main tetap di A."
+  }
 }

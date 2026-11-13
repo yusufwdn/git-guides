@@ -28,15 +28,15 @@
   "practice": "Buat lg pada salah satu repo latihan, pakai, lalu hapus. Buktikan log dan isi proyek tidak berubah karena pengaturan itu.",
   "quiz": {
     "question": "Tanpa --global, alias disimpan di mana?",
-    "options": ["Konfigurasi repo saat ini", "Semua komputer tim otomatis", "Server GitHub"],
-    "answer": 0,
+    "options": ["Semua komputer tim otomatis", "Konfigurasi repo saat ini", "Server GitHub"],
+    "answer": 1,
     "explanation": "Scope lokal sesuai untuk mencoba preferensi di satu repo."
   },
   "commands": ["git config alias.lg", "git config"],
   "visual": "snapshot",
   "minutes": 9,
   "level": "Lanjutan",
-  "prerequisites": ["hooks"],
+  "prerequisites": ["setup"],
   "initialState": "Berada di repo latihan. Contoh memakai konfigurasi lokal dan nama alias lg yang boleh dibuat/dihapus.",
   "lab": "basics",
   "objectives": [
@@ -53,5 +53,15 @@
     "command": "git config --get alias.lg",
     "explanation": "Kamu punya shortcut yang bisa diperiksa dan dibatalkan dengan jelas."
   },
-  "order": 61
+  "order": 61,
+  "checkpoint": {
+    "question": "Token telanjur masuk commit publik. Apa langkah penting selain membersihkan file/riwayat sesuai kebutuhan?",
+    "options": [
+      "Cabut atau rotasi token pada penyedianya",
+      "Tambahkan .env ke ignore lalu anggap selesai",
+      "Ubah pesan commit terakhir saja"
+    ],
+    "answer": 0,
+    "explanation": "Menghapus teks tidak mencabut akses kredensial yang sudah terekspos."
+  }
 }

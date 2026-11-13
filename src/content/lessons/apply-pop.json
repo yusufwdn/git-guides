@@ -29,18 +29,18 @@
   "quiz": {
     "question": "Apa yang terjadi jika stash pop berkonflik?",
     "options": [
-      "Entri tetap ada di daftar stash",
       "Entri selalu langsung hilang",
+      "Entri tetap ada di daftar stash",
       "Git otomatis memilih isi yang benar"
     ],
-    "answer": 0,
+    "answer": 1,
     "explanation": "Pop mempertahankan entri ketika penerapannya menghasilkan konflik."
   },
   "commands": ["git stash apply", "git stash pop", "git stash drop"],
   "visual": "stash",
   "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["stash-untracked"],
+  "prerequisites": ["stash"],
   "initialState": "Ada entri stash yang sudah ditinjau. Untuk apply/pop pada contoh sederhana, index dan tracked working tree bersih.",
   "lab": "stash",
   "objectives": [

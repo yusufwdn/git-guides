@@ -58,6 +58,8 @@ export default (context) => {
       ['sumber', 'Baca lebih lanjut'],
     ];
     toc.splice(1, 0, ['persiapan', 'Sebelum mulai']);
+    if (lesson.id === 'kenalan-git')
+      toc.unshift(['proyek-latihan', 'Kenalan dengan proyek contoh']);
     return /* HTML */ `<div class="lesson-layout scroll-reveal">
       <article class="lesson">
         ${crumbs([
@@ -86,6 +88,30 @@ export default (context) => {
             ${bookmarkIcon}<span>${bookmarks.has(lesson.id) ? 'Tersimpan' : 'Simpan'}</span>
           </button>
         </div>
+        ${
+          lesson.id === 'kenalan-git'
+            ? /* HTML */ `<section id="proyek-latihan" class="lesson-section">
+                <h2>Kenalan dulu dengan Kopi Kita.</h2>
+                <p>
+                  Sepanjang panduan ini, kita memakai proyek contoh bernama
+                  <strong>Kopi Kita</strong>: website sederhana untuk kedai kopi fiktif. Bayangkan
+                  kamu ikut mengurus menu, mengubah harga, dan menambahkan fitur diskon pada website
+                  itu.
+                </p>
+                <p>Contoh file yang akan kita pakai:</p>
+                <ul>
+                  <li><code>menu.json</code> menyimpan harga minuman.</li>
+                  <li><code>diskon.js</code> menyimpan nilai diskon.</li>
+                </ul>
+                <p>
+                  Untuk sekarang, cukup ikuti ceritanya. Saat mulai praktik,
+                  <a href="/persiapan/">halaman persiapan</a> akan memandu kamu membuat folder
+                  <code>kopi-kita</code> dan kedua file tersebut dari awal. Perubahan pada file-file
+                  inilah yang akan kita catat dan telusuri dengan Git.
+                </p>
+              </section>`
+            : ''
+        }
         <section id="situasi" class="scenario">
           <div class="scenario-icon">${cup}</div>
           <div>
@@ -94,7 +120,9 @@ export default (context) => {
               ${
                 lesson.id === 'stash'
                   ? 'Lagi asyik bikin fitur. Tiba-tiba, ada bug.'
-                  : 'Satu masalah dari proyek Kopi Kita.'
+                  : lesson.id === 'kenalan-git'
+                    ? 'Menu berubah. Salinannya makin banyak.'
+                    : 'Satu masalah dari proyek latihan Kopi Kita.'
               }
             </h2>
             <p>${inline(lesson.scenario)}</p>

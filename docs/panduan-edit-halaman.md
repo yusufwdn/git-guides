@@ -92,6 +92,8 @@ Mengganti nama satu bab tidak perlu mengubah fungsi sidebar. Jika menambah atau 
 
 Edit `lessonPage()` di `src/renderers/lesson.js` untuk mengubah urutan bagian atau tampilan semua pelajaran. Bagian yang dipakai berulang disusun di `src/renderers/common.js`:
 
+Pengantar proyek contoh Kopi Kita muncul khusus di materi `kenalan-git`, sebelum kasus pertama, pada bagian ber-ID `proyek-latihan` di `lessonPage()`. Penjelasan singkat bagi pembaca yang langsung membuka halaman persiapan ada di `GettingStarted.astro`. Jika mengubah nama atau konteks proyek latihan, perbarui kedua pengantar dan contoh file yang terkait.
+
 | Fungsi                       | Yang ditampilkan                              |
 | ---------------------------- | --------------------------------------------- |
 | `preparation()`              | Kondisi awal, tujuan, dan prasyarat.          |

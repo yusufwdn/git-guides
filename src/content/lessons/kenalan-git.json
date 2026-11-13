@@ -3,14 +3,14 @@
   "id": "kenalan-git",
   "title": "Versi berubah. Jejaknya tetap ada.",
   "summary": "Kenali Git sebagai pencatat snapshot proyek, supaya perubahan bisa dipahami dan ditinjau kembali.",
-  "scenario": "Kamu punya menu-final.html, menu-final-baru.html, dan menu-final-beneran.html. Rekanmu mengedit salinan yang berbeda. Versi mana yang sebenarnya dipakai?",
+  "scenario": "Bayangkan kamu mengubah harga pada menu website Kopi Kita. Supaya versi lama tetap ada, kamu membuat salinan file menu.json dengan nama menu-lama.json, menu-baru.json, dan menu-final.json. Rekanmu mengedit salinan yang berbeda. Versi mana yang sebenarnya dipakai?",
   "concept": "Git adalah version control terdistribusi. Commit merekam snapshot file yang dilacak beserta metadata dan hubungan ke riwayat sebelumnya. Repository lokal bisa dipakai tanpa koneksi internet. GitHub dan GitLab adalah layanan yang bisa menyimpan repository remote dan menambahkan fitur kolaborasi.",
   "analogy": "Bayangkan album foto perkembangan tokomu. Foto menyimpan keadaan pada suatu waktu, sementara keterangan menjelaskan alasan perubahan. Git menyimpan snapshot proyek, bukan foto layar dan bukan hanya daftar baris yang diedit.",
   "steps": [
     {
       "title": "Kenali Git yang terpasang",
       "command": "git --version",
-      "explanation": "Perintah ini menampilkan versi Git di komputermu. Jika belum tersedia, lanjutkan ke bab persiapan."
+      "explanation": "Perintah ini menampilkan versi Git di komputermu. Jika belum tersedia, buka halaman persiapan untuk memasangnya."
     },
     {
       "title": "Baca pengantar lokal",
@@ -36,7 +36,7 @@
   "minutes": 6,
   "level": "Dasar",
   "prerequisites": [],
-  "initialState": "Tidak memerlukan repo. Git sudah terpasang untuk contoh --version; instalasi dijelaskan pada bab 02.",
+  "initialState": "Kamu bisa membaca pengenalan tanpa menyiapkan proyek. Untuk mencoba git --version, Git perlu terpasang; panduan instalasi tersedia di halaman persiapan.",
   "lab": "basics",
   "objectives": [
     "Kenali Git sebagai pencatat snapshot proyek, supaya perubahan bisa dipahami dan ditinjau kembali.",

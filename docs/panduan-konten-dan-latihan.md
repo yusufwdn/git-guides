@@ -45,7 +45,7 @@ Contoh di atas hanya memperlihatkan bentuk satu field. Pertahankan field lain da
 | `sources`            | Array objek `title` dan `url` untuk sumber resmi.                                                                                |
 | `level`, `minutes`   | Label tingkat dan perkiraan waktu baca/praktik.                                                                                  |
 
-Schema berada di [content.config.ts](../src/content.config.ts). Hubungan antarmateri, keberadaan latihan, dan beberapa kriteria kelengkapan tambahan diperiksa di [scripts/check.mjs](../scripts/check.mjs).
+Schema berada di [content.config.ts](../src/content.config.ts). Hubungan antarmateri, keberadaan latihan, urutan command, dan beberapa kriteria kelengkapan tambahan diperiksa di [scripts/check.mjs](../scripts/check.mjs). Kalau pemeriksaan gagal dengan pesan Command dipakai sebelum diajarkan, pindahkan command itu ke materi yang lebih belakang, ganti dengan command yang sudah diajarkan, atau cantumkan di field `commands` materi tempat ia pertama kali dijelaskan.
 
 ### Contoh mengganti satu langkah
 

@@ -4,7 +4,7 @@
 
 ## Aturan urutan
 
-1. **Dikenalkan sebelum dipakai.** Command atau istilah yang muncul di langkah, verifikasi, konsep, atau skenario sebuah materi harus sudah diajarkan di materi sebelumnya, atau dikenalkan di materi itu sendiri beserta fungsinya. Contoh pelanggaran: materi bab 1 memakai `git diff --staged` sebelum staging area dijelaskan.
+1. **Dikenalkan sebelum dipakai.** Command atau istilah yang muncul di langkah, verifikasi, konsep, atau skenario sebuah materi harus sudah diajarkan di materi sebelumnya, atau dikenalkan di materi itu sendiri beserta fungsinya. Contoh pelanggaran: materi bab 1 memakai `git diff --staged` sebelum staging area dijelaskan. Bagian langkah dan verifikasi diperiksa otomatis oleh [scripts/curriculum-order.mjs](../scripts/curriculum-order.mjs) lewat `npm run check`: subcommand Git (misalnya `fetch` dari `git fetch origin`) tidak boleh dipakai sebelum materi pertama yang mencantumkannya di field `commands`. Subcommand yang tidak tercantum di `commands` mana pun dianggap dikenalkan di tempat ia dipakai. Teks penjelasan diperiksa manual, karena penyebutan maju seperti "dibahas di bab 11" diperbolehkan.
 2. **Halaman Persiapan hanya menyiapkan lingkungan.** Isinya memasang Git dan membuka terminal. Pembuatan repository dan commit pertama diajarkan di materi bab 2, bukan dijalankan diam-diam di halaman Persiapan.
 3. **Urutan mengikuti ketergantungan, bukan tema.** Materi yang membutuhkan branch, merge, atau remote ditempatkan setelah topik itu diajarkan, walaupun temanya terasa dekat dengan bab yang lebih awal.
 4. **`prerequisites` menunjuk materi yang benar-benar dibutuhkan.** `scripts/check.mjs` menolak prasyarat yang berada di urutan yang lebih belakang.

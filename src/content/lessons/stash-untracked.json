@@ -1,47 +1,57 @@
 {
   "chapter": 9,
   "id": "stash-untracked",
-  "title": "File baru perlu diajak secara eksplisit.",
-  "summary": "Pilih perubahan tracked, untracked, dan staged yang perlu disimpan.",
-  "scenario": "diskon.js sudah dilacak, sedangkan catatan.txt baru dibuat. Setelah stash biasa, catatan masih terlihat di working tree.",
-  "concept": "Stash biasa menyimpan perubahan tracked dan index. -u juga menyertakan untracked; -a juga ignored. --index pada penerapan mencoba memulihkan pemisahan staged/unstaged. Pilihan ini berbeda: -u menentukan apa yang disimpan, --index menentukan keadaan index yang dicoba dipulihkan.",
-  "analogy": "Kamu memberi daftar bahan yang masuk laci, lalu nanti memilih apakah susunan nampannya ikut dipasang kembali.",
+  "title": "Stash file baru: pakai -u dan --index",
+  "summary": "Secara bawaan stash cuma menyimpan file yang sudah dilacak. Opsi -u ikut menyimpan file baru, dan --index menjaga isi staging area saat stash dikeluarkan.",
+  "scenario": "Diskon member butuh penjelasan untuk kasir, jadi kamu membuat file baru member.txt. Saat mencoba stash lagi, file baru itu tetap tertinggal di folder.",
+  "concept": "git stash push tanpa opsi cuma menyimpan perubahan pada file yang sudah dilacak Git. File untracked seperti member.txt tetap di working tree, sehingga bisa terbawa ke branch lain atau tercampur dengan pekerjaan lain. Opsi -u (kependekan dari --include-untracked) ikut menyimpan file untracked, tapi file yang diabaikan .gitignore tetap nggak disimpan. Ada satu detail lagi: saat stash dikeluarkan dengan git stash pop, semua perubahan kembali sebagai perubahan yang belum di-add, walaupun sebelumnya sudah ada di staging area. Tambahkan --index kalau kamu ingin isi staging area ikut dipulihkan persis seperti sebelumnya.",
+  "analogy": "Laci stash cuma menerima kertas yang sudah diberi label. Kertas baru yang belum berlabel harus kamu masukkan dengan sengaja, kalau nggak ia tetap tergeletak di meja.",
   "steps": [
     {
-      "title": "Simpan file baru juga",
-      "command": "git stash push -u -m \"Diskon dan catatan\"",
-      "explanation": "Gunakan latihan stash. Periksa status untuk membuktikan file baru tidak tertinggal."
+      "title": "Simpan tanpa -u",
+      "command": "git stash push -m \"WIP member\"\ngit status --short",
+      "explanation": "Sebelum menjalankan command, buat file member.txt berisi satu baris: Member dapat diskon 5 persen untuk setiap pembelian. Setelah stash, status masih menampilkan ?? member.txt. File baru itu nggak ikut disimpan."
     },
     {
-      "title": "Pulihkan dan periksa",
-      "command": "git stash pop\ngit status --short",
-      "explanation": "catatan.txt kembali sebagai untracked bila memang awalnya belum ditambahkan."
+      "title": "Kembalikan, lalu simpan dengan -u",
+      "command": "git stash pop\ngit stash push -u -m \"WIP member lengkap\"\ngit status --short",
+      "explanation": "Kali ini status kosong. diskon.js dan member.txt sama-sama tersimpan di entri stash."
     },
     {
-      "title": "Variasi staging pada latihan terpisah",
-      "command": "git stash push -m \"Pisahkan index\"\ngit stash apply --index",
-      "explanation": "Jalankan variasi ini pada start stash-index, bukan lanjutan wajib dari latihan -u."
+      "title": "Keluarkan lagi dan add diskon.js",
+      "command": "git stash pop\ngit add diskon.js\ngit status --short",
+      "explanation": "Status menampilkan M diskon.js di kolom kiri, artinya sudah di-add, dan ?? member.txt."
+    },
+    {
+      "title": "Simpan, lalu pulihkan staging area",
+      "command": "git stash push -u -m \"WIP member, diskon sudah di-add\"\ngit stash pop --index\ngit status --short",
+      "explanation": "Status kembali sama seperti sebelum stash: M diskon.js di kolom kiri dan ?? member.txt. Tanpa --index, M diskon.js akan pindah ke kolom kanan dan kamu perlu menjalankan git add lagi."
     }
   ],
-  "result": "Cakupan simpanan dan pemulihan staging dapat dijelaskan secara terpisah.",
-  "pitfall": "-a dapat memasukkan file ignored besar atau sensitif. Jangan menggunakannya sebagai kebiasaan tanpa meninjau isi.",
-  "practice": "Selesaikan stash dan stash-index pada dua folder latihan berbeda. Periksa diff biasa dan staged setelah apply --index.",
+  "result": "diskon.js ada di staging area dan member.txt masih untracked, persis seperti sebelum stash terakhir. Daftar stash kosong.",
+  "pitfall": "Opsi -u nggak menyimpan file yang diabaikan .gitignore, jadi catatan.txt tetap di tempatnya. Kalau staging area nggak bisa dipulihkan dengan bersih, git stash pop --index berhenti dengan pesan Conflicts in index. Try without --index. Jalankan git stash pop tanpa --index, lalu add ulang file yang perlu.",
+  "practice": "Jalankan git stash push -u -m \"Latihan\" lalu git stash pop tanpa --index. Perhatikan M diskon.js pindah ke kolom kanan, lalu kembalikan dengan git add diskon.js.",
   "quiz": {
-    "question": "Opsi untuk ikut menyimpan untracked adalah?",
-    "options": ["-u saat stash push", "--index saat status", "--force saat push remote"],
-    "answer": 0,
-    "explanation": "-u atau --include-untracked menambah cakupan file yang disimpan."
+    "question": "Kamu punya file baru yang belum pernah di-add, lalu menjalankan git stash push. Apa yang terjadi pada file itu?",
+    "options": [
+      "Ikut tersimpan di stash",
+      "Tetap di working tree, karena stash bawaan cuma menyimpan file yang dilacak",
+      "Terhapus"
+    ],
+    "answer": 1,
+    "explanation": "File untracked baru ikut tersimpan kalau kamu menambahkan -u."
   },
-  "commands": ["git stash push -u", "git stash apply --index"],
+  "commands": ["git stash push -u", "git stash pop --index"],
   "visual": "stash",
   "minutes": 9,
   "level": "Menengah",
-  "prerequisites": ["stash", "ignore"],
-  "initialState": "Latihan stash untuk -u; latihan stash-index terpisah untuk --index. Mulai folder baru saat membandingkan dua skenario.",
-  "lab": "stash",
+  "prerequisites": ["stash", "status-singkat"],
+  "initialState": "Lanjutan dari materi stash: kamu berada di branch diskon-member, dan diskon.js berisi baris diskonMember yang belum di-commit.",
+  "lab": "stash-index",
   "objectives": [
-    "Pilih perubahan tracked, untracked, dan staged yang perlu disimpan.",
-    "Periksa hasilnya: Cakupan simpanan dan pemulihan staging dapat dijelaskan secara terpisah."
+    "Tahu bahwa stash bawaan nggak menyimpan file untracked",
+    "Bisa ikut menyimpan file baru dengan -u",
+    "Bisa memulihkan isi staging area dengan --index"
   ],
   "sources": [
     {
@@ -50,8 +60,8 @@
     }
   ],
   "verification": {
-    "command": "git diff --staged\ngit diff\ngit stash list",
-    "explanation": "Cakupan simpanan dan pemulihan staging dapat dijelaskan secara terpisah."
+    "command": "git status --short\ngit stash list",
+    "explanation": "Status menampilkan M diskon.js di kolom kiri dan ?? member.txt. git stash list kosong."
   },
   "order": 33
 }

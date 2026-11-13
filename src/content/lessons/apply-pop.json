@@ -1,51 +1,56 @@
 {
   "chapter": 9,
   "id": "apply-pop",
-  "title": "Ambil salinan, atau keluarkan sekalian?",
-  "summary": "Bedakan apply, pop, dan drop berdasarkan nasib entri stash.",
-  "scenario": "Kamu ingin mencoba perubahan diskon pada branch lain, tetapi masih ingin menyimpan cadangannya di daftar stash.",
-  "concept": "git stash apply menerapkan perubahan tanpa menghapus entri. pop menerapkan lalu menghapus entri hanya jika berhasil; saat konflik entrinya tetap ada. drop hanya menghapus entri yang dipilih. Gunakan show -p untuk membaca perubahan dan kutip stash@{0} agar aman pada PowerShell.",
-  "analogy": "Apply seperti menyalin bahan dari laci ke meja. Pop mengeluarkannya dari laci setelah berhasil diletakkan. Drop membuang catatan simpanannya tanpa mengembalikan bahan ke meja.",
+  "title": "Apply, pop, dan drop: kelola isi stash",
+  "summary": "pop mengeluarkan perubahan sekaligus menghapus entrinya. apply mengeluarkan perubahan tapi menyimpan entrinya, dan drop menghapus entri yang sudah nggak dibutuhkan.",
+  "scenario": "Sebelum commit diskon member, kamu ingin memeriksa isi stash dulu dan memastikan perubahannya benar sebelum entrinya dibuang.",
+  "concept": "git stash show diikuti nama entri menampilkan ringkasan file yang berubah, dan opsi -u ikut menampilkan file untracked yang tersimpan. git stash apply mengembalikan perubahan ke working tree, tapi entrinya tetap ada di daftar. Ini berguna kalau kamu ingin menerapkan perubahan yang sama di beberapa tempat, atau ingin memastikan hasilnya dulu. git stash drop menghapus satu entri dari daftar; tanpa nama entri, yang dihapus adalah stash@{0}. git stash pop pada dasarnya adalah apply yang diikuti drop, tapi drop cuma dijalankan kalau penerapannya berhasil tanpa konflik. Di PowerShell, nama entri seperti stash@{0} perlu diapit tanda kutip karena kurung kurawal punya arti khusus.",
+  "analogy": "Apply seperti memfotokopi kertas dari laci: salinannya di meja, aslinya tetap di laci. Pop seperti mengambil kertas aslinya. Drop seperti membuang kertas dari laci.",
   "steps": [
     {
-      "title": "Periksa simpanan yang dipilih",
-      "command": "git stash list\ngit stash show -p \"stash@{0}\"",
-      "explanation": "Indeks nol adalah entri terbaru. Nomor bisa bergeser setelah ada push, pop, atau drop."
+      "title": "Simpan dan periksa isi stash",
+      "command": "git stash push -u -m \"WIP member\"\ngit stash show -u \"stash@{0}\"",
+      "explanation": "Ringkasan menampilkan diskon.js dan member.txt, masing-masing dengan satu baris tambahan. Tanpa -u, member.txt nggak muncul di ringkasan."
     },
     {
-      "title": "Terapkan sambil mempertahankan",
-      "command": "git stash apply \"stash@{0}\"",
-      "explanation": "Periksa perubahan dan uji hasil. Gunakan --index jika kamu juga perlu mencoba memulihkan staged state."
+      "title": "Terapkan tanpa menghapus entri",
+      "command": "git stash apply\ngit stash list",
+      "explanation": "Perubahan kembali ke working tree, tapi git stash list masih menampilkan stash@{0}: On diskon-member: WIP member. diskon.js kembali sebagai perubahan yang belum di-add, karena apply dijalankan tanpa --index."
     },
     {
-      "title": "Hapus setelah yakin",
-      "command": "git stash drop \"stash@{0}\"",
-      "explanation": "Jalankan hanya setelah simpanan yang dimaksud sudah tidak diperlukan. Jangan gunakan clear untuk membersihkan satu entri."
+      "title": "Hapus entri yang sudah diterapkan",
+      "command": "git stash drop\ngit stash list",
+      "explanation": "Git membalas Dropped refs/stash@{0} diikuti hash entri. Daftar stash sekarang kosong."
+    },
+    {
+      "title": "Commit diskon member",
+      "command": "git add diskon.js member.txt\ngit commit -m \"Tambah diskon member\"",
+      "explanation": "Pekerjaan yang sejak tadi keluar masuk stash sekarang tersimpan sebagai commit di diskon-member."
     }
   ],
-  "result": "Kamu dapat memulihkan pekerjaan sambil memilih kapan simpanannya dihapus.",
-  "pitfall": "Menjalankan apply berulang pada keadaan yang sudah berubah dapat gagal atau berkonflik. Selalu baca status dan diff sebelum mengulang.",
-  "practice": "Buat satu stash, apply, lalu periksa bahwa stash list masih berisi entri tersebut. Bandingkan dengan pop pada skenario baru yang bersih.",
+  "result": "Branch diskon-member punya commit Tambah diskon member yang berisi diskon.js dan member.txt, dan daftar stash kosong.",
+  "pitfall": "Kalau git stash drop dijalankan sebelum perubahannya diterapkan, entrinya hilang dari daftar dan sulit dicari lagi. Biasakan menjalankan git stash show dulu sebelum drop. Hindari juga menumpuk banyak entri tanpa nama; beri nama dengan -m dan bersihkan entri yang sudah selesai.",
+  "practice": "Ubah diskon.js sedikit lalu stash dengan nama Latihan A. Ubah lagi, lalu stash dengan nama Latihan B. Lihat urutannya dengan git stash list, hapus Latihan A dengan git stash drop diikuti nama entrinya, lalu hapus juga Latihan B.",
   "quiz": {
-    "question": "Apa yang terjadi jika stash pop berkonflik?",
+    "question": "Kapan git stash apply lebih cocok daripada pop?",
     "options": [
-      "Entri selalu langsung hilang",
-      "Entri tetap ada di daftar stash",
-      "Git otomatis memilih isi yang benar"
+      "Saat kamu ingin entri stash tetap ada setelah perubahannya diterapkan",
+      "Saat kamu ingin menghapus entri tanpa menerapkannya",
+      "Saat perubahan sudah di-commit"
     ],
-    "answer": 1,
-    "explanation": "Pop mempertahankan entri ketika penerapannya menghasilkan konflik."
+    "answer": 0,
+    "explanation": "apply mempertahankan entri. Menghapus entri tanpa menerapkannya adalah tugas drop."
   },
-  "commands": ["git stash apply", "git stash pop", "git stash drop"],
+  "commands": ["git stash apply", "git stash drop", "git stash show"],
   "visual": "stash",
   "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["stash"],
-  "initialState": "Ada entri stash yang sudah ditinjau. Untuk apply/pop pada contoh sederhana, index dan tracked working tree bersih.",
-  "lab": "stash",
+  "prerequisites": ["stash-untracked"],
+  "initialState": "Lanjutan dari materi stash file baru: di branch diskon-member, diskon.js sudah di-add dan member.txt masih untracked. Daftar stash kosong.",
   "objectives": [
-    "Bedakan apply, pop, dan drop berdasarkan nasib entri stash.",
-    "Periksa hasilnya: Kamu dapat memulihkan pekerjaan sambil memilih kapan simpanannya dihapus."
+    "Bisa memeriksa isi stash dengan git stash show",
+    "Tahu bedanya apply dan pop",
+    "Bisa menghapus entri dengan git stash drop"
   ],
   "sources": [
     {
@@ -54,8 +59,8 @@
     }
   ],
   "verification": {
-    "command": "git stash list\ngit status --short",
-    "explanation": "Kamu dapat memulihkan pekerjaan sambil memilih kapan simpanannya dihapus."
+    "command": "git log --oneline -1\ngit stash list",
+    "explanation": "Commit teratas Tambah diskon member, dan git stash list kosong."
   },
   "order": 34
 }

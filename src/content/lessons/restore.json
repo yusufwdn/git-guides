@@ -1,47 +1,52 @@
 {
   "chapter": 10,
   "id": "restore",
-  "title": "Batalkan perubahan di tempat yang tepat.",
-  "summary": "Pisahkan membatalkan staging dari membuang edit di working tree.",
-  "scenario": "menu.json tidak sengaja masuk staging. Isinya masih diperlukan, tetapi belum siap menjadi commit.",
-  "concept": "git restore --staged mengembalikan path pada index dari HEAD secara default, tanpa membuang edit working tree. git restore tanpa --staged menyalin dari index ke working tree secara default dan bisa membuang edit lokal pada file tracked. Keduanya tersedia sejak Git 2.23.",
-  "analogy": "Mengeluarkan barang dari nampan persiapan berbeda dengan membuang barang dari meja kerja. Pastikan kamu memilih tempat yang benar.",
+  "title": "Restore: batalkan perubahan yang belum di-commit",
+  "summary": "git restore mengembalikan isi file di working tree, dan git restore --staged mengeluarkan file dari staging area. Keduanya dipakai sebelum perubahan menjadi commit.",
+  "scenario": "Saat memperbarui menu di main, kamu salah ketik harga kopi susu menjadi 2200 dan sudah sempat menjalankan git add. Kamu ingin membatalkannya tanpa mengubah commit apa pun.",
+  "concept": "Perubahan yang belum di-commit bisa berada di dua tempat: staging area dan working tree. git restore --staged diikuti nama file mengembalikan isi file di staging area ke isi commit terakhir, tanpa menyentuh working tree. Hasilnya, file yang sudah di-add kembali menjadi perubahan yang belum di-add. git restore diikuti nama file mengembalikan isi file di working tree ke isi staging area; kalau file itu belum di-add, artinya kembali ke isi commit terakhir. Perubahan di working tree yang dibuang dengan git restore nggak tersimpan di mana pun, jadi nggak bisa dikembalikan. git status sudah menyarankan kedua command ini di keluarannya.",
+  "analogy": "Staging area seperti nampan pesanan yang siap diantar, working tree seperti meja racik. restore --staged mengembalikan gelas dari nampan ke meja tanpa membuang isinya. restore biasa membuang racikan di meja dan menggantinya dengan resep standar.",
   "steps": [
     {
-      "title": "Periksa calon commit",
-      "command": "git status\ngit diff --staged",
-      "explanation": "Kenali isi yang akan dikeluarkan dari staging."
+      "title": "Kembali ke main dan buat kesalahan",
+      "command": "git switch main",
+      "explanation": "Ubah nilai kopiSusu di menu.json dari 22000 menjadi 2200 lalu simpan. Ceritanya ini salah ketik."
     },
     {
-      "title": "Unstage tanpa kehilangan edit",
-      "command": "git restore --staged menu.json",
-      "explanation": "Pada repo yang sudah mempunyai HEAD, file kembali belum staged dan edit working tree tetap ada."
+      "title": "Add tanpa sengaja",
+      "command": "git add menu.json\ngit status",
+      "explanation": "Di bawah Changes to be committed, Git menyarankan (use \"git restore --staged <file>...\" to unstage)."
     },
     {
-      "title": "Hanya jika edit memang ingin dibuang",
-      "command": "git restore menu.json",
-      "explanation": "Ini alternatif untuk membuang edit unstaged pada path itu. Lihat diff dulu; edit yang belum direkam mungkin tidak bisa dipulihkan."
+      "title": "Keluarkan dari staging area",
+      "command": "git restore --staged menu.json\ngit status --short",
+      "explanation": "Status menampilkan M menu.json di kolom kanan. Perubahannya masih ada, cuma belum di-add."
+    },
+    {
+      "title": "Buang perubahan di working tree",
+      "command": "git restore menu.json\ngit status --short",
+      "explanation": "Status kosong, dan kopiSusu di menu.json kembali 22000."
     }
   ],
-  "result": "Kamu tahu kapan memakai --staged dan kapan restore berisiko membuang pekerjaan.",
-  "pitfall": "git restore bukan undo serbaguna. Sumber dan tujuan berubah mengikuti opsi yang dipakai.",
-  "practice": "Stage perubahan README, unstage dengan restore --staged, lalu pastikan teks edit masih ada.",
+  "result": "main bersih lagi dan menu.json sama dengan commit terakhir. Nggak ada commit yang berubah.",
+  "pitfall": "git restore tanpa --staged membuang perubahan di working tree untuk selamanya, karena perubahan itu belum pernah disimpan Git. Kalau ragu, simpan dulu dengan git stash. Di tutorial lama kamu mungkin melihat git checkout -- diikuti nama file untuk tugas yang sama; git restore adalah command yang lebih jelas.",
+  "practice": "Ubah menu.json dan diskon.js sekaligus, add salah satunya, lalu kembalikan keduanya ke commit terakhir. Tentukan sendiri command mana yang perlu dijalankan untuk masing-masing file.",
   "quiz": {
-    "question": "Bagaimana unstage tanpa membuang edit working tree?",
-    "options": ["git restore --staged file", "git restore file", "git clean -fd"],
-    "answer": 0,
-    "explanation": "--staged menargetkan index; working tree tetap."
+    "question": "menu.json sudah di-add. Kamu ingin mengeluarkannya dari staging area tapi tetap menyimpan editannya. Command mana yang tepat?",
+    "options": ["git restore menu.json", "git restore --staged menu.json", "git stash drop"],
+    "answer": 1,
+    "explanation": "--staged cuma mengubah staging area. Tanpa --staged, editan di working tree ikut dibuang."
   },
   "commands": ["git restore", "git restore --staged"],
-  "visual": "snapshot",
+  "visual": "restore",
   "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["tiga-area", "staging"],
-  "initialState": "Repo sudah punya HEAD dan menu.json tracked. Untuk unstage, ada perubahan menu pada index dan salinan edit di working tree.",
-  "lab": "staging",
+  "prerequisites": ["tiga-area", "stash-konflik"],
+  "initialState": "Lanjutan dari bab 9: kamu berada di branch diskon-member dengan working tree bersih.",
   "objectives": [
-    "Pisahkan membatalkan staging dari membuang edit di working tree.",
-    "Periksa hasilnya: Kamu tahu kapan memakai --staged dan kapan restore berisiko membuang pekerjaan."
+    "Bisa mengeluarkan file dari staging area dengan git restore --staged",
+    "Bisa membuang perubahan di working tree dengan git restore",
+    "Tahu bahwa perubahan yang dibuang restore nggak bisa dikembalikan"
   ],
   "sources": [
     {
@@ -50,8 +55,8 @@
     }
   ],
   "verification": {
-    "command": "git diff --staged\ngit diff",
-    "explanation": "Kamu tahu kapan memakai --staged dan kapan restore berisiko membuang pekerjaan."
+    "command": "git status --short\ngit diff",
+    "explanation": "Keduanya kosong. menu.json sama persis dengan commit terakhir di main."
   },
   "order": 36
 }

@@ -1,47 +1,62 @@
 {
   "chapter": 10,
   "id": "reset-modes",
-  "title": "Satu target, tiga dampak berbeda.",
-  "summary": "Bandingkan reset soft, mixed, dan hard dari keadaan awal yang sama.",
-  "scenario": "HEAD berisi harga 20000, index 22000, dan editor 24000. Kamu ingin kembali ke commit harga 18000 dengan dampak yang diketahui.",
-  "concept": "Untuk reset dengan target commit, soft memindahkan branch aktif tanpa mengganti index dan working tree. Mixed juga mengisi ulang index dari target. Hard mengisi ulang keduanya dan dapat menimpa pekerjaan lokal, termasuk untracked yang menghalangi penulisan path tracked. Ini berbeda dari reset per path yang tidak memindahkan HEAD.",
-  "analogy": "Kamu bisa memundurkan penanda saja, mengatur ulang nampan juga, atau mengatur ulang seluruh meja sesuai foto lama.",
+  "title": "Reset: mundurkan branch dengan tiga mode",
+  "summary": "git reset memindahkan branch ke commit lain. Mode --soft, --mixed, dan --hard menentukan apakah staging area dan working tree ikut berubah.",
+  "scenario": "Kamu commit harga es kopi 25000, lalu sadar pesan commit-nya kurang jelas dan harganya belum disetujui. Commit itu belum di-push, jadi masih aman untuk ditarik kembali.",
+  "concept": "git reset diikuti sebuah commit memindahkan branch yang sedang aktif ke commit itu, sehingga commit sesudahnya nggak lagi berada di riwayat branch. Modenya menentukan nasib perubahan dari commit yang ditinggalkan. --soft cuma memindahkan branch: perubahannya tetap di staging area, siap di-commit ulang. --mixed, mode bawaan kalau nggak ditulis, ikut mengosongkan staging area: perubahannya kembali menjadi perubahan yang belum di-add. --hard ikut mengembalikan working tree, jadi perubahannya dibuang. git reset --hard tanpa target berarti membuang semua perubahan yang belum di-commit. Pakai reset untuk commit yang belum di-push; commit yang sudah dibagikan dibatalkan dengan cara lain di materi berikutnya.",
+  "analogy": "Reset seperti memindahkan pembatas buku ke halaman sebelumnya. Soft membiarkan isi halaman yang ditinggalkan tetap di nampan, mixed menaruhnya kembali di meja, dan hard membuangnya ke tempat sampah.",
   "steps": [
     {
-      "title": "Catat tiga versi",
-      "command": "git show HEAD:menu.json\ngit show :menu.json\ngit diff -- menu.json",
-      "explanation": "Mulai salah satu latihan reset. Jangan mencoba tiga mode berurutan lalu membandingkannya sebagai keadaan awal yang sama."
+      "title": "Commit harga es kopi",
+      "command": "git add menu.json\ngit commit -m \"Ubah harga es kopi jadi 25000\"",
+      "explanation": "Sebelum menjalankan command, ubah nilai esKopi di menu.json dari 22000 menjadi 25000 lalu simpan."
     },
     {
-      "title": "Pilih satu mode di folder latihan",
-      "command": "git reset --soft awal",
-      "explanation": "Ganti --soft dengan --mixed atau --hard hanya pada folder latihan mode yang sesuai. Tag awal menunjuk snapshot 18000."
+      "title": "Reset soft",
+      "command": "git reset --soft HEAD~1\ngit status --short\ngit log --oneline -1",
+      "explanation": "Status menampilkan M menu.json di kolom kiri: perubahannya masih di staging area. Commit teratas kembali Naikkan harga teh jadi 17000."
     },
     {
-      "title": "Buktikan hasil",
-      "command": "git show HEAD:menu.json\ngit show :menu.json\ngit status --short",
-      "explanation": "Periksa isi editor juga. Checker menilai ketiga tempat tersebut."
+      "title": "Commit ulang dengan pesan lebih jelas",
+      "command": "git commit -m \"Naikkan harga es kopi jadi 25000\"",
+      "explanation": "Soft cocok untuk mengulang commit terakhir: perubahannya tetap, kamu cuma membuat commit-nya lagi."
+    },
+    {
+      "title": "Reset mixed",
+      "command": "git reset HEAD~1\ngit status --short",
+      "explanation": "Tanpa opsi, reset memakai --mixed. Git menulis Unstaged changes after reset, dan status menampilkan M menu.json di kolom kanan: perubahannya masih di working tree, tapi belum di-add."
+    },
+    {
+      "title": "Reset hard: buang perubahannya",
+      "command": "git reset --hard\ngit status --short",
+      "explanation": "Pemilik kedai menolak harga baru. Git menulis HEAD is now at diikuti hash dan Naikkan harga teh jadi 17000, lalu status kosong. esKopi di menu.json kembali 22000."
     }
   ],
-  "result": "Soft: index 22000/working 24000; mixed: index 18000/working 24000; hard: keduanya 18000.",
-  "pitfall": "Gunakan hard hanya bila perubahan contoh memang boleh dibuang. Reflog mencatat perpindahan commit, bukan seluruh edit yang belum direkam.",
-  "practice": "Jalankan start reset-soft, reset-mixed, dan reset-hard pada folder berbeda. Tuliskan tabel hasil sebelum dan sesudah.",
+  "result": "main kembali ke commit Naikkan harga teh jadi 17000 tanpa jejak harga es kopi 25000. Riwayat yang sudah di-push nggak berubah.",
+  "pitfall": "reset --hard membuang perubahan di working tree yang belum pernah di-commit, dan itu nggak bisa dikembalikan. Commit yang ditinggalkan reset masih bisa dicari lewat reflog untuk sementara waktu, seperti di materi pemulihan nanti. Jangan me-reset commit yang sudah di-push: riwayat lokalmu jadi berbeda dari server, dan push berikutnya ditolak.",
+  "practice": "Buat commit latihan, lalu coba ketiga mode berturut-turut. Setiap habis reset, tebak dulu hasil git status --short sebelum menjalankannya.",
   "quiz": {
-    "question": "Mode mana yang mengganti index tetapi mempertahankan working tree?",
-    "options": ["soft", "hard", "mixed"],
-    "answer": 2,
-    "explanation": "Mixed mengisi ulang index dari target dan mempertahankan working tree."
+    "question": "Kamu menjalankan git reset --soft HEAD~1. Di mana perubahan dari commit terakhir?",
+    "options": [
+      "Di staging area, siap di-commit ulang",
+      "Di working tree, belum di-add",
+      "Terbuang"
+    ],
+    "answer": 0,
+    "explanation": "--soft cuma memindahkan branch. --mixed menaruh perubahan di working tree, dan --hard membuangnya."
   },
   "commands": ["git reset"],
   "visual": "reset",
-  "minutes": 9,
+  "minutes": 10,
   "level": "Menengah",
-  "prerequisites": ["reset-revert"],
-  "initialState": "Pilih salah satu latihan reset: tag awal harga 18000, HEAD 20000, index 22000, working tree 24000.",
+  "prerequisites": ["restore", "revision"],
+  "initialState": "Lanjutan dari materi restore: kamu berada di branch main, working tree bersih, dan commit teratas Naikkan harga teh jadi 17000.",
   "lab": "reset-soft",
   "objectives": [
-    "Bandingkan reset soft, mixed, dan hard dari keadaan awal yang sama.",
-    "Periksa hasilnya: Soft: index 22000/working 24000; mixed: index 18000/working 24000; hard: keduanya 18000."
+    "Tahu bahwa reset memindahkan branch ke commit lain",
+    "Bisa membedakan hasil --soft, --mixed, dan --hard",
+    "Tahu kapan reset aman dipakai"
   ],
   "sources": [
     {
@@ -50,8 +65,8 @@
     }
   ],
   "verification": {
-    "command": "git show HEAD:menu.json\ngit show :menu.json\ngit diff -- menu.json",
-    "explanation": "Soft: index 22000/working 24000; mixed: index 18000/working 24000; hard: keduanya 18000."
+    "command": "git log --oneline -1\ngit status --short",
+    "explanation": "Commit teratas Naikkan harga teh jadi 17000, dan status kosong."
   },
-  "order": 38
+  "order": 37
 }

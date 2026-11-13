@@ -1,47 +1,57 @@
 {
   "chapter": 10,
   "id": "clean-preview",
-  "title": "Lihat daftar sebelum membersihkan.",
-  "summary": "Gunakan dry-run dan path spesifik untuk file untracked.",
-  "scenario": "Ada catatan sementara, cache ignored, dan edit harga yang belum di-commit. Kamu hanya ingin membuang catatan sementara.",
-  "concept": "Clean menghapus file untracked sesuai opsi/path. -n adalah dry-run, -d menyertakan direktori, dan -f meminta pelaksanaan. File ignored dikecualikan secara default; -x mengubah cakupan itu. Clean tidak memindahkan HEAD dan bukan cara mengembalikan isi tracked.",
-  "analogy": "Sebelum membuang barang di meja, tulis daftar yang akan masuk tempat sampah. Pilih satu barang bila hanya itu yang ingin dibuang.",
+  "title": "Clean: bersihkan file untracked dengan aman",
+  "summary": "git clean menghapus file untracked dari working tree. Selalu lihat daftarnya dulu dengan -n sebelum menghapus dengan -f.",
+  "scenario": "Folder kopi-kita mulai penuh file percobaan: coba.txt dan folder sementara berisi draf. Semuanya belum pernah di-add, dan kamu ingin membersihkannya sekaligus.",
+  "concept": "File untracked nggak tersentuh oleh git restore atau git reset, karena Git belum pernah mencatatnya. git clean dibuat khusus untuk menghapus file seperti itu. Karena yang dihapus belum pernah tersimpan di Git, hasilnya permanen, sehingga Git menolak menjalankan git clean tanpa -f (force). Opsi -n menampilkan apa yang akan dihapus tanpa menghapus apa pun, dan -d ikut menyertakan folder untracked. File yang diabaikan .gitignore tetap aman, kecuali kamu menambahkan -x. Untuk melihat file yang diabaikan, jalankan git status --short --ignored; file seperti itu ditandai !!.",
+  "analogy": "Sebelum membuang tumpukan kertas di meja, kamu membaca daftar isinya dulu. Kertas yang diberi label simpan di .gitignore nggak ikut dibuang.",
   "steps": [
     {
-      "title": "Lihat kandidat",
-      "command": "git status --short\ngit clean -nd",
-      "explanation": "Latihan clean punya satu catatan untracked dan satu folder cache ignored. Perhatikan yang tidak masuk daftar."
+      "title": "Buat file percobaan",
+      "command": "git status --short",
+      "explanation": "Sebelum menjalankan command, buat file coba.txt berisi apa saja, lalu buat folder sementara berisi file draf.txt. Status menampilkan ?? coba.txt dan ?? sementara/."
     },
     {
-      "title": "Hapus path yang memang dipilih",
-      "command": "git clean -f -- catatan-sementara.txt",
-      "explanation": "Hapus hanya file contoh itu. Tidak perlu menambahkan -x."
+      "title": "Lihat daftar yang akan dihapus",
+      "command": "git clean -n\ngit clean -nd",
+      "explanation": "Yang pertama cuma menampilkan Would remove coba.txt. Dengan -d, folder ikut terdaftar: Would remove sementara/."
     },
     {
-      "title": "Periksa yang dipertahankan",
-      "command": "git diff -- menu.json\ngit status --short --ignored",
-      "explanation": "Edit menu dan cache seharusnya tetap ada."
+      "title": "Hapus",
+      "command": "git clean -fd\ngit status --short",
+      "explanation": "Git menulis Removing coba.txt dan Removing sementara/. Status kosong."
+    },
+    {
+      "title": "Pastikan file yang diabaikan aman",
+      "command": "git status --short --ignored",
+      "explanation": "Hasilnya !! catatan.txt. File ini diabaikan .gitignore, jadi git clean nggak menyentuhnya."
     }
   ],
-  "result": "Hanya catatan-sementara.txt terhapus; cache dan perubahan tracked tetap ada.",
-  "pitfall": "Untracked yang dihapus clean biasanya tidak bisa dikembalikan oleh Git. Mulai dari preview dan jangan menjadikan -fdx kebiasaan.",
-  "practice": "Selesaikan latihan clean dan jelaskan mengapa status biasa tidak menampilkan cache ignored.",
+  "result": "Working tree bersih dari file percobaan, sementara file yang dilacak dan catatan.txt tetap utuh.",
+  "pitfall": "Jangan langsung menjalankan git clean -fdx. Opsi -x ikut menghapus file yang diabaikan, termasuk catatan pribadi, file konfigurasi lokal seperti .env, atau folder hasil instalasi. Selalu jalankan versi -n dulu dan baca daftarnya.",
+  "practice": "Buat dua file untracked, tambahkan nama salah satunya ke .gitignore, lalu jalankan git clean -n. Pastikan cuma file yang nggak diabaikan yang terdaftar. Setelah itu kembalikan .gitignore dengan git restore .gitignore dan hapus kedua file latihan.",
   "quiz": {
-    "question": "Opsi mana yang hanya menampilkan rencana clean?",
-    "options": ["-f", "-n", "-x"],
+    "question": "Apa yang dilakukan git clean -n?",
+    "options": [
+      "Menghapus file untracked",
+      "Menampilkan file yang akan dihapus tanpa menghapusnya",
+      "Membuang perubahan pada file yang dilacak"
+    ],
     "answer": 1,
-    "explanation": "Dry-run tidak menghapus file."
+    "explanation": "-n adalah pratinjau. Penghapusan baru terjadi dengan -f."
   },
   "commands": ["git clean -n", "git clean"],
-  "visual": "snapshot",
-  "minutes": 9,
+  "visual": "clean",
+  "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["ignore", "restore"],
-  "initialState": "Latihan clean: catatan-sementara.txt untracked, cache/data.txt ignored, dan menu.json tracked berubah. Hanya catatan boleh dibuang.",
+  "prerequisites": ["ignore", "reflog-rescue"],
+  "initialState": "Lanjutan dari materi reflog: kamu berada di branch main, dan working tree bersih.",
   "lab": "clean",
   "objectives": [
-    "Gunakan dry-run dan path spesifik untuk file untracked.",
-    "Periksa hasilnya: Hanya catatan-sementara.txt terhapus; cache dan perubahan tracked tetap ada."
+    "Tahu file mana yang dihapus git clean",
+    "Bisa melihat pratinjau dengan -n sebelum menghapus",
+    "Tahu bahwa file yang diabaikan aman kecuali memakai -x"
   ],
   "sources": [
     {
@@ -50,18 +60,18 @@
     }
   ],
   "verification": {
-    "command": "git status --short --ignored\ngit diff -- menu.json",
-    "explanation": "Hanya catatan-sementara.txt terhapus; cache dan perubahan tracked tetap ada."
+    "command": "git status --short --ignored",
+    "explanation": "Cuma tersisa !! catatan.txt."
   },
   "order": 40,
   "checkpoint": {
-    "question": "Perubahan buruk sudah dipakai rekan. Kamu ingin membuat koreksi sambil mempertahankan riwayat bersama. Mana yang sesuai?",
+    "question": "Kamu ingin membuang editan menu.json yang belum di-add, menghapus coba.txt yang untracked, dan membatalkan commit yang sudah di-push. Kombinasi mana yang tepat?",
     "options": [
-      "Revert commit terkait setelah meninjau dampaknya",
-      "Reset hard lalu force push tanpa koordinasi",
-      "Hapus seluruh reflog"
+      "git restore menu.json, git clean -f coba.txt, dan git revert untuk commit itu",
+      "git reset --hard, git restore coba.txt, dan git reset HEAD~1",
+      "git clean -f menu.json, git revert coba.txt, dan git restore --staged"
     ],
     "answer": 0,
-    "explanation": "Revert menambahkan commit koreksi, sehingga commit yang sudah dibagikan tetap ada dalam riwayat."
+    "explanation": "restore untuk file yang dilacak, clean untuk file untracked, dan revert untuk commit yang sudah dibagikan."
   }
 }

@@ -1,51 +1,67 @@
 {
   "chapter": 9,
   "id": "stash-konflik",
-  "title": "Kalau lacinya ketemu perubahan baru.",
-  "summary": "Tangani konflik stash dengan memeriksa isi dan mempertahankan simpanan sampai aman.",
-  "scenario": "Saat diskon disimpan, baris yang sama diubah di branch tujuan. Pop sekarang berhenti dengan konflik.",
-  "concept": "Stash diterapkan pada keadaan working tree saat ini, sehingga bisa berbenturan dengan perubahan lain. Tidak ada git stash --continue. Selesaikan file, gunakan add jika ingin menandai hasil di index, periksa, lalu buat commit saat pekerjaan memang siap. stash branch dapat memulai branch dari dasar asli stash.",
-  "analogy": "Bahan di laci dibuat untuk rancangan meja yang lama. Ketika meja sudah berubah, kamu perlu menyesuaikan bahan itu, bukan menumpuknya sembarangan.",
+  "title": "Konflik stash: saat stash bertemu perubahan baru",
+  "summary": "Kalau baris yang sama sudah berubah sejak stash dibuat, git stash pop bisa berhenti dengan konflik. Selesaikan seperti konflik merge, atau pindahkan stash ke branch sendiri.",
+  "scenario": "Kamu sedang mencoba diskon 25 persen dan menyimpannya ke stash. Lalu pemilik kedai memutuskan diskon jadi 15 persen, dan kamu meng-commit-nya. Saat stash dikeluarkan, baris diskon di keduanya berbeda.",
+  "concept": "git stash pop menggabungkan perubahan di stash dengan isi file saat ini. Kalau baris yang sama sudah berubah sejak stash dibuat, Git berhenti dengan CONFLICT dan menulis penanda konflik seperti di bab 6. Bagian antara <<<<<<< Updated upstream dan ======= berisi versi saat ini, dan bagian sampai >>>>>>> Stashed changes berisi versi dari stash. Karena penerapannya nggak berhasil, pop nggak menghapus entrinya, sehingga isi stash tetap aman. Ada dua jalan keluar. Pertama, selesaikan konflik di file, jalankan git add, lalu hapus entri dengan git stash drop kalau sudah nggak dibutuhkan. Kedua, git stash branch diikuti nama branch baru dan nama entri: Git membuat branch dari commit tempat stash dibuat, menerapkan stash di sana tanpa konflik, lalu menghapus entrinya. Cara kedua cocok kalau isi stash masih ingin disimpan sebagai usulan terpisah.",
+  "analogy": "Kertas dari laci ternyata berisi angka yang berbeda dengan papan terbaru. Kamu bisa memutuskan angka mana yang dipakai di papan, atau menempel kertas itu di papan percobaan sendiri supaya nggak mengganggu papan utama.",
   "steps": [
     {
-      "title": "Baca konflik dan simpanan",
-      "command": "git status\ngit stash list",
-      "explanation": "Jangan menghapus entri yang masih menjadi pegangan. Buka file dan tentukan hasil yang benar."
+      "title": "Simpan percobaan diskon 25",
+      "command": "git stash push -m \"Coba diskon 25\"",
+      "explanation": "Sebelum menjalankan command, ubah baris pertama diskon.js menjadi const diskon = 25; lalu simpan."
     },
     {
-      "title": "Periksa hasil penyelesaian",
-      "command": "git add diskon.js\ngit diff --staged",
-      "explanation": "Setelah marker dihapus dan logika diuji, periksa hasil yang akan di-commit."
+      "title": "Commit keputusan diskon 15",
+      "command": "git add diskon.js\ngit commit -m \"Turunkan diskon jadi 15 persen\"",
+      "explanation": "Sebelum menjalankan command, ubah baris pertama diskon.js menjadi const diskon = 15; lalu simpan. Sekarang baris yang sama berbeda di commit terbaru dan di stash."
     },
     {
-      "title": "Alternatif dari dasar semula",
-      "command": "git stash branch pulihkan-diskon \"stash@{0}\"",
-      "explanation": "Ini alternatif pada keadaan kerja yang sesuai, bukan langkah wajib setelah add. Jika berhasil dari ref stash, entri itu di-drop."
+      "title": "Keluarkan stash",
+      "command": "git stash pop\ngit status --short",
+      "explanation": "Git berhenti dengan CONFLICT (content): Merge conflict in diskon.js dan menulis The stash entry is kept in case you need it again. Status menampilkan UU diskon.js."
+    },
+    {
+      "title": "Selesaikan dengan keputusan pemilik",
+      "command": "git add diskon.js\ngit status",
+      "explanation": "Sebelum menjalankan command, buka diskon.js, hapus baris penanda konflik dan baris const diskon = 25;, sehingga baris pertama kembali const diskon = 15;. Karena isinya sama dengan commit terakhir, git status menampilkan nothing to commit, working tree clean."
+    },
+    {
+      "title": "Simpan percobaan ke branch sendiri",
+      "command": "git stash list\ngit stash branch coba-diskon-25 \"stash@{0}\"",
+      "explanation": "Entri Coba diskon 25 masih ada. git stash branch membuat branch coba-diskon-25 dari commit Tambah diskon member, menerapkan diskon 25 di sana tanpa konflik, lalu menulis Dropped stash@{0}."
+    },
+    {
+      "title": "Commit percobaan dan kembali",
+      "command": "git add diskon.js\ngit commit -m \"Coba diskon 25 persen\"\ngit switch diskon-member",
+      "explanation": "Usulan diskon 25 sekarang tersimpan sebagai commit di branch coba-diskon-25, terpisah dari diskon-member."
     }
   ],
-  "result": "Perubahan dipulihkan dengan keputusan isi yang jelas atau dipindahkan ke branch berdasarkan dasar aslinya.",
-  "pitfall": "Jangan berasumsi merge --abort membatalkan stash apply/pop. Untuk membuang hasil percobaan, identifikasi dahulu seluruh perubahan lokal yang harus dipertahankan.",
-  "practice": "Buat benturan satu baris di repo latihan. Pop, periksa stash tetap ada, lalu selesaikan isi tanpa membuang perubahan yang dibutuhkan.",
+  "result": "diskon-member berisi diskon 15 persen, usulan diskon 25 tersimpan di branch coba-diskon-25, dan daftar stash kosong.",
+  "pitfall": "Setelah konflik pop diselesaikan, entri stash masih ada. Kalau kamu lupa menghapusnya, daftar stash makin panjang dan kamu bisa salah menerapkannya lagi nanti. Jangan juga menjalankan git stash drop sebelum yakin isi file sudah benar, karena entri itu satu-satunya salinan percobaanmu.",
+  "practice": "Jalankan git log --oneline --graph --all -4 dan temukan coba-diskon-25 yang bercabang dari Tambah diskon member. Jelaskan kenapa git stash branch nggak mengalami konflik.",
   "quiz": {
-    "question": "Adakah git stash --continue untuk konflik?",
+    "question": "git stash pop berhenti karena konflik. Apa yang terjadi pada entri stash?",
     "options": [
-      "Ya, selalu wajib",
-      "Hanya pada branch main",
-      "Tidak; selesaikan dan periksa file sesuai kebutuhan"
+      "Langsung dihapus",
+      "Tetap ada sampai kamu menghapusnya sendiri",
+      "Pindah ke branch baru"
     ],
-    "answer": 2,
-    "explanation": "Stash tidak mempunyai alur continue seperti rebase."
+    "answer": 1,
+    "explanation": "pop cuma menghapus entri kalau penerapannya berhasil. Saat konflik, entri tetap disimpan supaya perubahanmu nggak hilang."
   },
-  "commands": ["git stash branch", "git stash show"],
+  "commands": ["git stash branch"],
   "visual": "conflict",
-  "minutes": 8,
+  "minutes": 10,
   "level": "Menengah",
   "prerequisites": ["apply-pop", "konflik"],
-  "initialState": "Latihan stash-conflict: HEAD dan file diskon 15; stash menyimpan perubahan dari 0 ke 10. Index bersih sebelum pop.",
+  "initialState": "Lanjutan dari materi apply dan pop: di branch diskon-member, commit terakhir Tambah diskon member, working tree bersih, dan daftar stash kosong.",
   "lab": "stash-conflict",
   "objectives": [
-    "Tangani konflik stash dengan memeriksa isi dan mempertahankan simpanan sampai aman.",
-    "Periksa hasilnya: Perubahan dipulihkan dengan keputusan isi yang jelas atau dipindahkan ke branch berdasarkan dasar aslinya."
+    "Bisa membaca konflik saat git stash pop",
+    "Tahu bahwa entri stash tetap ada setelah pop berkonflik",
+    "Bisa memindahkan stash ke branch sendiri dengan git stash branch"
   ],
   "sources": [
     {
@@ -54,18 +70,18 @@
     }
   ],
   "verification": {
-    "command": "git status --short\ngit stash list",
-    "explanation": "git status --short nggak lagi menampilkan kode UU untuk diskon.js, artinya konflik sudah selesai. git stash list masih menampilkan entrinya, karena pop yang berhenti di tengah konflik nggak menghapus stash. Hapus entri itu sendiri setelah yakin hasilnya benar. Kalau kamu memakai git stash branch, entrinya sudah hilang dari daftar."
+    "command": "git stash list\ngit log --oneline -1 coba-diskon-25",
+    "explanation": "Daftar stash kosong, dan commit teratas coba-diskon-25 adalah Coba diskon 25 persen."
   },
   "order": 35,
   "checkpoint": {
-    "question": "Stash pop menghasilkan konflik. Setelah file selesai diedit dan di-add, apa yang dilakukan pada entri stash?",
+    "question": "git stash pop berhenti dengan konflik. Kamu sudah memperbaiki file dan menjalankan git add. Apa yang perlu kamu ingat soal entri stash?",
     "options": [
-      "Periksa dan hapus sendiri ketika sudah aman",
-      "Jalankan stash --continue",
-      "Anggap entri pasti sudah hilang"
+      "Entrinya masih ada, jadi hapus dengan git stash drop kalau sudah nggak dibutuhkan",
+      "Entrinya otomatis hilang setelah git add",
+      "Entrinya ikut ter-push ke server"
     ],
     "answer": 0,
-    "explanation": "Pop yang konflik mempertahankan entri. Stash tidak memiliki alur --continue."
+    "explanation": "Pop yang berhenti karena konflik nggak menghapus entri. Setelah yakin hasilnya benar, hapus dengan git stash drop."
   }
 }

@@ -1,51 +1,58 @@
 {
   "chapter": 10,
   "id": "reflog-rescue",
-  "title": "Cari jejak sebelum memindahkan lagi.",
-  "summary": "Pulihkan referensi menuju commit yang masih tersedia.",
-  "scenario": "Branch fitur terhapus sebelum digabung. Kamu ingin menemukan commit pekerjaan dan memasang nama baru padanya.",
-  "concept": "Reflog adalah catatan lokal pembaruan referensi, termasuk perpindahan HEAD. Temukan kandidat berdasarkan pesan/waktu, baca isinya, lalu buat branch baru pada hash yang benar. Jangan berasumsi HEAD@{1} selalu posisi yang dicari. Retensi dan pemangkasan object membatasi pemulihan.",
-  "analogy": "Buku kunjungan menunjukkan halaman yang sempat kamu buka. Temukan halaman yang benar, lalu pasang penanda lagi sebelum lanjut.",
+  "title": "Reflog: temukan commit yang hilang setelah reset",
+  "summary": "Reflog mencatat setiap posisi HEAD di repo lokal. Kalau commit hilang dari riwayat karena reset, hash-nya biasanya masih bisa ditemukan di sana.",
+  "scenario": "Kamu menambah teh tarik ke menu dan commit. Lalu karena salah hitung, kamu menjalankan git reset --hard HEAD~1. Commit teh tarik hilang dari git log, padahal itu pekerjaan yang benar.",
+  "concept": "Setiap kali HEAD berpindah, misalnya karena commit, reset, switch, atau merge, Git menambah satu baris ke reflog. git reflog menampilkan catatan itu dari yang terbaru: hash, nama urutan seperti HEAD@{1}, dan apa yang terjadi. Commit yang ditinggalkan reset nggak langsung dihapus. Object-nya masih tersimpan, cuma nggak ada branch yang menunjuknya. Begitu hash-nya ketemu, beri nama dengan git branch diikuti nama dan hash, lalu periksa dan gabungkan seperti branch biasa. Reflog cuma ada di repo lokal, nggak ikut di-push, dan entri lama dibersihkan otomatis setelah beberapa minggu, jadi segera pulihkan selagi masih tercatat.",
+  "analogy": "Reflog seperti rekaman CCTV di meja kerjamu. Kertas yang tersapu jatuh nggak langsung dibuang petugas kebersihan, dan rekamannya menunjukkan di mana kertas itu terakhir terlihat.",
   "steps": [
     {
-      "title": "Cari kandidat",
-      "command": "git reflog --all --date=iso",
-      "explanation": "Pada latihan reflog, cari commit berpesan Diskon yang ingin dipulihkan. Hash berbeda setiap latihan."
+      "title": "Commit teh tarik",
+      "command": "git add menu.json\ngit commit -m \"Tambah teh tarik ke menu\"",
+      "explanation": "Sebelum menjalankan command, ubah isi menu.json menjadi {\"kopiSusu\":22000,\"esKopi\":22000,\"teh\":17000,\"kue\":18000,\"rotiBakar\":15000,\"nasiUduk\":18000,\"tehTarik\":15000} lalu simpan."
     },
     {
-      "title": "Periksa kandidat pilihan",
-      "command": "git show HASH_KANDIDAT",
-      "explanation": "Ganti placeholder dengan hash nyata. Pastikan diskon 10 ada pada commit tersebut."
+      "title": "Reset yang salah",
+      "command": "git reset --hard HEAD~1\ngit log --oneline -2",
+      "explanation": "Commit teh tarik nggak lagi muncul di log, dan menu.json kembali tanpa tehTarik."
     },
     {
-      "title": "Pasang nama yang baru",
-      "command": "git branch pulih-diskon HASH_KANDIDAT\ngit show pulih-diskon:diskon.js",
-      "explanation": "Ini mempertahankan referensi tanpa menimpa working tree."
+      "title": "Cari di reflog",
+      "command": "git reflog -3",
+      "explanation": "Baris kedua berbentuk 6820d57 HEAD@{1}: commit: Tambah teh tarik ke menu. Catat hash di awal baris itu; hash di komputermu berbeda."
+    },
+    {
+      "title": "Beri nama dan periksa",
+      "command": "git branch pulih-teh-tarik HASH\ngit show pulih-teh-tarik:menu.json",
+      "explanation": "Ganti HASH dengan hash yang kamu catat. git show menampilkan menu.json yang berisi tehTarik."
+    },
+    {
+      "title": "Kembalikan ke main",
+      "command": "git merge --ff-only pulih-teh-tarik\ngit branch -d pulih-teh-tarik",
+      "explanation": "main cuma tertinggal satu commit dari pulih-teh-tarik, jadi merge bisa fast-forward. Setelah itu branch bantuan dihapus, karena commit-nya sudah ada di main."
     }
   ],
-  "result": "Branch pulih-diskon menunjuk commit yang tadi kehilangan nama branch.",
-  "pitfall": "File untracked yang tidak pernah ditambahkan atau disimpan tidak otomatis memiliki jejak object yang bisa dipulihkan dari reflog.",
-  "practice": "Selesaikan latihan reflog tanpa menggunakan reset. Jelaskan mengapa branch baru cukup untuk mempertahankan commit.",
+  "result": "main kembali berisi commit Tambah teh tarik ke menu, seolah reset tadi nggak pernah terjadi.",
+  "pitfall": "Reflog cuma bisa menyelamatkan yang pernah di-commit. Perubahan yang dibuang git reset --hard atau git restore sebelum sempat di-commit nggak tercatat di reflog. Jangan juga mengandalkan nomor HEAD@{n} dari contoh, karena nomornya bergeser setiap kali HEAD berpindah. Selalu baca pesannya dan periksa isi commit dengan git show sebelum memulihkan.",
+  "practice": "Jalankan git reflog -10 dan cari jejak semua yang kamu lakukan di bab ini: reset soft, reset mixed, revert, dan reset yang salah tadi.",
   "quiz": {
-    "question": "Apa langkah setelah menemukan hash kandidat?",
-    "options": [
-      "Periksa isinya sebelum membuat referensi",
-      "Langsung prune semua object",
-      "Hapus folder .git"
-    ],
+    "question": "Kamu menjalankan git reset --hard HEAD~1, dan commit terakhir hilang dari log. Di mana mencarinya?",
+    "options": ["Di git reflog", "Di git stash list", "Sudah terhapus permanen"],
     "answer": 0,
-    "explanation": "Buktikan kandidat benar agar tidak memulihkan titik yang salah."
+    "explanation": "Reflog mencatat posisi HEAD sebelum reset, termasuk hash commit yang ditinggalkan."
   },
-  "commands": ["git reflog", "git branch"],
+  "commands": ["git reflog"],
   "visual": "recovery",
   "minutes": 9,
   "level": "Menengah",
-  "prerequisites": ["reset-modes", "detached-head"],
-  "initialState": "Latihan reflog: branch fitur dihapus; commit diskon masih tersedia melalui jejak HEAD. Main dan working tree bersih.",
+  "prerequisites": ["reset-modes"],
+  "initialState": "Lanjutan dari materi revert: kamu berada di branch main, working tree bersih, dan commit teratas Revert \"Naikkan harga kue jadi 20000\".",
   "lab": "reflog",
   "objectives": [
-    "Pulihkan referensi menuju commit yang masih tersedia.",
-    "Periksa hasilnya: Branch pulih-diskon menunjuk commit yang tadi kehilangan nama branch."
+    "Tahu apa yang dicatat reflog",
+    "Bisa menemukan hash commit yang hilang setelah reset",
+    "Bisa memulihkan commit dengan branch lalu merge"
   ],
   "sources": [
     {
@@ -58,8 +65,8 @@
     }
   ],
   "verification": {
-    "command": "git show pulih-diskon:diskon.js",
-    "explanation": "Branch pulih-diskon menunjuk commit yang tadi kehilangan nama branch."
+    "command": "git log --oneline -1",
+    "explanation": "Commit teratas Tambah teh tarik ke menu. Commit ini belum di-push; kamu akan mengirimnya bersama commit lain di bab berikutnya."
   },
   "order": 39
 }

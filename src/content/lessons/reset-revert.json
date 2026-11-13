@@ -1,69 +1,66 @@
 {
   "chapter": 10,
   "id": "reset-revert",
-  "title": "Riwayat bersama butuh cara undo yang pas.",
-  "summary": "Bandingkan reset, revert, dan batas bantuan reflog.",
-  "scenario": "Commit harga salah sudah dipakai tim. Di branch pribadi, kamu juga punya commit percobaan yang ingin disusun ulang.",
-  "concept": "Revert membuat commit baru yang membalik perubahan commit terpilih. Reset dengan target commit memindahkan branch aktif: --soft mempertahankan index dan working tree, --mixed mereset index, --hard juga mereset working tree dan dapat membuang perubahan. Reflog mencatat perpindahan refs secara lokal dan dapat membantu menemukan commit yang belum dipangkas.",
-  "analogy": "Revert menulis koreksi baru dalam buku bersama. Reset memindahkan penanda buku milikmu; dampaknya pada meja dan nampan bergantung mode.",
+  "title": "Revert: batalkan commit yang sudah dibagikan",
+  "summary": "git revert membuat commit baru yang membalik perubahan commit lama. Riwayat yang sudah di-push tetap utuh, jadi aman untuk tim.",
+  "scenario": "Kamu menaikkan harga kue jadi 20000 dan langsung push. Ternyata pemilik kedai belum setuju. Commit itu sudah ada di server, dan Rani mungkin sudah mengambilnya.",
+  "concept": "Reset menghapus commit dari riwayat branch, jadi berbahaya untuk commit yang sudah dibagikan: riwayatmu jadi berbeda dari server dan dari laptop rekan. git revert diikuti sebuah commit mengambil cara lain. Git menghitung kebalikan dari perubahan commit itu, lalu menyimpannya sebagai commit baru dengan pesan Revert diikuti judul commit lama. Commit lama tetap ada dan riwayat cuma bertambah, jadi push berikutnya diterima seperti biasa. Secara bawaan revert membuka editor untuk pesan commit; opsi --no-edit memakai pesan bawaan. Kalau baris yang diubah commit lama sudah diubah lagi oleh commit lain, revert bisa berkonflik dan diselesaikan seperti konflik merge.",
+  "analogy": "Kalau pengumuman yang salah sudah dibaca semua orang, kamu nggak mencabutnya diam-diam. Kamu menempel pengumuman ralat di bawahnya.",
   "steps": [
     {
-      "title": "Undo commit biasa yang dibagikan",
-      "command": "git revert HEAD",
-      "explanation": "Untuk commit non-merge, ini membuat perubahan kebalikan. Konflik masih mungkin terjadi. Merge commit memerlukan pemilihan mainline dan pemahaman tambahan."
+      "title": "Commit dan push harga kue",
+      "command": "git add menu.json\ngit commit -m \"Naikkan harga kue jadi 20000\"\ngit push",
+      "explanation": "Sebelum menjalankan command, ubah nilai kue di menu.json dari 18000 menjadi 20000 lalu simpan. Sekarang commit ini sudah ada di server."
     },
     {
-      "title": "Rapikan commit lokal yang belum dibagikan",
-      "command": "git reset --soft HEAD~1",
-      "explanation": "Ini skenario alternatif: parent harus ada dan commit memang aman ditulis ulang. Isi tetap staged."
+      "title": "Batalkan dengan revert",
+      "command": "git revert --no-edit HEAD",
+      "explanation": "Git membuat commit baru berjudul Revert \"Naikkan harga kue jadi 20000\". Buka menu.json: nilai kue kembali 18000."
     },
     {
-      "title": "Cari posisi sebelum perpindahan",
-      "command": "git reflog",
-      "explanation": "Jika menemukan commit yang dimaksud, buat branch dengan git branch pulih HASH untuk mempertahankannya tanpa reset tergesa-gesa."
+      "title": "Lihat riwayat dan kirim",
+      "command": "git log --oneline -3\ngit push",
+      "explanation": "Commit harga kue dan commit revert sama-sama ada di riwayat. Push diterima karena main cuma maju."
     }
   ],
-  "result": "Koreksi riwayat bersama punya jejak baru, sedangkan pekerjaan lokal bisa dirapikan dengan dampak yang diketahui.",
-  "pitfall": "Reflog bukan jaminan backup: entrinya dapat kedaluwarsa dan object bisa dipangkas. git clean menargetkan untracked; selalu mulai dengan git clean -nd untuk preview, bukan langsung menghapus.",
-  "practice": "Pada repo latihan, bandingkan reset --soft dan --mixed pada keadaan awal identik. Amati status dan kedua jenis diff.",
+  "result": "Harga kue kembali 18000 di main dan di server, dan riwayat mencatat bahwa kenaikan harga pernah dicoba lalu dibatalkan.",
+  "pitfall": "Jangan memakai git reset untuk commit yang sudah di-push. Push berikutnya akan ditolak, dan kalau dipaksa, commit itu hilang dari server padahal rekan mungkin sudah memakainya. Ingat juga bahwa revert membatalkan perubahan satu commit, bukan mengembalikan semua file ke keadaan lama; commit lain sesudahnya tetap berlaku.",
+  "practice": "Jalankan git show HEAD dan bandingkan dengan git show HEAD~1. Perhatikan baris yang dihapus di satu commit adalah baris yang ditambahkan di commit lainnya.",
   "quiz": {
-    "question": "Mode reset mana yang mempertahankan index dan working tree?",
-    "options": ["--hard", "--soft", "--mixed"],
+    "question": "Commit yang salah sudah di-push dan mungkin sudah diambil rekan. Cara membatalkan yang aman?",
+    "options": [
+      "git reset --hard HEAD~1 lalu push paksa",
+      "git revert diikuti hash commit itu, lalu push",
+      "Menghapus file menu.json"
+    ],
     "answer": 1,
-    "explanation": "Soft memindahkan referensi tanpa mereset index atau working tree."
+    "explanation": "Revert menambah commit baru tanpa menulis ulang riwayat yang sudah dibagikan."
   },
-  "commands": ["git reset", "git revert", "git reflog", "git clean"],
-  "visual": "graph",
+  "commands": ["git revert"],
+  "visual": "revert",
   "minutes": 8,
   "level": "Menengah",
-  "prerequisites": ["restore", "riwayat"],
-  "initialState": "Contoh revert berlaku untuk commit biasa yang sudah direkam. Contoh soft adalah skenario lokal terpisah dengan parent yang tersedia.",
+  "prerequisites": ["reset-modes", "push"],
+  "initialState": "Lanjutan dari materi reset: kamu berada di branch main, working tree bersih, dan main sejajar dengan origin/main.",
   "lab": "revert",
   "objectives": [
-    "Bandingkan reset, revert, dan batas bantuan reflog.",
-    "Periksa hasilnya: Koreksi riwayat bersama punya jejak baru, sedangkan pekerjaan lokal bisa dirapikan dengan dampak yang diketahui."
+    "Tahu kenapa reset berbahaya untuk commit yang sudah di-push",
+    "Bisa membatalkan commit dengan git revert",
+    "Bisa membaca commit revert di riwayat"
   ],
   "sources": [
-    {
-      "title": "Manual git reset",
-      "url": "https://git-scm.com/docs/git-reset"
-    },
     {
       "title": "Manual git revert",
       "url": "https://git-scm.com/docs/git-revert"
     },
     {
-      "title": "Manual git reflog",
-      "url": "https://git-scm.com/docs/git-reflog"
-    },
-    {
-      "title": "Manual git clean",
-      "url": "https://git-scm.com/docs/git-clean"
+      "title": "Manual git reset",
+      "url": "https://git-scm.com/docs/git-reset"
     }
   ],
   "verification": {
-    "command": "git log --oneline -3\ngit show HEAD:menu.json",
-    "explanation": "Koreksi riwayat bersama punya jejak baru, sedangkan pekerjaan lokal bisa dirapikan dengan dampak yang diketahui."
+    "command": "git log --oneline -2\ngit status",
+    "explanation": "Commit teratas Revert \"Naikkan harga kue jadi 20000\", diikuti commit harga kue. git status menulis Your branch is up to date with 'origin/main'."
   },
-  "order": 37
+  "order": 38
 }

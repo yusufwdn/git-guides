@@ -2,52 +2,66 @@
   "chapter": 9,
   "id": "stash",
   "title": "Stash: simpan kerjaan yang belum selesai",
-  "summary": "Kerjaan belum siap di-commit, tapi ada hal lain yang harus dikerjakan sekarang? git stash menyimpan perubahanmu untuk sementara, lalu mengembalikannya saat kamu siap lanjut.",
-  "scenario": "Kamu lagi bikin fitur diskon di Kopi Kita dan kerjaannya belum selesai. Tiba-tiba ada laporan halaman checkout error dan harus dibetulkan sekarang juga. Kamu perlu menyingkirkan kerjaan diskon dulu tanpa mencampurnya dengan perbaikan checkout.",
-  "concept": "git stash push mengambil perubahan yang belum di-commit, baik yang sudah di-add maupun belum, lalu menyimpannya di tempat terpisah. Setelah itu working tree kembali bersih, sama seperti commit terakhir (HEAD). Simpanan ini cuma ada di repository lokalmu dan nggak ikut ter-push. Yang perlu diingat: secara default, file baru yang belum pernah di-add (untracked) nggak ikut disimpan. Tambahkan -u kalau file baru juga perlu ikut, atau -a kalau file yang di-ignore juga mau disimpan.",
-  "analogy": "Bayangkan kamu lagi menggambar di meja, lalu harus mengerjakan tugas lain. Gambar yang belum selesai kamu masukkan ke laci dan kamu beri label. Mejanya jadi lega, dan nanti gambarnya tinggal diambil lagi. Laci ini ada di laptopmu sendiri, bukan di server.",
+  "summary": "git stash menyimpan perubahan yang belum di-commit ke tempat sementara. Working tree kembali bersih, jadi kamu bisa pindah tugas tanpa membuat commit setengah jadi.",
+  "scenario": "Kamu sedang menambahkan diskon member di branch diskon-member, dan pekerjaannya belum selesai. Tiba-tiba pemilik kedai minta harga teh di main dinaikkan jadi 17000 sekarang juga. Kamu belum mau commit diskon member yang masih setengah jadi.",
+  "concept": "git stash push mengambil perubahan di working tree dan staging area untuk file yang sudah dilacak, menyimpannya sebagai entri stash, lalu mengembalikan file-file itu ke isi commit terakhir. Opsi -m memberi nama entri supaya mudah dikenali. Entri stash disimpan di repo, bukan di branch tertentu, dan bisa dilihat dengan git stash list. Entri terbaru selalu bernama stash@{0}. Setelah tugas lain selesai, git stash pop mengembalikan perubahan teratas ke working tree dan menghapus entrinya dari daftar. File baru yang belum pernah di-add nggak ikut tersimpan secara bawaan; ini dibahas di materi berikutnya.",
+  "analogy": "Seperti memasukkan kertas kerja yang belum selesai ke laci sebelum meja dipakai untuk tugas lain. Mejanya bersih, kertasnya aman, dan kamu bisa mengeluarkannya lagi nanti.",
   "steps": [
     {
-      "title": "Cek dulu apa yang akan disimpan",
-      "command": "git status\ngit diff\ngit diff --staged",
-      "explanation": "Lihat perubahan apa saja yang ada, baik yang belum maupun yang sudah di-add. Perhatikan juga apakah ada file baru (untracked). Kalau ada dan perlu ikut disimpan, kamu butuh opsi -u."
+      "title": "Mulai kerja di branch diskon-member",
+      "command": "git switch -c diskon-member",
+      "explanation": "Setelah pindah, tambahkan baris ketiga di diskon.js: const diskonMember = 5; lalu simpan. Jangan commit dulu, karena ceritanya pekerjaan ini belum selesai."
     },
     {
-      "title": "Simpan dengan label yang jelas",
-      "command": "git stash push -u -m \"WIP diskon\"",
-      "explanation": "Perubahanmu sekarang tersimpan di stash, dan working tree kembali bersih seperti commit terakhir. Label dari -m membantumu mengenali simpanan ini kalau nanti isinya sudah banyak. Opsi -u dipakai supaya catatan.txt, file baru di latihan ini, ikut tersimpan."
+      "title": "Simpan perubahan ke stash",
+      "command": "git status --short\ngit stash push -m \"WIP diskon member\"\ngit status --short",
+      "explanation": "Status pertama menampilkan M diskon.js. Git lalu membalas Saved working directory and index state On diskon-member: WIP diskon member. Status kedua kosong: working tree sudah bersih."
     },
     {
-      "title": "Pastikan tersimpan, lalu kerjakan perbaikannya",
-      "command": "git stash list\ngit switch main\ngit switch -c hotfix-checkout",
-      "explanation": "git stash list seharusnya menampilkan simpanan WIP diskon. Setelah itu pindah ke main, buat branch hotfix-checkout, lalu perbaiki checkout dan commit di branch tersebut."
+      "title": "Lihat daftar stash",
+      "command": "git stash list",
+      "explanation": "Hasilnya stash@{0}: On diskon-member: WIP diskon member. Angka 0 menandai entri terbaru."
     },
     {
-      "title": "Kembali dan lanjutkan kerjaan diskon",
-      "command": "git switch fitur-diskon\ngit stash pop",
-      "explanation": "pop mengembalikan perubahan ke working tree, lalu menghapus simpanannya dari daftar stash. Kalau terjadi konflik, simpanannya nggak dihapus. Cek git status dulu sebelum lanjut bekerja."
+      "title": "Pindah ke main untuk tugas mendesak",
+      "command": "git switch main",
+      "explanation": "Ubah nilai teh di menu.json dari 16000 menjadi 17000 lalu simpan."
+    },
+    {
+      "title": "Commit dan kirim harga teh",
+      "command": "git add menu.json\ngit commit -m \"Naikkan harga teh jadi 17000\"\ngit push",
+      "explanation": "Harga teh sudah tercatat dan terkirim ke server. Pekerjaan diskon member nggak ikut, karena masih di stash."
+    },
+    {
+      "title": "Kembali dan keluarkan stash",
+      "command": "git switch diskon-member\ngit stash pop",
+      "explanation": "Git menampilkan status dengan modified: diskon.js, lalu Dropped refs/stash@{0}. Baris diskonMember kembali ada di diskon.js, dan entri stash sudah dihapus."
     }
   ],
-  "result": "Kerjaan diskon kembali seperti semula, sementara commit perbaikan checkout tersimpan terpisah di branch hotfix-checkout. Menggabungkan hotfix itu ke main adalah langkah berikutnya, sesuai alur kerja timmu.",
-  "pitfall": "Stash bukan tempat penyimpanan permanen dan nggak ikut ter-push, jadi jangan menimbun kerjaan di sana. File untracked juga nggak ikut tanpa -u. Kalau pop berujung konflik, simpanannya tetap ada di daftar stash. Selesaikan konfliknya, cek hasilnya, baru hapus simpanan itu dengan git stash drop.",
-  "practice": "Di repo latihan, ubah satu file yang sudah dilacak dan buat satu file baru. Bandingkan hasil git stash push biasa dengan git stash push -u. Kembalikan perubahannya, lalu pastikan kedua file sesuai harapan.",
+  "result": "Harga teh 17000 sudah di-commit dan di-push dari main, sementara pekerjaan diskon member kembali ke working tree branch diskon-member tanpa commit setengah jadi.",
+  "pitfall": "Kalau kamu langsung pindah branch tanpa stash, Git membawa perubahan yang belum di-commit ikut pindah, atau menolak pindah kalau perubahan itu bakal tertimpa. Dua-duanya membingungkan, jadi biasakan cek git status sebelum pindah branch. Ingat juga bahwa stash cuma ada di laptopmu: nggak ikut ter-push dan bukan pengganti commit untuk pekerjaan yang perlu disimpan lama.",
+  "practice": "Ulangi alurnya: jalankan git stash push -m \"Latihan\", pastikan git status bersih, lalu git stash pop. Perhatikan pesan Dropped di akhir, lalu pastikan git stash list kosong lagi.",
   "quiz": {
-    "question": "Kamu mau mengembalikan kerjaan dari stash, tapi simpanannya tetap disimpan. Perintah mana yang dipakai?",
-    "options": ["git stash pop", "git stash drop", "git stash apply"],
-    "answer": 2,
-    "explanation": "apply mengembalikan perubahan tanpa menghapus simpanannya. pop juga mengembalikan perubahan, tapi langsung menghapus simpanannya kalau berhasil. Kalau terjadi konflik, simpanannya tetap ada."
+    "question": "Setelah git stash push, di mana perubahan diskonMember berada?",
+    "options": [
+      "Di commit baru di branch diskon-member",
+      "Di entri stash, dan working tree kembali bersih",
+      "Sudah terkirim ke server"
+    ],
+    "answer": 1,
+    "explanation": "Stash bukan commit dan nggak ikut di-push. Perubahan disimpan sebagai entri stash di repo lokal sampai kamu mengeluarkannya."
   },
-  "commands": ["git stash push", "git stash list", "git stash pop", "git stash apply"],
+  "commands": ["git stash push", "git stash list", "git stash pop"],
   "visual": "stash",
   "minutes": 10,
   "level": "Menengah",
-  "prerequisites": ["staging", "branch"],
-  "initialState": "Di latihan stash, kamu ada di branch fitur-diskon. File diskon.js yang sudah dilacak sedang diubah, dan ada file baru catatan.txt yang belum pernah di-add. Pakai -u kalau ingin keduanya ikut tersimpan.",
+  "prerequisites": ["branch", "workflow"],
+  "initialState": "Lanjutan dari bab 8: terminal berada di kopi-kita di branch main, main sejajar dengan origin/main, dan working tree bersih.",
   "lab": "stash",
   "objectives": [
-    "Bisa menyimpan kerjaan yang belum selesai lalu mengembalikannya lagi",
-    "Tahu kapan file baru ikut tersimpan dan kapan tidak",
-    "Paham bedanya pop dan apply"
+    "Bisa menyimpan perubahan sementara dengan git stash push",
+    "Bisa melihat dan mengeluarkan stash dengan git stash list dan git stash pop",
+    "Tahu bahwa stash cuma ada di repo lokal"
   ],
   "sources": [
     {
@@ -57,7 +71,7 @@
   ],
   "verification": {
     "command": "git status --short\ngit stash list",
-    "explanation": "git status --short seharusnya menampilkan diskon.js dan catatan.txt lagi, artinya perubahanmu sudah kembali. git stash list seharusnya kosong karena pop sudah menghapus simpanannya."
+    "explanation": "Status menampilkan M diskon.js, dan git stash list kosong."
   },
   "order": 32
 }

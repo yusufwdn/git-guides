@@ -55,7 +55,7 @@
   },
   "stash": {
     "title": "Stash dan file baru",
-    "lesson": "stash-untracked",
+    "lesson": "stash",
     "goal": "Simpan diskon dan catatan baru, pastikan bersih, lalu pop dan periksa keduanya.",
     "hints": ["File catatan masih untracked.", "Gunakan -u pada push."],
     "solution": "git status --short\ngit stash push -u -m \"WIP diskon\"\ngit status\ngit stash list\ngit stash pop\ngit status --short",

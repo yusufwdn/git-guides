@@ -104,6 +104,8 @@ Sebelum selesai, periksa `git status --short` dan `git log --oneline -5`. Commit
 
 Jalankan pemeriksaan lokal yang relevan sebelum push agar masalah sederhana bisa diketahui lebih cepat.
 
+Versi Git di runner Linux bisa berbeda dari Git lokal. Tes latihan `bisect` memeriksa kandidat melalui referensi Git dan `rev-list`, sehingga perubahan kalimat output Git tidak menentukan kelulusan tes. Saat menulis tes command Git baru, gunakan status repository atau output terstruktur; hindari mencocokkan kalimat tampilan secara persis.
+
 ## Deployment Vercel
 
 [vercel.json](../vercel.json) memakai preset Astro, build `npm run build`, output `dist`, dan trailing slash. Pilih Node.js 24 pada pengaturan proyek Vercel.

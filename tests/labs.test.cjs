@@ -143,10 +143,16 @@ const solutions = {
     let bad;
     for (let count = 0; count < 12; count++) {
       const value = fs.readFileSync(path.join(l.repo, 'diskon.js'), 'utf8');
-      const output = l.g('bisect', value.includes('-10') ? 'bad' : 'good');
-      const match = output.match(/([a-f0-9]{40,64}) is the first bad commit/);
-      if (match) {
-        bad = match[1];
+      l.g('bisect', value.includes('-10') ? 'bad' : 'good');
+      // This linear history has no skipped commits. One remaining candidate means
+      // every earlier commit is known good; do not parse Git's display messages.
+      const candidates = l
+        .g('rev-list', 'refs/bisect/bad', '--not', '--glob=refs/bisect/good-*')
+        .split('\n')
+        .filter(Boolean);
+      assert(candidates.length > 0, 'Bisect kehilangan kandidat commit.');
+      if (candidates.length === 1) {
+        bad = candidates[0];
         break;
       }
       if (count === 11) assert.fail('Bisect tidak selesai.');
@@ -178,6 +184,25 @@ for (const id of Object.keys(Lab.definitions))
     const result = Lab.check(lab.repo);
     assert.equal(result.ok, true, JSON.stringify(result.items));
   });
+
+test('solusi bisect tetap selesai saat Git memakai tanda petik pada istilah bad', (t) => {
+  const lab = fresh(t, 'bisect');
+  const git = lab.g;
+  let reformatted = false;
+  lab.g = (...args) => {
+    const output = git(...args);
+    if (args[0] !== 'bisect') return output;
+    return output.replace(/is the first (?:bad|'bad') commit/g, () => {
+      reformatted = true;
+      return "is the first 'bad' commit";
+    });
+  };
+  solutions.bisect(lab);
+  assert(reformatted, 'Tes harus melewati output hasil bisect dengan format berbeda.');
+  assert.equal(lab.g('rev-parse', 'bug-ditemukan'), lab.metadata.expected.bad);
+  const result = Lab.check(lab.repo);
+  assert.equal(result.ok, true, JSON.stringify(result.items));
+});
 
 test('checker menolak commit yang mencampur kedua pekerjaan', (t) => {
   const l = fresh(t, 'staging');

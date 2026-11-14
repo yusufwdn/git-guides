@@ -132,6 +132,35 @@ const canonical = Astro.site && page.status !== 404 ? new URL(page.path, Astro.s
         </a>
       </div>
     </aside>
+    <script is:inline>
+      // Menjaga posisi scroll sidebar saat pindah halaman. Situs ini MPA, jadi setiap halaman
+      // membuat sidebar baru dengan scroll di atas. Script ini sengaja inline dan diletakkan
+      // tepat setelah </aside>: ia jalan sebelum halaman tampil pertama kali, sehingga sidebar
+      // nggak terlihat melompat dari atas ke posisi lama.
+      // Input: posisi tersimpan di sessionStorage (per tab, hilang saat tab ditutup).
+      // Output: scrollTop sidebar dipulihkan, lalu digeser lagi kalau bab aktif tidak terlihat.
+      (() => {
+        const sidebar = document.getElementById('sidebar');
+        const key = 'gitguides:sidebarScroll';
+        try {
+          const saved = Number(sessionStorage.getItem(key));
+          if (saved > 0) sidebar.scrollTop = saved;
+        } catch {}
+        const active = sidebar.querySelector('.chapter-item.active');
+        if (active) {
+          const top = active.offsetTop;
+          const bottom = top + active.offsetHeight;
+          const visible =
+            top >= sidebar.scrollTop && bottom <= sidebar.scrollTop + sidebar.clientHeight;
+          if (!visible) sidebar.scrollTop = top - (sidebar.clientHeight - active.offsetHeight) / 2;
+        }
+        addEventListener('pagehide', () => {
+          try {
+            sessionStorage.setItem(key, String(sidebar.scrollTop));
+          } catch {}
+        });
+      })();
+    </script>
     <div class="sidebar-scrim" id="sidebar-scrim"></div>
     <main id="main" tabindex="-1" data-page-path={page.path}>
       <noscript>

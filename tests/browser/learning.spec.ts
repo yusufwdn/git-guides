@@ -53,6 +53,41 @@ test('hover link halaman memicu prefetch, tetapi tombol unduh ZIP tidak', async 
   expect(requested.filter((path) => path.endsWith('.zip'))).toEqual([]);
 });
 
+test('posisi scroll sidebar bertahan saat pindah bab, dan bab aktif selalu terlihat', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  const sidebar = page.locator('#sidebar');
+  const sidebarState = () =>
+    sidebar.evaluate((element) => {
+      const active = element.querySelector('.chapter-item.active') as HTMLElement;
+      return {
+        scrollTop: element.scrollTop,
+        activeVisible:
+          active.offsetTop >= element.scrollTop &&
+          active.offsetTop + active.offsetHeight <= element.scrollTop + element.clientHeight,
+      };
+    });
+
+  await page.goto('/belajar/kenalan-git/');
+  await sidebar.evaluate((element) => (element.scrollTop = 250));
+  await page.locator('#sidebar a.chapter-item[href="/belajar/stash/"]').click();
+  await page.waitForURL('**/belajar/stash/');
+  const afterClick = await sidebarState();
+  expect(Math.abs(afterClick.scrollTop - 250)).toBeLessThan(40);
+  expect(afterClick.activeVisible).toBe(true);
+
+  const fresh = await page.context().newPage();
+  await fresh.setViewportSize({ width: 1280, height: 720 });
+  await fresh.goto('/belajar/maintenance/');
+  const freshState = await fresh.locator('#sidebar').evaluate((element) => {
+    const active = element.querySelector('.chapter-item.active') as HTMLElement;
+    return active.offsetTop + active.offsetHeight <= element.scrollTop + element.clientHeight;
+  });
+  expect(freshState).toBe(true);
+  await fresh.close();
+});
+
 test('persiapan membawa pemula dari instalasi ke materi pertama', async ({ page }) => {
   await page.goto('/belajar/kenalan-git/');
   await page.getByRole('link', { name: 'Belum pasang Git? Ikuti halaman persiapan' }).click();

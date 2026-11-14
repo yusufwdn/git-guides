@@ -35,6 +35,24 @@ test('66 materi dapat dibuka tanpa runtime error dan halaman biasa tidak mengamb
   expect(errors).toEqual([]);
 });
 
+test('hover link halaman memicu prefetch, tetapi tombol unduh ZIP tidak', async ({ page }) => {
+  const requested: string[] = [];
+  page.on('request', (request) => requested.push(new URL(request.url()).pathname));
+  await page.goto('/latihan/remote/');
+  await expect(page.locator('#main')).toHaveAttribute('data-hydrated', 'true');
+
+  const lessonLink = page.locator('#main a[href="/belajar/fetch-pull/"]').first();
+  const prefetched = page.waitForRequest(
+    (request) => new URL(request.url()).pathname === '/belajar/fetch-pull/',
+  );
+  await lessonLink.hover();
+  await prefetched;
+
+  await page.locator('a[download]').first().hover();
+  await page.waitForTimeout(300);
+  expect(requested.filter((path) => path.endsWith('.zip'))).toEqual([]);
+});
+
 test('persiapan membawa pemula dari instalasi ke materi pertama', async ({ page }) => {
   await page.goto('/belajar/kenalan-git/');
   await page.getByRole('link', { name: 'Belum pasang Git? Ikuti halaman persiapan' }).click();

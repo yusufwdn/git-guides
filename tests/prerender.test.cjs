@@ -94,9 +94,15 @@ test('browser menerima modul kecil dan data halaman saat ini, simulator dipisahk
   assert.equal(payload.lesson.id, 'snapshot');
   assert(!JSON.stringify(payload.lessons).includes('initialState'));
   assert(Object.values(payload.lessons).every((lesson) => !lesson.concept));
+  // Halaman memuat script aplikasi dan script prefetch bawaan Astro. Yang dijaga adalah
+  // total ukurannya tetap kecil, bukan jumlah file.
   const scripts = [...html.matchAll(/<script[^>]*src="([^"]+)"/g)].map((match) => match[1]);
-  assert.equal(scripts.length, 1);
-  assert(fs.statSync(path.join('dist', scripts[0].slice(1))).size < 25000);
+  assert(scripts.length >= 1 && scripts.length <= 2, scripts.join(', '));
+  const totalSize = scripts.reduce(
+    (sum, src) => sum + fs.statSync(path.join('dist', src.slice(1))).size,
+    0,
+  );
+  assert(totalSize < 25000, `total script ${totalSize} byte`);
   const chunks = fs.readdirSync('dist/_astro');
   assert(chunks.some((name) => name.startsWith('playground.')));
 });

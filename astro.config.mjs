@@ -18,6 +18,10 @@ export default defineConfig({
   site,
   output: 'static',
   trailingSlash: 'always',
+  // Situs tetap MPA: setiap pindah halaman memuat dokumen baru. Prefetch mengunduh halaman
+  // tujuan saat link di-hover atau difokus, sehingga halaman muncul hampir instan saat diklik.
+  // Link yang bukan halaman (unduhan ZIP) diberi data-astro-prefetch="false".
+  prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
   server: { host: '127.0.0.1', port: 4321 },
   devToolbar: { enabled: false },
 });

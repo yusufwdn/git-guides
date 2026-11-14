@@ -38,9 +38,12 @@ export default function createContext(data) {
   >
     <path d="M2 1h10v14L7 12l-5 3V1Z" />
   </svg>`;
+  // Tombol unduh paket latihan. data-astro-prefetch="false" mencegah ZIP ikut diunduh
+  // diam-diam saat kursor lewat, karena prefetch diaktifkan untuk semua link (astro.config.mjs).
   const download = `<a
     class="button"
     href="${Routes.asset('downloads/kopi-kita-labs.zip')}"
+    data-astro-prefetch="false"
     download
     >Unduh paket latihan <span aria-hidden="true">↓</span></a
   >`;
